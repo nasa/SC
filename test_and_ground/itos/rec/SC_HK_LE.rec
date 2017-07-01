@@ -1,0 +1,78 @@
+CfeTelemetryPacket FSW_SC_HkPkt
+{
+    applyWhen={FieldInRange{field=applicationId, range=0xAA}}
+
+    U1 SC_ATSNUM {generateMnemonic="no"}
+    U1 SC_ATPSTATE {generateMnemonic="no"}
+    U1 SC_CONTONFAIL {generateMnemonic="no"}
+    U1 SC_CMDEC {generateMnemonic="no"}
+    U1 SC_CMDPC {generateMnemonic="no"}
+    U1 SC_PAD8 {generateMnemonic="no"}
+
+    U21 SC_SWITCHPEND {generateMnemonic="no"}
+    U21 SC_NUMRTSACTIVE {generateMnemonic="no"}
+    U21 SC_NEXTRTSNUM {generateMnemonic="no"}
+    U21 SC_RTSACTPC {generateMnemonic="no"}
+    U21 SC_RTSACTEC {generateMnemonic="no"}
+    U21 SC_ATSCMDPC {generateMnemonic="no"}
+    U21 SC_ATSCMDEC {generateMnemonic="no"}
+    U21 SC_RTSCMDPC {generateMnemonic="no"}
+    U21 SC_RTSCMDEC {generateMnemonic="no"}
+    U21 SC_ATSLASTERRID {generateMnemonic="no"}
+    U21 SC_ATSLASTERRCMD {generateMnemonic="no"}
+    U21 SC_RTSLASTERRID {generateMnemonic="no"}
+    U21 SC_RTSLASTERRCMD {generateMnemonic="no"}
+    U21 SC_AppendAtsID {generateMnemonic="no"}
+    U21 SC_AppendEntryCount {generateMnemonic="no"}
+    U21 SC_AppendByteCount {generateMnemonic="no"}
+    U21 SC_AppendLoadCount {generateMnemonic="no"}
+
+    U4321 SC_ATPCMDNUM {generateMnemonic="no"}
+   
+    U4321 SC_ATPFREEBYTES  {generateMnemonic="no"}
+
+    U4321 SC_ATPFREEBYTES1 {generateMnemonic="no"}
+
+    U4321 SC_NXTRTSTIME {generateMnemonic="no"}
+    U4321 SC_NXTATSTIME {generateMnemonic="no"}
+ 
+    U21 SC_RTSEXEC0 {generateMnemonic="no"}
+    U21 SC_RTSEXEC1 {generateMnemonic="no"}
+
+    U21 SC_RTSDISABLED0 {generateMnemonic="no"}
+    U21 SC_RTSDISABLED1 {generateMnemonic="no"}
+}
+
+/* Define the mnemonics */
+
+D FSW_SC_HkPkt_packet_time {sourceFields={FSW_SC_HkPkt.time}}
+U FSW_SC_ATSNUM {sourceFields={FSW_SC_HkPkt.SC_ATSNUM}}
+U FSW_SC_ATPSTATE {sourceFields={FSW_SC_HkPkt.SC_ATPSTATE}}
+U FSW_SC_CONTONFAIL {sourceFields={FSW_SC_HkPkt.SC_CONTONFAIL}}
+U FSW_SC_PAD8 {sourceFields={FSW_SC_HkPkt.SC_PAD8}}
+U FSW_SC_ATPCMDNUM {sourceFields={FSW_SC_HkPkt.SC_ATPCMDNUM}}
+U FSW_SC_SWITCHPEND {sourceFields={FSW_SC_HkPkt.SC_SWITCHPEND}}
+U FSW_SC_NUMRTSACTIVE {sourceFields={FSW_SC_HkPkt.SC_NUMRTSACTIVE}}
+U FSW_SC_NEXTRTSNUM {sourceFields={FSW_SC_HkPkt.SC_NEXTRTSNUM}}
+U FSW_SC_CMDEC {sourceFields={FSW_SC_HkPkt.SC_CMDEC}}
+U FSW_SC_CMDPC {sourceFields={FSW_SC_HkPkt.SC_CMDPC}}
+U FSW_SC_RTSACTPC {sourceFields={FSW_SC_HkPkt.SC_RTSACTPC}}
+U FSW_SC_RTSACTEC {sourceFields={FSW_SC_HkPkt.SC_RTSACTEC}}
+U FSW_SC_ATSCMDPC {sourceFields={FSW_SC_HkPkt.SC_ATSCMDPC}}
+U FSW_SC_ATSCMDEC {sourceFields={FSW_SC_HkPkt.SC_ATSCMDEC}}
+U FSW_SC_RTSCMDPC {sourceFields={FSW_SC_HkPkt.SC_RTSCMDPC}}
+U FSW_SC_RTSCMDEC {sourceFields={FSW_SC_HkPkt.SC_RTSCMDEC}}
+U FSW_SC_ATSLASTERRID {sourceFields={FSW_SC_HkPkt.SC_ATSLASTERRID}}
+U FSW_SC_ATSLASTERRCMD {sourceFields={FSW_SC_HkPkt.SC_ATSLASTERRCMD}}
+U FSW_SC_RTSLASTERRID {sourceFields={FSW_SC_HkPkt.SC_RTSLASTERRID}}
+U FSW_SC_RTSLASTERRCMD {sourceFields={FSW_SC_HkPkt.SC_RTSLASTERRCMD}}
+U FSW_SC_ATPFREEBYTES {sourceFields={FSW_SC_HkPkt.SC_ATPFREEBYTES}}
+U FSW_SC_ATPFREEBYTES1 {sourceFields={FSW_SC_HkPkt.SC_ATPFREEBYTES1}}
+U FSW_SC_NXTRTSTIME {sourceFields={FSW_SC_HkPkt.SC_NXTRTSTIME}}
+U FSW_SC_NXTATSTIME {sourceFields={FSW_SC_HkPkt.SC_NXTATSTIME}}
+U FSW_SC_RTSEXEC0{sourceFields={FSW_SC_HkPkt.SC_RTSEXEC0}}
+U FSW_SC_RTSEXEC1{sourceFields={FSW_SC_HkPkt.SC_RTSEXEC1}}
+U FSW_SC_RTSDISABLED0{sourceFields={FSW_SC_HkPkt.SC_RTSDISABLED0}}
+U FSW_SC_RTSDISABLED1{sourceFields={FSW_SC_HkPkt.SC_RTSDISABLED1}}
+
+

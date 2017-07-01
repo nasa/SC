@@ -1,0 +1,3658 @@
+<html><head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Test Execution Summary</title>
+    <style type="text/css" media="screen">
+p {margin-top:0in; margin-bottom:.0001pt; margin-left:0in; margin-right:0in;}
+ul, ol  {margin-top:0in; margin-bottom:.0001pt; margin-left:0in; margin-right:0in;}
+body, table { font-family: Arial, Helvetica, Tahoma; font-size: 9pt; }
+table.display { font-family: Arial, Helvetica, Tahoma; font-size: 9pt; width: 100%;}
+table.display2 { font-family: Arial, Helvetica, Tahoma; font-size: 9pt; width: 95%;}
+.display td, .display2 td { vertical-align: top; font-size: 9pt;}
+table.list { font-family: Arial, Helvetica, Tahoma; font-size: 9pt; width: 95%; border-width: 1px; border-style: solid; border-color: #333399; border-collapse: collapse; padding: 5px 5px 5px 5px; }
+.list th { color: #000000; background-color: #F9F9E3; border-width: 1px; border-style: solid; border-color: #333399; }
+.list td { background-color: #F9F7F7; vertical-align: top; border-width: 1px; border-style: solid; border-color: #333399; padding: 5px 5px 5px 5px; }
+table.list2 { font-family: Arial, Helvetica, Tahoma; font-size: 9pt; border-width: 0px; border-style: solid; border-color: #333399; padding: 0px 0px 0px 0px; }
+.list2 th { font-size: 11pt; color: #333399; text-align: left; text-decoration: underline; background-color: #FFFFFF; padding: 2px 2px 2px 2px; }
+.list2 td { background-color: #FFFFFF; vertical-align: top; padding: 2px 2px 2px 2px; }
+table.list3 { font-family: Arial, Helvetica, Tahoma; font-size: 9pt; width: 100%; border-width: 1px; border-style: solid; border-color: #333399; border-collapse: collapse; padding: 0px 0px 0px 0px; }
+.list3 th { color: #000000; background-color: #ECECEC; border-width: 1px 0px 1px 0px; border-style: solid; border-color: #333399; padding: 5px 5px 5px 5px; }
+.list3 td { background-color: #F9F7F7; vertical-align: top; border-style: solid; border-color: #333399; border-width: 1px 0px 1px 0px; padding: 5px 5px 5px 5px; }
+td.logo { width: 10%; }
+.border { border-width: 0px; border-style: solid; border-color: #333399; padding: 2px 2px 2px 2px; }
+.center { text-align: center; }
+.right { text-align: right; }
+.nowrap { white-space: nowrap; }
+.title { font-size: 16pt; color: #333399; font-weight: bold; text-align: center; }
+.date { font-size: 10pt; color: #333399; font-weight: bold; text-align: right; }
+.header { font-size: 11pt; color: #000000; text-align: center; }
+.footer { font-size: 9pt; color: #999999; text-align: left; }
+.heading1 { font-size: 11pt; color: #000000; font-weight: bold; background-color: #F6E78C; }
+.heading2 { font-size: 11pt; color: #333399; font-weight: bold; background-color: #F6E78C; }
+.heading3 { font-size: 11pt; color: #000000; font-weight: bold; background-color: #E6E6CB; }
+.heading4 { font-size: 11pt; color: #333399; font-weight: bold; background-color: #E6E6CB; }
+.heading5 { font-size: 11pt; color: #000000; font-weight: bold; background-color: #CFCF9D; }
+.heading6 { font-size: 11pt; color: #333399; font-weight: bold; background-color: #CFCF9D; }
+.heading7 { font-size: 15pt; color: #000000; font-weight: bold; background-color: #CFCF9D; }
+.heading8 { font-size: 10pt; color: #000000; font-weight: bold; text-align: center; background-color: #F5EFCA; }
+.heading9 { font-size: 10pt; color: #000000; font-weight: bold; background-color: #F6E78C; }
+.grouping1 { font-size: 10pt; color: #333399; font-weight: bold; background-color: #CFCF9D; }
+.grouping2 { font-size: 10pt; color: #000000; font-weight: bold; background-color: #CFCF9D; }
+.grouping3 { font-size: 9pt; color: #333399; font-weight: bold; background-color: #E6E6CB; }
+.odd_row { background-color: #F8F3F7; }
+.even_row { background-color: #FFFBFF; }
+.level1 { background-color: #FFEFF7; padding: 2px 2px 2px 2px; }
+.level2 { background-color: #F7E7EF; padding: 2px 2px 2px 2px; }
+.level2_indent { background-color: #F7E7EF; padding: 2px 2px 2px 12px; }
+.level3 { background-color: #EFDFE7; padding: 2px 2px 2px 2px; }
+.level3_indent { background-color: #EFDFE7; padding: 2px 2px 2px 22px; }
+.level4 { background-color: #E7D7DF; padding: 2px 2px 2px 2px; }
+.level4_indent { background-color: #E7D7DF; padding: 2px 2px 2px 32px; }
+.level5 { background-color: #DFCFD7; padding: 2px 2px 2px 2px; }
+.level5_indent { background-color: #DFCFD7; padding: 2px 2px 2px 42px; }
+.level6 { background-color: #D1BFC8; padding: 2px 2px 2px 2px; }
+.level6_indent { background-color: #D1BFC8; padding: 2px 2px 2px 52px; }
+.level7 { background-color: #C2B0B9; padding: 2px 2px 2px 2px; }
+.level7_indent { background-color: #C2B0B9; padding: 2px 2px 2px 62px; }
+.level8 { background-color: #B0A0A8; padding: 2px 2px 2px 2px; }
+.level8_indent { background-color: #B0A0A8; padding: 2px 2px 2px 72px; }
+.indent_transparent { padding: 0px 0px 0px 12px }
+.context_backward_level4_indent { background-color: #E7D7DF; padding: 2px 2px 2px 2px; }
+.context_backward_level3_indent { background-color: #EFDFE7; padding: 2px 2px 2px 12px; }
+.context_backward_level2_indent { background-color: #F7E7EF; padding: 2px 2px 2px 22px; }
+.context_backward_level1_indent { background-color: #FFEFF7; padding: 2px 2px 2px 32px; }
+.context { color: #333399; font-weight: bold; background-color: #FFFFFF; border-style: solid; border-color: #000000; border-width: 1px; padding: 2px 2px 2px 2px; }
+.context_indent { color: #333399; font-weight: bold; background-color: #FFFFFF; border-style: solid; border-color: #000000; border-width: 1px; padding: 2px 2px 2px 42px; }
+.context_forward_level1_indent { background-color: #FFEFF7; padding: 2px 2px 2px 52px; }
+.context_forward_level2_indent { background-color: #F7E7EF; padding: 2px 2px 2px 62px; }
+.context_forward_level3_indent { background-color: #EFDFE7; padding: 2px 2px 2px 72px; }
+.context_forward_level4_indent { background-color: #E7D7DF; padding: 2px 2px 2px 82px; }
+.document_level1 { background-color: #FFFFFF; padding: 2px 2px 2px 2px; }
+.document_level2 { background-color: #FFFFFF; padding: 2px 2px 2px 12px; }
+.document_level3 { background-color: #FFFFFF; padding: 2px 2px 2px 22px; }
+.document_level4 { background-color: #FFFFFF; padding: 2px 2px 2px 32px; }
+.underline { text-decoration: underline; }
+.bold { color: #000000; font-weight: bold; }
+.bold_large { font-size: 12pt; color: #000000; font-weight: bold; }
+.bold_very_large { font-size: 14pt; color: #000000; font-weight: bold; }
+.bold_italic { color: #000000; font-weight: bold; font-style: italic; }
+.bold_underline { color: #000000; font-weight: bold; text-decoration: underline; }
+.bold_color { color: #333399; font-weight: bold; }
+.bold_color_large { font-size: 12pt; color: #333399; font-weight: bold; }
+.bold_color_italic { color: #333399; font-weight: bold; font-style: italic; }
+.bold_color_underline { color: #333399; font-weight: bold; text-decoration: underline; }
+.bold_color_underline_large { font-size: 11pt; color: #333399; font-weight: bold; text-decoration: underline; }
+.hr_default { height:1px; width:100%; color: #000000; background:#000000; }
+.calendar_no_date_cell { background-color: #F3F3F3; }
+</style>
+
+    <style type="text/css" media="print">
+p {margin-top:0in; margin-bottom:.0001pt; margin-left:0in; margin-right:0in;}
+ul, ol  {margin-top:0in; margin-bottom:.0001pt; margin-left:0in; margin-right:0in;}
+thead { display: table-header-group; }
+tfoot { display: table-footer-group; }
+tbody { display:table-row-group; }
+body, table { font-family: Arial, Helvetica, Tahoma; font-size: 9pt; }
+table.display { font-family: Arial, Helvetica, Tahoma; font-size: 9pt; width: 100%;}
+table.display2 { font-family: Arial, Helvetica, Tahoma; font-size: 9pt; width: 95%;}
+.display td, .display2 td { vertical-align: top; font-size: 9pt;}
+table.list { font-family: Arial, Helvetica, Tahoma; font-size: 9pt; width: 95%; border-width: 1px; border-style: solid; border-color: #333399; border-collapse: collapse; padding: 5px 5px 5px 5px; }
+.list th { color: #000000; background-color: #F9F9E3; border-width: 1px; border-style: solid; border-color: #333399; }
+.list td { background-color: #F9F7F7; vertical-align: top; border-width: 1px; border-style: solid; border-color: #333399; padding: 5px 5px 5px 5px; }
+table.list2 { font-family: Arial, Helvetica, Tahoma; font-size: 9pt; border-width: 0px; border-style: solid; border-color: #333399; padding: 0px 0px 0px 0px; }
+.list2 th { font-size: 11pt; color: #333399; text-align: left; text-decoration: underline; background-color: #FFFFFF; padding: 2px 2px 2px 2px; }
+.list2 td { background-color: #FFFFFF; vertical-align: top; padding: 2px 2px 2px 2px; }
+table.list3 { font-family: Arial, Helvetica, Tahoma; font-size: 9pt; width: 100%; border-width: 1px; border-style: solid; border-color: #333399; border-collapse: collapse; padding: 0px 0px 0px 0px; }
+.list3 th { color: #000000; background-color: #ECECEC; border-width: 1px 0px 1px 0px; border-style: solid; border-color: #333399; padding: 5px 5px 5px 5px; }
+.list3 td { background-color: #F9F7F7; vertical-align: top; border-style: solid; border-color: #333399; border-width: 1px 0px 1px 0px; padding: 5px 5px 5px 5px; }
+td.logo { width: 10%; }
+.border { border-width: 0px; border-style: solid; border-color: #333399; padding: 2px 2px 2px 2px; }
+.center { text-align: center; }
+.right { text-align: right; }
+.nowrap { white-space: nowrap; }
+.title { font-size: 16pt; color: #333399; font-weight: bold; text-align: center; }
+.date { font-size: 10pt; color: #333399; font-weight: bold; text-align: right; }
+.header { font-size: 11pt; color: #000000; text-align: center; }
+.footer { font-size: 9pt; color: #999999; text-align: left; }
+.heading1 { font-size: 11pt; color: #000000; font-weight: bold; background-color: #F6E78C; }
+.heading2 { font-size: 11pt; color: #333399; font-weight: bold; background-color: #F6E78C; }
+.heading3 { font-size: 11pt; color: #000000; font-weight: bold; background-color: #E6E6CB; }
+.heading4 { font-size: 11pt; color: #333399; font-weight: bold; background-color: #E6E6CB; }
+.heading5 { font-size: 11pt; color: #000000; font-weight: bold; background-color: #CFCF9D; }
+.heading6 { font-size: 11pt; color: #333399; font-weight: bold; background-color: #CFCF9D; }
+.heading7 { font-size: 15pt; color: #000000; font-weight: bold; background-color: #CFCF9D; }
+.heading8 { font-size: 10pt; color: #000000; font-weight: bold; text-align: center; background-color: #F5EFCA; }
+.heading9 { font-size: 10pt; color: #000000; font-weight: bold; background-color: #F6E78C; }
+.grouping1 { font-size: 10pt; color: #333399; font-weight: bold; background-color: #CFCF9D; }
+.grouping2 { font-size: 10pt; color: #000000; font-weight: bold; background-color: #CFCF9D; }
+.grouping3 { font-size: 9pt; color: #333399; font-weight: bold; background-color: #E6E6CB; }
+.odd_row { background-color: #F8F3F7; }
+.even_row { background-color: #FFFBFF; }
+.level1 { background-color: #FFEFF7; padding: 2px 2px 2px 2px; }
+.level2 { background-color: #F7E7EF; padding: 2px 2px 2px 2px; }
+.level2_indent { background-color: #F7E7EF; padding: 2px 2px 2px 12px; }
+.level3 { background-color: #EFDFE7; padding: 2px 2px 2px 2px; }
+.level3_indent { background-color: #EFDFE7; padding: 2px 2px 2px 22px; }
+.level4 { background-color: #E7D7DF; padding: 2px 2px 2px 2px; }
+.level4_indent { background-color: #E7D7DF; padding: 2px 2px 2px 32px; }
+.level5 { background-color: #DFCFD7; padding: 2px 2px 2px 2px; }
+.level5_indent { background-color: #DFCFD7; padding: 2px 2px 2px 42px; }
+.level6 { background-color: #D1BFC8; padding: 2px 2px 2px 2px; }
+.level6_indent { background-color: #D1BFC8; padding: 2px 2px 2px 52px; }
+.level7 { background-color: #C2B0B9; padding: 2px 2px 2px 2px; }
+.level7_indent { background-color: #C2B0B9; padding: 2px 2px 2px 62px; }
+.level8 { background-color: #B0A0A8; padding: 2px 2px 2px 2px; }
+.level8_indent { background-color: #B0A0A8; padding: 2px 2px 2px 72px; }
+.indent_transparent { padding: 0px 0px 0px 12px; }
+.context_backward_level4_indent { background-color: #E7D7DF; padding: 2px 2px 2px 2px; }
+.context_backward_level3_indent { background-color: #EFDFE7; padding: 2px 2px 2px 12px; }
+.context_backward_level2_indent { background-color: #F7E7EF; padding: 2px 2px 2px 22px; }
+.context_backward_level1_indent { background-color: #FFEFF7; padding: 2px 2px 2px 32px; }
+.context { color: #333399; font-weight: bold; background-color: #FFFFFF; border-style: solid; border-color: #000000; border-width: 1px; padding: 2px 2px 2px 2px; }
+.context_indent { color: #333399; font-weight: bold; background-color: #FFFFFF; border-style: solid; border-color: #000000; border-width: 1px; padding: 2px 2px 2px 42px; }
+.context_forward_level1_indent { background-color: #FFEFF7; padding: 2px 2px 2px 52px; }
+.context_forward_level2_indent { background-color: #F7E7EF; padding: 2px 2px 2px 62px; }
+.context_forward_level3_indent { background-color: #EFDFE7; padding: 2px 2px 2px 72px; }
+.context_forward_level4_indent { background-color: #E7D7DF; padding: 2px 2px 2px 82px; }
+.document_level1 { background-color: #FFFFFF; padding: 2px 2px 2px 2px; }
+.document_level2 { background-color: #FFFFFF; padding: 2px 2px 2px 12px; }
+.document_level3 { background-color: #FFFFFF; padding: 2px 2px 2px 22px; }
+.document_level4 { background-color: #FFFFFF; padding: 2px 2px 2px 32px; }
+.underline { text-decoration: underline; }
+.bold { color: #000000; font-weight: bold; }
+.bold_large { font-size: 12pt; color: #000000; font-weight: bold; }
+.bold_very_large { font-size: 14pt; color: #000000; font-weight: bold; }
+.bold_italic { color: #000000; font-weight: bold; font-style: italic; }
+.bold_underline { color: #000000; font-weight: bold; text-decoration: underline; }
+.bold_color { color: #333399; font-weight: bold; }
+.bold_color_large { font-size: 12pt; color: #333399; font-weight: bold; }
+.bold_color_italic { color: #333399; font-weight: bold; font-style: italic; }
+.bold_color_underline { color: #333399; font-weight: bold; text-decoration: underline; }
+.bold_color_underline_large { font-size: 11pt; color: #333399; font-weight: bold; text-decoration: underline; }
+.hr_default { height:1px; width:100%; color: #000000; background:#000000; }
+.calendar_no_date_cell { background-color: #F3F3F3; }
+</style>
+
+	<script type="text/javascript">
+		var line_count=0;
+		
+		function writeEvenOddTRTag() {
+			line_count++; 
+			if (line_count%2 == 0)
+				document.write("<tr class='even_row'>");
+			else
+				document.write("<tr class='odd_row'>");
+		}
+	</script>
+</head>
+
+
+
+<body>
+<table class="heading">
+<tbody><tr>
+	<td></td>
+	<td class="title_white" width="100%" align="right">Test Execution Summary</td>
+	<td>&nbsp;</td>
+</tr>
+</tbody></table>
+<table class="white_bg">
+    <tbody><tr><td></td></tr>
+</tbody></table>
+<table class="heading" width="100%">
+    <tbody><tr><td></td></tr>
+
+</tbody></table>
+<p class="header"></p>
+<p class="date">Oct 28, 2016</p>
+
+<table class="detailcols fullWidth">
+<!-- block ID=4487-->
+
+<!-- Display issue heading -->
+<tbody><tr><th style="text-align: left">SC_ATSFunc - Item 4487 </th></tr>
+<!-- Display issue field names and values -->
+
+<tr><td><b>TEST_Test_Name:</b> SC_ATSFunc</td></tr>
+
+<tr><td><b>TEST_Description:</b> <!-- MKS HTML -->The purpose of this 
+test is to verify the Stored Command (SC) application supports the 
+execution of Absolute Time Sequences (ATS) as well as detecting errors 
+with the commands contained in an ATS. Invalid commands will also be 
+issued to see if the SC application handles these appropriately.</td></tr>
+
+<tr><td><b>TEST_Current_Build:</b> 2.5.0.0</td></tr>
+
+<tr><td><b>TEST_Execution_Assigned_To:</b> Walt Moleski (wmoleski)</td></tr>
+
+<tr><td><b>TEST_Execution_Testbed:</b> 50244</td></tr>
+
+<tr><td><b>TEST_Execution_Checksum:</b> cFE 6.5.0.0; OSAL 4.2.0.0; PSP 1.3.0.0</td></tr>
+
+<tr><td><b>TEST_Execution_Completion_Date:</b> Oct 27, 2016</td></tr>
+
+<tr><td><b>TEST_Execution_Time:</b> 2609.67 seconds or 43.4946 minutes for TAI; 2827.22 seconds or 47.1204 minutes for UTC</td></tr>
+
+<tr><td><b>TEST_Execution_Comments:</b> <!-- MKS HTML -->This test was 
+run using Default time (TAI) and UTC Time. All requirements passed in 
+both tests. The only difference was that Step 5.6 executed 6 commands in
+ the same second when the Leap_Seconds were jammed while using UTC time.</td></tr>
+
+<tr><td><b>TEST_Comments:</b> &nbsp;</td></tr>
+
+<!-- Relationships info -->
+<!-- Display relationship heading -->
+<tr><td>DCRs Submitted / Tested and Requirements Validated</td></tr>
+
+
+<tr><td class="detailheading" style="text-align: left">Links_To_TEST_from_DCRs_Backward,ALM_Validates:</td></tr>
+<tr>
+    <td>
+        <table class="detailcols fullWidth">
+        
+        <tbody><tr>
+            
+            <th>ReqID</th>
+            
+            <th>Text</th>
+            
+            <th>Build Test Method</th>
+            
+            <th>REQ_Build_Sys_Test_Results</th>
+            
+            <th>REQ_Build_Sys_Test_Comments</th>
+            
+            <th>DCR_Title</th>
+            
+            <th>DCR_TEST_Outcome</th>
+            
+        </tr>
+        <!-- block ID=4487-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="odd_row">
+            
+            <td>SC1002</td>
+            
+            <td><!-- MKS HTML -->For all SC commands, if the length 
+contained in the message header is not equal to the expected length, SC 
+shall reject the command and issue an event message.</td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4487-->
+<!-- block ID=4487-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="even_row">
+            
+            <td>SC1004</td>
+            
+            <td><!-- MKS HTML -->If SC accepts any command as valid, SC 
+shall execute the command, increment the SC Valid Command Counter and 
+issue an event message.</td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4487-->
+<!-- block ID=4487-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="odd_row">
+            
+            <td>SC1005</td>
+            
+            <td><!-- MKS HTML -->If SC rejects any command, SC shall 
+abort the command execution, increment the SC Command Rejected Counter 
+and issue an error event message.</td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4487-->
+<!-- block ID=4487-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="even_row">
+            
+            <td>SC2000</td>
+            
+            <td><!-- MKS HTML -->SC shall define 
+&lt;PLATFORM_DEFINED&gt; bytes of storage for each of two (2) Absolute 
+Time-tagged command Sequence (ATS) tables.</td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4487-->
+<!-- block ID=4487-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="odd_row">
+            
+            <td>SC2000.1</td>
+            
+            <td><!-- MKS HTML -->SC shall resolve time to 1 second for Absolute Time Command Sequences (ATS).</td>
+            
+            <td>Analysis</td>
+            
+            <td>Pass</td>
+            
+            <td><!-- MKS HTML -->Step 2.6 of the atsfunc test procedure 
+verifies this requirement. The ATS commands executed with the proper 
+delay between them as specified in the table load file. The load file 
+contained a 5 second delay between the commands.</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4487-->
+<!-- block ID=4487-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="even_row">
+            
+            <td>SC2000.2</td>
+            
+            <td><!-- MKS HTML -->SC shall accept a maximum of &lt;PLATFORM_DEFINED&gt; commands per ATS.</td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4487-->
+<!-- block ID=4487-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="odd_row">
+            
+            <td>SC2000.3</td>
+            
+            <td><!-- MKS HTML --><p>SC shall accept a variable number of variable length commands from each ATS. Each ATS command shall contain:</p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; A command number</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; A time tag denoting the time at which to execute the command</p><p>c)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; A variable length command&nbsp;</p></td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4487-->
+<!-- block ID=4487-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="even_row">
+            
+            <td>SC2000.4</td>
+            
+            <td><!-- MKS HTML -->SC shall use the &lt;PLATFORM_DEFINED&gt; time format (UTC or TAI).</td>
+            
+            <td>Analysis</td>
+            
+            <td>Pass</td>
+            
+            <td><!-- MKS HTML -->Steps 5.4 thru 5.6 of the atsfunc test 
+procedure verify this requirement. When TAI (CFE_DEFAULT) time was used,
+ a jam of the LeapSeconds did not have any effect on the ATS execution. 
+When using UTC time, there were 6 commands that executed in the same 
+second when the LeapSeconds was jammed from 32 to 27 seconds.</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4487-->
+<!-- block ID=4487-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="odd_row">
+            
+            <td>SC2001</td>
+            
+            <td><!-- MKS HTML --><p>Upon receipt of a table update indication for an ATS Table, SC shall validate the following for the ATS table:</p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Duplicate command numbers</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Invalid command lengths</p><p>c)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Commands that run off of the end of the table<br>d)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Command number</p></td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4487-->
+<!-- block ID=4487-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="even_row">
+            
+            <td>SC2004</td>
+            
+            <td><!-- MKS HTML -->SC shall execute commands in the ATS 
+table in ascending order, based upon the time-tag of the commands, 
+regardless of the order in which the commands are stored in the ATS 
+table.&nbsp;</td>
+            
+            <td>Analysis</td>
+            
+            <td>Pass</td>
+            
+            <td><!-- MKS HTML -->Step 2.6 of the atsfunc test procedure 
+verifies this requirement. The ATS commands were executed in the proper 
+"time" order rather than the order loaded in the table. The table load 
+contained command 2 (SC_NOOP), command 1 (TBL_NOOP), and command 3 
+(EVS_NOOP).</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4487-->
+<!-- block ID=4487-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="odd_row">
+            
+            <td>SC2007</td>
+            
+            <td><!-- MKS HTML -->SC shall define &lt;PLATFORM_DEFINED&gt; bytes of storage for an ATS Append Table.</td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4487-->
+<!-- block ID=4487-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="even_row">
+            
+            <td>SC2007.1</td>
+            
+            <td><!-- MKS HTML -->The ATS Append Table format is the same as the ATS tables</td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4487-->
+<!-- block ID=4487-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="odd_row">
+            
+            <td>SC2008</td>
+            
+            <td><!-- MKS HTML -->Upon receipt of an Apply ATS Append 
+Table command SC shall append the ATS Append Table contents to the 
+command-specified ATS table.</td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4487-->
+<!-- block ID=4487-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="even_row">
+            
+            <td>SC2008.1</td>
+            
+            <td><!-- MKS HTML -->The Append command may be performed on either ATS table.</td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4487-->
+<!-- block ID=4487-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="odd_row">
+            
+            <td>SC2008.2</td>
+            
+            <td><!-- MKS HTML -->If the number of entries in the ATS and
+ ATS Append Table exceeds the size of the ATS table SC shall reject the 
+Apply ATS Append Table command.</td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4487-->
+<!-- block ID=4487-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="even_row">
+            
+            <td>SC2008.3</td>
+            
+            <td><!-- MKS HTML -->The Apply ATS Append Table command shall add all ATS Append Table data to the end of the command-specified ATS table.</td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4487-->
+<!-- block ID=4487-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="odd_row">
+            
+            <td>SC2008.6</td>
+            
+            <td><!-- MKS HTML -->Upon completion of the Apply ATS Append
+ Table Command, SC shall issue an info event message indicating the 
+number of commands that were appended to the ATS.</td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4487-->
+<!-- block ID=4487-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="even_row">
+            
+            <td>SC2009</td>
+            
+            <td><!-- MKS HTML --><p>Upon receipt of a table update indication for an ATS Append Table, SC shall validate the following for the ATS table:</p><p>a) Duplicate command numbers</p><p>b) Invalid command lengths</p><p>c) Commands that run off the end of the table</p><p>d) Command number</p></td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4487-->
+<!-- block ID=4487-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="odd_row">
+            
+            <td>SC3000</td>
+            
+            <td><!-- MKS HTML --><p>Upon receipt of a Start ATS command,
+ SC shall start the command-specified ATS provided all of the following 
+conditions are satisfied:</p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The command-specified ATS table identification is valid</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The ATS table contains at least one command</p><p>c)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Neither of the two ATS tables is currently executing</p></td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4487-->
+<!-- block ID=4487-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="even_row">
+            
+            <td>SC3000.1</td>
+            
+            <td><!-- MKS HTML -->SC shall mark all ATS commands with time less-than the current time as SKIPPED and an event message shall be generated.</td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4487-->
+<!-- block ID=4487-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="odd_row">
+            
+            <td>SC3000.3</td>
+            
+            <td><!-- MKS HTML -->Prior to the dispatch of each 
+individual ATS command, SC shall verify the Data Integrity Check Value 
+of the stored command. &nbsp;</td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4487-->
+<!-- block ID=4487-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="even_row">
+            
+            <td>SC3000.3.1</td>
+            
+            <td><!-- MKS HTML --><p>For any ATS command which fails the Data Integrity Check Value, the following shall be performed:</p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Discard the command</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Mark the command with DATA INTEGRITY CHECK VALUE VERIFICATION FAILED</p><p>c)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Issue an event message</p></td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4487-->
+<!-- block ID=4487-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="odd_row">
+            
+            <td>SC3000.3.2</td>
+            
+            <td><!-- MKS HTML -->If the Continuation Execution of ATS On Error Flag is Disabled, SC shall terminate the execution of the ATS.</td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4487-->
+<!-- block ID=4487-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="even_row">
+            
+            <td>SC3001</td>
+            
+            <td><!-- MKS HTML --><p>Upon receipt of a Stop ATS Command, SC shall</p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Stop processing the currently executing ATS</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set the state of that ATS to IDLE</p></td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4487-->
+<!-- block ID=4487-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="odd_row">
+            
+            <td>SC3001.1</td>
+            
+            <td><!-- MKS HTML -->If no ATS is executing, SC shall increment the Valid Command Counter.</td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4487-->
+<!-- block ID=4487-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="even_row">
+            
+            <td>SC3002</td>
+            
+            <td><!-- MKS HTML --><p>Upon receipt of a Switch ATS Command, SC shall</p><p>a
+ )&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Terminate the processing of the 
+current ATS table after processing all of the commands within the 
+current second</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Start processing of the alternate ATS table&nbsp;</p></td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4487-->
+<!-- block ID=4487-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="odd_row">
+            
+            <td>SC3002.1</td>
+            
+            <td><!-- MKS HTML --><p>SC shall begin processing the first 
+ATS command after the next 1 second occurs containing a time which is 
+greater-than-or-equal-to the current time.</p></td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4487-->
+<!-- block ID=4487-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="even_row">
+            
+            <td>SC3002.2</td>
+            
+            <td><!-- MKS HTML -->SC shall mark all ATS commands with time less-than the current time as SKIPPED and an event message shall be generated.</td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4487-->
+<!-- block ID=4487-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="odd_row">
+            
+            <td>SC3002.3</td>
+            
+            <td><!-- MKS HTML -->If the alternate ATS table has not been loaded, SC shall reject the command.</td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4487-->
+<!-- block ID=4487-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="even_row">
+            
+            <td>SC3002.4</td>
+            
+            <td><!-- MKS HTML -->If the Switch command is located within an ATS, SC shall immediately execute the switch command.</td>
+            
+            <td>Analysis</td>
+            
+            <td>Pass</td>
+            
+            <td><!-- MKS HTML -->Step 4.27 of the atsfunc test procedure
+ waits for the switch command to execute. However, in this test run, the
+ Switch command executed prior to getting to this step. The ATS 
+purposely contained a switch command to an empty ATS in order to 
+generate an error event. The error event message was captured which 
+indicated that the switch command executed immediately since it was 
+contained in an ATS.</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4487-->
+<!-- block ID=4487-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="odd_row">
+            
+            <td>SC3003</td>
+            
+            <td><!-- MKS HTML -->Upon receipt of a Jump Command, SC 
+shall transfer execution to the command within the currently executing 
+ATS table whose time-tag is equal to a command-specified time value.</td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4487-->
+<!-- block ID=4487-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="even_row">
+            
+            <td>SC3003.1</td>
+            
+            <td><!-- MKS HTML -->If no command exists that is equal to the command-specified jump time, SC shall wait for the first command after the jump time.</td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4487-->
+<!-- block ID=4487-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="odd_row">
+            
+            <td>SC3003.2</td>
+            
+            <td><!-- MKS HTML -->If the command-specified time value is 
+less-than &nbsp;or equal-to the current &nbsp;time, SC shall skip all of
+ the commands in the past.</td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4487-->
+<!-- block ID=4487-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="even_row">
+            
+            <td>SC3003.2.1</td>
+            
+            <td><!-- MKS HTML -->The status of all ATS commands skipped 
+over as a result of the Jump command shall be marked as SKIPPED and an 
+event message shall be generated.</td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4487-->
+<!-- block ID=4487-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="odd_row">
+            
+            <td>SC3003.2.2</td>
+            
+            <td><!-- MKS HTML -->If all of the commands in the ATS have been skipped, SC shall stop the ATS and issue an event message.</td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4487-->
+<!-- block ID=4487-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="even_row">
+            
+            <td>SC3003.3</td>
+            
+            <td><!-- MKS HTML -->If neither of the two ATS tables are currently executing, SC shall &nbsp;reject the Jump command.</td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4487-->
+<!-- block ID=4487-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="odd_row">
+            
+            <td>SC3003.4</td>
+            
+            <td><!-- MKS HTML -->If multiple commands exist that satisfy
+ the JUMP condition, the commands shall be executed in ascending command
+ number order (as they exist in the ATS table).</td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4487-->
+<!-- block ID=4487-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="even_row">
+            
+            <td>SC3004</td>
+            
+            <td><!-- MKS HTML -->Upon receipt of an Enable Continuation 
+Execution of ATS On Error Command, SC shall set the Continuation 
+Execution of ATS On Error Flag to ENABLED.</td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4487-->
+<!-- block ID=4487-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="odd_row">
+            
+            <td>SC3005</td>
+            
+            <td><!-- MKS HTML -->Upon receipt of a Disable Continuation 
+Execution of ATS On Error Command, SC shall set the Continuation 
+Execution of ATS On Error Flag to DISABLED.</td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4487-->
+<!-- block ID=4487-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="even_row">
+            
+            <td>SC8000</td>
+            
+            <td><!-- MKS HTML --><p>SC shall generate a housekeeping message containing the following:</p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Valid &nbsp;Command Counter</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Command Rejected Counter</p><p>c)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Total count of commands dispatched from ATSs</p><p>d)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Total count of commands dispatched from RTSs</p><p>e)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Total count of commands which failed dispatch from ATSs</p><p>f)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Total count of commands which failed dispatch from RTSs</p><p>g)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ ATS Table #1 free byte count h)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ATS
+ Table #2 free byte count</p><p>i)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Absolute Time Command Processing State</p><p>j)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Identifier of the active ATS table &nbsp;</p><p>k)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Number of the next ATS command pending execution</p><p>l)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ATS switch pending flag</p><p>m)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Time the next ATS command is due to be dispatched</p><p>n)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The identifier of the ATS table for which the most recent ATS command failed to dispatch</p><p>o)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The identifier of most recent ATS command which failed to dispatch from the ATS tables</p><p>p)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; RTS table activation count</p><p>q)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; RTS table activation error count</p><p>r)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Number of active RTSs</p><p>s)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Identifier of the next RTS table to dispatch a command</p><p>t)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Time the next RTS command is due to be dispatched</p><p>u)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Execution status for each RTS table</p><p>v)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Enable status for each RTS table</p><p>w)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Identifier of the RTS table for which the most recent RTS command dispatch error occurred</p><p>x)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ The word offset within the RTS for the most recent RTS command which 
+failed to dispatch&nbsp;</p><p>y)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ATS Continue-On-Failure status<br>z)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The last append ApId</p><p>aa)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The last ATS Append Table command count</p><p>bb)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The last appended count</p></td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4487-->
+<!-- block ID=4487-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="odd_row">
+            
+            <td>SC9000</td>
+            
+            <td><!-- MKS HTML --><p>Upon a power-on or processor reset SC shall initialize the following Housekeeping data to Zero (or value specified):</p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Valid Command Counter</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Command Rejected Counter</p><p>c)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Total count of commands dispatched from ATSs</p><p>d)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Total count of commands dispatched from RTSs</p><p>e)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Total count of commands which failed dispatch from ATSs</p><p>f)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Total count of commands which failed dispatch from RTSs</p><p>g)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ATS Table #1 free byte count</p><p>h)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ATS Table #2 free byte count</p><p>i)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Absolute Time Command Processing State - DISABLED</p><p>j)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Identifier of the active ATS table &nbsp;- None</p><p>k)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Number of the next ATS command pending execution</p><p>l)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;ATS switch pending flag</p><p>m)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Time of the next ATS command dispatch</p><p>n)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The identifier of the ATS table for which the most recent ATS command failed to dispatch</p><p>o)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The identifier of most recent ATS command which failed to dispatch from the ATS tables</p><p>p)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; RTS table activation count</p><p>q)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; RTS table activation error count</p><p>r)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Number of active RTSs</p><p>s)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Identifier of the next RTS table to dispatch a command</p><p>t)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Time the next RTS command is due to be dispatched</p><p>u)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Execution status for each RTS table - IDLE</p><p>v)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Status for each RTS table - DISABLED</p><p>w)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Identifier of the RTS table for which the most recent RTS command dispatch error occurred</p><p>x)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ The word offset within the RTS for the most recent RTS command which 
+failed to dispatch&nbsp;</p><p>y)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ATS Continue-On-Failure status &lt;PLATFORM_DEFINED&gt;<br>z) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The last append ApId</p><p>aa)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The last ATS Append Table command count</p><p>bb)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The last appended coun</p></td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4487-->
+<!-- block ID=4487-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="even_row">
+            
+            <td>Sc2008.4</td>
+            
+            <td><!-- MKS HTML -->The Apply ATS Append Table command shall provide the ability to add new commands to the ATS buffer</td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4487-->
+<!-- block ID=4487-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="odd_row">
+            
+            <td>Sc2008.5</td>
+            
+            <td><!-- MKS HTML -->The Apply ATS Append Table command shall provide the ability to modify existing commands in the ATS buffer</td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4487-->
+<!-- block ID=4487-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="even_row">
+            
+            <td>Sc2008.7</td>
+            
+            <td><!-- MKS HTML -->Upon completion of the Apply ATS Append Table Command, SC shall recompute the command execution sequence.</td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4487-->
+
+        </tbody></table>
+    </td>
+</tr>
+
+<tr><td><hr class="hr_default"></td></tr>
+<tr><td>&nbsp;</td></tr>
+<script type="text/javascript"> line_count=0; </script>
+<!-- blockend ID=4487-->
+<!-- block ID=4486-->
+
+<!-- Display issue heading -->
+<tr><th style="text-align: left">SC_GenCmds - Item 4486 </th></tr>
+<!-- Display issue field names and values -->
+
+<tr><td><b>TEST_Test_Name:</b> SC_GenCmds</td></tr>
+
+<tr><td><b>TEST_Description:</b> <!-- MKS HTML -->The purpose of this 
+test is to verify the Stored Command (SC) general commands function 
+properly. The NOOP and Reset Counters commands will be tested as well as
+ invalid commands to see if the SC application handles these 
+appropriately.</td></tr>
+
+<tr><td><b>TEST_Current_Build:</b> 2.5.0.0</td></tr>
+
+<tr><td><b>TEST_Execution_Assigned_To:</b> Walt Moleski (wmoleski)</td></tr>
+
+<tr><td><b>TEST_Execution_Testbed:</b> 50244</td></tr>
+
+<tr><td><b>TEST_Execution_Checksum:</b> cFE 6.5.0.0; OSAL 4.2.0.0; PSP 1.3.0.0</td></tr>
+
+<tr><td><b>TEST_Execution_Completion_Date:</b> Oct 26, 2016</td></tr>
+
+<tr><td><b>TEST_Execution_Time:</b> 348.525 seconds or 5.80876 minutes</td></tr>
+
+<tr><td><b>TEST_Execution_Comments:</b> <!-- MKS HTML -->All requirements passed.</td></tr>
+
+<tr><td><b>TEST_Comments:</b> &nbsp;</td></tr>
+
+<!-- Relationships info -->
+<!-- Display relationship heading -->
+<tr><td>DCRs Submitted / Tested and Requirements Validated</td></tr>
+
+
+<tr><td class="detailheading" style="text-align: left">Links_To_TEST_from_DCRs_Backward,ALM_Validates:</td></tr>
+<tr>
+    <td>
+        <table class="detailcols fullWidth">
+        
+        <tbody><tr>
+            
+            <th>ReqID</th>
+            
+            <th>Text</th>
+            
+            <th>Build Test Method</th>
+            
+            <th>REQ_Build_Sys_Test_Results</th>
+            
+            <th>REQ_Build_Sys_Test_Comments</th>
+            
+            <th>DCR_Title</th>
+            
+            <th>DCR_TEST_Outcome</th>
+            
+        </tr>
+        <!-- block ID=4486-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="odd_row">
+            
+            <td>SC1000</td>
+            
+            <td><!-- MKS HTML -->Upon receipt of a No-Op command, SC shall increment the SC Valid Command Counter and generate an event message.</td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4486-->
+<!-- block ID=4486-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="even_row">
+            
+            <td>SC1001</td>
+            
+            <td><!-- MKS HTML --><p>Upon receipt of a Reset command, SC shall reset the following housekeeping variables to a value of zero:</p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Valid Command Counter</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Command Rejected Counter</p><p>c)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ATS Command Counter</p><p>d)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ATS Command Error Counter</p><p>e)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; RTS Command Counter</p><p>f)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; RTS Command Error Counter</p><p>g)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Number of RTS Started Counter</p><p>h)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Number of RTS Started Error Counter</p></td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4486-->
+<!-- block ID=4486-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="odd_row">
+            
+            <td>SC1002</td>
+            
+            <td><!-- MKS HTML -->For all SC commands, if the length 
+contained in the message header is not equal to the expected length, SC 
+shall reject the command and issue an event message.</td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4486-->
+<!-- block ID=4486-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="even_row">
+            
+            <td>SC1004</td>
+            
+            <td><!-- MKS HTML -->If SC accepts any command as valid, SC 
+shall execute the command, increment the SC Valid Command Counter and 
+issue an event message.</td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4486-->
+<!-- block ID=4486-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="odd_row">
+            
+            <td>SC1005</td>
+            
+            <td><!-- MKS HTML -->If SC rejects any command, SC shall 
+abort the command execution, increment the SC Command Rejected Counter 
+and issue an error event message.</td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4486-->
+<!-- block ID=4486-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="even_row">
+            
+            <td>SC8000</td>
+            
+            <td><!-- MKS HTML --><p>SC shall generate a housekeeping message containing the following:</p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Valid &nbsp;Command Counter</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Command Rejected Counter</p><p>c)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Total count of commands dispatched from ATSs</p><p>d)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Total count of commands dispatched from RTSs</p><p>e)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Total count of commands which failed dispatch from ATSs</p><p>f)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Total count of commands which failed dispatch from RTSs</p><p>g)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ ATS Table #1 free byte count h)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ATS
+ Table #2 free byte count</p><p>i)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Absolute Time Command Processing State</p><p>j)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Identifier of the active ATS table &nbsp;</p><p>k)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Number of the next ATS command pending execution</p><p>l)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ATS switch pending flag</p><p>m)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Time the next ATS command is due to be dispatched</p><p>n)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The identifier of the ATS table for which the most recent ATS command failed to dispatch</p><p>o)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The identifier of most recent ATS command which failed to dispatch from the ATS tables</p><p>p)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; RTS table activation count</p><p>q)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; RTS table activation error count</p><p>r)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Number of active RTSs</p><p>s)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Identifier of the next RTS table to dispatch a command</p><p>t)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Time the next RTS command is due to be dispatched</p><p>u)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Execution status for each RTS table</p><p>v)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Enable status for each RTS table</p><p>w)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Identifier of the RTS table for which the most recent RTS command dispatch error occurred</p><p>x)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ The word offset within the RTS for the most recent RTS command which 
+failed to dispatch&nbsp;</p><p>y)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ATS Continue-On-Failure status<br>z)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The last append ApId</p><p>aa)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The last ATS Append Table command count</p><p>bb)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The last appended count</p></td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4486-->
+<!-- block ID=4486-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="odd_row">
+            
+            <td>SC9000</td>
+            
+            <td><!-- MKS HTML --><p>Upon a power-on or processor reset SC shall initialize the following Housekeeping data to Zero (or value specified):</p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Valid Command Counter</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Command Rejected Counter</p><p>c)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Total count of commands dispatched from ATSs</p><p>d)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Total count of commands dispatched from RTSs</p><p>e)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Total count of commands which failed dispatch from ATSs</p><p>f)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Total count of commands which failed dispatch from RTSs</p><p>g)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ATS Table #1 free byte count</p><p>h)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ATS Table #2 free byte count</p><p>i)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Absolute Time Command Processing State - DISABLED</p><p>j)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Identifier of the active ATS table &nbsp;- None</p><p>k)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Number of the next ATS command pending execution</p><p>l)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;ATS switch pending flag</p><p>m)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Time of the next ATS command dispatch</p><p>n)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The identifier of the ATS table for which the most recent ATS command failed to dispatch</p><p>o)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The identifier of most recent ATS command which failed to dispatch from the ATS tables</p><p>p)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; RTS table activation count</p><p>q)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; RTS table activation error count</p><p>r)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Number of active RTSs</p><p>s)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Identifier of the next RTS table to dispatch a command</p><p>t)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Time the next RTS command is due to be dispatched</p><p>u)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Execution status for each RTS table - IDLE</p><p>v)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Status for each RTS table - DISABLED</p><p>w)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Identifier of the RTS table for which the most recent RTS command dispatch error occurred</p><p>x)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ The word offset within the RTS for the most recent RTS command which 
+failed to dispatch&nbsp;</p><p>y)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ATS Continue-On-Failure status &lt;PLATFORM_DEFINED&gt;<br>z) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The last append ApId</p><p>aa)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The last ATS Append Table command count</p><p>bb)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The last appended coun</p></td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4486-->
+
+        </tbody></table>
+    </td>
+</tr>
+
+<tr><td><hr class="hr_default"></td></tr>
+<tr><td>&nbsp;</td></tr>
+<script type="text/javascript"> line_count=0; </script>
+<!-- blockend ID=4486-->
+<!-- block ID=4488-->
+
+<!-- Display issue heading -->
+<tr><th style="text-align: left">SC_RTSFunc - Item 4488 </th></tr>
+<!-- Display issue field names and values -->
+
+<tr><td><b>TEST_Test_Name:</b> SC_RTSFunc</td></tr>
+
+<tr><td><b>TEST_Description:</b> <!-- MKS HTML -->The purpose of this 
+test is to verify the Stored Command (SC) application supports the 
+execution of Relative Time Sequences (RTS) as well as detecting errors 
+with the commands contained in the RTS. Invalid commands will also be 
+issued to see if the SC application handles these appropriately.</td></tr>
+
+<tr><td><b>TEST_Current_Build:</b> 2.5.0.0</td></tr>
+
+<tr><td><b>TEST_Execution_Assigned_To:</b> Walt Moleski (wmoleski)</td></tr>
+
+<tr><td><b>TEST_Execution_Testbed:</b> 50244</td></tr>
+
+<tr><td><b>TEST_Execution_Checksum:</b> cFE 6.5.0.0; OSAL 4.2.0.0; PSP 1.3.0.0</td></tr>
+
+<tr><td><b>TEST_Execution_Completion_Date:</b> Oct 28, 2016</td></tr>
+
+<tr><td><b>TEST_Execution_Time:</b> 1552.97 seconds or 25.8829 minutes TAI; 1552.61 seconds or 258769 minutes UTC</td></tr>
+
+<tr><td><b>TEST_Execution_Comments:</b> <!-- MKS HTML -->All requirements passed. This test was executed with default (TAI) time and UTC time.</td></tr>
+
+<tr><td><b>TEST_Comments:</b> &nbsp;</td></tr>
+
+<!-- Relationships info -->
+<!-- Display relationship heading -->
+<tr><td>DCRs Submitted / Tested and Requirements Validated</td></tr>
+
+
+<tr><td class="detailheading" style="text-align: left">Links_To_TEST_from_DCRs_Backward,ALM_Validates:</td></tr>
+<tr>
+    <td>
+        <table class="detailcols fullWidth">
+        
+        <tbody><tr>
+            
+            <th>ReqID</th>
+            
+            <th>Text</th>
+            
+            <th>Build Test Method</th>
+            
+            <th>REQ_Build_Sys_Test_Results</th>
+            
+            <th>REQ_Build_Sys_Test_Comments</th>
+            
+            <th>DCR_Title</th>
+            
+            <th>DCR_TEST_Outcome</th>
+            
+        </tr>
+        <!-- block ID=4488-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="odd_row">
+            
+            <td>SC1002</td>
+            
+            <td><!-- MKS HTML -->For all SC commands, if the length 
+contained in the message header is not equal to the expected length, SC 
+shall reject the command and issue an event message.</td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4488-->
+<!-- block ID=4488-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="even_row">
+            
+            <td>SC1004</td>
+            
+            <td><!-- MKS HTML -->If SC accepts any command as valid, SC 
+shall execute the command, increment the SC Valid Command Counter and 
+issue an event message.</td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4488-->
+<!-- block ID=4488-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="odd_row">
+            
+            <td>SC1005</td>
+            
+            <td><!-- MKS HTML -->If SC rejects any command, SC shall 
+abort the command execution, increment the SC Command Rejected Counter 
+and issue an error event message.</td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4488-->
+<!-- block ID=4488-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="even_row">
+            
+            <td>SC2002</td>
+            
+            <td><!-- MKS HTML -->SC shall allocate 
+&lt;PLATFORM_DEFINED&gt; Relative Time-tagged Sequences (RTSs) with each
+ capable of storing &lt;PLATFORM_DEFINED&gt; &nbsp;bytes of stored 
+command data.</td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4488-->
+<!-- block ID=4488-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="odd_row">
+            
+            <td>SC2002.1</td>
+            
+            <td><!-- MKS HTML -->SC shall resolve time to 1 second for Relative Time Command Sequences (RTS).</td>
+            
+            <td>Analysis</td>
+            
+            <td>Pass</td>
+            
+            <td><!-- MKS HTML -->Step 2.7 of the rtsfunc test procedure 
+verifies this requirement. The RTS commands executed every 1 second as 
+specified in the loaded table.</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4488-->
+<!-- block ID=4488-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="even_row">
+            
+            <td>SC2002.2</td>
+            
+            <td><!-- MKS HTML -->SC shall accept variable length packed 
+RTS commands within the &lt;PLATFORM_DEFINED&gt;&nbsp;byte relative 
+time-tagged sequences.</td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4488-->
+<!-- block ID=4488-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="odd_row">
+            
+            <td>SC2002.3</td>
+            
+            <td><!-- MKS HTML --><p>Each individual command within the sequence shall consist of:</p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Time tag with a one second resolution</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; A variable length command, with a maximum length of &lt;PLATFORM_DEFINED&gt; bytes</p></td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4488-->
+<!-- block ID=4488-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="even_row">
+            
+            <td>SC2003</td>
+            
+            <td><!-- MKS HTML -->Upon receipt of a table update indication for an RTS Table, SC shall set the RTS status to &nbsp;DISABLED.</td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4488-->
+<!-- block ID=4488-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="odd_row">
+            
+            <td>SC2005</td>
+            
+            <td><!-- MKS HTML -->SC shall execute no more than 
+&lt;PLATFORM_DEFINED&gt; commands per second from all currently 
+executing RTS tables and/or ATS tables.</td>
+            
+            <td>Analysis</td>
+            
+            <td>Pass</td>
+            
+            <td><!-- MKS HTML -->Step 2.19 of the rtsfunc and 2.17 of 
+the stress test procedures verify this requirement. RTS #3 contained 6 
+commands (3 SC_NOOP and 3 ES_NOOP) that execute each second for 2 
+consecutive seconds. RTS #8 contained 4 commands (TBL_NOOP) that 
+executed each second for 3 seconds. The test log shows that the max 
+number of commands (8) executed in any one second.</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4488-->
+<!-- block ID=4488-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="even_row">
+            
+            <td>SC2006</td>
+            
+            <td><!-- MKS HTML -->SC shall execute the RTSs in priority order based on the RTS number where RTS #1 has the highest priority.</td>
+            
+            <td>Analysis</td>
+            
+            <td>Pass</td>
+            
+            <td><!-- MKS HTML -->Step 2.19 of the rtsfunc test procedure
+ verifies this requirement. RTS #3 contained 6 commands (3 SC_NOOP and 3
+ ES_NOOP) that execute each second for 2 consecutive seconds. RTS #8 
+contained 4 commands (TBL_NOOP) that executed each second for 3 seconds.
+ The test log shows that all RTS #3 commands were executed in each 
+second along with 2 of RTS #8 commands. The remaining RTS #8 commands 
+executed when RTS #3 completed.</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4488-->
+<!-- block ID=4488-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="odd_row">
+            
+            <td>SC4000</td>
+            
+            <td><!-- MKS HTML --><p>Upon receipt of a Start RTS Command,
+ SC shall execute the command-specified RTS, or range of RTS, provided 
+all of the following conditions are met:</p><p>a)The command-specified RTS, or range of RTS, is not currently executing</p><p>b) The RTS, or range of RTS, table(s) is Enabled c) The RTS, or range of RTS, table(s) has been Loaded</p></td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4488-->
+<!-- block ID=4488-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="even_row">
+            
+            <td>SC4000.1</td>
+            
+            <td><!-- MKS HTML -->If the conditions are met, SC shall 
+issue an event message indicating the RTS started if the RTS number is 
+less than &lt;PLATFORM_DEFINED&gt; RTS number.</td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4488-->
+<!-- block ID=4488-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="odd_row">
+            
+            <td>SC4000.2</td>
+            
+            <td><!-- MKS HTML -->If the conditions are not met, SC shall reject the command and send an event message.</td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4488-->
+<!-- block ID=4488-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="even_row">
+            
+            <td>SC4001</td>
+            
+            <td><!-- MKS HTML -->SC shall dispatch commands within the 
+RTS table, in position order, as the relative time-tag specified in the 
+RTS command expires.&nbsp;</td>
+            
+            <td>Analysis</td>
+            
+            <td>Pass</td>
+            
+            <td><!-- MKS HTML -->Step 2.6 and 2.7 of the rtsfunc test 
+procedure verify this requirement. Three commands were loaded into RTS 
+#2. The command order in the table was SC_NOOP, TBL_NOOP and EVS_NOOP. 
+The RTS commands were dispatched in the correct order.</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4488-->
+<!-- block ID=4488-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="odd_row">
+            
+            <td>SC4001.1</td>
+            
+            <td><!-- MKS HTML -->The time-tag shall be interpreted as 
+the number of seconds to delay relative to the previous RTS command 
+dispatched from that RTS table.&nbsp;</td>
+            
+            <td>Analysis</td>
+            
+            <td>Pass</td>
+            
+            <td><!-- MKS HTML -->Step 2.6 and 2.7 of the rtsfunc test 
+procedure verify this requirement. The delay prior to the first command 
+was 5 seconds, followed by a 1 second delay between the other commands. 
+The test log shows these delays.</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4488-->
+<!-- block ID=4488-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="even_row">
+            
+            <td>SC4001.2</td>
+            
+            <td><!-- MKS HTML -->For the first command in an RTS table, the delay time shall be relative to the receipt of the RTS Start Command.&nbsp;</td>
+            
+            <td>Analysis</td>
+            
+            <td>Pass</td>
+            
+            <td><!-- MKS HTML -->Step 2.6 and 2.7 of the rtsfunc test 
+procedure verify this requirement. The first command in the RTS table 
+was to delay for 5 seconds. The log file of the test shows that the 
+first command executed approximately 5 seconds after the RTS was 
+started.</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4488-->
+<!-- block ID=4488-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="odd_row">
+            
+            <td>SC4001.3</td>
+            
+            <td><!-- MKS HTML --><p>Prior to the dispatch of each individual RTS command, SC shall verify the validity of the following command parameters:</p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; RTS command length</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Embedded command Data Integrity Check Value&nbsp;</p></td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4488-->
+<!-- block ID=4488-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="even_row">
+            
+            <td>SC4001.3.1</td>
+            
+            <td><!-- MKS HTML --><p>In the event an RTS command fails the validation checks, &nbsp;SC shall:</p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Discard the invalid RTS command</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ Generate an event message c)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ABORT 
+the execution of that specific RTS</p></td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4488-->
+<!-- block ID=4488-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="odd_row">
+            
+            <td>SC4001.4</td>
+            
+            <td><!-- MKS HTML -->Upon completion of the execution of the RTS, SC shall send an event message indicating that the RTS completed.</td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4488-->
+<!-- block ID=4488-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="even_row">
+            
+            <td>SC4002</td>
+            
+            <td><!-- MKS HTML --><p>SC shall terminate the execution of an RTS table upon detection of:</p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; A Stop RTS Command within the RTS command table</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Null data</p><p>c)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The physical end of the RTS table&nbsp;</p></td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4488-->
+<!-- block ID=4488-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="odd_row">
+            
+            <td>SC4003</td>
+            
+            <td><!-- MKS HTML -->Upon receipt of a Stop RTS Command, SC shall terminate the execution of the command-specified RTS table, or range of RTS table.</td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4488-->
+<!-- block ID=4488-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="even_row">
+            
+            <td>SC4004</td>
+            
+            <td><!-- MKS HTML -->Upon receipt of an Enable RTS Command, SC shall set the status of the command-specified RTS to Enabled.</td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4488-->
+<!-- block ID=4488-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="odd_row">
+            
+            <td>SC4005</td>
+            
+            <td><!-- MKS HTML -->Upon receipt of an Disable RTS Command, SC shall set the status of the command-specified RTS to Disabled.</td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4488-->
+<!-- block ID=4488-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="even_row">
+            
+            <td>SC4005.1</td>
+            
+            <td><!-- MKS HTML --><p>If the RTS is currently executing when the Disable RTS Command is received, the current execution of this RTS table shall:</p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Be executed until completion</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set to RTS state to Disabled, preventing it from future execution</p></td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4488-->
+<!-- block ID=4488-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="odd_row">
+            
+            <td>SC8000</td>
+            
+            <td><!-- MKS HTML --><p>SC shall generate a housekeeping message containing the following:</p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Valid &nbsp;Command Counter</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Command Rejected Counter</p><p>c)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Total count of commands dispatched from ATSs</p><p>d)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Total count of commands dispatched from RTSs</p><p>e)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Total count of commands which failed dispatch from ATSs</p><p>f)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Total count of commands which failed dispatch from RTSs</p><p>g)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ ATS Table #1 free byte count h)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ATS
+ Table #2 free byte count</p><p>i)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Absolute Time Command Processing State</p><p>j)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Identifier of the active ATS table &nbsp;</p><p>k)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Number of the next ATS command pending execution</p><p>l)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ATS switch pending flag</p><p>m)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Time the next ATS command is due to be dispatched</p><p>n)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The identifier of the ATS table for which the most recent ATS command failed to dispatch</p><p>o)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The identifier of most recent ATS command which failed to dispatch from the ATS tables</p><p>p)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; RTS table activation count</p><p>q)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; RTS table activation error count</p><p>r)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Number of active RTSs</p><p>s)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Identifier of the next RTS table to dispatch a command</p><p>t)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Time the next RTS command is due to be dispatched</p><p>u)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Execution status for each RTS table</p><p>v)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Enable status for each RTS table</p><p>w)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Identifier of the RTS table for which the most recent RTS command dispatch error occurred</p><p>x)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ The word offset within the RTS for the most recent RTS command which 
+failed to dispatch&nbsp;</p><p>y)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ATS Continue-On-Failure status<br>z)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The last append ApId</p><p>aa)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The last ATS Append Table command count</p><p>bb)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The last appended count</p></td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4488-->
+<!-- block ID=4488-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="even_row">
+            
+            <td>SC9000</td>
+            
+            <td><!-- MKS HTML --><p>Upon a power-on or processor reset SC shall initialize the following Housekeeping data to Zero (or value specified):</p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Valid Command Counter</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Command Rejected Counter</p><p>c)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Total count of commands dispatched from ATSs</p><p>d)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Total count of commands dispatched from RTSs</p><p>e)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Total count of commands which failed dispatch from ATSs</p><p>f)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Total count of commands which failed dispatch from RTSs</p><p>g)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ATS Table #1 free byte count</p><p>h)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ATS Table #2 free byte count</p><p>i)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Absolute Time Command Processing State - DISABLED</p><p>j)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Identifier of the active ATS table &nbsp;- None</p><p>k)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Number of the next ATS command pending execution</p><p>l)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;ATS switch pending flag</p><p>m)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Time of the next ATS command dispatch</p><p>n)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The identifier of the ATS table for which the most recent ATS command failed to dispatch</p><p>o)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The identifier of most recent ATS command which failed to dispatch from the ATS tables</p><p>p)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; RTS table activation count</p><p>q)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; RTS table activation error count</p><p>r)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Number of active RTSs</p><p>s)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Identifier of the next RTS table to dispatch a command</p><p>t)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Time the next RTS command is due to be dispatched</p><p>u)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Execution status for each RTS table - IDLE</p><p>v)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Status for each RTS table - DISABLED</p><p>w)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Identifier of the RTS table for which the most recent RTS command dispatch error occurred</p><p>x)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ The word offset within the RTS for the most recent RTS command which 
+failed to dispatch&nbsp;</p><p>y)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ATS Continue-On-Failure status &lt;PLATFORM_DEFINED&gt;<br>z) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The last append ApId</p><p>aa)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The last ATS Append Table command count</p><p>bb)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The last appended coun</p></td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4488-->
+<!-- block ID=4488-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="odd_row">
+            
+            <td>SC9004</td>
+            
+            <td><!-- MKS HTML -->Upon a power-on reset, SC shall start RTS #1.</td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4488-->
+
+        </tbody></table>
+    </td>
+</tr>
+
+<tr><td><hr class="hr_default"></td></tr>
+<tr><td>&nbsp;</td></tr>
+<script type="text/javascript"> line_count=0; </script>
+<!-- blockend ID=4488-->
+<!-- block ID=4490-->
+
+<!-- Display issue heading -->
+<tr><th style="text-align: left">SC_ResetNoCDS - Item 4490 </th></tr>
+<!-- Display issue field names and values -->
+
+<tr><td><b>TEST_Test_Name:</b> SC_ResetNoCDS</td></tr>
+
+<tr><td><b>TEST_Description:</b> <!-- MKS HTML -->The purpose of this 
+test is to verify the Stored Command (SC) application initializes the 
+appropriate data items based upon the type of initialization that occurs
+ (Application Reset, Processor Reset, or Power-On Reset). This test also
+ verifies that the proper notifications occur if any anomolies exist 
+with the data items stated in the requirements.<br><br>This test should not be executed if the configuration parameter indicating Save Critical Data is set to YES by the Mission.</td></tr>
+
+<tr><td><b>TEST_Current_Build:</b> 2.5.0.0</td></tr>
+
+<tr><td><b>TEST_Execution_Assigned_To:</b> Walt Moleski (wmoleski)</td></tr>
+
+<tr><td><b>TEST_Execution_Testbed:</b> 50244</td></tr>
+
+<tr><td><b>TEST_Execution_Checksum:</b> cFE 6.5.0.0; OSAL 4.2.0.0; PSP 1.3.0.0</td></tr>
+
+<tr><td><b>TEST_Execution_Completion_Date:</b> Oct 27, 2016</td></tr>
+
+<tr><td><b>TEST_Execution_Time:</b> 1236.19 seconds or 20.6031 minutes</td></tr>
+
+<tr><td><b>TEST_Execution_Comments:</b> <!-- MKS HTML -->All requirements passed.</td></tr>
+
+<tr><td><b>TEST_Comments:</b> &nbsp;</td></tr>
+
+<!-- Relationships info -->
+<!-- Display relationship heading -->
+<tr><td>DCRs Submitted / Tested and Requirements Validated</td></tr>
+
+
+<tr><td class="detailheading" style="text-align: left">Links_To_TEST_from_DCRs_Backward,ALM_Validates:</td></tr>
+<tr>
+    <td>
+        <table class="detailcols fullWidth">
+        
+        <tbody><tr>
+            
+            <th>ReqID</th>
+            
+            <th>Text</th>
+            
+            <th>Build Test Method</th>
+            
+            <th>REQ_Build_Sys_Test_Results</th>
+            
+            <th>REQ_Build_Sys_Test_Comments</th>
+            
+            <th>DCR_Title</th>
+            
+            <th>DCR_TEST_Outcome</th>
+            
+        </tr>
+        <!-- block ID=4490-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="odd_row">
+            
+            <td>SC1004</td>
+            
+            <td><!-- MKS HTML -->If SC accepts any command as valid, SC 
+shall execute the command, increment the SC Valid Command Counter and 
+issue an event message.</td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4490-->
+<!-- block ID=4490-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="even_row">
+            
+            <td>SC2000.2</td>
+            
+            <td><!-- MKS HTML -->SC shall accept a maximum of &lt;PLATFORM_DEFINED&gt; commands per ATS.</td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4490-->
+<!-- block ID=4490-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="odd_row">
+            
+            <td>SC2000.3</td>
+            
+            <td><!-- MKS HTML --><p>SC shall accept a variable number of variable length commands from each ATS. Each ATS command shall contain:</p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; A command number</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; A time tag denoting the time at which to execute the command</p><p>c)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; A variable length command&nbsp;</p></td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4490-->
+<!-- block ID=4490-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="even_row">
+            
+            <td>SC2001</td>
+            
+            <td><!-- MKS HTML --><p>Upon receipt of a table update indication for an ATS Table, SC shall validate the following for the ATS table:</p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Duplicate command numbers</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Invalid command lengths</p><p>c)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Commands that run off of the end of the table<br>d)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Command number</p></td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4490-->
+<!-- block ID=4490-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="odd_row">
+            
+            <td>SC2002.2</td>
+            
+            <td><!-- MKS HTML -->SC shall accept variable length packed 
+RTS commands within the &lt;PLATFORM_DEFINED&gt;&nbsp;byte relative 
+time-tagged sequences.</td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4490-->
+<!-- block ID=4490-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="even_row">
+            
+            <td>SC2002.3</td>
+            
+            <td><!-- MKS HTML --><p>Each individual command within the sequence shall consist of:</p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Time tag with a one second resolution</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; A variable length command, with a maximum length of &lt;PLATFORM_DEFINED&gt; bytes</p></td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4490-->
+<!-- block ID=4490-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="odd_row">
+            
+            <td>SC2003</td>
+            
+            <td><!-- MKS HTML -->Upon receipt of a table update indication for an RTS Table, SC shall set the RTS status to &nbsp;DISABLED.</td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4490-->
+<!-- block ID=4490-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="even_row">
+            
+            <td>SC3000</td>
+            
+            <td><!-- MKS HTML --><p>Upon receipt of a Start ATS command,
+ SC shall start the command-specified ATS provided all of the following 
+conditions are satisfied:</p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The command-specified ATS table identification is valid</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The ATS table contains at least one command</p><p>c)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Neither of the two ATS tables is currently executing</p></td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4490-->
+<!-- block ID=4490-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="odd_row">
+            
+            <td>SC4000</td>
+            
+            <td><!-- MKS HTML --><p>Upon receipt of a Start RTS Command,
+ SC shall execute the command-specified RTS, or range of RTS, provided 
+all of the following conditions are met:</p><p>a)The command-specified RTS, or range of RTS, is not currently executing</p><p>b) The RTS, or range of RTS, table(s) is Enabled c) The RTS, or range of RTS, table(s) has been Loaded</p></td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4490-->
+<!-- block ID=4490-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="even_row">
+            
+            <td>SC4000.1</td>
+            
+            <td><!-- MKS HTML -->If the conditions are met, SC shall 
+issue an event message indicating the RTS started if the RTS number is 
+less than &lt;PLATFORM_DEFINED&gt; RTS number.</td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4490-->
+<!-- block ID=4490-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="odd_row">
+            
+            <td>SC4004</td>
+            
+            <td><!-- MKS HTML -->Upon receipt of an Enable RTS Command, SC shall set the status of the command-specified RTS to Enabled.</td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4490-->
+<!-- block ID=4490-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="even_row">
+            
+            <td>SC8000</td>
+            
+            <td><!-- MKS HTML --><p>SC shall generate a housekeeping message containing the following:</p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Valid &nbsp;Command Counter</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Command Rejected Counter</p><p>c)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Total count of commands dispatched from ATSs</p><p>d)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Total count of commands dispatched from RTSs</p><p>e)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Total count of commands which failed dispatch from ATSs</p><p>f)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Total count of commands which failed dispatch from RTSs</p><p>g)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ ATS Table #1 free byte count h)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ATS
+ Table #2 free byte count</p><p>i)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Absolute Time Command Processing State</p><p>j)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Identifier of the active ATS table &nbsp;</p><p>k)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Number of the next ATS command pending execution</p><p>l)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ATS switch pending flag</p><p>m)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Time the next ATS command is due to be dispatched</p><p>n)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The identifier of the ATS table for which the most recent ATS command failed to dispatch</p><p>o)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The identifier of most recent ATS command which failed to dispatch from the ATS tables</p><p>p)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; RTS table activation count</p><p>q)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; RTS table activation error count</p><p>r)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Number of active RTSs</p><p>s)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Identifier of the next RTS table to dispatch a command</p><p>t)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Time the next RTS command is due to be dispatched</p><p>u)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Execution status for each RTS table</p><p>v)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Enable status for each RTS table</p><p>w)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Identifier of the RTS table for which the most recent RTS command dispatch error occurred</p><p>x)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ The word offset within the RTS for the most recent RTS command which 
+failed to dispatch&nbsp;</p><p>y)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ATS Continue-On-Failure status<br>z)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The last append ApId</p><p>aa)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The last ATS Append Table command count</p><p>bb)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The last appended count</p></td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4490-->
+<!-- block ID=4490-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="odd_row">
+            
+            <td>SC9000</td>
+            
+            <td><!-- MKS HTML --><p>Upon a power-on or processor reset SC shall initialize the following Housekeeping data to Zero (or value specified):</p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Valid Command Counter</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Command Rejected Counter</p><p>c)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Total count of commands dispatched from ATSs</p><p>d)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Total count of commands dispatched from RTSs</p><p>e)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Total count of commands which failed dispatch from ATSs</p><p>f)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Total count of commands which failed dispatch from RTSs</p><p>g)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ATS Table #1 free byte count</p><p>h)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ATS Table #2 free byte count</p><p>i)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Absolute Time Command Processing State - DISABLED</p><p>j)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Identifier of the active ATS table &nbsp;- None</p><p>k)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Number of the next ATS command pending execution</p><p>l)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;ATS switch pending flag</p><p>m)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Time of the next ATS command dispatch</p><p>n)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The identifier of the ATS table for which the most recent ATS command failed to dispatch</p><p>o)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The identifier of most recent ATS command which failed to dispatch from the ATS tables</p><p>p)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; RTS table activation count</p><p>q)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; RTS table activation error count</p><p>r)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Number of active RTSs</p><p>s)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Identifier of the next RTS table to dispatch a command</p><p>t)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Time the next RTS command is due to be dispatched</p><p>u)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Execution status for each RTS table - IDLE</p><p>v)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Status for each RTS table - DISABLED</p><p>w)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Identifier of the RTS table for which the most recent RTS command dispatch error occurred</p><p>x)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ The word offset within the RTS for the most recent RTS command which 
+failed to dispatch&nbsp;</p><p>y)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ATS Continue-On-Failure status &lt;PLATFORM_DEFINED&gt;<br>z) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The last append ApId</p><p>aa)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The last ATS Append Table command count</p><p>bb)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The last appended coun</p></td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4490-->
+<!-- block ID=4490-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="even_row">
+            
+            <td>SC9004</td>
+            
+            <td><!-- MKS HTML -->Upon a power-on reset, SC shall start RTS #1.</td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4490-->
+<!-- block ID=4490-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="odd_row">
+            
+            <td>SC9005</td>
+            
+            <td><!-- MKS HTML -->Upon a processor reset, SC shall start RTS #2.</td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4490-->
+
+        </tbody></table>
+    </td>
+</tr>
+
+<tr><td><hr class="hr_default"></td></tr>
+<tr><td>&nbsp;</td></tr>
+<script type="text/javascript"> line_count=0; </script>
+<!-- blockend ID=4490-->
+<!-- block ID=4491-->
+
+<!-- Display issue heading -->
+<tr><th style="text-align: left">SC_Stress - Item 4491 </th></tr>
+<!-- Display issue field names and values -->
+
+<tr><td><b>TEST_Test_Name:</b> SC_Stress</td></tr>
+
+<tr><td><b>TEST_Description:</b> <!-- MKS HTML -->The purpose of this 
+test is to verify the Stored Command (SC) application can support the 
+execution of the maximum allowable Relative Time Sequences (RTS) and the
+ maximum number of commands contained in an ATS and/or RTS.</td></tr>
+
+<tr><td><b>TEST_Current_Build:</b> 2.5.0.0</td></tr>
+
+<tr><td><b>TEST_Execution_Assigned_To:</b> Walt Moleski (wmoleski)</td></tr>
+
+<tr><td><b>TEST_Execution_Testbed:</b> 50244</td></tr>
+
+<tr><td><b>TEST_Execution_Checksum:</b> cFE 6.5.0.0; OSAL 4.2.0.0; PSP 1.3.0.0</td></tr>
+
+<tr><td><b>TEST_Execution_Completion_Date:</b> Oct 27, 2016</td></tr>
+
+<tr><td><b>TEST_Execution_Time:</b> 1991.77 seconds or 33.1961 minutes</td></tr>
+
+<tr><td><b>TEST_Execution_Comments:</b> <!-- MKS HTML -->All requirements passed</td></tr>
+
+<tr><td><b>TEST_Comments:</b> &nbsp;</td></tr>
+
+<!-- Relationships info -->
+<!-- Display relationship heading -->
+<tr><td>DCRs Submitted / Tested and Requirements Validated</td></tr>
+
+
+<tr><td class="detailheading" style="text-align: left">Links_To_TEST_from_DCRs_Backward,ALM_Validates:</td></tr>
+<tr>
+    <td>
+        <table class="detailcols fullWidth">
+        
+        <tbody><tr>
+            
+            <th>ReqID</th>
+            
+            <th>Text</th>
+            
+            <th>Build Test Method</th>
+            
+            <th>REQ_Build_Sys_Test_Results</th>
+            
+            <th>REQ_Build_Sys_Test_Comments</th>
+            
+            <th>DCR_Title</th>
+            
+            <th>DCR_TEST_Outcome</th>
+            
+        </tr>
+        <!-- block ID=4491-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="odd_row">
+            
+            <td>SC1004</td>
+            
+            <td><!-- MKS HTML -->If SC accepts any command as valid, SC 
+shall execute the command, increment the SC Valid Command Counter and 
+issue an event message.</td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4491-->
+<!-- block ID=4491-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="even_row">
+            
+            <td>SC2000.2</td>
+            
+            <td><!-- MKS HTML -->SC shall accept a maximum of &lt;PLATFORM_DEFINED&gt; commands per ATS.</td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4491-->
+<!-- block ID=4491-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="odd_row">
+            
+            <td>SC2000.3</td>
+            
+            <td><!-- MKS HTML --><p>SC shall accept a variable number of variable length commands from each ATS. Each ATS command shall contain:</p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; A command number</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; A time tag denoting the time at which to execute the command</p><p>c)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; A variable length command&nbsp;</p></td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4491-->
+<!-- block ID=4491-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="even_row">
+            
+            <td>SC2001</td>
+            
+            <td><!-- MKS HTML --><p>Upon receipt of a table update indication for an ATS Table, SC shall validate the following for the ATS table:</p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Duplicate command numbers</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Invalid command lengths</p><p>c)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Commands that run off of the end of the table<br>d)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Command number</p></td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4491-->
+<!-- block ID=4491-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="odd_row">
+            
+            <td>SC2002</td>
+            
+            <td><!-- MKS HTML -->SC shall allocate 
+&lt;PLATFORM_DEFINED&gt; Relative Time-tagged Sequences (RTSs) with each
+ capable of storing &lt;PLATFORM_DEFINED&gt; &nbsp;bytes of stored 
+command data.</td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4491-->
+<!-- block ID=4491-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="even_row">
+            
+            <td>SC2002.2</td>
+            
+            <td><!-- MKS HTML -->SC shall accept variable length packed 
+RTS commands within the &lt;PLATFORM_DEFINED&gt;&nbsp;byte relative 
+time-tagged sequences.</td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4491-->
+<!-- block ID=4491-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="odd_row">
+            
+            <td>SC2002.3</td>
+            
+            <td><!-- MKS HTML --><p>Each individual command within the sequence shall consist of:</p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Time tag with a one second resolution</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; A variable length command, with a maximum length of &lt;PLATFORM_DEFINED&gt; bytes</p></td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4491-->
+<!-- block ID=4491-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="even_row">
+            
+            <td>SC2003</td>
+            
+            <td><!-- MKS HTML -->Upon receipt of a table update indication for an RTS Table, SC shall set the RTS status to &nbsp;DISABLED.</td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4491-->
+<!-- block ID=4491-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="odd_row">
+            
+            <td>SC2005</td>
+            
+            <td><!-- MKS HTML -->SC shall execute no more than 
+&lt;PLATFORM_DEFINED&gt; commands per second from all currently 
+executing RTS tables and/or ATS tables.</td>
+            
+            <td>Analysis</td>
+            
+            <td>Pass</td>
+            
+            <td><!-- MKS HTML -->Step 2.19 of the rtsfunc and 2.17 of 
+the stress test procedures verify this requirement. RTS #3 contained 6 
+commands (3 SC_NOOP and 3 ES_NOOP) that execute each second for 2 
+consecutive seconds. RTS #8 contained 4 commands (TBL_NOOP) that 
+executed each second for 3 seconds. The test log shows that the max 
+number of commands (8) executed in any one second.</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4491-->
+<!-- block ID=4491-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="even_row">
+            
+            <td>SC2005.1</td>
+            
+            <td><!-- MKS HTML -->SC shall defer execution of pending RTS
+ commands, when the combined execution count, of ATS and RTS, exceeds 
+the command per second limit.<br>&nbsp;<br>Note: RTS commands that are deferred may take priority over ATS commands that are scheduled to execute in the next second.</td>
+            
+            <td>Analysis</td>
+            
+            <td>Pass</td>
+            
+            <td><!-- MKS HTML -->Step 2.17 of the stress test procedure 
+verifies this requirement. ATS B was loaded with the maximum commands 
+per second (8) and executed for 6 seconds. The first ATS command started
+ RTS #5 which contained 3 commands (TO_NOOP, CI_NOOP and TST_SC_NOOP) 
+that executed for 6 consecutive seconds. The ATS commands executed first
+ followed by the deferred RTS commands until both sequences completed.</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4491-->
+<!-- block ID=4491-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="odd_row">
+            
+            <td>SC2005.2</td>
+            
+            <td><!-- MKS HTML -->SC shall allow up to the maximum number of defined RTSs to be active concurrently.</td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4491-->
+<!-- block ID=4491-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="even_row">
+            
+            <td>SC3000</td>
+            
+            <td><!-- MKS HTML --><p>Upon receipt of a Start ATS command,
+ SC shall start the command-specified ATS provided all of the following 
+conditions are satisfied:</p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The command-specified ATS table identification is valid</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The ATS table contains at least one command</p><p>c)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Neither of the two ATS tables is currently executing</p></td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4491-->
+<!-- block ID=4491-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="odd_row">
+            
+            <td>SC3001</td>
+            
+            <td><!-- MKS HTML --><p>Upon receipt of a Stop ATS Command, SC shall</p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Stop processing the currently executing ATS</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set the state of that ATS to IDLE</p></td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4491-->
+<!-- block ID=4491-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="even_row">
+            
+            <td>SC4000</td>
+            
+            <td><!-- MKS HTML --><p>Upon receipt of a Start RTS Command,
+ SC shall execute the command-specified RTS, or range of RTS, provided 
+all of the following conditions are met:</p><p>a)The command-specified RTS, or range of RTS, is not currently executing</p><p>b) The RTS, or range of RTS, table(s) is Enabled c) The RTS, or range of RTS, table(s) has been Loaded</p></td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4491-->
+<!-- block ID=4491-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="odd_row">
+            
+            <td>SC4000.1</td>
+            
+            <td><!-- MKS HTML -->If the conditions are met, SC shall 
+issue an event message indicating the RTS started if the RTS number is 
+less than &lt;PLATFORM_DEFINED&gt; RTS number.</td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4491-->
+<!-- block ID=4491-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="even_row">
+            
+            <td>SC4003</td>
+            
+            <td><!-- MKS HTML -->Upon receipt of a Stop RTS Command, SC shall terminate the execution of the command-specified RTS table, or range of RTS table.</td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4491-->
+<!-- block ID=4491-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="odd_row">
+            
+            <td>SC4004</td>
+            
+            <td><!-- MKS HTML -->Upon receipt of an Enable RTS Command, SC shall set the status of the command-specified RTS to Enabled.</td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4491-->
+<!-- block ID=4491-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="even_row">
+            
+            <td>SC8000</td>
+            
+            <td><!-- MKS HTML --><p>SC shall generate a housekeeping message containing the following:</p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Valid &nbsp;Command Counter</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Command Rejected Counter</p><p>c)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Total count of commands dispatched from ATSs</p><p>d)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Total count of commands dispatched from RTSs</p><p>e)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Total count of commands which failed dispatch from ATSs</p><p>f)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Total count of commands which failed dispatch from RTSs</p><p>g)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ ATS Table #1 free byte count h)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ATS
+ Table #2 free byte count</p><p>i)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Absolute Time Command Processing State</p><p>j)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Identifier of the active ATS table &nbsp;</p><p>k)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Number of the next ATS command pending execution</p><p>l)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ATS switch pending flag</p><p>m)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Time the next ATS command is due to be dispatched</p><p>n)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The identifier of the ATS table for which the most recent ATS command failed to dispatch</p><p>o)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The identifier of most recent ATS command which failed to dispatch from the ATS tables</p><p>p)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; RTS table activation count</p><p>q)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; RTS table activation error count</p><p>r)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Number of active RTSs</p><p>s)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Identifier of the next RTS table to dispatch a command</p><p>t)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Time the next RTS command is due to be dispatched</p><p>u)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Execution status for each RTS table</p><p>v)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Enable status for each RTS table</p><p>w)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Identifier of the RTS table for which the most recent RTS command dispatch error occurred</p><p>x)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ The word offset within the RTS for the most recent RTS command which 
+failed to dispatch&nbsp;</p><p>y)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ATS Continue-On-Failure status<br>z)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The last append ApId</p><p>aa)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The last ATS Append Table command count</p><p>bb)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The last appended count</p></td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4491-->
+<!-- block ID=4491-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="odd_row">
+            
+            <td>SC9000</td>
+            
+            <td><!-- MKS HTML --><p>Upon a power-on or processor reset SC shall initialize the following Housekeeping data to Zero (or value specified):</p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Valid Command Counter</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Command Rejected Counter</p><p>c)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Total count of commands dispatched from ATSs</p><p>d)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Total count of commands dispatched from RTSs</p><p>e)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Total count of commands which failed dispatch from ATSs</p><p>f)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Total count of commands which failed dispatch from RTSs</p><p>g)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ATS Table #1 free byte count</p><p>h)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ATS Table #2 free byte count</p><p>i)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Absolute Time Command Processing State - DISABLED</p><p>j)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Identifier of the active ATS table &nbsp;- None</p><p>k)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Number of the next ATS command pending execution</p><p>l)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;ATS switch pending flag</p><p>m)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Time of the next ATS command dispatch</p><p>n)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The identifier of the ATS table for which the most recent ATS command failed to dispatch</p><p>o)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The identifier of most recent ATS command which failed to dispatch from the ATS tables</p><p>p)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; RTS table activation count</p><p>q)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; RTS table activation error count</p><p>r)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Number of active RTSs</p><p>s)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Identifier of the next RTS table to dispatch a command</p><p>t)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Time the next RTS command is due to be dispatched</p><p>u)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Execution status for each RTS table - IDLE</p><p>v)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Status for each RTS table - DISABLED</p><p>w)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Identifier of the RTS table for which the most recent RTS command dispatch error occurred</p><p>x)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ The word offset within the RTS for the most recent RTS command which 
+failed to dispatch&nbsp;</p><p>y)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ATS Continue-On-Failure status &lt;PLATFORM_DEFINED&gt;<br>z) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The last append ApId</p><p>aa)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The last ATS Append Table command count</p><p>bb)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The last appended coun</p></td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4491-->
+<!-- block ID=4491-->
+
+		
+        
+        <!-- Display relationship issue field headings -->
+        
+        
+        <!-- Display relationship issue field values -->
+		<script type="text/javascript"> writeEvenOddTRTag(); </script><tr class="even_row">
+            
+            <td>SC9004</td>
+            
+            <td><!-- MKS HTML -->Upon a power-on reset, SC shall start RTS #1.</td>
+            
+            <td>Demonstration</td>
+            
+            <td>Pass</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+            <td>&nbsp;</td>
+            
+        </tr>
+        <!-- blockend ID=4491-->
+
+        </tbody></table>
+    </td>
+</tr>
+
+<tr><td><hr class="hr_default"></td></tr>
+<tr><td>&nbsp;</td></tr>
+<script type="text/javascript"> line_count=0; </script>
+<!-- blockend ID=4491-->
+
+</tbody></table>
+<center class="footer"></center>
+
+</body></html>

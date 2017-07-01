@@ -1,0 +1,130 @@
+Enumeration FSW_SC_Continue_ATS_on_Checksum_Failure_ENUM
+{
+    EnumerationValue TRUE {value=0x0001}
+    EnumerationValue FALSE {value=0x0000}
+}
+
+CfeSoftwareCommand FSW_SC_NOOP
+{
+    applicationId {range=0xA9}
+    commandCode {range=0}
+}
+
+CfeSoftwareCommand FSW_SC_RESET
+{
+    applicationId {range=0xA9}
+    commandCode {range=1}
+}
+
+CfeSoftwareCommand FSW_SC_START_ATS
+{
+    applicationId {range=0xA9}
+    commandCode {range=2}
+
+    U21 AtsId {range=1..2}
+}
+
+CfeSoftwareCommand FSW_SC_STOP_ATS
+{
+    applicationId {range=0xA9}
+    commandCode {range=3}
+}
+
+CfeSoftwareCommand FSW_SC_SWITCH_ATS
+{
+    applicationId {range=0xA9}
+    commandCode {range=8}
+}
+
+CfeSoftwareCommand FSW_SC_ATS_JUMP
+{
+    applicationId {range=0xA9}
+    commandCode {range=9}
+
+    U4321 NewTime {range=0..4294967295}
+}
+
+CfeSoftwareCommand FSW_SC_CONTINUE_ATS_ON_CHECKSUM_FAILURE
+{
+    applicationId {range=0xA9}
+    commandCode {range=10}
+
+    U21 ContinueState {enumeration=FSW_SC_Continue_ATS_on_Checksum_Failure_ENUM,range=0..1}
+}
+
+CfeSoftwareCommand FSW_SC_ENABLE_RTS
+{
+    applicationId {range=0xA9}
+    commandCode {range=7}
+
+    U21 RtsId {range=1..64}
+}
+
+CfeSoftwareCommand FSW_SC_DISABLE_RTS
+{
+    applicationId {range=0xA9}
+    commandCode {range=6}
+
+    U21 RtsId {range=1..64}
+}
+
+CfeSoftwareCommand FSW_SC_START_RTS
+{
+    applicationId {range=0xA9}
+    commandCode {range=4}
+
+    U21 RtsId {range=1..64}
+}
+
+CfeSoftwareCommand FSW_SC_STOP_RTS
+{
+    applicationId {range=0xA9}
+    commandCode {range=5}
+
+    U21 RtsId {range=1..64}
+}
+
+CfeSoftwareCommand FSW_SC_APPEND_ATS
+{
+    applicationId {range=0xA9}
+    commandCode {range=11}
+
+    U21 AtsId {range=1..2}
+}
+
+CfeSoftwareCommand FSW_SC_ENABLE_RTS_GROUP
+{
+    applicationId {range=0xA9}
+    commandCode {range=16}
+
+    U21 FirstRts {range=1..64}
+    U21 LastRts {range=1..64}
+}
+
+CfeSoftwareCommand FSW_SC_DISABLE_RTS_GROUP
+{
+    applicationId {range=0xA9}
+    commandCode {range=15}
+
+    U21 FirstRts {range=1..64}
+    U21 LastRts {range=1..64}
+}
+
+CfeSoftwareCommand FSW_SC_START_RTS_GROUP
+{
+    applicationId {range=0xA9}
+    commandCode {range=13}
+
+    U21 FirstRts {range=1..64}
+    U21 LastRts {range=1..64}
+}
+
+CfeSoftwareCommand FSW_SC_STOP_RTS_GROUP
+{
+    applicationId {range=0xA9}
+    commandCode {range=14}
+
+    U21 FirstRts {range=1..64}
+    U21 LastRts {range=1..64}
+}
+
