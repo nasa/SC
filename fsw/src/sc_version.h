@@ -1,6 +1,6 @@
 /************************************************************************
  * NASA Docket No. GSC-18,924-1, and identified as “Core Flight
- * System (cFS) Stored Command Application version 3.1.0”
+ * System (cFS) Stored Command Application version 3.1.1”
  *
  * Copyright (c) 2021 United States Government as represented by the
  * Administrator of the National Aeronautics and Space Administration.
@@ -31,9 +31,9 @@
  * \{
  */
 
-#define SC_MAJOR_VERSION 3  /**< \brief Major version number */
-#define SC_MINOR_VERSION 1  /**< \brief Minor version number */
-#define SC_REVISION      99 /**< \brief Revision number */
+#define SC_MAJOR_VERSION 3 /**< \brief Major version number */
+#define SC_MINOR_VERSION 1 /**< \brief Minor version number */
+#define SC_REVISION      1 /**< \brief Revision number */
 
 /**\}*/
 
