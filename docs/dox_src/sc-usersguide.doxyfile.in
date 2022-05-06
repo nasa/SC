@@ -16,4 +16,4 @@
 INPUT                 += @MISSION_SOURCE_DIR@/cfe/cmake/sample_defs
 
 PROJECT_NAME           = "SC User's Guide"
-WARN_LOGFILE           = sc_usersguide_warnings.log
+WARN_LOGFILE           = sc-usersguide-warnings.log
