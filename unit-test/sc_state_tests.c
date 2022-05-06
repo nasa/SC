@@ -1,3 +1,21 @@
+/************************************************************************
+ * NASA Docket No. GSC-18,924-1, and identified as “Core Flight
+ * System (cFS) Stored Command Application version 3.1.0”
+ *
+ * Copyright (c) 2021 United States Government as represented by the
+ * Administrator of the National Aeronautics and Space Administration.
+ * All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may
+ * not use this file except in compliance with the License. You may obtain
+ * a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ************************************************************************/
 
 /*
  * Includes
@@ -14,7 +32,6 @@
 #include "sc_msgids.h"
 #include "sc_events.h"
 #include "sc_test_utils.h"
-#include <sys/fcntl.h>
 #include <unistd.h>
 #include <stdlib.h>
 
@@ -193,8 +210,8 @@ void SC_UpdateNextTime_Test_Atp2(void)
     SC_OperData.RtsInfoTblAddr  = &SC_STATE_TEST_GlobalRtsInfoTbl[0];
     SC_OperData.RtsCtrlBlckAddr = &SC_STATE_TEST_GlobalRtsCtrlBlck;
 
-    SC_OperData.AtsCtrlBlckAddr->AtpState = SC_EXECUTING;
-    SC_OperData.RtsCtrlBlckAddr->RtsNumber = SC_NUMBER_OF_RTS+1;
+    SC_OperData.AtsCtrlBlckAddr->AtpState  = SC_EXECUTING;
+    SC_OperData.RtsCtrlBlckAddr->RtsNumber = SC_NUMBER_OF_RTS + 1;
     SC_AppData.NextCmdTime[SC_RTP]         = 0;
     SC_AppData.NextCmdTime[SC_ATP]         = 10;
 
@@ -284,11 +301,8 @@ void SC_UpdateNextTime_Test_RtpAtpPriority(void)
 void SC_GetNextRtsCommand_Test_GetNextCommand(void)
 {
     SC_RtsEntryHeader_t *Entry;
-    uint16               RtsTable[SC_RTS_BUFF_SIZE];
+    uint32               RtsTable[SC_RTS_BUFF_SIZE32];
     size_t               MsgSize;
-
-    CFE_EVS_SendEvent_context_t context_CFE_EVS_SendEvent;
-    UT_SetHookFunction(UT_KEY(CFE_EVS_SendEvent), UT_Utils_stub_reporter_hook, &context_CFE_EVS_SendEvent);
 
     SC_InitTables();
 
@@ -304,7 +318,7 @@ void SC_GetNextRtsCommand_Test_GetNextCommand(void)
     SC_OperData.RtsInfoTblAddr  = &SC_STATE_TEST_GlobalRtsInfoTbl[0];
     SC_OperData.RtsCtrlBlckAddr = &SC_STATE_TEST_GlobalRtsCtrlBlck;
 
-    SC_OperData.RtsTblAddr[0] = (uint32 *)&RtsTable[0];
+    SC_OperData.RtsTblAddr[0] = &RtsTable[0];
 
     SC_AppData.NextCmdTime[SC_RTP]                                                   = 0;
     SC_AppData.CurrentTime                                                           = 1;
@@ -315,7 +329,7 @@ void SC_GetNextRtsCommand_Test_GetNextCommand(void)
 
     Entry = (SC_RtsEntryHeader_t *)&SC_OperData.RtsTblAddr[0][0];
 
-    CFE_MSG_Init((CFE_MSG_Message_t *)Entry, SC_CMD_MID, sizeof(SC_NoArgsCmd_t));
+    CFE_MSG_Init((CFE_MSG_Message_t *)Entry, CFE_SB_ValueToMsgId(SC_CMD_MID), sizeof(SC_NoArgsCmd_t));
 
     /* Give the packet the minimum possible size, to ensure that (CmdOffset < SC_RTS_HDR_WORDS) is met */
     MsgSize = SC_PACKET_MIN_SIZE;
@@ -345,11 +359,8 @@ void SC_GetNextRtsCommand_Test_GetNextCommand(void)
 void SC_GetNextRtsCommand_Test_RtsNumberZero(void)
 {
     SC_RtsEntryHeader_t *Entry;
-    uint16               RtsTable[SC_RTS_BUFF_SIZE];
+    uint32               RtsTable[SC_RTS_BUFF_SIZE32];
     size_t               MsgSize;
-
-    CFE_EVS_SendEvent_context_t context_CFE_EVS_SendEvent;
-    UT_SetHookFunction(UT_KEY(CFE_EVS_SendEvent), UT_Utils_stub_reporter_hook, &context_CFE_EVS_SendEvent);
 
     SC_InitTables();
 
@@ -365,7 +376,7 @@ void SC_GetNextRtsCommand_Test_RtsNumberZero(void)
     SC_OperData.RtsInfoTblAddr  = &SC_STATE_TEST_GlobalRtsInfoTbl[0];
     SC_OperData.RtsCtrlBlckAddr = &SC_STATE_TEST_GlobalRtsCtrlBlck;
 
-    SC_OperData.RtsTblAddr[0] = (uint32 *)&RtsTable[0];
+    SC_OperData.RtsTblAddr[0] = &RtsTable[0];
 
     SC_AppData.NextCmdTime[SC_RTP]                                                   = 0;
     SC_AppData.CurrentTime                                                           = 1;
@@ -376,7 +387,7 @@ void SC_GetNextRtsCommand_Test_RtsNumberZero(void)
 
     Entry = (SC_RtsEntryHeader_t *)&SC_OperData.RtsTblAddr[0][0];
 
-    CFE_MSG_Init((CFE_MSG_Message_t *)Entry, SC_CMD_MID, sizeof(SC_NoArgsCmd_t));
+    CFE_MSG_Init((CFE_MSG_Message_t *)Entry, CFE_SB_ValueToMsgId(SC_CMD_MID), sizeof(SC_NoArgsCmd_t));
 
     /* Give the packet the minimum possible size, to ensure that (CmdOffset < SC_RTS_HDR_WORDS) is met */
     MsgSize = SC_PACKET_MIN_SIZE;
@@ -401,11 +412,8 @@ void SC_GetNextRtsCommand_Test_RtsNumberZero(void)
 void SC_GetNextRtsCommand_Test_RtsNumberMax(void)
 {
     SC_RtsEntryHeader_t *Entry;
-    uint16               RtsTable[SC_RTS_BUFF_SIZE];
+    uint32               RtsTable[SC_RTS_BUFF_SIZE32];
     size_t               MsgSize;
-
-    CFE_EVS_SendEvent_context_t context_CFE_EVS_SendEvent;
-    UT_SetHookFunction(UT_KEY(CFE_EVS_SendEvent), UT_Utils_stub_reporter_hook, &context_CFE_EVS_SendEvent);
 
     SC_InitTables();
 
@@ -421,7 +429,7 @@ void SC_GetNextRtsCommand_Test_RtsNumberMax(void)
     SC_OperData.RtsInfoTblAddr  = &SC_STATE_TEST_GlobalRtsInfoTbl[0];
     SC_OperData.RtsCtrlBlckAddr = &SC_STATE_TEST_GlobalRtsCtrlBlck;
 
-    SC_OperData.RtsTblAddr[SC_NUMBER_OF_RTS - 1] = (uint32 *)&RtsTable[0];
+    SC_OperData.RtsTblAddr[SC_NUMBER_OF_RTS - 1] = &RtsTable[0];
 
     SC_AppData.NextCmdTime[SC_RTP]                                                   = 0;
     SC_AppData.CurrentTime                                                           = 1;
@@ -432,7 +440,7 @@ void SC_GetNextRtsCommand_Test_RtsNumberMax(void)
 
     Entry = (SC_RtsEntryHeader_t *)&SC_OperData.RtsTblAddr[SC_NUMBER_OF_RTS - 1][0];
 
-    CFE_MSG_Init((CFE_MSG_Message_t *)Entry, SC_CMD_MID, sizeof(SC_NoArgsCmd_t));
+    CFE_MSG_Init((CFE_MSG_Message_t *)Entry, CFE_SB_ValueToMsgId(SC_CMD_MID), sizeof(SC_NoArgsCmd_t));
 
     /* Give the packet the minimum possible size, to ensure that (CmdOffset < SC_RTS_HDR_WORDS) is met */
     MsgSize = SC_PACKET_MIN_SIZE;
@@ -457,11 +465,8 @@ void SC_GetNextRtsCommand_Test_RtsNumberMax(void)
 void SC_GetNextRtsCommand_Test_RtsNumberOverMax(void)
 {
     SC_RtsEntryHeader_t *Entry;
-    uint16               RtsTable[SC_RTS_BUFF_SIZE];
+    uint32               RtsTable[SC_RTS_BUFF_SIZE32];
     size_t               MsgSize;
-
-    CFE_EVS_SendEvent_context_t context_CFE_EVS_SendEvent;
-    UT_SetHookFunction(UT_KEY(CFE_EVS_SendEvent), UT_Utils_stub_reporter_hook, &context_CFE_EVS_SendEvent);
 
     SC_InitTables();
 
@@ -477,7 +482,7 @@ void SC_GetNextRtsCommand_Test_RtsNumberOverMax(void)
     SC_OperData.RtsInfoTblAddr  = &SC_STATE_TEST_GlobalRtsInfoTbl[0];
     SC_OperData.RtsCtrlBlckAddr = &SC_STATE_TEST_GlobalRtsCtrlBlck;
 
-    SC_OperData.RtsTblAddr[SC_NUMBER_OF_RTS - 1] = (uint32 *)&RtsTable[0];
+    SC_OperData.RtsTblAddr[SC_NUMBER_OF_RTS - 1] = &RtsTable[0];
 
     SC_AppData.NextCmdTime[SC_RTP]                                                   = 0;
     SC_AppData.CurrentTime                                                           = 1;
@@ -488,7 +493,7 @@ void SC_GetNextRtsCommand_Test_RtsNumberOverMax(void)
 
     Entry = (SC_RtsEntryHeader_t *)&SC_OperData.RtsTblAddr[SC_NUMBER_OF_RTS - 1][0];
 
-    CFE_MSG_Init((CFE_MSG_Message_t *)Entry, SC_CMD_MID, sizeof(SC_NoArgsCmd_t));
+    CFE_MSG_Init((CFE_MSG_Message_t *)Entry, CFE_SB_ValueToMsgId(SC_CMD_MID), sizeof(SC_NoArgsCmd_t));
 
     /* Give the packet the minimum possible size, to ensure that (CmdOffset < SC_RTS_HDR_WORDS) is met */
     MsgSize = SC_PACKET_MIN_SIZE;
@@ -513,11 +518,8 @@ void SC_GetNextRtsCommand_Test_RtsNumberOverMax(void)
 void SC_GetNextRtsCommand_Test_RtsNotExecuting(void)
 {
     SC_RtsEntryHeader_t *Entry;
-    uint16               RtsTable[SC_RTS_BUFF_SIZE];
+    uint32               RtsTable[SC_RTS_BUFF_SIZE32];
     size_t               MsgSize;
-
-    CFE_EVS_SendEvent_context_t context_CFE_EVS_SendEvent;
-    UT_SetHookFunction(UT_KEY(CFE_EVS_SendEvent), UT_Utils_stub_reporter_hook, &context_CFE_EVS_SendEvent);
 
     SC_InitTables();
 
@@ -533,7 +535,7 @@ void SC_GetNextRtsCommand_Test_RtsNotExecuting(void)
     SC_OperData.RtsInfoTblAddr  = &SC_STATE_TEST_GlobalRtsInfoTbl[0];
     SC_OperData.RtsCtrlBlckAddr = &SC_STATE_TEST_GlobalRtsCtrlBlck;
 
-    SC_OperData.RtsTblAddr[SC_NUMBER_OF_RTS - 1] = (uint32 *)&RtsTable[0];
+    SC_OperData.RtsTblAddr[SC_NUMBER_OF_RTS - 1] = &RtsTable[0];
 
     SC_AppData.NextCmdTime[SC_RTP]                                                   = 0;
     SC_AppData.CurrentTime                                                           = 1;
@@ -544,7 +546,7 @@ void SC_GetNextRtsCommand_Test_RtsNotExecuting(void)
 
     Entry = (SC_RtsEntryHeader_t *)&SC_OperData.RtsTblAddr[SC_NUMBER_OF_RTS - 1][0];
 
-    CFE_MSG_Init((CFE_MSG_Message_t *)Entry, SC_CMD_MID, sizeof(SC_NoArgsCmd_t));
+    CFE_MSG_Init((CFE_MSG_Message_t *)Entry, CFE_SB_ValueToMsgId(SC_CMD_MID), sizeof(SC_NoArgsCmd_t));
 
     /* Give the packet the minimum possible size, to ensure that (CmdOffset < SC_RTS_HDR_WORDS) is met */
     MsgSize = SC_PACKET_MIN_SIZE;
@@ -569,16 +571,13 @@ void SC_GetNextRtsCommand_Test_RtsNotExecuting(void)
 void SC_GetNextRtsCommand_Test_RtsLengthError(void)
 {
     SC_RtsEntryHeader_t *Entry;
-    uint16               RtsTable[SC_RTS_BUFF_SIZE];
+    uint32               RtsTable[SC_RTS_BUFF_SIZE32];
     size_t               MsgSize1;
     size_t               MsgSize2;
     int32                strCmpResult;
     char                 ExpectedEventString[CFE_MISSION_EVS_MAX_MESSAGE_LENGTH];
     snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH,
              "Cmd Runs passed end of table, RTS %%03d Aborted");
-
-    CFE_EVS_SendEvent_context_t context_CFE_EVS_SendEvent;
-    UT_SetHookFunction(UT_KEY(CFE_EVS_SendEvent), UT_Utils_stub_reporter_hook, &context_CFE_EVS_SendEvent);
 
     SC_InitTables();
 
@@ -594,7 +593,7 @@ void SC_GetNextRtsCommand_Test_RtsLengthError(void)
     SC_OperData.RtsInfoTblAddr  = &SC_STATE_TEST_GlobalRtsInfoTbl[0];
     SC_OperData.RtsCtrlBlckAddr = &SC_STATE_TEST_GlobalRtsCtrlBlck;
 
-    SC_OperData.RtsTblAddr[0] = (uint32 *)&RtsTable[0];
+    SC_OperData.RtsTblAddr[0] = &RtsTable[0];
 
     SC_AppData.NextCmdTime[SC_RTP]                                                   = 0;
     SC_AppData.CurrentTime                                                           = 1;
@@ -605,7 +604,7 @@ void SC_GetNextRtsCommand_Test_RtsLengthError(void)
     Entry = (SC_RtsEntryHeader_t *)&SC_OperData.RtsTblAddr[0][0];
 
     /* Set to generate error message SC_RTS_LNGTH_ERR_EID */
-    CFE_MSG_Init((CFE_MSG_Message_t *)Entry, SC_CMD_MID, SC_PACKET_MAX_SIZE);
+    CFE_MSG_Init((CFE_MSG_Message_t *)Entry, CFE_SB_ValueToMsgId(SC_CMD_MID), SC_PACKET_MAX_SIZE);
     MsgSize1 = SC_PACKET_MIN_SIZE;
     MsgSize2 = SC_PACKET_MAX_SIZE;
 
@@ -635,12 +634,12 @@ void SC_GetNextRtsCommand_Test_RtsLengthError(void)
                   "SC_OperData.HkPacket.LastRtsErrCmd == SC_OperData.RtsInfoTblAddr[0].NextCommandPtr + "
                   "((SC_PACKET_MIN_SIZE + SC_RTS_HEADER_SIZE + 3) / SC_BYTES_IN_WORD)");
 
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent.EventID, SC_RTS_LNGTH_ERR_EID);
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent.EventType, CFE_EVS_EventType_ERROR);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_RTS_LNGTH_ERR_EID);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventType, CFE_EVS_EventType_ERROR);
 
-    strCmpResult = strncmp(ExpectedEventString, context_CFE_EVS_SendEvent.Spec, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH);
+    strCmpResult = strncmp(ExpectedEventString, context_CFE_EVS_SendEvent[0].Spec, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH);
 
-    UtAssert_True(strCmpResult == 0, "Event string matched expected result, '%s'", context_CFE_EVS_SendEvent.Spec);
+    UtAssert_True(strCmpResult == 0, "Event string matched expected result, '%s'", context_CFE_EVS_SendEvent[0].Spec);
 
     call_count_CFE_EVS_SendEvent = UT_GetStubCount(UT_KEY(CFE_EVS_SendEvent));
 
@@ -652,16 +651,13 @@ void SC_GetNextRtsCommand_Test_RtsLengthError(void)
 void SC_GetNextRtsCommand_Test_CommandLengthError(void)
 {
     SC_RtsEntryHeader_t *Entry;
-    uint16               RtsTable[SC_RTS_BUFF_SIZE];
+    uint32               RtsTable[SC_RTS_BUFF_SIZE32];
     size_t               MsgSize1;
     size_t               MsgSize2;
     int32                strCmpResult;
     char                 ExpectedEventString[CFE_MISSION_EVS_MAX_MESSAGE_LENGTH];
     snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH,
              "Invalid Length Field in RTS Command, RTS %%03d Aborted. Length: %%u, Max: %%d");
-
-    CFE_EVS_SendEvent_context_t context_CFE_EVS_SendEvent;
-    UT_SetHookFunction(UT_KEY(CFE_EVS_SendEvent), UT_Utils_stub_reporter_hook, &context_CFE_EVS_SendEvent);
 
     SC_InitTables();
 
@@ -677,7 +673,7 @@ void SC_GetNextRtsCommand_Test_CommandLengthError(void)
     SC_OperData.RtsInfoTblAddr  = &SC_STATE_TEST_GlobalRtsInfoTbl[0];
     SC_OperData.RtsCtrlBlckAddr = &SC_STATE_TEST_GlobalRtsCtrlBlck;
 
-    SC_OperData.RtsTblAddr[0] = (uint32 *)&RtsTable[0];
+    SC_OperData.RtsTblAddr[0] = &RtsTable[0];
 
     SC_AppData.NextCmdTime[SC_RTP]                                                   = 0;
     SC_AppData.CurrentTime                                                           = 1;
@@ -688,7 +684,7 @@ void SC_GetNextRtsCommand_Test_CommandLengthError(void)
     Entry = (SC_RtsEntryHeader_t *)&SC_OperData.RtsTblAddr[0][0];
 
     /* Set to generate error message SC_RTS_LNGTH_ERR_EID */
-    CFE_MSG_Init((CFE_MSG_Message_t *)Entry, SC_CMD_MID, SC_PACKET_MAX_SIZE);
+    CFE_MSG_Init((CFE_MSG_Message_t *)Entry, CFE_SB_ValueToMsgId(SC_CMD_MID), SC_PACKET_MAX_SIZE);
     MsgSize1 = SC_PACKET_MIN_SIZE;
     MsgSize2 = SC_PACKET_MAX_SIZE + 1;
 
@@ -718,12 +714,12 @@ void SC_GetNextRtsCommand_Test_CommandLengthError(void)
                   "SC_OperData.HkPacket.LastRtsErrCmd == SC_OperData.RtsInfoTblAddr[0].NextCommandPtr + "
                   "((SC_PACKET_MIN_SIZE + SC_RTS_HEADER_SIZE + 3) / SC_BYTES_IN_WORD)");
 
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent.EventID, SC_RTS_CMD_LNGTH_ERR_EID);
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent.EventType, CFE_EVS_EventType_ERROR);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_RTS_CMD_LNGTH_ERR_EID);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventType, CFE_EVS_EventType_ERROR);
 
-    strCmpResult = strncmp(ExpectedEventString, context_CFE_EVS_SendEvent.Spec, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH);
+    strCmpResult = strncmp(ExpectedEventString, context_CFE_EVS_SendEvent[0].Spec, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH);
 
-    UtAssert_True(strCmpResult == 0, "Event string matched expected result, '%s'", context_CFE_EVS_SendEvent.Spec);
+    UtAssert_True(strCmpResult == 0, "Event string matched expected result, '%s'", context_CFE_EVS_SendEvent[0].Spec);
 
     call_count_CFE_EVS_SendEvent = UT_GetStubCount(UT_KEY(CFE_EVS_SendEvent));
 
@@ -735,15 +731,12 @@ void SC_GetNextRtsCommand_Test_CommandLengthError(void)
 void SC_GetNextRtsCommand_Test_ZeroCommandLength(void)
 {
     SC_RtsEntryHeader_t *Entry;
-    uint16               RtsTable[SC_RTS_BUFF_SIZE];
+    uint32               RtsTable[SC_RTS_BUFF_SIZE32];
     size_t               MsgSize1;
     size_t               MsgSize2;
     int32                strCmpResult;
     char                 ExpectedEventString[CFE_MISSION_EVS_MAX_MESSAGE_LENGTH];
     snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH, "RTS %%03d Execution Completed");
-
-    CFE_EVS_SendEvent_context_t context_CFE_EVS_SendEvent;
-    UT_SetHookFunction(UT_KEY(CFE_EVS_SendEvent), UT_Utils_stub_reporter_hook, &context_CFE_EVS_SendEvent);
 
     SC_InitTables();
 
@@ -759,7 +752,7 @@ void SC_GetNextRtsCommand_Test_ZeroCommandLength(void)
     SC_OperData.RtsInfoTblAddr  = &SC_STATE_TEST_GlobalRtsInfoTbl[0];
     SC_OperData.RtsCtrlBlckAddr = &SC_STATE_TEST_GlobalRtsCtrlBlck;
 
-    SC_OperData.RtsTblAddr[SC_LAST_RTS_WITH_EVENTS - 1] = (uint32 *)&RtsTable[0];
+    SC_OperData.RtsTblAddr[SC_LAST_RTS_WITH_EVENTS - 1] = &RtsTable[0];
 
     SC_AppData.NextCmdTime[SC_RTP]                                                   = 0;
     SC_AppData.CurrentTime                                                           = 1;
@@ -770,7 +763,7 @@ void SC_GetNextRtsCommand_Test_ZeroCommandLength(void)
     Entry = (SC_RtsEntryHeader_t *)&SC_OperData.RtsTblAddr[SC_LAST_RTS_WITH_EVENTS - 1][0];
 
     /* Set to generate error message SC_RTS_LNGTH_ERR_EID */
-    CFE_MSG_Init((CFE_MSG_Message_t *)Entry, SC_CMD_MID, SC_LAST_RTS_WITH_EVENTS - 1);
+    CFE_MSG_Init((CFE_MSG_Message_t *)Entry, CFE_SB_ValueToMsgId(SC_CMD_MID), SC_LAST_RTS_WITH_EVENTS - 1);
     MsgSize1 = SC_PACKET_MIN_SIZE - 1;
     MsgSize2 = SC_PACKET_MIN_SIZE - 1;
 
@@ -790,12 +783,12 @@ void SC_GetNextRtsCommand_Test_ZeroCommandLength(void)
     SC_GetNextRtsCommand();
 
     /* Verify results */
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent.EventID, SC_RTS_COMPL_INF_EID);
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent.EventType, CFE_EVS_EventType_INFORMATION);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_RTS_COMPL_INF_EID);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventType, CFE_EVS_EventType_INFORMATION);
 
-    strCmpResult = strncmp(ExpectedEventString, context_CFE_EVS_SendEvent.Spec, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH);
+    strCmpResult = strncmp(ExpectedEventString, context_CFE_EVS_SendEvent[0].Spec, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH);
 
-    UtAssert_True(strCmpResult == 0, "Event string matched expected result, '%s'", context_CFE_EVS_SendEvent.Spec);
+    UtAssert_True(strCmpResult == 0, "Event string matched expected result, '%s'", context_CFE_EVS_SendEvent[0].Spec);
 
     call_count_CFE_EVS_SendEvent = UT_GetStubCount(UT_KEY(CFE_EVS_SendEvent));
 
@@ -807,14 +800,11 @@ void SC_GetNextRtsCommand_Test_ZeroCommandLength(void)
 void SC_GetNextRtsCommand_Test_ZeroCommandLengthLastRts(void)
 {
     SC_RtsEntryHeader_t *Entry;
-    uint16               RtsTable[SC_RTS_BUFF_SIZE];
+    uint32               RtsTable[SC_RTS_BUFF_SIZE32];
     size_t               MsgSize1;
     size_t               MsgSize2;
     char                 ExpectedEventString[CFE_MISSION_EVS_MAX_MESSAGE_LENGTH];
     snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH, "RTS %%03d Execution Completed");
-
-    CFE_EVS_SendEvent_context_t context_CFE_EVS_SendEvent;
-    UT_SetHookFunction(UT_KEY(CFE_EVS_SendEvent), UT_Utils_stub_reporter_hook, &context_CFE_EVS_SendEvent);
 
     SC_InitTables();
 
@@ -830,7 +820,7 @@ void SC_GetNextRtsCommand_Test_ZeroCommandLengthLastRts(void)
     SC_OperData.RtsInfoTblAddr  = &SC_STATE_TEST_GlobalRtsInfoTbl[0];
     SC_OperData.RtsCtrlBlckAddr = &SC_STATE_TEST_GlobalRtsCtrlBlck;
 
-    SC_OperData.RtsTblAddr[SC_LAST_RTS_WITH_EVENTS] = (uint32 *)&RtsTable[0];
+    SC_OperData.RtsTblAddr[SC_LAST_RTS_WITH_EVENTS] = &RtsTable[0];
 
     SC_AppData.NextCmdTime[SC_RTP]                                                   = 0;
     SC_AppData.CurrentTime                                                           = 1;
@@ -841,7 +831,7 @@ void SC_GetNextRtsCommand_Test_ZeroCommandLengthLastRts(void)
     Entry = (SC_RtsEntryHeader_t *)&SC_OperData.RtsTblAddr[SC_LAST_RTS_WITH_EVENTS][0];
 
     /* Set to generate error message SC_RTS_LNGTH_ERR_EID */
-    CFE_MSG_Init((CFE_MSG_Message_t *)Entry, SC_CMD_MID, SC_PACKET_MIN_SIZE - 1);
+    CFE_MSG_Init((CFE_MSG_Message_t *)Entry, CFE_SB_ValueToMsgId(SC_CMD_MID), SC_PACKET_MIN_SIZE - 1);
     MsgSize1 = SC_PACKET_MIN_SIZE - 1;
     MsgSize2 = SC_PACKET_MIN_SIZE - 1;
 
@@ -871,14 +861,11 @@ void SC_GetNextRtsCommand_Test_ZeroCommandLengthLastRts(void)
 void SC_GetNextRtsCommand_Test_EndOfBuffer(void)
 {
     SC_RtsEntryHeader_t *Entry;
-    uint16               RtsTable[SC_RTS_BUFF_SIZE];
+    uint32               RtsTable[SC_RTS_BUFF_SIZE32];
     size_t               MsgSize;
     int32                strCmpResult;
     char                 ExpectedEventString[CFE_MISSION_EVS_MAX_MESSAGE_LENGTH];
     snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH, "RTS %%03d Execution Completed");
-
-    CFE_EVS_SendEvent_context_t context_CFE_EVS_SendEvent;
-    UT_SetHookFunction(UT_KEY(CFE_EVS_SendEvent), UT_Utils_stub_reporter_hook, &context_CFE_EVS_SendEvent);
 
     SC_InitTables();
 
@@ -894,7 +881,7 @@ void SC_GetNextRtsCommand_Test_EndOfBuffer(void)
     SC_OperData.RtsInfoTblAddr  = &SC_STATE_TEST_GlobalRtsInfoTbl[0];
     SC_OperData.RtsCtrlBlckAddr = &SC_STATE_TEST_GlobalRtsCtrlBlck;
 
-    SC_OperData.RtsTblAddr[0] = (uint32 *)&RtsTable[0];
+    SC_OperData.RtsTblAddr[0] = &RtsTable[0];
 
     SC_AppData.NextCmdTime[SC_RTP]                                                   = 0;
     SC_AppData.CurrentTime                                                           = 1;
@@ -905,7 +892,7 @@ void SC_GetNextRtsCommand_Test_EndOfBuffer(void)
     Entry = (SC_RtsEntryHeader_t *)&SC_OperData.RtsTblAddr[0][0];
 
     /* Set to generate error message SC_RTS_LNGTH_ERR_EID */
-    CFE_MSG_Init((CFE_MSG_Message_t *)Entry, SC_CMD_MID, 2 * SC_RTS_BUFF_SIZE);
+    CFE_MSG_Init((CFE_MSG_Message_t *)Entry, CFE_SB_ValueToMsgId(SC_CMD_MID), 2 * SC_RTS_BUFF_SIZE);
     MsgSize = 2 * SC_RTS_BUFF_SIZE;
 
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &MsgSize, sizeof(MsgSize), false);
@@ -923,12 +910,12 @@ void SC_GetNextRtsCommand_Test_EndOfBuffer(void)
     SC_GetNextRtsCommand();
 
     /* Verify results */
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent.EventID, SC_RTS_COMPL_INF_EID);
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent.EventType, CFE_EVS_EventType_INFORMATION);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_RTS_COMPL_INF_EID);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventType, CFE_EVS_EventType_INFORMATION);
 
-    strCmpResult = strncmp(ExpectedEventString, context_CFE_EVS_SendEvent.Spec, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH);
+    strCmpResult = strncmp(ExpectedEventString, context_CFE_EVS_SendEvent[0].Spec, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH);
 
-    UtAssert_True(strCmpResult == 0, "Event string matched expected result, '%s'", context_CFE_EVS_SendEvent.Spec);
+    UtAssert_True(strCmpResult == 0, "Event string matched expected result, '%s'", context_CFE_EVS_SendEvent[0].Spec);
 
     call_count_CFE_EVS_SendEvent = UT_GetStubCount(UT_KEY(CFE_EVS_SendEvent));
 
@@ -940,11 +927,8 @@ void SC_GetNextRtsCommand_Test_EndOfBuffer(void)
 void SC_GetNextRtsCommand_Test_EndOfBufferLastRts(void)
 {
     SC_RtsEntryHeader_t *Entry;
-    uint16               RtsTable[SC_RTS_BUFF_SIZE];
+    uint32               RtsTable[SC_RTS_BUFF_SIZE32];
     size_t               MsgSize;
-
-    CFE_EVS_SendEvent_context_t context_CFE_EVS_SendEvent;
-    UT_SetHookFunction(UT_KEY(CFE_EVS_SendEvent), UT_Utils_stub_reporter_hook, &context_CFE_EVS_SendEvent);
 
     SC_InitTables();
 
@@ -960,7 +944,7 @@ void SC_GetNextRtsCommand_Test_EndOfBufferLastRts(void)
     SC_OperData.RtsInfoTblAddr  = &SC_STATE_TEST_GlobalRtsInfoTbl[0];
     SC_OperData.RtsCtrlBlckAddr = &SC_STATE_TEST_GlobalRtsCtrlBlck;
 
-    SC_OperData.RtsTblAddr[SC_LAST_RTS_WITH_EVENTS] = (uint32 *)&RtsTable[0];
+    SC_OperData.RtsTblAddr[SC_LAST_RTS_WITH_EVENTS] = &RtsTable[0];
 
     SC_AppData.NextCmdTime[SC_RTP]                                                   = 0;
     SC_AppData.CurrentTime                                                           = 1;
@@ -971,7 +955,7 @@ void SC_GetNextRtsCommand_Test_EndOfBufferLastRts(void)
     Entry = (SC_RtsEntryHeader_t *)&SC_OperData.RtsTblAddr[SC_LAST_RTS_WITH_EVENTS][0];
 
     /* Set to generate error message SC_RTS_LNGTH_ERR_EID */
-    CFE_MSG_Init((CFE_MSG_Message_t *)Entry, SC_CMD_MID, 2 * SC_RTS_BUFF_SIZE);
+    CFE_MSG_Init((CFE_MSG_Message_t *)Entry, CFE_SB_ValueToMsgId(SC_CMD_MID), 2 * SC_RTS_BUFF_SIZE);
     MsgSize = 2 * SC_RTS_BUFF_SIZE;
 
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &MsgSize, sizeof(MsgSize), false);
@@ -1067,7 +1051,7 @@ void SC_GetNextAtsCommand_Test_Idle(void)
 void SC_GetNextAtsCommand_Test_GetNextCommand(void)
 {
     SC_AtsEntryHeader_t *Entry;
-    uint16               AtsTable[SC_ATS_BUFF_SIZE];
+    uint32               AtsTable[SC_ATS_BUFF_SIZE32];
 
     SC_InitTables();
 
@@ -1086,7 +1070,7 @@ void SC_GetNextAtsCommand_Test_GetNextCommand(void)
     SC_OperData.AtsCmdStatusTblAddr[0] = &SC_ATSRQ_TEST_GlobalAtsCmdStatus[0];
     SC_OperData.AtsCmdStatusTblAddr[1] = &SC_ATSRQ_TEST_GlobalAtsCmdStatus[1];
 
-    SC_OperData.AtsTblAddr[0] = (uint32 *)&AtsTable[0];
+    SC_OperData.AtsTblAddr[0] = &AtsTable[0];
 
     Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[0][0];
     Entry->CmdNumber = 1;
@@ -1097,7 +1081,8 @@ void SC_GetNextAtsCommand_Test_GetNextCommand(void)
     SC_OperData.AtsCtrlBlckAddr->AtpState = SC_EXECUTING;
 
     SC_OperData.AtsCtrlBlckAddr->AtsNumber = 1;
-    SC_OperData.AtsCtrlBlckAddr->CmdNumber = 0;
+    SC_AppData.AtsTimeIndexBuffer[0][0]    = 1;
+    SC_AppData.AtsTimeIndexBuffer[0][1]    = 2;
 
     SC_OperData.AtsCmdStatusTblAddr[0][0] = SC_LOADED;
     SC_AppData.AtsCmdIndexBuffer[0][0]    = 0;
@@ -1108,28 +1093,21 @@ void SC_GetNextAtsCommand_Test_GetNextCommand(void)
     SC_GetNextAtsCommand();
 
     /* Verify results */
-    UtAssert_True(SC_OperData.AtsCtrlBlckAddr->TimeIndexPtr == 1, "SC_OperData.AtsCtrlBlckAddr->TimeIndexPtr == 1");
-    UtAssert_True(SC_OperData.AtsCtrlBlckAddr->CmdNumber == SC_AppData.AtsTimeIndexBuffer[0][1],
-                  "SC_OperData.AtsCtrlBlckAddr->CmdNumber == SC_AppData.AtsTimeIndexBuffer[0][1];");
-    UtAssert_True(SC_AppData.NextCmdTime[SC_ATP] == 0, "SC_AppData.NextCmdTime[SC_ATP] == 0");
+    UtAssert_INT32_EQ(SC_OperData.AtsCtrlBlckAddr->TimeIndexPtr, 1);
+    UtAssert_INT32_EQ(SC_OperData.AtsCtrlBlckAddr->CmdNumber, SC_AppData.AtsTimeIndexBuffer[0][1]);
+    UtAssert_INT32_EQ(SC_AppData.NextCmdTime[SC_ATP], 0);
 
-    call_count_CFE_EVS_SendEvent = UT_GetStubCount(UT_KEY(CFE_EVS_SendEvent));
-
-    UtAssert_True(call_count_CFE_EVS_SendEvent == 0, "CFE_EVS_SendEvent was called %u time(s), expected 0",
-                  call_count_CFE_EVS_SendEvent);
+    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
 
 } /* end SC_GetNextAtsCommand_Test_GetNextCommand */
 
 void SC_GetNextAtsCommand_Test_ExecutionACompleted(void)
 {
     SC_AtsEntryHeader_t *Entry;
-    uint16               AtsTable[SC_ATS_BUFF_SIZE];
+    uint32               AtsTable[SC_ATS_BUFF_SIZE32];
     int32                strCmpResult;
     char                 ExpectedEventString[CFE_MISSION_EVS_MAX_MESSAGE_LENGTH];
     snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH, "ATS %%c Execution Completed");
-
-    CFE_EVS_SendEvent_context_t context_CFE_EVS_SendEvent;
-    UT_SetHookFunction(UT_KEY(CFE_EVS_SendEvent), UT_Utils_stub_reporter_hook, &context_CFE_EVS_SendEvent);
 
     SC_InitTables();
 
@@ -1148,7 +1126,7 @@ void SC_GetNextAtsCommand_Test_ExecutionACompleted(void)
     SC_OperData.AtsCmdStatusTblAddr[0] = &SC_ATSRQ_TEST_GlobalAtsCmdStatus[0];
     SC_OperData.AtsCmdStatusTblAddr[1] = &SC_ATSRQ_TEST_GlobalAtsCmdStatus[1];
 
-    SC_OperData.AtsTblAddr[0] = (uint32 *)&AtsTable[0];
+    SC_OperData.AtsTblAddr[0] = &AtsTable[0];
 
     Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[0][0];
     Entry->CmdNumber = 1;
@@ -1170,12 +1148,12 @@ void SC_GetNextAtsCommand_Test_ExecutionACompleted(void)
     SC_GetNextAtsCommand();
 
     /* Verify results */
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent.EventID, SC_ATS_COMPL_INF_EID);
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent.EventType, CFE_EVS_EventType_INFORMATION);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_ATS_COMPL_INF_EID);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventType, CFE_EVS_EventType_INFORMATION);
 
-    strCmpResult = strncmp(ExpectedEventString, context_CFE_EVS_SendEvent.Spec, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH);
+    strCmpResult = strncmp(ExpectedEventString, context_CFE_EVS_SendEvent[0].Spec, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH);
 
-    UtAssert_True(strCmpResult == 0, "Event string matched expected result, '%s'", context_CFE_EVS_SendEvent.Spec);
+    UtAssert_True(strCmpResult == 0, "Event string matched expected result, '%s'", context_CFE_EVS_SendEvent[0].Spec);
 
     call_count_CFE_EVS_SendEvent = UT_GetStubCount(UT_KEY(CFE_EVS_SendEvent));
 
@@ -1187,13 +1165,10 @@ void SC_GetNextAtsCommand_Test_ExecutionACompleted(void)
 void SC_GetNextAtsCommand_Test_ExecutionBCompleted(void)
 {
     SC_AtsEntryHeader_t *Entry;
-    uint16               AtsTable[SC_ATS_BUFF_SIZE];
+    uint32               AtsTable[SC_ATS_BUFF_SIZE32];
     int32                strCmpResult;
     char                 ExpectedEventString[CFE_MISSION_EVS_MAX_MESSAGE_LENGTH];
     snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH, "ATS %%c Execution Completed");
-
-    CFE_EVS_SendEvent_context_t context_CFE_EVS_SendEvent;
-    UT_SetHookFunction(UT_KEY(CFE_EVS_SendEvent), UT_Utils_stub_reporter_hook, &context_CFE_EVS_SendEvent);
 
     SC_InitTables();
 
@@ -1212,7 +1187,7 @@ void SC_GetNextAtsCommand_Test_ExecutionBCompleted(void)
     SC_OperData.AtsCmdStatusTblAddr[0] = &SC_ATSRQ_TEST_GlobalAtsCmdStatus[0];
     SC_OperData.AtsCmdStatusTblAddr[1] = &SC_ATSRQ_TEST_GlobalAtsCmdStatus[1];
 
-    SC_OperData.AtsTblAddr[0] = (uint32 *)&AtsTable[0];
+    SC_OperData.AtsTblAddr[0] = &AtsTable[0];
 
     Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[0][0];
     Entry->CmdNumber = 1;
@@ -1234,12 +1209,12 @@ void SC_GetNextAtsCommand_Test_ExecutionBCompleted(void)
     SC_GetNextAtsCommand();
 
     /* Verify results */
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent.EventID, SC_ATS_COMPL_INF_EID);
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent.EventType, CFE_EVS_EventType_INFORMATION);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_ATS_COMPL_INF_EID);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventType, CFE_EVS_EventType_INFORMATION);
 
-    strCmpResult = strncmp(ExpectedEventString, context_CFE_EVS_SendEvent.Spec, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH);
+    strCmpResult = strncmp(ExpectedEventString, context_CFE_EVS_SendEvent[0].Spec, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH);
 
-    UtAssert_True(strCmpResult == 0, "Event string matched expected result, '%s'", context_CFE_EVS_SendEvent.Spec);
+    UtAssert_True(strCmpResult == 0, "Event string matched expected result, '%s'", context_CFE_EVS_SendEvent[0].Spec);
 
     call_count_CFE_EVS_SendEvent = UT_GetStubCount(UT_KEY(CFE_EVS_SendEvent));
 

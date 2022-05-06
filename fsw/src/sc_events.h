@@ -1,1653 +1,1368 @@
-/*************************************************************************
-** File: sc_events.h
-**
-**  Copyright � 2007-2014 United States Government as represented by the
-**  Administrator of the National Aeronautics and Space Administration.
-**  All Other Rights Reserved.
-**
-**  This software was created at NASA's Goddard Space Flight Center.
-**  This software is governed by the NASA Open Source Agreement and may be
-**  used, distributed and modified only pursuant to the terms of that
-**  agreement.
-**
-** Purpose:
-**   his file contains the definitions of all of the events send by
-**   the Stored Command Processor
-**
-** References:
-**   Flight Software Branch C Coding Standard Version 1.2
-**   CFS Development Standards Document
-**
-*************************************************************************/
-#ifndef _sc_events_
-#define _sc_events_
+/************************************************************************
+ * NASA Docket No. GSC-18,924-1, and identified as “Core Flight
+ * System (cFS) Stored Command Application version 3.1.0”
+ *
+ * Copyright (c) 2021 United States Government as represented by the
+ * Administrator of the National Aeronautics and Space Administration.
+ * All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may
+ * not use this file except in compliance with the License. You may obtain
+ * a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ************************************************************************/
 
-/** \brief <tt> 'App terminating, Result = 0x\%08X' </tt>
-**  \event <tt> 'App terminating, Result = 0x\%08X' </tt>
-**
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message is issued when the App exits
-**  due to a fatal error condition
-**
-**  The \c Result field contains the return status from
-**  the function that caused the app to terminate
-*/
+/**
+ * @file
+ *   his file contains the definitions of all of the events sent by
+ *   the Stored Command Processor
+ */
+#ifndef SC_EVENTS_H
+#define SC_EVENTS_H
+
+/**
+ * \defgroup cfsscevents CFS Stored Command Event IDs
+ * \{
+ */
+
+/**
+ * \brief SC Application Fatal Termination Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  This event message is issued when the App exits
+ *  due to a fatal error condition
+ */
 #define SC_APP_EXIT_ERR_EID 1
 
-/** \brief <tt> 'Invalid msg length: ID = 0x\%04X, CC = \%d, Len = \%d, Expected = \%d' </tt>
-**  \event <tt> 'Invalid msg length: ID = 0x\%04X, CC = \%d, Len = \%d, Expected = \%d' </tt>
-**
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message is issued when a command is recieved, but it is not of the expected
-**  length
-**
-**  The \c ID field contains the message Id of the message
-**  The \c CC field contains the command code of the message
-**  The \c Len field contains the length of the message received
-**  The \c Expected field contains the expected length of the command
-*/
+/**
+ * \brief SC Command Message Length Invalid Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  This event message is issued when a command is recieved, but it is not of the expected
+ *  length
+ */
 #define SC_LEN_ERR_EID 2
 
-/** \brief <tt> 'Software Bus Create Pipe returned: 0x\%08X' </tt>
-**  \event <tt> 'Software Bus Create Pipe returned: 0x\%08X' </tt>
-**
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message is issued when #CFE_SB_CreatePipe returns an
-**  error
-**
-**  The \c returned field contains the result of the #CFE_SB_CreatePipe
-**  call
-*/
+/**
+ * \brief SC Create Pipe Failed Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  This event message is issued when #CFE_SB_CreatePipe returns an
+ *  error
+ */
 #define SC_INIT_SB_CREATE_ERR_EID 3
 
-/** \brief <tt> 'Software Bus subscribe to housekeeping returned: 0x\%08X' </tt>
-**  \event <tt> 'Software Bus subscribe to housekeeping returned: 0x\%08X' </tt>
-**
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message is issued when #CFE_SB_Subscribe to the Housekeeping
-**  Request packet fails
-**
-**  The \c returned field contains the result of the #CFE_SB_Subscribe call
-*/
+/**
+ * \brief SC Housekeeping Request Subscribe Failed Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  This event message is issued when #CFE_SB_Subscribe to the Housekeeping
+ *  Request packet fails
+ */
 #define SC_INIT_SB_SUBSCRIBE_HK_ERR_EID 4
 
-/** \brief <tt> 'Software Bus subscribe to 1 Hz cycle returned: 0x\%08X' </tt>
-**  \event <tt> 'Software Bus subscribe to 1 Hz cycle returned: 0x\%08X' </tt>
-**
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message is issued when #CFE_SB_Subscribe to the 1 Hz
-**  Request packet fails
-**
-**  The \c returned field contains the result of the #CFE_SB_Subscribe call
-*/
+/**
+ * \brief SC 1Hz Cycle Message Subscribe Failed Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  This event message is issued when #CFE_SB_Subscribe to the 1 Hz
+ *  Request packet fails
+ */
 #define SC_INIT_SB_SUBSCRIBE_1HZ_ERR_EID 5
 
-/** \brief <tt> 'Software Bus subscribe to command returned: 0x\%08X' </tt>
-**  \event <tt> 'Software Bus subscribe to command returned: 0x\%08X' </tt>
-**
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message is issued when #CFE_SB_Subscribe to the SC Command
-**  Request packet fails
-**
-**  The \c returned field contains the result of the #CFE_SB_Subscribe call
-*/
+/**
+ * \brief HS Command Message Subscribe Failed Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  This event message is issued when #CFE_SB_Subscribe to the SC Command
+ *  Request packet fails
+ */
 #define SC_INIT_SB_SUBSCRIBE_CMD_ERR_EID 6
 
-/** \brief <tt> 'SC Initialized. Version \%d.\%d.\%d.\%d' </tt>
-**  \event <tt> 'SC Initialized. Version \%d.\%d.\%d.\%d' </tt>
-**
-**  \par Type: INFORMATIONAL
-**
-**  \par Cause:
-**
-**  This event message is issued when the App has
-**  completed initialization.
-**
-**  The \c Version fields contain the #SC_MAJOR_VERSION,
-**  #SC_MINOR_VERSION, #SC_REVISION, and #SC_MISSION_REV
-**  version identifiers.
-*/
+/**
+ * \brief SC Initialization Event ID
+ *
+ *  \par Type: INFORMATIONAL
+ *
+ *  \par Cause:
+ *
+ *  This event message is issued when the App has
+ *  completed initialization.
+ */
 #define SC_INIT_INF_EID 9
 
-/** \brief <tt> 'RTS Table Registration Failed for RTS \%d, returned: 0x\%08X' </tt>
-**  \event <tt> 'RTS Table Registration Failed for RTS \%d, returned: 0x\%08X' </tt>
-**
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message is issued when a call to #CFE_TBL_Register for an RTS table failed
-**
-**  The \c RTS field contains the RTS ID of the table that failed and the \c returned field
-**  contains the error code returned from #CFE_TBL_Register
-*/
+/**
+ * \brief SC RTS Table Registration Failed Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  This event message is issued when a call to #CFE_TBL_Register for an RTS table failed
+ */
 #define SC_REGISTER_RTS_TBL_ERR_EID 10
 
-/** \brief <tt> 'ATS Table Registration Failed for ATS \%d, returned: 0x\%08X' </tt>
-**  \event <tt> 'ATS Table Registration Failed for ATS \%d, returned: 0x\%08X' </tt>
-**
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message is issued when a call to #CFE_TBL_Register for an ATS table failed
-**
-**  The \c ATS field contains the ATS ID of the table that failed and the \c returned field
-**  contains the error code returned from #CFE_TBL_Register
-*/
+/**
+ * \brief SC ATS Table Registration Failed Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  This event message is issued when a call to #CFE_TBL_Register for an ATS table failed
+ */
 #define SC_REGISTER_ATS_TBL_ERR_EID 11
 
-/** \brief <tt> 'RTS info table register failed, returned: 0x\%08X' </tt>
-**  \event <tt> 'RTS info table register failed, returned: 0x\%08X' </tt>
-**
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message is issued when trying to register the RTS Info Table
-**  dump only table fails
-**
-**  The \c returned field contains the result from #CFE_TBL_Register
-*/
+/**
+ * \brief SC RTS Info Table Registration Failed Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  This event message is issued when trying to register the RTS Info Table
+ *  dump only table fails
+ */
 #define SC_REGISTER_RTS_INFO_TABLE_ERR_EID 16
 
-/** \brief <tt> 'RTS control block table register failed, returned: 0x\%08X' </tt>
-**  \event <tt> 'RTS control block table register failed, returned: 0x\%08X' </tt>
-**
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message is issued when trying to register the RTS control block
-**  dump only table fails
-**
-**  The \c returned field contains the result from #CFE_TBL_Register
-*/
+/**
+ * \brief SC RTS Control Block Table Registration Failed Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  This event message is issued when trying to register the RTS control block
+ *  dump only table fails
+ */
 #define SC_REGISTER_RTS_CTRL_BLK_TABLE_ERR_EID 17
 
-/** \brief <tt> 'ATS info table register failed, returned: 0x\%08X' </tt>
-**  \event <tt> 'ATS info table register failed, returned: 0x\%08X' </tt>
-**
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message is issued when trying to register the ATS Info Table
-**  dump only table fails
-**
-**  The \c returned field contains the result from #CFE_TBL_Register
-*/
+/**
+ * \brief SC ATS Info Table Registration Failed Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  This event message is issued when trying to register the ATS Info Table
+ *  dump only table fails
+ */
 #define SC_REGISTER_ATS_INFO_TABLE_ERR_EID 18
 
-/** \brief <tt> 'ATS control block table register failed, returned: 0x\%08X' </tt>
-**  \event <tt> 'ATS control block table register failed, returned: 0x\%08X' </tt>
-**
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message is issued when trying to register the ATS control block
-**  dump only table fails
-**
-**  The \c returned field contains the result from #CFE_TBL_Register
-*/
+/**
+ * \brief SC ATS Control Block Table Registration Failed Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  This event message is issued when trying to register the ATS control block
+ *  dump only table fails
+ */
 #define SC_REGISTER_ATS_CTRL_BLK_TABLE_ERR_EID 19
 
-/** \brief <tt> 'ATS command status table register failed for ATS \%d, returned: 0x\%08X' </tt>
-**  \event <tt> 'ATS command status table register failed for ATS \%d, returned: 0x\%08X' </tt>
-**
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message is issued when one of the ATS command status tables fails table
-**  registration
-**
-**  The \c ATS field contains the ATS Id for the table that failed, and the \c returned
-**  field contains the result from #CFE_TBL_Register
-*/
+/**
+ * \brief SC ATS Command Status Table Registration Failed Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  This event message is issued when one of the ATS command status tables fails table
+ *  registration
+ */
 #define SC_REGISTER_ATS_CMD_STATUS_TABLE_ERR_EID 20
 
-/** \brief <tt> 'RTS table load failure count = \%d' </tt>
-**  \event <tt> 'RTS table load failure count = \%d' </tt>
-**
-**  \par Type: INFORMATIONAL
-**
-**  \par Cause:
-**  This event message indicates the number of RTS tables that failed
-**  to load at startup. This can be either from failure to open the RTS file
-**  or from a failure to load the RTS table.
-*/
+/**
+ * \brief SC RTS Table Load Failure Count Event ID
+ *
+ *  \par Type: INFORMATIONAL
+ *
+ *  \par Cause:
+ *  This event message indicates the number of RTS tables that failed
+ *  to load at startup. This can be either from failure to open the RTS file
+ *  or from a failure to load the RTS table.
+ */
 #define SC_RTS_LOAD_FAIL_COUNT_INFO_EID 21
 
-/** \brief <tt> 'ATS \%c Execution Started' </tt>
-**  \event <tt> 'ATS \%c Execution Started' </tt>
-**
-**  \par Type: INFORMATIONAL
-**
-**  \par Cause:
-**  This event message is issued when an ATS is started successfully
-**
-**
-**  The \c Sequence field contains which ATS was started
-*/
+/**
+ * \brief SC ATS Execution Started Event ID
+ *
+ *  \par Type: INFORMATIONAL
+ *
+ *  \par Cause:
+ *  This event message is issued when an ATS is started successfully
+ */
 #define SC_STARTATS_CMD_INF_EID 23
 
-/** \brief <tt> 'Start ATS Rejected: ATS \%c Not Loaded' </tt>
-**  \event <tt> 'Start ATS Rejected: ATS \%c Not Loaded' </tt>
-**
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message is issued when a #SC_START_ATS_CC cmd failed because
-**  the specified ATS was not loaded.
-**
-**  The \c ATS field contains the ATS that was tried to be started
-*/
+/**
+ * \brief SC ATS Start Rejected Table Not Loaded Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  This event message is issued when a #SC_START_ATS_CC cmd failed because
+ *  the specified ATS was not loaded.
+ */
 #define SC_STARTATS_CMD_NOT_LDED_ERR_EID 24
 
-/** \brief <tt> 'Start ATS Rejected: ATP is not Idle' </tt>
-**  \event <tt> 'Start ATS Rejected: ATP is not Idle' </tt>
-**
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message is issued when a #SC_START_ATS_CC command was issued
-**  but there is already an ATS running
-*/
+/**
+ * \brief SC ATS Start Rejected ATP Not Idle Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  This event message is issued when a #SC_START_ATS_CC command was issued
+ *  but there is already an ATS running
+ */
 #define SC_STARTATS_CMD_NOT_IDLE_ERR_EID 25
 
-/** \brief <tt> 'Start ATS \%d Rejected: Invalid ATS ID' </tt>
-**  \event <tt> 'Start ATS \%d Rejected: Invalid ATS ID' </tt>
-**
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message is issued when the ATS Id specified in the
-**  #SC_START_ATS_CC command was invalid
-**
-**  The \c ATS field contains the invalid ATS Id
-*/
+/**
+ * \brief SC ATS Start Rejected ATS ID Invalid Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  This event message is issued when the ATS Id specified in the
+ *  #SC_START_ATS_CC command was invalid
+ */
 #define SC_STARTATS_CMD_INVLD_ID_ERR_EID 26
 
-/** \brief <tt> 'ATS \%c stopped' </tt>
-**  \event <tt> 'ATS \%c stopped' </tt>
-**
-**  \par Type: INFORMATIONAL
-**
-**  \par Cause:
-**  This event message is issued when a #SC_STOP_ATS_CC command successfully
-**  stopped an ATS
-**
-**  The \c ATS field contains the ATS that was stopped
-*/
+/**
+ * \brief SC ATS Stopped Event ID
+ *
+ *  \par Type: INFORMATIONAL
+ *
+ *  \par Cause:
+ *  This event message is issued when a #SC_STOP_ATS_CC command successfully
+ *  stopped an ATS
+ */
 #define SC_STOPATS_CMD_INF_EID 27
 
-/** \brief <tt> 'There is no ATS running to stop' </tt>
-**  \event <tt> 'There is no ATS running to stop' </tt>
-**
-**  \par Type: INFORMATIONAL
-**
-**  \par Cause:
-**  This event message is issued when a #SC_STOP_ATS_CC command was issued
-**  but there was no ATS running
-*/
+/**
+ * \brief SC ATS Stopped No ATS Running Event ID
+ *
+ *  \par Type: INFORMATIONAL
+ *
+ *  \par Cause:
+ *  This event message is issued when a #SC_STOP_ATS_CC command was issued
+ *  but there was no ATS running
+ */
 #define SC_STOPATS_NO_ATS_INF_EID 28
 
-/** \brief <tt> 'All ATS commands were skipped, ATS stopped' </tt>
-**  \event <tt> 'All ATS commands were skipped, ATS stopped' </tt>
-**
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message is issued when an ATS is begun, and all times for
-**  the commands in the ATS exist in the past.
-*/
+/**
+ * \brief SC ATS All Commands Skipped Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  This event message is issued when an ATS is begun, and all times for
+ *  the commands in the ATS exist in the past.
+ */
 #define SC_ATS_SKP_ALL_ERR_EID 29
 
-/** \brief <tt> 'ATS started, skipped \%d commands' </tt>
-**  \event <tt> 'ATS started, skipped \%d commands' </tt>
-**
-**  \par Type: DEBUG
-**
-**  \par Cause:
-**  This event message is issued when an ATS is started, and some of the
-**  times for commands in the ATS exist in the past.
-**
-**  The \c skipped field contains the number of commands that were skipped
-**  in the ATS
-*/
+/**
+ * \brief SC ATS Some Commands Skipped Event ID
+ *
+ *  \par Type: DEBUG
+ *
+ *  \par Cause:
+ *  This event message is issued when an ATS is started, and some of the
+ *  times for commands in the ATS exist in the past.
+ */
 #define SC_ATS_ERR_SKP_DBG_EID 30
 
-/** \brief <tt> 'Switch ATS Pending' </tt>
-**  \event <tt> 'Switch ATS Pending' </tt>
-**
-**  \par Type: INFORMATIONAL
-**
-**  \par Cause:
-**  This event message is issued when a #SC_SWITCH_ATS_CC command is issued and
-**  the switch is scheduled
-*/
+/**
+ * \brief SC ATS Switch Pending Event ID
+ *
+ *  \par Type: INFORMATIONAL
+ *
+ *  \par Cause:
+ *  This event message is issued when a #SC_SWITCH_ATS_CC command is issued and
+ *  the switch is scheduled
+ */
 #define SC_SWITCH_ATS_CMD_INF_EID 31
 
-/** \brief <tt> 'Switch ATS Failure: Destination ATS Not Loaded' </tt>
-**  \event <tt> 'Switch ATS Failure: Destination ATS Not Loaded' </tt>
-**
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message is issued when a #SC_SWITCH_ATS_CC command is issued, but the
-**  ATS to switch to is not loaded
-*/
+/**
+ * \brief SC ATS Switch Command Rejected Destination ATS Not Loaded Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  This event message is issued when a #SC_SWITCH_ATS_CC command is issued, but the
+ *  ATS to switch to is not loaded
+ */
 #define SC_SWITCH_ATS_CMD_NOT_LDED_ERR_EID 32
 
-/** \brief <tt> 'Switch ATS Rejected: ATP is idle' </tt>
-**  \event <tt> 'Switch ATS Rejected: ATP is idle' </tt>
-**
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message is issued when a #SC_SWITCH_ATS_CC command is issued, but there
-**  is not an ATS running to switch from
-*/
+/**
+ * \brief SC ATS Switch Command Rejected ATP Is Idle Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  This event message is issued when a #SC_SWITCH_ATS_CC command is issued, but there
+ *  is not an ATS running to switch from
+ */
 #define SC_SWITCH_ATS_CMD_IDLE_ERR_EID 33
 
-/** \brief <tt> 'ATS Switched from \%c to \%c' </tt>
-**  \event <tt> 'ATS Switched from \%c to \%c' </tt>
-**
-**  \par Type: INFORMATIONAL
-**
-**  \par Cause:
-**  This event message is issued when an ATS switch is scheduled and has been switched
-**
-**  The \c from field contains old ATS and the \c to field contains the new running ATS
-*/
+/**
+ * \brief SC ATS Switch Completed Event ID
+ *
+ *  \par Type: INFORMATIONAL
+ *
+ *  \par Cause:
+ *  This event message is issued when an ATS switch is scheduled and has been switched
+ */
 #define SC_ATS_SERVICE_SWTCH_INF_EID 34
 
-/** \brief <tt> 'Switch ATS Failure: Destination ATS is empty' </tt>
-**  \event <tt> 'Switch ATS Failure: Destination ATS is empty' </tt>
-**
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message is issued when an ATS switch is scheduled, but there are no commands
-**  (ie not loaded) in the destination ATS
-*/
+/**
+ * \brief SC ATS Switch Scheduled Destination ATS Empty Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  This event message is issued when an ATS switch is scheduled, but there are no commands
+ *  (ie not loaded) in the destination ATS
+ */
 #define SC_SERVICE_SWITCH_ATS_CMD_LDED_ERR_EID 35
 
-/** \brief <tt> 'Switch ATS Rejected: ATP is idle' </tt>
-**  \event <tt> 'Switch ATS Rejected: ATP is idle' </tt>
-**
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message is issued when an ATS switch is scheduled, but there is no ATS running
-**  This error will only occur is something gets corrupted
-*/
+/**
+ * \brief SC ATS Switch Scheduled ATP Is Idle Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  This event message is issued when an ATS switch is scheduled, but there is no ATS running
+ *  This error will only occur is something gets corrupted
+ */
 #define SC_ATS_SERVICE_SWITCH_IDLE_ERR_EID 36
 
-/** \brief <tt> 'ATS Switched from \%c to \%c' </tt>
-**  \event <tt> 'ATS Switched from \%c to \%c' </tt>
-**
-**  \par Type: INFORMATIONAL
-**
-**  \par Cause:
-**  This event message is issued when an ATS is scheduled in-line and the switch is successful
-**
-**  The \c from field contains old ATS and the \c to field contains the new running ATS
-*/
+/**
+ * \brief SC ATS Inline Switch Completed Event ID
+ *
+ *  \par Type: INFORMATIONAL
+ *
+ *  \par Cause:
+ *  This event message is issued when an ATS is scheduled in-line and the switch is successful
+ */
 #define SC_ATS_INLINE_SWTCH_INF_EID 37
 
-/** \brief <tt> 'Switch ATS Failure: Destination ATS Not Loaded' </tt>
-**  \event <tt> 'Switch ATS Failure: Destination ATS Not Loaded' </tt>
-**
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message is issued when an ATS switch is scheduled, but there are no commands
-**  (ie not loaded) in the destination ATS
-*/
+/**
+ * \brief SC ATS Inline Switch Destination ATS Not Loaded Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  This event message is issued when an ATS switch is scheduled, but there are no commands
+ *  (ie not loaded) in the destination ATS
+ */
 #define SC_ATS_INLINE_SWTCH_NOT_LDED_ERR_EID 38
 
-/** \brief <tt> 'Jump Cmd: All ATS commands were skipped, ATS stopped' </tt>
-**  \event <tt> 'Jump Cmd: All ATS commands were skipped, ATS stopped' </tt>
-**
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message is issued when a #SC_JUMP_ATS_CC command was issued, and the time to
-**  jump to was passed all of the commands in the ATS
-*/
+/**
+ * \brief SC ATS Jump Command All Commands Skipped Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  This event message is issued when a #SC_JUMP_ATS_CC command was issued, and the time to
+ *  jump to was passed all of the commands in the ATS
+ */
 #define SC_JUMPATS_CMD_STOPPED_ERR_EID 39
 
-/** \brief <tt> 'Next ATS command time in the ATP was set to \%s' </tt>
-**  \event <tt> 'Next ATS command time in the ATP was set to \%s' </tt>
-**
-**  \par Type: INFORMATIONAL
-**
-**  \par Cause:
-**  This event message is issued when a #SC_JUMP_ATS_CC command was executed successfully
-**
-**
-**  The \c time field contains the time of the next ATS command after the jump
-*/
+/**
+ * \brief SC ATS Jump Command Event ID
+ *
+ *  \par Type: INFORMATIONAL
+ *
+ *  \par Cause:
+ *  This event message is issued when a #SC_JUMP_ATS_CC command was executed successfully
+ */
 #define SC_JUMP_ATS_INF_EID 40
 
-/** \brief <tt> 'ATS Jump Failed: No active ATS' </tt>
-**  \event <tt> 'ATS Jump Failed: No active ATS' </tt>
-**
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message is issued when a #SC_JUMP_ATS_CC command was received, but there
-**  is no ATS currently running
-*/
+/**
+ * \brief SC ATS Jump Command No Active ATS Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  This event message is issued when a #SC_JUMP_ATS_CC command was received, but there
+ *  is no ATS currently running
+ */
 #define SC_JUMPATS_CMD_NOT_ACT_ERR_EID 41
 
-/** \brief <tt> 'Continue ATS On Failure command  failed, invalid state: \%d"' </tt>
-**  \event <tt> 'Continue ATS On Failure command  failed, invalid state: \%d"' </tt>
-**
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message is issued when a #SC_CONTINUE_ATS_ON_FAILURE_CC command was received, but the state
-**  in the command was invalid
-**
-**  The \c State field contains the state given in the command
-*/
+/**
+ * \brief SC Continue ATS On Failure Commanded State Invalid Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  This event message is issued when a #SC_CONTINUE_ATS_ON_FAILURE_CC command was received, but the state
+ *  in the command was invalid
+ */
 #define SC_CONT_CMD_ERR_EID 42
 
-/** \brief <tt> 'Continue-ATS-On-Failure command, State: \%d' </tt>
-**  \event <tt> 'Continue-ATS-On-Failure command, State: \%d' </tt>
-**
-**  \par Type: DEBUG
-**
-**  \par Cause:
-**  This event message is issued when the #SC_CONTINUE_ATS_ON_FAILURE_CC command was recieved and
-**  the state was changed successfully
-**
-**  The \c State field contains the new state for the flag
-*/
+/**
+ * \brief SC Continue ATS On Failure Command Event ID
+ *
+ *  \par Type: DEBUG
+ *
+ *  \par Cause:
+ *  This event message is issued when the #SC_CONTINUE_ATS_ON_FAILURE_CC command was recieved and
+ *  the state was changed successfully
+ */
 #define SC_CONT_CMD_DEB_EID 43
 
-/** \brief <tt> 'ATS Command Failed Checksum: Command #\%d Skipped' </tt>
-**  \event <tt> 'ATS Command Failed Checksum: Command #\%d Skipped' </tt>
-**
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message is issued when a command from an ATS is about to be sent out
-**  but it fails checksum validation
-**
-**  The \c Command field contains the number of the command that was skipped
-*/
+/**
+ * \brief SC ATS Command Skipped Checksum Failed Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  This event message is issued when a command from an ATS is about to be sent out
+ *  but it fails checksum validation
+ */
 #define SC_ATS_CHKSUM_ERR_EID 44
 
-/** \brief <tt> 'ATS \%c Aborted' </tt>
-**  \event <tt> 'ATS \%c Aborted' </tt>
-**
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message is issued when a ATS command that was about to be sent out
-**  failed checksum validation, and the Continue-ATS-on_checksum-Failure flag was
-**  set to 'FALSE'
-**
-**  The \c Sequence field contains the ATS that was stopped
-*/
+/**
+ * \brief SC ATS Aborted Command Checksum Failed Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  This event message is issued when a ATS command that was about to be sent out
+ *  failed checksum validation, and the Continue-ATS-on_checksum-Failure flag was
+ *  set to 'FALSE'
+ */
 #define SC_ATS_ABT_ERR_EID 45
 
-/** \brief <tt> 'ATS Command Distribution Failed, Cmd Number: \%d, SB returned: 0x\%08X' </tt>
-**  \event <tt> 'ATS Command Distribution Failed, Cmd Number: \%d, SB returned: 0x\%08X' </tt>
-**
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message is issued when an ATS command is about to be sent out,
-**  and the #CFE_SB_TransmitMsg call failed to send it
-**
-**  The \c Cmd \c number field contains the command number that failed
-**  The \c Returned field contains the return code from #CFE_SB_TransmitMsg
-*/
+/**
+ * \brief SC ATS Transmit Message Failed Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  This event message is issued when an ATS command is about to be sent out,
+ *  and the #CFE_SB_TransmitMsg call failed to send it
+ */
 #define SC_ATS_DIST_ERR_EID 46
 
-/** \brief <tt> 'ATS Command Number Mismatch: Command Skipped, expected: \%d received: \%d' </tt>
-**  \event <tt> 'ATS Command Number Mismatch: Command Skipped, expected: \%d received: \%d' </tt>
-**
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message is issued when an ATS command is about to be sent out,
-**  but it's command number is not what was expected
-**
-**  The \c expected field is the command number that was in the ATS control block
-**  The \c received field is the command number that was in the ATS table
-*/
+/**
+ * \brief SC ATS Command Skipped Due To Number Mismatch Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  This event message is issued when an ATS command is about to be sent out,
+ *  but it's command number is not what was expected
+ */
 #define SC_ATS_MSMTCH_ERR_EID 47
 
-/** \brief <tt> 'Invalid ATS Command Status: Command Skipped' </tt>
-**  \event <tt> 'Invalid ATS Command Status: Command Skipped' </tt>
-**
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message is issued when an ATS command is about to be send out,
-**  but the command isn't marked as '#SC_LOADED'
-**
-**  The \c Status field contains the state of the ATS command
-*/
+/**
+ * \brief SC ATS Command Skipped Due To Command Status Invalid Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  This event message is issued when an ATS command is about to be send out,
+ *  but the command isn't marked as '#SC_LOADED'
+ */
 #define SC_ATS_SKP_ERR_EID 48
 
-/** \brief <tt> 'RTS \%03d Command Distribution Failed: RTS Stopped. SB returned 0x%08X' </tt>
-**  \event <tt> 'RTS \%03d Command Distribution Failed: RTS Stopped. SB returned 0x%08X' </tt>
-**
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message is issued when an RTS command was about to be sent out,
-**  and #CFE_SB_TransmitMsg couldn't send the message
-**
-**  The \c RTS field contains the RTS Id that was stopped
-**  The \c returned field is the return code from #CFE_SB_TransmitMsg
-*/
+/**
+ * \brief SC RTS Transmit Message Failed Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  This event message is issued when an RTS command was about to be sent out,
+ *  and #CFE_SB_TransmitMsg couldn't send the message
+ */
 #define SC_RTS_DIST_ERR_EID 49
 
-/** \brief <tt> 'RTS \%03d Command Failed Checksum: RTS Stopped' </tt>
-**  \event <tt> 'RTS \%03d Command Failed Checksum: RTS Stopped' </tt>
-**
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message is issued when an RTS comand was about to be sent out,
-**  but the command failed checksum validation
-**
-**  The \c RTS field contains the RTS Id that was stopped
-*/
+/**
+ * \brief SC RTS Stopped Due To Command Checksum Failure Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  This event message is issued when an RTS comand was about to be sent out,
+ *  but the command failed checksum validation
+ */
 #define SC_RTS_CHKSUM_ERR_EID 50
 
-/** \brief <tt> 'Reset counters command' </tt>
-**  \event <tt> 'Reset counters command' </tt>
-**
-**  \par Type: DEBUG
-**
-**  \par Cause:
-**  This event message is issued when the #SC_RESET_COUNTERS_CC command was received
-*/
+/**
+ * \brief SC Reset Counters Command Event ID
+ *
+ *  \par Type: DEBUG
+ *
+ *  \par Cause:
+ *  This event message is issued when the #SC_RESET_COUNTERS_CC command was received
+ */
 #define SC_RESET_DEB_EID 51
 
-/** \brief <tt> 'No-op command. Version \%d.\%d.\%d.\%d' </tt>
-**  \event <tt> 'No-op command. Version \%d.\%d.\%d.\%d' </tt>
-**
-**  \par Type: INFORMATIONAL
-**
-**  \par Cause:
-**
-**  This event message is issued when a #SC_NOOP_CC command has been received
-**
-**  The \c Version fields contain the #SC_MAJOR_VERSION,
-**  #SC_MINOR_VERSION, #SC_REVISION, and #SC_MISSION_REV
-**  version identifiers.
-*/
+/**
+ * \brief SC No-op Command Event ID
+ *
+ *  \par Type: INFORMATIONAL
+ *
+ *  \par Cause:
+ *
+ *  This event message is issued when a #SC_NOOP_CC command has been received
+ */
 #define SC_NOOP_INF_EID 52
 
-/** \brief <tt> 'RTS cmd loaded with invalid MID at \%d' </tt>
-**  \event <tt> 'RTS cmd loaded with invalid MID at \%d' </tt>
-**
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message is issued when and RTS table is loaded, but there is an invalid
-**  message Id in the command
-**
-**  The \c Start field contains the word at which the failure occured
-*/
+/**
+ * \brief SC RTS Table Command Message ID Invalid Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  This event message is issued when and RTS table is loaded, but there is an invalid
+ *  message Id in the command
+ */
 #define SC_RTS_INVLD_MID_ERR_EID 59
 
-/** \brief <tt> 'RTS cmd loaded with invalid length at \%d, len: \%d' </tt>
-**  \event <tt> 'RTS cmd loaded with invalid length at \%d, len: \%d' </tt>
-**
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message is issued when and RTS table is loaded, but there is an invalid
-**  length in the command
-**
-**  The \c Start field contains the word at which the failure occured
-**  The \c len field contauns the length in the commaand
-*/
+/**
+ * \brief SC RTS Table Command Message Length Invalid Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  This event message is issued when and RTS table is loaded, but there is an invalid
+ *  length in the command
+ */
 #define SC_RTS_LEN_ERR_EID 60
 
-/** \brief <tt> 'RTS cmd at \%d runs off end of buffer' </tt>
-**  \event <tt> 'RTS cmd at \%d runs off end of buffer' </tt>
-**
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message is issued when and RTS table is loaded, but the command
-**  runs off the end of the buffer
-**
-**  The \c Start field contains the word at which the failure occured
-*/
+/**
+ * \brief SC RTS Table Command Runs Off Buffer Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  This event message is issued when and RTS table is loaded, but the command
+ *  runs off the end of the buffer
+ */
 #define SC_RTS_LEN_BUFFER_ERR_EID 61
 
-/** \brief <tt> 'RTS cmd loaded won't fit in buffer at \%d' </tt>
-**  \event <tt> 'RTS cmd loaded won't fit in buffer at \%d' </tt>
-**
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message is issued when and RTS table is loaded, but the command
-**  won't fit in the buffer
-**
-**  The \c Start field contains the word at which the failure occured
-*/
+/**
+ * \brief SC RTS Table Data Detected That Would Exceed Buffer Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  This event message is issued when and RTS table is loaded, but there
+ *  is non-zero data at the end when the size left is less than #SC_RTS_HDR_WORDS
+ */
 #define SC_RTS_LEN_TOO_LONG_ERR_EID 62
 
-/** \brief <tt> 'Invalid command pipe message ID: 0x\%08X' </tt>
-**  \event <tt> 'Invalid command pipe message ID: 0x\%08X' </tt>
-**
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message is issued when an invalid message Id is recieved in the
-**  command pipe
-**
-**  The \c Messge \c Id field contains the erroneous message Id
-*/
+/**
+ * \brief SC Command Pipe Message ID Invalid Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  This event message is issued when an invalid message Id is recieved in the
+ *  command pipe
+ */
 #define SC_MID_ERR_EID 63
 
-/** \brief <tt> 'Invalid Command Code: MID =  0x\%04X CC =  \%d' </tt>
-**  \event <tt> 'Invalid Command Code: MID =  0x\%04X CC =  \%d' </tt>
-**
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message is issued when an invalid command code was recieved in
-**  the command pipe
-**
-**  The MID \c field contains the message Id for the command, and the \c CC
-**  field contains the erroneous command code
-*/
+/**
+ * \brief SC Command Code Invalid Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  This event message is issued when an invalid command code was recieved in
+ *  the command pipe
+ */
 #define SC_INVLD_CMD_ERR_EID 64
 
-/** \brief <tt> 'RTS Info table failed Getting Address, returned: 0x\%08X' </tt>
-**  \event <tt> 'RTS Info table failed Getting Address, returned: 0x\%08X' </tt>
-**
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message is issued when getting the address of the Rts Info table
-**  failed
-**
-**  The returned \c field contains the result from #CFE_TBL_GetAddress
-*/
+/**
+ * \brief SC RTS Info Table Get Address Failed Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  This event message is issued when getting the address of the Rts Info table
+ *  failed
+ */
 #define SC_GET_ADDRESS_RTS_INFO_ERR_EID 65
 
-/** \brief <tt> 'RTS Ctrl Blck table failed Getting Address, returned: 0x\%08X' </tt>
-**  \event <tt> 'RTS Ctrl Blck table failed Getting Address, returned: 0x\%08X' </tt>
-**
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message is issued when getting the address of the Rts Control Block table
-**  failed
-**
-**  The returned \c field contains the result from #CFE_TBL_GetAddress
-*/
+/**
+ * \brief SC RTS Control Block Table Get Address Failed Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  This event message is issued when getting the address of the Rts Control Block table
+ *  failed
+ */
 #define SC_GET_ADDRESS_RTS_CTRL_BLCK_ERR_EID 66
 
-/** \brief <tt> 'ATS Info table failed Getting Address, returned: 0x\%08X' </tt>
-**  \event <tt> 'ATS Info table failed Getting Address, returned: 0x\%08X' </tt>
-**
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message is issued when getting the address of the Ats Info table
-**  failed
-**
-**  The returned \c field contains the result from #CFE_TBL_GetAddress
-*/
+/**
+ * \brief SC ATS Info Table Get Address Failed Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  This event message is issued when getting the address of the Ats Info table
+ *  failed
+ */
 #define SC_GET_ADDRESS_ATS_INFO_ERR_EID 67
 
-/** \brief <tt> 'ATS Ctrl Blck table failed Getting Address, returned: 0x\%08X' </tt>
-**  \event <tt> 'ATS Ctrl Blck table failed Getting Address, returned: 0x\%08X' </tt>
-**
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message is issued when getting the address of the Ats Control Block table
-**  failed
-**
-**  The returned \c field contains the result from #CFE_TBL_GetAddress
-*/
+/**
+ * \brief SC ATS Control Block Table Get Address Failed Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  This event message is issued when getting the address of the Ats Control Block table
+ *  failed
+ */
 #define SC_GET_ADDRESS_ATS_CTRL_BLCK_ERR_EID 68
 
-/** \brief <tt> 'ATS Cmd Status table for ATS \%d failed Getting Address, returned: 0x\%08X' </tt>
-**  \event <tt> 'ATS Cmd Status table for ATS \%d failed Getting Address, returned: 0x\%08X' </tt>
-**
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message is issued when getting the address of an Ats Command Status table
-**  failed
-**
-**  The \c ATS field contains the ATS Id of the Cmd Status table that failed
-**  The returned \c field contains the result from #CFE_TBL_GetAddress
-*/
+/**
+ * \brief SC ATS Command Status Table Get Address Failed Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  This event message is issued when getting the address of an Ats Command Status table
+ *  failed
+ */
 #define SC_GET_ADDRESS_ATS_CMD_STAT_ERR_EID 69
 
-/** \brief <tt> 'RTS table \%d failed Getting Address, returned: 0x\%08X' </tt>
-**  \event <tt> 'RTS table \%d failed Getting Address, returned: 0x\%08X' </tt>
-**
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message is issued when getting the address of an RTS table
-**  failed
-**
-**  The \c RTS field contains the RTS Id of the table that failed
-**  The returned \c field contains the result from #CFE_TBL_GetAddress
-*/
+/**
+ * \brief SC RTS Table Get Address Failed Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  This event message is issued when getting the address of an RTS table
+ *  failed
+ */
 #define SC_GET_ADDRESS_RTS_ERR_EID 70
 
-/** \brief <tt> 'ATS table \%d failed Getting Address, returned: 0x\%08X' </tt>
-**  \event <tt> 'ATS table \%d failed Getting Address, returned: 0x\%08X' </tt>
-**
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message is issued when getting the address of an ATS table
-**  failed
-**
-**  The \c RTS field contains the RTS Id of the table that failed
-**  The returned \c field contains the result from #CFE_TBL_GetAddress
-*/
+/**
+ * \brief SC ATS Table Get Address Failed Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  This event message is issued when getting the address of an ATS table
+ *  failed
+ */
 #define SC_GET_ADDRESS_ATS_ERR_EID 71
 
-/** \brief <tt> 'Start RTS #\%d command' </tt>
-**  \event <tt> 'Start RTS #\%d command' </tt>
-**
-**  \par Type: DEBUG
-**
-**  \par Cause:
-**  This event message is issued when a #SC_START_RTS_CC cmd is recieved and is sucessful
-**
-**  The \c RTS field specifes the RTS ID to start
-*/
+/**
+ * \brief SC RTS Start Command Event ID
+ *
+ *  \par Type: DEBUG
+ *
+ *  \par Cause:
+ *  This event message is issued when a #SC_START_RTS_CC cmd is recieved and is sucessful
+ */
 #define SC_STARTRTS_CMD_DBG_EID 72
 
-/** \brief <tt> 'RTS Number \%03d Started' </tt>
-**  \event <tt> 'RTS Number \%03d Started' </tt>
-**
-**  \par Type: INFORMATIONAL
-**
-**  \par Cause:
-**  This event message is issued when an RTS is started sucessfully
-**
-**  The \c Number field contains the RTS Id that was started
-*/
+/**
+ * \brief SC RTS Started Event ID
+ *
+ *  \par Type: INFORMATIONAL
+ *
+ *  \par Cause:
+ *  This event message is issued when an RTS is started sucessfully
+ */
 #define SC_RTS_START_INF_EID 73
 
-/** \brief <tt> 'Start RTS \%03d Rejected: Invld Len Field for 1st Cmd in Sequence. Invld Cmd Length = \%d' </tt>
-**  \event <tt> 'Start RTS \%03d Rejected: Invld Len Field for 1st Cmd in Sequence. Invld Cmd Length = \%d' </tt>
-**
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message is issued when an RTS is started but the first command has an invalid length
-**
-**  The \c Number field contains the RTS Id that was started
-*/
+/**
+ * \brief SC Start RTS Rejected Due To First Command Length Invalid Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  This event message is issued when an RTS is started but the first command has an invalid length
+ */
 #define SC_STARTRTS_CMD_INVLD_LEN_ERR_EID 74
 
-/** \brief <tt> 'Start RTS \%03d Rejected: RTS Not Loaded or In Use, Status: \%d' </tt>
-**  \event <tt> 'Start RTS \%03d Rejected: RTS Not Loaded or In Use, Status: \%d' </tt>
-**
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message is issued when an RTS is tried to be started, but the RTS is not
-**  marked as #SC_LOADED
-**
-**  The \c RTS field contains the RTS ID that was rejected, and the \c Status field
-**  contains the status of that RTS.
-*/
+/**
+ * \brief SC Start RTS Rejected Due To RTS Not Loaded Or In Use Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  This event message is issued when an RTS is tried to be started, but the RTS is not
+ *  marked as #SC_LOADED
+ */
 #define SC_STARTRTS_CMD_NOT_LDED_ERR_EID 75
 
-/** \brief <tt> 'Start RTS \%03d Rejected: RTS Disabled' </tt>
-**  \event <tt> 'Start RTS \%03d Rejected: RTS Disabled' </tt>
-**
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message is issued when a #SC_START_RTS_CC command was recieved, but the
-**  RTS is disabled
-**
-**  The \c RTS field contains the RTS Id of the RTS that was rejected to start
-*/
+/**
+ * \brief SC Start RTS Rejected RTS Disabled Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  This event message is issued when a #SC_START_RTS_CC command was recieved, but the
+ *  RTS is disabled
+ */
 #define SC_STARTRTS_CMD_DISABLED_ERR_EID 76
 
-/** \brief <tt> 'Start RTS \%03d Rejected: Invalid RTS ID' </tt>
-**  \event <tt> 'Start RTS \%03d Rejected: Invalid RTS ID' </tt>
-**
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message is issued when a #SC_START_RTS_CC command was recieved, but the
-**  RTS Id was invalid
-**
-**  The \c RTS field contains the RTS Id of the RTS that was rejected to start
-*/
+/**
+ * \brief SC Start RTS Rejected RTS ID Invalid Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  This event message is issued when a #SC_START_RTS_CC command was recieved, but the
+ *  RTS Id was invalid
+ */
 #define SC_STARTRTS_CMD_INVALID_ERR_EID 77
 
-/** \brief <tt> 'RTS \%03d Aborted' </tt>
-**  \event <tt> 'RTS \%03d Aborted' </tt>
-**
-**  \par Type: INFORMATIONAL
-**
-**  \par Cause:
-**  This event message is issued when an #SC_STOP_RTS_CC command is received and exexuted sucessfully
-**
-**  The \c RTS field contains the RTS Id of the RTS that was stopped
-*/
+/**
+ * \brief SC Stop RTS Command Event ID
+ *
+ *  \par Type: INFORMATIONAL
+ *
+ *  \par Cause:
+ *  This event message is issued when an #SC_STOP_RTS_CC command is received and exexuted sucessfully
+ */
 #define SC_STOPRTS_CMD_INF_EID 78
 
-/** \brief <tt> 'Stop RTS \%03d rejected: Invalid RTS ID' </tt>
-**  \event <tt> 'Stop RTS \%03d rejected: Invalid RTS ID' </tt>
-**
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message is issued when a #SC_STOP_RTS_CC command was rejected because the
-**  RTS Id given was invalid
-**
-**  The \c RTS field contains the RTS Id of the RTS that was invalid
-*/
+/**
+ * \brief SC Stop RTS Rejected RTS ID Invalid Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  This event message is issued when a #SC_STOP_RTS_CC command was rejected because the
+ *  RTS Id given was invalid
+ */
 #define SC_STOPRTS_CMD_ERR_EID 79
 
-/** \brief <tt> 'Disabled RTS \%03d' </tt>
-**  \event <tt> 'Disabled RTS \%03d' </tt>
-**
-**  \par Type: DEBUG
-**
-**  \par Cause:
-**  This event message is issued when a #SC_DISABLE_RTS_CC command was recieved, and executed sucessfully
-**
-**  The \c RTS field contains the RTS Id of the RTS that was disabled
-*/
+/**
+ * \brief SC Disable RTS Command Event ID
+ *
+ *  \par Type: DEBUG
+ *
+ *  \par Cause:
+ *  This event message is issued when a #SC_DISABLE_RTS_CC command was recieved, and executed sucessfully
+ */
 #define SC_DISABLE_RTS_DEB_EID 80
 
-/** \brief <tt> 'Disable RTS \%03d Rejected: Invalid RTS ID' </tt>
-**  \event <tt> 'Disable RTS \%03d Rejected: Invalid RTS ID' </tt>
-**
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message is issued when a #SC_DISABLE_RTS_CC command was recieved,
-**  but the RTS Id given was invalid
-**
-**  The \c RTS field contains the RTS Id of the RTS that was invalid
-*/
+/**
+ * \brief SC Disable RTS Rejected RTS ID Invalid Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  This event message is issued when a #SC_DISABLE_RTS_CC command was recieved,
+ *  but the RTS Id given was invalid
+ */
 #define SC_DISRTS_CMD_ERR_EID 81
 
-/** \brief <tt> 'Enabled RTS \%03d' </tt>
-**  \event <tt> 'Enabled RTS \%03d' </tt>
-**
-**  \par Type: DEBUG
-**
-**  \par Cause:
-**  This event message is issued when a #SC_ENABLE_RTS_CC command was recieved, and executed sucessfully
-**
-**  The \c RTS field contains the RTS Id of the RTS that was enabled
-*/
+/**
+ * \brief SC Enable RTS Command ID Event ID
+ *
+ *  \par Type: DEBUG
+ *
+ *  \par Cause:
+ *  This event message is issued when a #SC_ENABLE_RTS_CC command was recieved, and executed sucessfully
+ */
 #define SC_ENABLE_RTS_DEB_EID 82
 
-/** \brief <tt> 'Enable RTS \%03d Rejected: Invalid RTS ID' </tt>
-**  \event <tt> 'Enable RTS \%03d Rejected: Invalid RTS ID' </tt>
-**
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message is issued when a #SC_DISABLE_RTS_CC command was recieved,
-**  but the RTS Id given was invalid
-**
-**  The \c RTS field contains the RTS Id of the RTS that was invalid
-*/
+/**
+ * \brief SC Enable RTS Rejected RTS ID Invalid Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  This event message is issued when a #SC_DISABLE_RTS_CC command was recieved,
+ *  but the RTS Id given was invalid
+ */
 #define SC_ENARTS_CMD_ERR_EID 83
 
-/** \brief <tt> 'Cmd Runs passed end of Buffer, RTS \%03d Aborted' </tt>
-**  \event <tt> 'Cmd Runs passed end of Buffer, RTS \%03d Aborted' </tt>
-**
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message is issued when trying to get the next RTS command to execute,
-**  and that command runs passed the end of the RTS table buffer
-**
-**  The \c RTS field contains the RTS Id that failed
-*/
+/**
+ * \brief SC RTS Aborted Due To Command Exceeding Buffer Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  This event message is issued when trying to get the next RTS command to execute,
+ *  and that command runs passed the end of the RTS table buffer
+ */
 #define SC_RTS_LNGTH_ERR_EID 84
 
-/** \brief <tt> 'Invalid Length Field in RTS Command, RTS \%03d Aborted. Length: \%d, Max: \%d' </tt>
-**  \event <tt> 'Invalid Length Field in RTS Command, RTS \%03d Aborted. Length: \%d, Max: \%d' </tt>
-**
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message is issued when trying to get the next RTS command to execute,
-**  and that command has an illegal length value in the command
-**
-**  The \c RTS field contains the RTS Id that failed
-**  The \c Length field is the length of the command
-**  The \c Max field is #SC_PACKET_MAX_SIZE
-*/
+/**
+ * \brief SC RTS Aborted Due To Command Length Field Invalid Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  This event message is issued when trying to get the next RTS command to execute,
+ *  and that command has an illegal length value in the command
+ */
 #define SC_RTS_CMD_LNGTH_ERR_EID 85
 
-/** \brief <tt> 'RTS \%03d Execution Completed' </tt>
-**  \event <tt> 'RTS \%03d Execution Completed' </tt>
-**
-**  \par Type: INFORMATIONAL
-**
-**  \par Cause:
-**  This event message is issued when an RTS completes execution
-**
-**  The \c RTS field contains the RTS Id that completed
-*/
+/**
+ * \brief SC RTS Execution Completed Event ID
+ *
+ *  \par Type: INFORMATIONAL
+ *
+ *  \par Cause:
+ *  This event message is issued when an RTS completes execution
+ */
 #define SC_RTS_COMPL_INF_EID 86
 
-/** \brief <tt> 'ATS \%c Execution Completed' </tt>
-**  \event <tt> 'ATS \%c Execution Completed' </tt>
-**
-**  \par Type: INFORMATIONAL
-**
-**  \par Cause:
-**  This event message is issued when an ATS completes execution
-**
-**  The \c ATS field contains the ATS that completed
-*/
+/**
+ * \brief SC ATS Execution Completed Event ID
+ *
+ *  \par Type: INFORMATIONAL
+ *
+ *  \par Cause:
+ *  This event message is issued when an ATS completes execution
+ */
 #define SC_ATS_COMPL_INF_EID 87
 
-/** \brief <tt> 'Jump Cmd: Skipped \%d ATS commands' </tt>
-**  \event <tt> 'Jump Cmd: Skipped \%d ATS commands' </tt>
-**
-**  \par Type: DEBUG
-**
-**  \par Cause:
-**  This event message is issued a Jump Command is issued and
-**  Some of the ATS commands were marked as skipped
-**
-**  The \c Skipped field contains the number of ATS commands
-**  that were skipped when jumping forward in time
-*/
+/**
+ * \brief SC Jump Command Skipped ATS Commands Event ID
+ *
+ *  \par Type: DEBUG
+ *
+ *  \par Cause:
+ *  This event message is issued a Jump Command is issued and
+ *  Some of the ATS commands were marked as skipped
+ */
 #define SC_JUMP_ATS_SKIPPED_DBG_EID 88
 
-/** \brief <tt> 'Append ATS info table register failed, returned: 0x\%08X' </tt>
-**  \event <tt> 'Append ATS info table register failed, returned: 0x\%08X' </tt>
-**
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message is issued when trying to register the Append ATS Info Table
-**  dump only table fails
-**
-**  The \c returned field contains the result from #CFE_TBL_Register
-*/
-#define SC_REGISTER_APPEND_INFO_TABLE_ERR_EID 90
-
-/** \brief <tt> 'Append ATS Info table failed Getting Address, returned: 0x\%08X' </tt>
-**  \event <tt> 'Append ATS Info table failed Getting Address, returned: 0x\%08X' </tt>
-**
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message is issued when getting the address of the Append ATS Info table
-**  failed
-**
-**  The returned \c field contains the result from #CFE_TBL_GetAddress
-*/
-#define SC_GET_ADDRESS_APPEND_INFO_ERR_EID 91
-
-/** \brief <tt> 'Append ATS table failed Getting Address, returned: 0x\%08X' </tt>
-**  \event <tt> 'Append ATS table failed Getting Address, returned: 0x\%08X' </tt>
-**
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message indicates a failure to get the table data address from
-**  cFE Table Services
-**
-**  The returned value is the result from the call to #CFE_TBL_GetAddress
-*/
+/**
+ * \brief SC Append ATS Table Get Address Failed Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  This event message indicates a failure to get the table data address from
+ *  cFE Table Services
+ */
 #define SC_GET_ADDRESS_APPEND_ERR_EID 92
 
-/** \brief <tt> 'Append ATS Table Registration Failed, returned: 0x\%08X' </tt>
-**  \event <tt> 'Append ATS Table Registration Failed, returned: 0x\%08X' </tt>
-**
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message indicates a failure to register the table with cFE Table Services
-**
-**  The returned value is the result from the call to #CFE_TBL_Register
-*/
+/**
+ * \brief SC Append ATS Table Registration Failed Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  This event message indicates a failure to register the table with cFE Table Services
+ */
 #define SC_REGISTER_APPEND_TBL_ERR_EID 93
 
-/** \brief <tt> 'Update Append ATS Table: load count = \%d, command count = \%d, byte count = \%d' </tt>
-**  \event <tt> 'Update Append ATS Table: load count = \%d, command count = \%d, byte count = \%d' </tt>
-**
-**  \par Type: INFORMATION
-**
-**  \par Cause:
-**  This event message signals that the Append ATS table has been updated.
-**
-**  The displayed values include a load counter to identify this particular update,
-**  the number of valid ATS command entries in the table and the size (in bytes) of
-**  the portion of the table containing valid ATS command entries.
-*/
+/**
+ * \brief SC Append ATS Table Updated Event ID
+ *
+ *  \par Type: INFORMATION
+ *
+ *  \par Cause:
+ *  This event message signals that the Append ATS table has been updated.
+ */
 #define SC_UPDATE_APPEND_EID 97
 
-/** \brief <tt> 'Append ATS \%c command: \%d ATS entries appended' </tt>
-**  \event <tt> 'Append ATS \%c command: \%d ATS entries appended' </tt>
-**
-**  \par Type: INFORMATIONAL
-**
-**  \par Cause:
-**  This event signals the successful completion of an Append ATS command.
-**
-**  The event text displays the ATS selection command argument (A or B) and
-**  the number of Append table entries appended to the selected ATS.
-*/
+/**
+ * \brief SC Append ATS Table Appended Event ID
+ *
+ *  \par Type: INFORMATIONAL
+ *
+ *  \par Cause:
+ *  This event signals the successful completion of an Append ATS command.
+ */
 #define SC_APPEND_CMD_INF_EID 98
 
-/** \brief <tt> 'Append ATS error: invalid ATS ID = \%d' </tt>
-**  \event <tt> 'Append ATS error: invalid ATS ID = \%d' </tt>
-**
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message is issued when a #SC_APPEND_ATS_CC command has failed
-**  because the specified ATS command argument was not a valid ATS ID.
-**
-**  The event text displays the invalid ATS ID command argument.
-*/
+/**
+ * \brief SC Append ATS Rejected ATS ID Invalid Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  This event message is issued when a #SC_APPEND_ATS_CC command has failed
+ *  because the specified ATS command argument was not a valid ATS ID.
+ */
 #define SC_APPEND_CMD_ARG_ERR_EID 99
 
-/** \brief <tt> 'Append ATS \%c error: ATS table is empty' </tt>
-**  \event <tt> 'Append ATS \%c error: ATS table is empty' </tt>
-**
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message is issued when a #SC_APPEND_ATS_CC command has failed
-**  because the specified target ATS table is empty.  The Append ATS command
-**  requires that both the source Append table and the target ATS table have
-**  valid contents.
-**
-**  The event text displays the ATS ID command argument (A or B).
-*/
+/**
+ * \brief SC Append ATS Rejected Target ATS Table Empty Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  This event message is issued when a #SC_APPEND_ATS_CC command has failed
+ *  because the specified target ATS table is empty.  The Append ATS command
+ *  requires that both the source Append table and the target ATS table have
+ *  valid contents.
+ */
 #define SC_APPEND_CMD_TGT_ERR_EID 100
 
-/** \brief <tt> 'Append ATS \%c error: Append table is empty' </tt>
-**  \event <tt> 'Append ATS \%c error: Append table is empty' </tt>
-**
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message is issued when a #SC_APPEND_ATS_CC command has failed
-**  because the source Append table is empty.  The Append ATS command requires
-**  that both the source Append table and the target ATS table have valid
-**  contents.
-**
-**  The event text displays the ATS ID command argument (A or B).
-*/
+/**
+ * \brief SC Append ATS Rejected Append Table Empty Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  This event message is issued when a #SC_APPEND_ATS_CC command has failed
+ *  because the source Append table is empty.  The Append ATS command requires
+ *  that both the source Append table and the target ATS table have valid
+ *  contents.
+ */
 #define SC_APPEND_CMD_SRC_ERR_EID 101
 
-/** \brief <tt> 'Append ATS \%c error: ATS size = \%d, Append size = \%d, ATS buffer = \%d' </tt>
-**  \event <tt> 'Append ATS \%c error: ATS size = \%d, Append size = \%d, ATS buffer = \%d' </tt>
-**
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message is issued when a #SC_APPEND_ATS_CC command has failed
-**  because there is not room in the specified target ATS table to add the
-**  contents of the Append table.
-**
-**  The event text displays the ATS ID command argument (A or B), the size
-**  (in words) of the data in the specified ATS table, the size of the data
-**  in the Append table and the total size of the ATS table.
-*/
+/**
+ * \brief SC Append ATS Rejected Insufficent Space Left In ATS Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  This event message is issued when a #SC_APPEND_ATS_CC command has failed
+ *  because there is not room in the specified target ATS table to add the
+ *  contents of the Append table.
+ */
 #define SC_APPEND_CMD_FIT_ERR_EID 102
 
-/** \brief <tt> 'Verify ATS Table: command count = \%d, byte count = \%d' </tt>
-**  \event <tt> 'Verify ATS Table: command count = \%d, byte count = \%d' </tt>
-**
-**  \par Type: INFORMATION
-**
-**  \par Cause:
-**  This event message signals the successful verification of an ATS or an
-**     Append ATS table.
-**  The displayed values indicate the number of table entries (ATS commands)
-**     and the total size of the in use table data (in bytes).
-*/
+/**
+ * \brief SC ATS Or Append Table Verification Event ID
+ *
+ *  \par Type: INFORMATION
+ *
+ *  \par Cause:
+ *  This event message signals the successful verification of an ATS or an
+ *     Append ATS table.
+ */
 #define SC_VERIFY_ATS_EID 103
 
-/** \brief <tt> 'Verify ATS Table error: invalid command number: buf index = \%d, cmd num = \%d' </tt>
-**  \event <tt> 'Verify ATS Table error: invalid command number: buf index = \%d, cmd num = \%d' </tt>
-**
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message indicates an error during verification of an ATS
-**  or an Append ATS table due to an invalid table entry. The cause is
-**  a table entry with an invalid command number.
-**
-**  The event text describes the offset into the table in words for the
-**  invalid ATS table entry and the invalid table entry command number.
-*/
+/**
+ * \brief SC ATS Or Append Table Verification Table Entry Comamnd Number Invalid Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  This event message indicates an error during verification of an ATS
+ *  or an Append ATS table due to an invalid table entry. The cause is
+ *  a table entry with an invalid command number.
+ */
 #define SC_VERIFY_ATS_NUM_ERR_EID 104
 
-/** \brief <tt> 'Verify ATS Table error: buffer full: buf index = \%d, cmd num = \%d, buf words = \%d' </tt>
-**  \event <tt> 'Verify ATS Table error: buffer full: buf index = \%d, cmd num = \%d, buf words = \%d' </tt>
-**
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message indicates an error during verification of an ATS
-**  or an Append ATS table due to an invalid table entry. The cause is
-**  a table entry that has a valid command number but the entry begins
-**  at an offset too near the end of the table buffer to provide room
-**  for even the smallest possible command packet.
-**
-**  This error can be corrected by setting the first data word which
-**  follows the last valid table entry to zero. Note that the first
-**  word in an ATS table entry is the entry command number.
-**
-**  The event text describes the offset into the table in words for the
-**  invalid ATS table entry, the valid entry command number and the
-**  total size of the table buffer in words.
-*/
+/**
+ * \brief SC ATS Or Append Table Data Detected That Would Exceed Buffer Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  This event message indicates an error during verification of an ATS
+ *  or an Append ATS table due to an invalid table entry. The cause is
+ *  a table entry that has a valid command number but the entry begins
+ *  at an offset too near the end of the table buffer to provide room
+ *  for even the smallest possible command packet.
+ *
+ *  This error can be corrected by setting the first data word which
+ *  follows the last valid table entry to zero. Note that the first
+ *  word in an ATS table entry is the entry command number.
+ */
 #define SC_VERIFY_ATS_END_ERR_EID 105
 
-/** \brief <tt> 'Verify ATS Table error: invalid length: buf index = \%d, cmd num = \%d, pkt len = \%d' </tt>
-**  \event <tt> 'Verify ATS Table error: invalid length: buf index = \%d, cmd num = \%d, pkt len = \%d' </tt>
-**
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message indicates an error during verification of an ATS
-**  or an Append ATS table due to an invalid table entry. The cause is
-**  a table entry with an invalid command packet length.
-**
-**  The event text describes the offset into the table in words for the
-**  invalid ATS table entry, the valid table entry command number and
-**  the invalid table entry command packet length in bytes.
-*/
+/**
+ * \brief SC ATS Or Append Table Verification Command Length Invalid Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  This event message indicates an error during verification of an ATS
+ *  or an Append ATS table due to an invalid table entry. The cause is
+ *  a table entry with an invalid command packet length.
+ */
 #define SC_VERIFY_ATS_PKT_ERR_EID 106
 
-/** \brief <tt> 'Verify ATS Table error: buffer overflow: buf index = \%d, cmd num = \%d, pkt len = \%d' </tt>
-**  \event <tt> 'Verify ATS Table error: buffer overflow: buf index = \%d, cmd num = \%d, pkt len = \%d' </tt>
-**
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message indicates an error during verification of an ATS
-**  or an Append ATS table due to an invalid table entry. The cause is
-**  a table entry with an otherwise valid command packet length that
-**  would extend past the end of the table buffer.
-**
-**  The event text describes the offset into the table in words for the
-**  invalid ATS table entry, the valid table entry command number and
-**  the table entry command packet length in bytes.
-*/
+/**
+ * \brief SC ATS Or Append Table Verification Command Length Exceeds Buffer Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  This event message indicates an error during verification of an ATS
+ *  or an Append ATS table due to an invalid table entry. The cause is
+ *  a table entry with an otherwise valid command packet length that
+ *  would extend past the end of the table buffer.
+ */
 #define SC_VERIFY_ATS_BUF_ERR_EID 107
 
-/** \brief <tt> 'Verify ATS Table error: dup cmd number: buf index = \%d, cmd num = \%d, dup index = \%d' </tt>
-**  \event <tt> 'Verify ATS Table error: dup cmd number: buf index = \%d, cmd num = \%d, dup index = \%d' </tt>
-**
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message indicates an error during verification of an ATS
-**  or an Append ATS table due to an invalid table entry. The cause is
-**  a table entry with an otherwise valid command number that is already
-**  in use by an earlier table entry.
-**
-**  The event text describes the offset into the table in words for the
-**  invalid ATS table entry, the table entry command number and the
-**  table offset in words for the earlier entry using the same number.
-*/
+/**
+ * \brief SC ATS Or Append Table Verification Duplicate Command Number Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  This event message indicates an error during verification of an ATS
+ *  or an Append ATS table due to an invalid table entry. The cause is
+ *  a table entry with an otherwise valid command number that is already
+ *  in use by an earlier table entry.
+ */
 #define SC_VERIFY_ATS_DUP_ERR_EID 109
 
-/** \brief <tt> 'Verify ATS Table error: table is empty' </tt>
-**  \event <tt> 'Verify ATS Table error: table is empty' </tt>
-**
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message indicates an error during verification of an ATS
-**  or an Append ATS table due to the table having no entries.  This
-**  error can only occur if the first entry in the table has a command
-**  number equal to zero - the end of data marker.
-*/
+/**
+ * \brief SC ATS Or Append Table Verification Table Empty Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  This event message indicates an error during verification of an ATS
+ *  or an Append ATS table due to the table having no entries.  This
+ *  error can only occur if the first entry in the table has a command
+ *  number equal to zero - the end of data marker.
+ */
 #define SC_VERIFY_ATS_MPT_ERR_EID 110
 
-/** \brief <tt> 'Table manage command packet error: table ID = \%d' </tt>
-**  \event <tt> 'Table manage command packet error: table ID = \%d' </tt>
-**
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message is issued upon receipt of a table manage
-**  request command that has an invalid table ID argument.
-**
-**  The event text includes the invalid table ID.
-*/
+/**
+ * \brief SC Table Manage Request Table ID Invalid Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  This event message is issued upon receipt of a table manage
+ *  request command that has an invalid table ID argument.
+ */
 #define SC_TABLE_MANAGE_ID_ERR_EID 111
 
-/** \brief <tt> 'RTS table manage process error: RTS = \%d, Result = 0x\%X' </tt>
-**  \event <tt> 'RTS table manage process error: RTS = \%d, Result = 0x\%X' </tt>
-**
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  The expectation is that this command is sent by cFE Table
-**  Services only when the indicated RTS table has been updated.
-**  Thus, after allowing cFE Table Services an opportunity to
-**  manage the table, the call to re-acquire the table data
-**  pointer is expected to return an indication that the table
-**  data has been updated.  This event message is issued upon
-**  receipt of any other function result.
-**
-**  The event text includes the RTS number and the unexpected
-**  result.
-*/
+/**
+ * \brief SC RTS Table Manage Processing Failed Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  The expectation is that this command is sent by cFE Table
+ *  Services only when the indicated RTS table has been updated.
+ *  Thus, after allowing cFE Table Services an opportunity to
+ *  manage the table, the call to re-acquire the table data
+ *  pointer is expected to return an indication that the table
+ *  data has been updated.  This event message is issued upon
+ *  receipt of any other function result.
+ */
 #define SC_TABLE_MANAGE_RTS_ERR_EID 112
 
-/** \brief <tt> 'ATS table manage process error: ATS = \%d, Result = 0x\%X' </tt>
-**  \event <tt> 'ATS table manage process error: ATS = \%d, Result = 0x\%X' </tt>
-**
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  The expectation is that this command is sent by cFE Table
-**  Services only when the indicated ATS table has been updated.
-**  Thus, after allowing cFE Table Services an opportunity to
-**  manage the table, the call to re-acquire the table data
-**  pointer is expected to return an indication that the table
-**  data has been updated.  This event message is issued upon
-**  receipt of any other function result.
-**
-**  The event text includes the ATS number and the unexpected
-**  result.
-*/
+/**
+ * \brief SC ATS Table Manage Processing Failed Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  The expectation is that this command is sent by cFE Table
+ *  Services only when the indicated ATS table has been updated.
+ *  Thus, after allowing cFE Table Services an opportunity to
+ *  manage the table, the call to re-acquire the table data
+ *  pointer is expected to return an indication that the table
+ *  data has been updated.  This event message is issued upon
+ *  receipt of any other function result.
+ */
 #define SC_TABLE_MANAGE_ATS_ERR_EID 113
 
-/** \brief <tt> 'ATS Append table manage process error: Result = 0x\%X' </tt>
-**  \event <tt> 'ATS Append table manage process error: Result = 0x\%X' </tt>
-**
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  The expectation is that this command is sent by cFE Table
-**  Services only when the ATS Append table has been updated.
-**  Thus, after allowing cFE Table Services an opportunity to
-**  manage the table, the call to re-acquire the table data
-**  pointer is expected to return an indication that the table
-**  data has been updated.  This event message is issued upon
-**  receipt of any other function result.
-**
-**  The event text includes the unexpected result.
-*/
+/**
+ * \brief SC ATS Append Table Manage Processing Failed Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  The expectation is that this command is sent by cFE Table
+ *  Services only when the ATS Append table has been updated.
+ *  Thus, after allowing cFE Table Services an opportunity to
+ *  manage the table, the call to re-acquire the table data
+ *  pointer is expected to return an indication that the table
+ *  data has been updated.  This event message is issued upon
+ *  receipt of any other function result.
+ */
 #define SC_TABLE_MANAGE_APPEND_ERR_EID 114
 
 #if (SC_ENABLE_GROUP_COMMANDS == true)
-/** \brief <tt> 'Start RTS group: FirstID=\%d, LastID=\%d, Modified=\%d' </tt>
-**  \event <tt> 'Start RTS group: FirstID=\%d, LastID=\%d, Modified=\%d' </tt>
-**
-**  \par Type: INFORMATION
-**
-**  \par Cause:
-**  This event message is issued following the successful execution of
-**  a #SC_START_RTSGRP_CC command.
-**
-**  The event text includes the group definition values and the count of RTS
-**  in the group that were actually affected by the command (may be zero).
-*/
+/**
+ * \brief SC Start RTS Group Command Event ID
+ *
+ *  \par Type: INFORMATION
+ *
+ *  \par Cause:
+ *  This event message is issued following the successful execution of
+ *  a #SC_START_RTSGRP_CC command.
+ */
 #define SC_STARTRTSGRP_CMD_INF_EID 115
 
-/** \brief <tt> 'Start RTS group error: FirstID=\%d, LastID=\%d' </tt>
-**  \event <tt> 'Start RTS group error: FirstID=\%d, LastID=\%d' </tt>
-**
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message is issued when a #SC_START_RTSGRP_CC command was
-**  rejected because the RTS group definition was invalid:
-**  - First RTS ID must be 1 through #SC_NUMBER_OF_RTS
-**  - Last RTS ID must be 1 through #SC_NUMBER_OF_RTS
-**  - Last RTS ID must be greater than or equal to First RTS ID
-**
-**  The event text includes the invalid group definition values.
-*/
+/**
+ * \brief SC Start RTS Group RTS ID Invalid Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  This event message is issued when a #SC_START_RTSGRP_CC command was
+ *  rejected because the RTS group definition was invalid:
+ *  - First RTS ID must be 1 through #SC_NUMBER_OF_RTS
+ *  - Last RTS ID must be 1 through #SC_NUMBER_OF_RTS
+ *  - Last RTS ID must be greater than or equal to First RTS ID
+ */
 #define SC_STARTRTSGRP_CMD_ERR_EID 116
 
-/** \brief <tt> 'Stop RTS group: FirstID=\%d, LastID=\%d, Modified=\%d' </tt>
-**  \event <tt> 'Stop RTS group: FirstID=\%d, LastID=\%d, Modified=\%d' </tt>
-**
-**  \par Type: INFORMATION
-**
-**  \par Cause:
-**  This event message is issued following the successful execution of
-**  a #SC_STOP_RTSGRP_CC command.
-**
-**  The event text includes the group definition values and the count of RTS
-**  in the group that were actually affected by the command (may be zero).
-*/
+/**
+ * \brief SC Stop RTS Group Command Event ID
+ *
+ *  \par Type: INFORMATION
+ *
+ *  \par Cause:
+ *  This event message is issued following the successful execution of
+ *  a #SC_STOP_RTSGRP_CC command.
+ */
 #define SC_STOPRTSGRP_CMD_INF_EID 117
 
-/** \brief <tt> 'Stop RTS group error: FirstID=\%d, LastID=\%d' </tt>
-**  \event <tt> 'Stop RTS group error: FirstID=\%d, LastID=\%d' </tt>
-**
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message is issued when a #SC_STOP_RTSGRP_CC command was
-**  rejected because the RTS group definition was invalid:
-**  - First RTS ID must be 1 through #SC_NUMBER_OF_RTS
-**  - Last RTS ID must be 1 through #SC_NUMBER_OF_RTS
-**  - Last RTS ID must be greater than or equal to First RTS ID
-**
-**  The event text includes the invalid group definition values.
-*/
+/**
+ * \brief SC Stop RTS Group RTS ID Invalid Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  This event message is issued when a #SC_STOP_RTSGRP_CC command was
+ *  rejected because the RTS group definition was invalid:
+ *  - First RTS ID must be 1 through #SC_NUMBER_OF_RTS
+ *  - Last RTS ID must be 1 through #SC_NUMBER_OF_RTS
+ *  - Last RTS ID must be greater than or equal to First RTS ID
+ */
 #define SC_STOPRTSGRP_CMD_ERR_EID 118
 
-/** \brief <tt> 'Disable RTS group: FirstID=\%d, LastID=\%d, Modified=\%d' </tt>
-**  \event <tt> 'Disable RTS group: FirstID=\%d, LastID=\%d, Modified=\%d' </tt>
-**
-**  \par Type: INFORMATION
-**
-**  \par Cause:
-**  This event message is issued following the successful execution of
-**  a #SC_DISABLE_RTSGRP_CC command.
-**
-**  The event text includes the group definition values and the count of RTS
-**  in the group that were actually affected by the command (may be zero).
-*/
+/**
+ * \brief SC Disable RTS Group Command Event ID
+ *
+ *  \par Type: INFORMATION
+ *
+ *  \par Cause:
+ *  This event message is issued following the successful execution of
+ *  a #SC_DISABLE_RTSGRP_CC command.
+ */
 #define SC_DISRTSGRP_CMD_INF_EID 119
 
-/** \brief <tt> 'Disable RTS group error: FirstID=\%d, LastID=\%d' </tt>
-**  \event <tt> 'Disable RTS group error: FirstID=\%d, LastID=\%d' </tt>
-**
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message is issued when a #SC_DISABLE_RTSGRP_CC command was
-**  rejected because the RTS group definition was invalid:
-**  - First RTS ID must be 1 through #SC_NUMBER_OF_RTS
-**  - Last RTS ID must be 1 through #SC_NUMBER_OF_RTS
-**  - Last RTS ID must be greater than or equal to First RTS ID
-**
-**  The event text includes the invalid group definition values.
-*/
+/**
+ * \brief SC Disable RTS Group RTS ID Invalid Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  This event message is issued when a #SC_DISABLE_RTSGRP_CC command was
+ *  rejected because the RTS group definition was invalid:
+ *  - First RTS ID must be 1 through #SC_NUMBER_OF_RTS
+ *  - Last RTS ID must be 1 through #SC_NUMBER_OF_RTS
+ *  - Last RTS ID must be greater than or equal to First RTS ID
+ */
 #define SC_DISRTSGRP_CMD_ERR_EID 120
 
-/** \brief <tt> 'Enable RTS group: FirstID=\%d, LastID=\%d, Modified=\%d' </tt>
-**  \event <tt> 'Enable RTS group: FirstID=\%d, LastID=\%d, Modified=\%d' </tt>
-**
-**  \par Type: INFORMATION
-**
-**  \par Cause:
-**  This event message is issued following the successful execution of
-**  a #SC_ENABLE_RTSGRP_CC command.
-**
-**  The event text includes the group definition values and the count of RTS
-**  in the group that were actually affected by the command (may be zero).
-*/
+/**
+ * \brief SC Enable RTS Group Command Event ID
+ *
+ *  \par Type: INFORMATION
+ *
+ *  \par Cause:
+ *  This event message is issued following the successful execution of
+ *  a #SC_ENABLE_RTSGRP_CC command.
+ */
 #define SC_ENARTSGRP_CMD_INF_EID 121
 
-/** \brief <tt> 'Enable RTS group error: FirstID=\%d, LastID=\%d' </tt>
-**  \event <tt> 'Enable RTS group error: FirstID=\%d, LastID=\%d' </tt>
-**
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message is issued when a #SC_ENABLE_RTSGRP_CC command was
-**  rejected because the RTS group definition was invalid:
-**  - First RTS ID must be 1 through #SC_NUMBER_OF_RTS
-**  - Last RTS ID must be 1 through #SC_NUMBER_OF_RTS
-**  - Last RTS ID must be greater than or equal to First RTS ID
-**
-**  The event text includes the invalid group definition values.
-*/
+/**
+ * \brief SC Enable RTS Group RTS ID Invalid Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  This event message is issued when a #SC_ENABLE_RTSGRP_CC command was
+ *  rejected because the RTS group definition was invalid:
+ *  - First RTS ID must be 1 through #SC_NUMBER_OF_RTS
+ *  - Last RTS ID must be 1 through #SC_NUMBER_OF_RTS
+ *  - Last RTS ID must be greater than or equal to First RTS ID
+ */
 #define SC_ENARTSGRP_CMD_ERR_EID 122
 #endif
 
-/** \brief <tt> 'Jump Cmd: jump time less than or equal to list entry \%d' </tt>
-**  \event <tt> 'Jump Cmd: jump time less than or equal to list entry \%d' </tt>
-**
-**  \par Type: INFORMATION
-**
-**  \par Cause:
-**  This event message is issued when a #SC_JUMP_ATS_CC command was issued, and the time to
-**  jump to was less than or equal to a list entry.
-*/
+/**
+ * \brief SC Jump Command Entry Event ID
+ *
+ *  \par Type: INFORMATION
+ *
+ *  \par Cause:
+ *  This event message is issued when a #SC_JUMP_ATS_CC command was issued, and the time to
+ *  jump to was less than or equal to a list entry.
+ */
 #define SC_JUMPATS_CMD_LIST_INF_EID 123
 
-/** \brief <tt> 'RTS table \%d failed to load, returned: 0x\%08X' </tt>
-**  \event <tt> 'RTS table \%d failed to load, returned: 0x\%08X' </tt>
-**
-**  \par Type: DEBUG
-**
-**  \par Cause:
-**  This event message is issued when an RTS table fails to load at startup.
-**
-**  The event text includes the RTS index and the result of the
-**  #CFE_TBL_Load call.
-*/
+/**
+ * \brief SC RTS Table Load Failed Event ID
+ *
+ *  \par Type: DEBUG
+ *
+ *  \par Cause:
+ *  This event message is issued when an RTS table fails to load at startup.
+ *
+ *  The event text includes the RTS index and the result of the
+ *  #CFE_TBL_Load call.
+ */
 #define SC_RTS_LOAD_FAIL_DBG_EID 124
 
-/** \brief <tt> 'RTS table \%d file open failed, returned: 0x\%08X' </tt>
-**  \event <tt> 'RTS table \%d file open failed, returned: 0x\%08X' </tt>
-**
-**  \par Type: DEBUG
-**
-**  \par Cause:
-**  This event message is issued when an RTS file fails to open at startup.
-**
-**  The event text includes the RTS index and the result of the
-**  #OS_OpenCreate call.
-*/
+/**
+ * \brief SC RTS Table Open Failed Event ID
+ *
+ *  \par Type: DEBUG
+ *
+ *  \par Cause:
+ *  This event message is issued when an RTS file fails to open at startup.
+ */
 #define SC_RTS_OPEN_FAIL_DBG_EID 125
 
-/** \brief <tt> 'Start RTS group error: rejected RTS ID \%03d, RTS Not Loaded or In Use, Status: \%d' </tt>
-**  \event <tt> 'Start RTS group error: rejected RTS ID \%03d, RTS Not Loaded or In Use, Status: \%d' </tt>
-**
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message is issued when a #SC_START_RTSGRP_CC command was recieved, but an
-**  RTS is marked as #SC_LOADED
-**
-**  The \c RTS field contains the RTS ID that was rejected, and the \c Status field
-**  contains the status of that RTS.
-*/
+/**
+ * \brief SC Start RTS Group RTS Not Loaded Or In Use Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  This event message is issued when a #SC_START_RTSGRP_CC command was recieved, but an
+ *  RTS is marked as #SC_LOADED
+ */
 #define SC_STARTRTSGRP_CMD_NOT_LDED_ERR_EID 126
 
-/** \brief <tt> 'Start RTS group error: rejected RTS ID \%03d, RTS Disabled' </tt>
-**  \event <tt> 'Start RTS group error: rejected RTS ID \%03d, RTS Disabled' </tt>
-**
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message is issued when a #SC_START_RTSGRP_CC command was received, but an
-**  RTS is disabled
-**
-**  The \c RTS field contains the RTS ID of the RTS that was rejected.
-*/
+/**
+ * \brief SC Start RTS Group RTS Disabled Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  This event message is issued when a #SC_START_RTSGRP_CC command was received, but an
+ *  RTS is disabled
+ */
 #define SC_STARTRTSGRP_CMD_DISABLED_ERR_EID 127
 
+/**
+ * \brief SC Begin ATS ID Invalid Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  This event message is issued when an invalid ATS index is received
+ *  in the SC_BeginAts function
+ */
+#define SC_BEGINATS_INVLD_INDEX_ERR_EID 128
 
-/** \brief <tt> 'Begin ATS error: invalid ATS index = %d' </tt>
-**  \event <tt> 'Begin ATS error: invalid ATS index = %d' </tt>
-**  
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message is issued when an invalid ATS index is received
-**  in the SC_BeginAts function
-**  
-**  The \c ATS field contains invalid ATS array index.
-*/
-#define SC_BEGINATS_INVLD_INDEX_ERR_EID                    128
+/**
+ * \brief SC RTS Table Manage RTS Index Invalid Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  This event message is issued when an invalid RTS index is received
+ *  in the SC_ManageRtsTable function
+ */
+#define SC_TABLE_MANAGE_RTS_INV_INDEX_ERR_EID 129
 
+/**
+ * \brief SC ATS Table Manage ATS Index Invalid Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  This event message is issued when an invalid ATS index is received
+ *  in the SC_ManageAtsTable function
+ */
+#define SC_TABLE_MANAGE_ATS_INV_INDEX_ERR_EID 130
 
-/** \brief <tt> 'RTS table manage error: invalid RTS index %d' </tt>
-**  \event <tt> 'RTS table manage error: invalid RTS index %d' </tt>
-**  
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message is issued when an invalid RTS index is received
-**  in the SC_ManageRtsTable function
-**  
-**  The \c RTS field contains the invalid RTS array index.
-*/
-#define SC_TABLE_MANAGE_RTS_INV_INDEX_ERR_EID              129
+/**
+ * \brief SC ATS Table Load ATS Index Invalid Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  This event message is issued when an invalid ATS index is received
+ *  in the SC_LoadAts function
+ */
+#define SC_LOADATS_INV_INDEX_ERR_EID 131
 
+/**
+ * \brief SC ATS Build Time Index ATS Index Invalid Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  This event message is issued when an invalid ATS index is received
+ *  in the SC_BuildTimeIndexTable function
+ */
+#define SC_BUILD_TIME_IDXTBL_ERR_EID 132
 
-/** \brief <tt> 'ATS table manage error: invalid ATS index %d' </tt>
-**  \event <tt> 'ATS table manage error: invalid ATS index %d' </tt>
-**  
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message is issued when an invalid ATS index is received
-**  in the SC_ManageAtsTable function
-**  
-**  The \c ATS field contains the invalid ATS array index.
-*/
-#define SC_TABLE_MANAGE_ATS_INV_INDEX_ERR_EID              130
+/**
+ * \brief SC ATS Insert ATS Index Invalid Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  This event message is issued when an invalid ATS index is received
+ *  in the SC_Insert function
+ */
+#define SC_INSERTATS_INV_INDEX_ERR_EID 133
 
+/**
+ * \brief SC ATS Table Initialization Error ATS Index Invalid Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  This event message is issued when an invalid ATS index is received
+ *  in the SC_InitAtsTables function
+ */
+#define SC_INIT_ATSTBL_INV_INDEX_ERR_EID 134
 
-/** \brief <tt> 'ATS load error: invalid ATS index %d' </tt>
-**  \event <tt> 'ATS load error: invalid ATS index %d' </tt>
-**  
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message is issued when an invalid ATS index is received
-**  in the SC_LoadAts function
-**  
-**  The \c ATS field contains the invalid ATS array index.
-*/
-#define SC_LOADATS_INV_INDEX_ERR_EID                       131
+/**
+ * \brief SC RTS Table Initialization Error RTS Index Invalid Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  This event message is issued when an invalid RTS index is received
+ *  in the SC_LoadRts function
+ */
+#define SC_LOADRTS_INV_INDEX_ERR_EID 135
 
+/**
+ * \brief SC ATS Process Append ATS Index Invalid Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  This event message is issued when an invalid ATS index is received
+ *  in the SC_ProcessAppend function
+ */
+#define SC_PROCESS_APPEND_INV_INDEX_ERR_EID 136
 
-/** \brief <tt> 'Build time index table error: invalid ATS index %d' </tt>
-**  \event <tt> 'Build time index table error: invalid ATS index %d' </tt>
-**  
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message is issued when an invalid ATS index is received
-**  in the SC_BuildTimeIndexTable function
-**  
-**  The \c ATS field contains the invalid ATS array index.
-*/
-#define SC_BUILD_TIME_IDXTBL_ERR_EID                       132
+/**
+ * \brief SC RTS Kill RTS Index Invalid Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  This event message is issued when an invalid RTS index is received
+ *  in the SC_KillRts function
+ */
+#define SC_KILLRTS_INV_INDEX_ERR_EID 137
 
+/**
+ * \brief SC RTS Autostart RTS ID Invalid Event ID
+ *
+ *  \par Type: ERROR
+ *
+ *  \par Cause:
+ *  This event message is issued when an invalid RTS ID is received
+ *  in the SC_AutoStartRts function
+ */
+#define SC_AUTOSTART_RTS_INV_ID_ERR_EID 138
 
-/** \brief <tt> 'ATS insert error: invalid ATS index %d' </tt>
-**  \event <tt> 'ATS insert error: invalid ATS index %d' </tt>
-**  
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message is issued when an invalid ATS index is received
-**  in the SC_Insert function
-**  
-**  The \c ATS field contains the invalid ATS array index.
-*/
-#define SC_INSERTATS_INV_INDEX_ERR_EID                     133
+/**\}*/
 
-
-/** \brief <tt> 'ATS table init error: invalid ATS index %d' </tt>
-**  \event <tt> 'ATS table init error: invalid ATS index %d' </tt>
-**  
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message is issued when an invalid ATS index is received
-**  in the SC_InitAtsTables function
-**  
-**  The \c ATS field contains the invalid ATS array index.
-*/
-#define SC_INIT_ATSTBL_INV_INDEX_ERR_EID                   134
-
-
-/** \brief <tt> 'RTS table init error: invalid RTS index %d' </tt>
-**  \event <tt> 'RTS table init error: invalid RTS index %d' </tt>
-**  
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message is issued when an invalid RTS index is received
-**  in the SC_LoadRts function
-**  
-**  The \c RTS field contains the invalid RTS array index.
-*/
-#define SC_LOADRTS_INV_INDEX_ERR_EID                       135
-
-
-/** \brief <tt> 'ATS process append error: invalid ATS index %d' </tt>
-**  \event <tt> 'ATS process append error: invalid ATS index %d' </tt>
-**  
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message is issued when an invalid ATS index is received
-**  in the SC_ProcessAppend function
-**  
-**  The \c ATS field contains the invalid ATS array index.
-*/
-#define SC_PROCESS_APPEND_INV_INDEX_ERR_EID                136
-
-
-/** \brief <tt> 'RTS kill error: invalid RTS index %d' </tt>
-**  \event <tt> 'RTS kill error: invalid RTS index %d' </tt>
-**  
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message is issued when an invalid RTS index is received
-**  in the SC_KillRts function
-**  
-**  The \c RTS field contains the invalid RTS array index.
-*/
-#define SC_KILLRTS_INV_INDEX_ERR_EID                       137
-
-
-/** \brief <tt> 'RTS autostart error: invalid RTS ID %d' </tt>
-**  \event <tt> 'RTS autostart error: invalid RTS ID %d' </tt>
-**  
-**  \par Type: ERROR
-**
-**  \par Cause:
-**  This event message is issued when an invalid RTS ID is received
-**  in the SC_AutoStartRts function
-**  
-**  The \c RTS field contains the invalid RTS ID.
-*/
-#define SC_AUTOSTART_RTS_INV_ID_ERR_EID                    138
-
-
-#endif /*_sc_events_*/
-
-/************************/
-/*  End of File Comment */
-/************************/
+#endif

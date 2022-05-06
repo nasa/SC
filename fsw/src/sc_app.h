@@ -1,30 +1,32 @@
+/************************************************************************
+ * NASA Docket No. GSC-18,924-1, and identified as “Core Flight
+ * System (cFS) Stored Command Application version 3.1.0”
+ *
+ * Copyright (c) 2021 United States Government as represented by the
+ * Administrator of the National Aeronautics and Space Administration.
+ * All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may
+ * not use this file except in compliance with the License. You may obtain
+ * a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ************************************************************************/
+
+/**
+ * @file
+ *   This file contains the Stored Command main event loop header
+ */
+#ifndef SC_APP_H
+#define SC_APP_H
+
 /*************************************************************************
- ** File: sc_app.h 
- **
- **  Copyright � 2007-2014 United States Government as represented by the
- **  Administrator of the National Aeronautics and Space Administration.
- **  All Other Rights Reserved.
- **
- **  This software was created at NASA's Goddard Space Flight Center.
- **  This software is governed by the NASA Open Source Agreement and may be
- **  used, distributed and modified only pursuant to the terms of that
- **  agreement.
- **
- ** Purpose:
- **     This file contains the Stored Command main event loop header
- **
- ** References:
- **   Flight Software Branch C Coding Standard Version 1.2
- **   CFS Development Standards Document
- **
+ * Includes
  *************************************************************************/
-
-#ifndef _sc_app_
-#define _sc_app_
-
-/*************************************************************************
-** Includes
-*************************************************************************/
 
 #include "cfe.h"
 #include "sc_platform_cfg.h"
@@ -33,324 +35,255 @@
 #include "sc_msg.h"
 
 /**
-** \brief Wakeup for SC
-**
-** \par Description
-**      Wakes up SC every 1 second for routine maintenance whether a
-**      message was received or not.
-*/
+ * \brief Wakeup for SC
+ *
+ * \par Description
+ *      Wakes up SC every 1 second for routine maintenance whether a
+ *      message was received or not.
+ */
 #define SC_SB_TIMEOUT 1000
 
-
-/************************************************************************/
-/** \brief Main loop for SC
- **
- **  \par Description
- **       This function is the entry point and main loop for the Stored
- **       Commands (SC) application.
- **
- **  \par Assumptions, External Events, and Notes:
- **        None
- **
- *************************************************************************/
+/**
+ * \brief Main loop for SC
+ *
+ *  \par Description
+ *       This function is the entry point and main loop for the Stored
+ *       Commands (SC) application.
+ *
+ *  \par Assumptions, External Events, and Notes:
+ *        None
+ */
 void SC_AppMain(void);
 
-/************************************************************************/
-/** \brief Initialize application
- **
- **  \par Description
- **       This function initializes the SC application. The return value
- **       is either CFE_SUCCESS or the error code from the failed cFE
- **       function call. Note that all errors generate an identifying
- **       event message.
- **
- **  \par Assumptions, External Events, and Notes:
- **        None
- **
- **  \returns
- **  \retcode #CFE_SUCCESS \retdesc \copydoc CFE_SUCCESS \endcode
- **  \retstmt Return status from CFE initialization function \endcode
- **  \endreturns
- **
- *************************************************************************/
+/**
+ * \brief Initialize application
+ *
+ *  \par Description
+ *       This function initializes the SC application. The return value
+ *       is either CFE_SUCCESS or the error code from the failed cFE
+ *       function call. Note that all errors generate an identifying
+ *       event message.
+ *
+ *  \par Assumptions, External Events, and Notes:
+ *        None
+ *  \return Execution status, see \ref CFEReturnCodes
+ *  \retval #CFE_SUCCESS \copybrief CFE_SUCCESS
+ */
 int32 SC_AppInit(void);
 
-/************************************************************************/
-/** \brief Initialize application tables
- **
- **  \par Description
- **       This function initializes the SC application tables. The
- **       return value is either CFE_SUCCESS or the error code from the
- **       failed cFE function call. Note that all errors generate an
- **       identifying event message.
- **
- **  \par Assumptions, External Events, and Notes:
- **        None
- **
- **  \returns
- **  \retcode #CFE_SUCCESS \retdesc \copydoc CFE_SUCCESS \endcode
- **  \retstmt Return status from CFE initialization function \endcode
- **  \endreturns
- **
- *************************************************************************/
+/**
+ * \brief Initialize application tables
+ *
+ *  \par Description
+ *       This function initializes the SC application tables. The
+ *       return value is either CFE_SUCCESS or the error code from the
+ *       failed cFE function call. Note that all errors generate an
+ *       identifying event message.
+ *
+ *  \par Assumptions, External Events, and Notes:
+ *        None
+ *
+ *  \return Execution status, see \ref CFEReturnCodes
+ *  \retval #CFE_SUCCESS \copybrief CFE_SUCCESS
+ */
 int32 SC_InitTables(void);
 
-/************************************************************************/
-/** \brief Register tables with cFE Table Services
- **
- **  \par Description
- **       This function registers all SC tables with cFE Table Services.
- **       The return value is either CFE_SUCCESS or the error code from
- **       the failed cFE function call. Note that all errors generate an
- **       identifying event message.
- **
- **  \par Assumptions, External Events, and Notes:
- **        None
- **
- **  \returns
- **  \retcode #CFE_SUCCESS \retdesc \copydoc CFE_SUCCESS \endcode
- **  \retstmt Return status from CFE initialization function \endcode
- **  \endreturns
- **
- *************************************************************************/
+/**
+ * \brief Register tables with cFE Table Services
+ *
+ *  \par Description
+ *       This function registers all SC tables with cFE Table Services.
+ *       The return value is either CFE_SUCCESS or the error code from
+ *       the failed cFE function call. Note that all errors generate an
+ *       identifying event message.
+ *
+ *  \par Assumptions, External Events, and Notes:
+ *        None
+ *
+ *  \return Execution status, see \ref CFEReturnCodes
+ *  \retval #CFE_SUCCESS \copybrief CFE_SUCCESS
+ */
 int32 SC_RegisterAllTables(void);
 
-/************************************************************************/
-/** \brief Get dump only table buffer pointers
- **
- **  \par Description
- **       This function acquires buffer pointers to the dump only tables.
- **       The return value is either CFE_SUCCESS or the error code from
- **       the failed cFE function call. Note that all errors generate an
- **       identifying event message.
- **
- **  \par Assumptions, External Events, and Notes:
- **        None
- **
- **  \returns
- **  \retcode #CFE_SUCCESS \retdesc \copydoc CFE_SUCCESS \endcode
- **  \retstmt Return status from CFE initialization function \endcode
- **  \endreturns
- **
- *************************************************************************/
+/**
+ * \brief Get dump only table buffer pointers
+ *
+ *  \par Description
+ *       This function acquires buffer pointers to the dump only tables.
+ *       The return value is either CFE_SUCCESS or the error code from
+ *       the failed cFE function call. Note that all errors generate an
+ *       identifying event message.
+ *
+ *  \par Assumptions, External Events, and Notes:
+ *        None
+ *
+ *  \return Execution status, see \ref CFEReturnCodes
+ *  \retval #CFE_SUCCESS \copybrief CFE_SUCCESS
+ */
 int32 SC_GetDumpTablePointers(void);
 
-/************************************************************************/
-/** \brief Get loadable table buffer pointers
- **
- **  \par Description
- **       This function acquires buffer pointers to the loadable tables.
- **       The return value is either CFE_SUCCESS or the error code from
- **       the failed cFE function call. Note that all errors generate an
- **       identifying event message.
- **
- **  \par Assumptions, External Events, and Notes:
- **        None
- **
- **  \returns
- **  \retcode #CFE_SUCCESS \retdesc \copydoc CFE_SUCCESS \endcode
- **  \retstmt Return status from CFE initialization function \endcode
- **  \endreturns
- **
- *************************************************************************/
+/**
+ * \brief Get loadable table buffer pointers
+ *
+ *  \par Description
+ *       This function acquires buffer pointers to the loadable tables.
+ *       The return value is either CFE_SUCCESS or the error code from
+ *       the failed cFE function call. Note that all errors generate an
+ *       identifying event message.
+ *
+ *  \par Assumptions, External Events, and Notes:
+ *        None
+ *
+ *  \return Execution status, see \ref CFEReturnCodes
+ *  \retval #CFE_SUCCESS \copybrief CFE_SUCCESS
+ */
 int32 SC_GetLoadTablePointers(void);
 
-/************************************************************************/
-/** \brief Load default RTS tables
- **
- **  \par Description
- **       This function loads the default RTS tables. The return value
- **       is either CFE_SUCCESS or the error code from the failed cFE
- **       function call. Note that all errors generate an identifying
- **       event message.
- **
- **  \par Assumptions, External Events, and Notes:
- **        None
- **
- **  \returns
- **  \retcode #CFE_SUCCESS \retdesc \copydoc CFE_SUCCESS \endcode
- **  \retstmt Return status from CFE initialization function \endcode
- **  \endreturns
- **
- *************************************************************************/
+/**
+ * \brief Load default RTS tables
+ *
+ *  \par Description
+ *       This function loads the default RTS tables. The return value
+ *       is either CFE_SUCCESS or the error code from the failed cFE
+ *       function call. Note that all errors generate an identifying
+ *       event message.
+ *
+ *  \par Assumptions, External Events, and Notes:
+ *        None
+ *
+ *  \return Execution status, see \ref CFEReturnCodes
+ *  \retval #CFE_SUCCESS \copybrief CFE_SUCCESS
+ */
 void SC_LoadDefaultTables(void);
 
-/************************************************************************/
-/** \brief Register to receive cFE Table Services manage request commands
- **
- **  \par Description
- **       This function provides cFE Table Services with the information
- **       necessary to send a notification command when one of the SC dump
- **       only tables has a dump pending, or when one of the SC loadable
- **       tables has a load pending.  Upon receipt of the command, the
- **       command handler will call the cFE Table Services API function
- **       to manage the table.  This sequence of events ensures that dump
- **       tables are not being updated by SC at the same moment that the
- **       dump occurs, and likewise, that loadable tables are not being
- **       referenced by SC at the moment that the update occurs.
- **
- **  \par Assumptions, External Events, and Notes:
- **        None
- **
- **  \param [in]         (none)
- **
- **  \sa #SC_TableManageCmd
- **
- *************************************************************************/
+/**
+ * \brief Register to receive cFE Table Services manage request commands
+ *
+ *  \par Description
+ *       This function provides cFE Table Services with the information
+ *       necessary to send a notification command when one of the SC dump
+ *       only tables has a dump pending, or when one of the SC loadable
+ *       tables has a load pending.  Upon receipt of the command, the
+ *       command handler will call the cFE Table Services API function
+ *       to manage the table.  This sequence of events ensures that dump
+ *       tables are not being updated by SC at the same moment that the
+ *       dump occurs, and likewise, that loadable tables are not being
+ *       referenced by SC at the moment that the update occurs.
+ *
+ *  \par Assumptions, External Events, and Notes:
+ *        None
+ *
+ *  \sa #SC_TableManageCmd
+ */
 void SC_RegisterManageCmds(void);
 
 /************************************************************************
-** Macro Definitions
-*************************************************************************/
+ * Macro Definitions
+ ************************************************************************/
 
-/**
-** \name SC number of bytes in a word */
-/** \{ */
-#define SC_BYTES_IN_WORD 4 /**< \brief Words are used to define table lengths   */
-/** \} */
+#define SC_BYTES_IN_WORD 4 /**< \brief Number of bytes in "word" used to define table lengths */
 
-/**
-** \name Sizes of the headers for the RTC's and ATC's */
-/** \{ */
-#define SC_ATS_HEADER_SIZE (sizeof(SC_AtsEntryHeader_t))
-#define SC_RTS_HEADER_SIZE (sizeof(SC_RtsEntryHeader_t))
-/** \} */
+#define SC_ATS_HEADER_SIZE (sizeof(SC_AtsEntryHeader_t)) /**< \brief ATS header size in bytes */
+#define SC_RTS_HEADER_SIZE (sizeof(SC_RtsEntryHeader_t)) /**< \brief RTS header size in bytes */
 
-/**
-** \name Buffer sizes in 32-bit words */
-/** \{ */
-#define SC_ATS_BUFF_SIZE32    (SC_ATS_BUFF_SIZE / 2)
-#define SC_RTS_BUFF_SIZE32    (SC_RTS_BUFF_SIZE / 2)
-#define SC_APPEND_BUFF_SIZE32 (SC_APPEND_BUFF_SIZE / 2)
-/** \} */
+#define SC_ATS_BUFF_SIZE32    (SC_ATS_BUFF_SIZE / 2)    /**< \brief ATS buffer number of 32-bit elements */
+#define SC_RTS_BUFF_SIZE32    (SC_RTS_BUFF_SIZE / 2)    /**< \brief RTS buffer number of 32-bit elements */
+#define SC_APPEND_BUFF_SIZE32 (SC_APPEND_BUFF_SIZE / 2) /**< \brief Append buffer number of 32-bit elements */
 
-/**
-** \name SC error return value */
-/** \{ */
-#define SC_ERROR -1
-/** \} */
+#define SC_ERROR -1 /**< \brief SC error return value */
 
-/**
-** \name  Cmd pipe information*/
-/** \{ */
-#define SC_CMD_PIPE_NAME "SC_CMD_PIPE"
-/** \} */
+#define SC_CMD_PIPE_NAME "SC_CMD_PIPE" /**< \brief Command pipe name */
 
-#define SC_ATS_HDR_WORDS       ((SC_ATS_HEADER_SIZE + SC_PACKET_MIN_SIZE) / SC_BYTES_IN_WORD)
+/** \brief ATS header + minimum packet size in "words" */
+#define SC_ATS_HDR_WORDS ((SC_ATS_HEADER_SIZE + SC_PACKET_MIN_SIZE) / SC_BYTES_IN_WORD)
+
+/** \brief ATS header only size in "words" */
 #define SC_ATS_HDR_NOPKT_WORDS (SC_ATS_HEADER_SIZE / SC_BYTES_IN_WORD)
 
-#define SC_RTS_HDR_WORDS       ((SC_RTS_HEADER_SIZE + SC_PACKET_MIN_SIZE) / SC_BYTES_IN_WORD)
+/** \brief RTS header + minimum packet size in "words" */
+#define SC_RTS_HDR_WORDS ((SC_RTS_HEADER_SIZE + SC_PACKET_MIN_SIZE) / SC_BYTES_IN_WORD)
+
+/** \brief RTS header only size in "words" */
 #define SC_RTS_HDR_NOPKT_WORDS (SC_RTS_HEADER_SIZE / SC_BYTES_IN_WORD)
 
-#define SC_DUP_TEST_UNUSED -1
+#define SC_DUP_TEST_UNUSED -1 /**< \brief Unused marking for duplicate test */
 
-/* used for ATS table initialization */
-#define SC_INVALID_CMD_NUMBER 0xFFFF
+#define SC_INVALID_CMD_NUMBER 0xFFFF /**< \brief Invalid command number */
 
-/* used to round byte len up to word len */
-#define SC_ROUND_UP_BYTES 3
+#define SC_ROUND_UP_BYTES 3 /**< \brief Round up to word length (in bytes) */
 
-/* count of bytes in an ATS append table entry */
-#define SC_BYTES_IN_ATS_APPEND_ENTRY 2
+#define SC_BYTES_IN_ATS_APPEND_ENTRY 2 /**< \brief Bytes in an ATS append table entry */
 
-/* convert an ATS command number to a table index */
-#define SC_ATS_CMD_NUM_TO_INDEX(num) ((num)-1)
-
-/* convert an ATS command table index to an ID number */
-#define SC_ATS_CMD_INDEX_TO_NUM(index) ((index) + 1)
-
-/* convert an ATS ID number to a table index */
-#define SC_ATS_NUM_TO_INDEX(num) ((num)-1)
-
-/* convert an ATS table index to an ID number */
-#define SC_ATS_INDEX_TO_NUM(index) ((index) + 1)
-
-/* convert an ATS ID to a table index */
-#define SC_ATS_ID_TO_INDEX(id) ((id)-1)
-
-/* convert an RTS number to a table index */
-#define SC_RTS_NUM_TO_INDEX(num) ((num)-1)
-
-/* convert an RTS table index to a number */
-#define SC_RTS_INDEX_TO_NUM(index) ((index) + 1)
-
-/* convert an RTS ID to a table index */
-#define SC_RTS_ID_TO_INDEX(id) ((id)-1)
-
-/* convert an RTS table index to an ID number */
-#define SC_RTS_INDEX_TO_ID(index) ((index)+1)
-
-/*********************************************************************************************/
+#define SC_ATS_CMD_NUM_TO_INDEX(num)   ((num)-1)     /**< \brief Convert ATS command number to index */
+#define SC_ATS_CMD_INDEX_TO_NUM(index) ((index) + 1) /**< \brief Convert ATS command index to number */
+#define SC_ATS_NUM_TO_INDEX(num)       ((num)-1)     /**< \brief Convert ATS table number to index */
+#define SC_ATS_INDEX_TO_NUM(index)     ((index) + 1) /**< \brief Convert ATS table index to number */
+#define SC_ATS_ID_TO_INDEX(id)         ((id)-1)      /**< \brief Convert ATS ID to index */
+#define SC_RTS_NUM_TO_INDEX(num)       ((num)-1)     /**< \brief Convert RTS table number to index */
+#define SC_RTS_INDEX_TO_NUM(index)     ((index) + 1) /**< \brief Convert RTS table index to number */
+#define SC_RTS_ID_TO_INDEX(id)         ((id)-1)      /**< \brief Convert RTS ID to index */
+#define SC_RTS_INDEX_TO_ID(index)      ((index) + 1) /**< \brief Convert RTS table index to ID */
 
 /**
-**  \brief ATS Table Entry Header Type
-*/
+ *  \brief ATS Table Entry Header Type
+ */
 typedef struct
 {
-    /* Header needs to be 32 bit multiple */
-    uint16 Pad;
+    uint16 Pad; /**< \brief Structure padding */
 
-    /* Command identifier, range = 1 to SC_MAX_ATS_CMDS */
-    uint16 CmdNumber;
+    uint16 CmdNumber; /**< \brief command number, range = 1 to SC_MAX_ATS_CMDS */
 
-    /* 32 bit absolute time, stored as two 16 bit values */
-    uint16 TimeTag_MS; /* Most significant 16 bits */
-    uint16 TimeTag_LS; /* Least significant 16 bits */
+    uint16 TimeTag_MS; /**< \brief Time tag most significant 16 bits */
+    uint16 TimeTag_LS; /**< \brief Time tag least significant 16 bits */
 
     /*
-    ** Note: the command packet data is variable length,
-    **       the command packet header (not shown here),
-    **       comes directly after Time tag 2.
-    */
-
+     * Note: the command packet data is variable length,
+     *       the command packet header (not shown here),
+     *       comes directly after the time tag
+     */
 } SC_AtsEntryHeader_t;
 
-typedef union
-{
-    SC_AtsEntryHeader_t Header;
-
-    uint16 *Buffer;
-} SC_AtsEntryHeaderBuf_t;
-
 /**
-**  \brief  RTS Command Header Type
-*/
+ * \brief ATS header and message header
+ */
 typedef struct
 {
+    SC_AtsEntryHeader_t Header; /**< \brief ATS header */
+    CFE_MSG_Message_t   Msg;    /**< \brief MSG header */
+} SC_AtsEntry_t;
 
-    /* Relative time tag*/
-    SC_RelTimeTag_t TimeTag;
+/**
+ * \brief RTS Command Header Type
+ */
+typedef struct
+{
+    SC_RelTimeTag_t TimeTag; /**< \brief Relative time tag */
 
     /*
-    ** Note: the command packet data is variable length,
-    **       the command packet header (not shown here),
-    **       comes directly after Time tag.
-    */
-
+     * Note: the command packet data is variable length,
+     *       the command packet header (not shown here),
+     *       comes directly after Time tag.
+     */
 } SC_RtsEntryHeader_t;
 
-/*
- * This determines the number of 32-bit words required to contain the
- * SC_RtsEntryHeader_t structure.  This is used to size a temporary buffer
- * used when validating the RTS table.
- */
-#define SC_RTS_HDR_32BIT_WORDS SC_RTS_HDR_WORDS
-
-typedef union
-{
-    SC_RtsEntryHeader_t Header;
-
-    uint16 *Buffer;
-} SC_RtsEntryHeaderBuf_t;
-
 /**
-**  \brief SC Operational Data Structure
-**  This structure contains addresses and handles for loadable and dump-only tables
-**  along with storage for the housekeeping packet.
-*/
+ * \brief RTS header and message header
+ */
 typedef struct
 {
-    CFE_SB_PipeId_t CmdPipe; /**< \brief Command pipe ID                     */
+    SC_RtsEntryHeader_t Header; /**< \brief RTS header */
+    CFE_MSG_Message_t   Msg;    /**< \brief MSG header */
+} SC_RtsEntry_t;
+
+/**
+ *  \brief SC Operational Data Structure
+ *
+ *  This structure contains addresses and handles for loadable and dump-only tables
+ *  along with storage for the housekeeping packet.
+ */
+typedef struct
+{
+    CFE_SB_PipeId_t CmdPipe; /**< \brief Command pipe ID */
 
     CFE_TBL_Handle_t AtsTblHandle[SC_NUMBER_OF_ATS]; /**< \brief Table handles for all ATS tables    */
     uint32 *         AtsTblAddr[SC_NUMBER_OF_ATS];   /**< \brief Table Addresses for all ATS tables  */
@@ -363,9 +296,6 @@ typedef struct
 
     CFE_TBL_Handle_t   AtsInfoHandle;  /**< \brief Table handle the for ATS Info Table */
     SC_AtsInfoTable_t *AtsInfoTblAddr; /**< \brief Table address for the ATS Info Table*/
-
-    CFE_TBL_Handle_t   AppendInfoHandle;  /**< \brief Table handle for Append Info Table  */
-    SC_AtsInfoTable_t *AppendInfoTblAddr; /**< \brief Table address for Append Info Table */
 
     CFE_TBL_Handle_t   RtsInfoHandle;  /**< \brief Table handle for RTS Info Table     */
     SC_RtsInfoEntry_t *RtsInfoTblAddr; /**< \brief Table address for RTS INfo Table    */
@@ -381,23 +311,22 @@ typedef struct
 
     int32 AtsDupTestArray[SC_MAX_ATS_CMDS]; /**< \brief ATS test for duplicate cmd numbers  */
 
-    uint16 NumCmdsSec;   /**< \brief the num of cmds that have gone out
-                               in a one second period                    */
-    SC_HkTlm_t HkPacket; /**< \brief SC Housekeeping structure           */
+    uint16 NumCmdsSec; /**< \brief the num of cmds that have gone out in a one second period */
 
+    SC_HkTlm_t HkPacket; /**< \brief SC Housekeeping structure */
 } SC_OperData_t;
 
 /**
-**  \brief SC Application Data Structure
-**  This structure is used by the application to process time ordered commands.
-*/
+ *  \brief SC Application Data Structure
+ *  This structure is used by the application to process time ordered commands.
+ */
 typedef struct
 {
     uint16 AtsTimeIndexBuffer[SC_NUMBER_OF_ATS][SC_MAX_ATS_CMDS];
     /**< \brief  This table is used to keep a time ordered listing
-         of ATS commands. The index used is the ATS command number. The first
-         in this table holds the command number of the command that will execute
-         first, the second entry has the number of the 2nd cmd, etc.. */
+         of ATS command indexes (0 based). The first entry
+         in this table holds the command index of the command that will execute
+         first, the second entry has the index of the 2nd cmd, etc.. */
 
     int32 AtsCmdIndexBuffer[SC_NUMBER_OF_ATS][SC_MAX_ATS_CMDS];
     /**< \brief  This table is used to keep a list of ATS table command offsets.
@@ -413,13 +342,9 @@ typedef struct
 } SC_AppData_t;
 
 /************************************************************************
-** Exported Data
-*************************************************************************/
+ * Exported Data
+ ************************************************************************/
 extern SC_AppData_t  SC_AppData;
 extern SC_OperData_t SC_OperData;
 
-#endif /* _sc_app_ */
-
-/************************/
-/*  End of File Comment */
-/************************/
+#endif

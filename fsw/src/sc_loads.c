@@ -1,25 +1,28 @@
-/*************************************************************************
-** File: sc_loads.c
-**
-**  Copyright � 2007-2014 United States Government as represented by the
-**  Administrator of the National Aeronautics and Space Administration.
-**  All Other Rights Reserved.
-**
-**  This software was created at NASA's Goddard Space Flight Center.
-**  This software is governed by the NASA Open Source Agreement and may be
-**  used, distributed and modified only pursuant to the terms of that
-**  agreement.
-**
-** Purpose:
-**   This file contains functions to handle validation of TBL tables,
-**   as well as setting up Stored Command's internal data structures for
-**   those tables
-**
-** References:
-**   Flight Software Branch C Coding Standard Version 1.2
-**   CFS Development Standards Document
-**
-*************************************************************************/
+/************************************************************************
+ * NASA Docket No. GSC-18,924-1, and identified as “Core Flight
+ * System (cFS) Stored Command Application version 3.1.0”
+ *
+ * Copyright (c) 2021 United States Government as represented by the
+ * Administrator of the National Aeronautics and Space Administration.
+ * All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may
+ * not use this file except in compliance with the License. You may obtain
+ * a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ************************************************************************/
+
+/**
+ * @file
+ *   This file contains functions to handle validation of TBL tables,
+ *   as well as setting up Stored Command's internal data structures for
+ *   those tables
+ */
 
 /**************************************************************************
  **
@@ -48,22 +51,20 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 void SC_LoadAts(uint16 AtsIndex)
 {
-    uint16               AtsEntryWords; /* current ats entry length in words */
-    uint16               AtsCmdNum;     /* current ats entry command number */
-    uint16               AtsEntryIndex; /* index into the load for current ats entry */
-    CFE_MSG_Message_t *  AtsCmd;        /* a pointer to an ats command */
-    SC_AtsEntryHeader_t *AtsEntryPtr;   /* a pointer to an ats entry header */
-    uint32 *             AtsTablePtr;   /* pointer to the start of the Ats table */
-    CFE_MSG_Size_t       MessageSize     = 0;
-    int32                Result          = CFE_SUCCESS;
-    bool                 StillProcessing = true;
+    uint16         AtsEntryWords; /* current ats entry length in words */
+    uint16         AtsCmdNum;     /* current ats entry command number */
+    uint16         AtsEntryIndex; /* index into the load for current ats entry */
+    SC_AtsEntry_t *EntryPtr;      /* a pointer to an ats entry */
+    uint32 *       AtsTablePtr;   /* pointer to the start of the Ats table */
+    CFE_MSG_Size_t MessageSize     = 0;
+    int32          Result          = CFE_SUCCESS;
+    bool           StillProcessing = true;
 
     /* validate ATS array index */
     if (AtsIndex >= SC_NUMBER_OF_ATS)
     {
-        CFE_EVS_SendEvent(SC_LOADATS_INV_INDEX_ERR_EID,
-                          CFE_EVS_EventType_ERROR,
-                          "ATS load error: invalid ATS index %d", AtsIndex);
+        CFE_EVS_SendEvent(SC_LOADATS_INV_INDEX_ERR_EID, CFE_EVS_EventType_ERROR, "ATS load error: invalid ATS index %d",
+                          AtsIndex);
         return;
     }
 
@@ -84,8 +85,11 @@ void SC_LoadAts(uint16 AtsIndex)
          */
         if (AtsEntryIndex < SC_ATS_BUFF_SIZE32)
         {
+            /* get a pointer to the ats command in the table */
+            EntryPtr = (SC_AtsEntry_t *)&AtsTablePtr[AtsEntryIndex];
+
             /* get the next command number from the buffer */
-            AtsCmdNum = ((SC_AtsEntryHeaderBuf_t *)&AtsTablePtr[AtsEntryIndex])->Header.CmdNumber;
+            AtsCmdNum = EntryPtr->Header.CmdNumber;
 
             if (AtsCmdNum == 0)
             {
@@ -105,12 +109,9 @@ void SC_LoadAts(uint16 AtsIndex)
             else if (AtsCmdNum <= SC_MAX_ATS_CMDS &&
                      SC_OperData.AtsCmdStatusTblAddr[AtsIndex][SC_ATS_CMD_NUM_TO_INDEX(AtsCmdNum)] == SC_EMPTY)
             {
-                /* get a pointer to the ats command in the table */
+                /* get message size */
+                CFE_MSG_GetSize(&EntryPtr->Msg, &MessageSize);
 
-                AtsEntryPtr = &((SC_AtsEntryHeaderBuf_t *)&AtsTablePtr[AtsEntryIndex])->Header;
-                AtsCmd      = (CFE_MSG_Message_t *)((uint8_t *)AtsEntryPtr + SC_ATS_HEADER_SIZE);
-
-                CFE_MSG_GetSize(AtsCmd, &MessageSize);
                 /* if the length of the command is valid */
                 if (MessageSize >= SC_PACKET_MIN_SIZE && MessageSize <= SC_PACKET_MAX_SIZE)
                 {
@@ -201,10 +202,8 @@ void SC_BuildTimeIndexTable(uint16 AtsIndex)
     /* validate ATS array index */
     if (AtsIndex >= SC_NUMBER_OF_ATS)
     {
-        CFE_EVS_SendEvent(SC_BUILD_TIME_IDXTBL_ERR_EID,
-                          CFE_EVS_EventType_ERROR,
-                          "Build time index table error: invalid ATS index %d",
-                          AtsIndex);
+        CFE_EVS_SendEvent(SC_BUILD_TIME_IDXTBL_ERR_EID, CFE_EVS_EventType_ERROR,
+                          "Build time index table error: invalid ATS index %d", AtsIndex);
         return;
     }
 
@@ -237,7 +236,7 @@ void SC_BuildTimeIndexTable(uint16 AtsIndex)
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 void SC_Insert(uint16 AtsIndex, uint32 NewCmdIndex, uint32 ListLength)
 {
-    SC_AtsEntryHeader_t *Entry;          /* ATS table entry pointer */
+    SC_AtsEntryHeader_t *EntryHeader;    /* ATS table entry pointer */
     SC_AbsTimeTag_t      NewCmdTime = 0; /* new command execution time */
     SC_AbsTimeTag_t      ListCmdTime;    /* list entry execution time */
     uint32               CmdIndex;       /* ATS command index (cmd num - 1) */
@@ -247,10 +246,8 @@ void SC_Insert(uint16 AtsIndex, uint32 NewCmdIndex, uint32 ListLength)
     /* validate ATS array index */
     if (AtsIndex >= SC_NUMBER_OF_ATS)
     {
-        CFE_EVS_SendEvent(SC_INSERTATS_INV_INDEX_ERR_EID,
-                          CFE_EVS_EventType_ERROR,
-                          "ATS insert error: invalid ATS index %d",
-                          AtsIndex);
+        CFE_EVS_SendEvent(SC_INSERTATS_INV_INDEX_ERR_EID, CFE_EVS_EventType_ERROR,
+                          "ATS insert error: invalid ATS index %d", AtsIndex);
         return;
     }
 
@@ -260,9 +257,9 @@ void SC_Insert(uint16 AtsIndex, uint32 NewCmdIndex, uint32 ListLength)
         /* first get the entry index in the selected ATS table for the new command */
         EntryIndex = SC_AppData.AtsCmdIndexBuffer[AtsIndex][NewCmdIndex];
         /* then get a pointer to the ATS entry */
-        Entry = &((SC_AtsEntryHeaderBuf_t *)&SC_OperData.AtsTblAddr[AtsIndex][EntryIndex])->Header;
+        EntryHeader = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[AtsIndex][EntryIndex];
         /* then get the execution time from the ATS entry for the new command */
-        NewCmdTime = SC_GetAtsEntryTime(Entry);
+        NewCmdTime = SC_GetAtsEntryTime(EntryHeader);
     }
 
     /* start at last element in the sorted by time list */
@@ -275,9 +272,9 @@ void SC_Insert(uint16 AtsIndex, uint32 NewCmdIndex, uint32 ListLength)
         /* then get the entry index from the ATS table */
         EntryIndex = SC_AppData.AtsCmdIndexBuffer[AtsIndex][CmdIndex];
         /* then get a pointer to the ATS entry data */
-        Entry = &((SC_AtsEntryHeaderBuf_t *)&SC_OperData.AtsTblAddr[AtsIndex][EntryIndex])->Header;
+        EntryHeader = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[AtsIndex][EntryIndex];
         /* then get cmd execution time from the ATS entry */
-        ListCmdTime = SC_GetAtsEntryTime(Entry);
+        ListCmdTime = SC_GetAtsEntryTime(EntryHeader);
 
         /* compare time for this list entry to time for new cmd */
         if (SC_CompareAbsTime(ListCmdTime, NewCmdTime))
@@ -315,18 +312,16 @@ void SC_Insert(uint16 AtsIndex, uint32 NewCmdIndex, uint32 ListLength)
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 void SC_InitAtsTables(uint16 AtsIndex)
 {
-    int32 i; 
+    int32 i;
 
     /* validate ATS array index */
     if (AtsIndex >= SC_NUMBER_OF_ATS)
     {
-        CFE_EVS_SendEvent(SC_INIT_ATSTBL_INV_INDEX_ERR_EID,
-                          CFE_EVS_EventType_ERROR,
-                          "ATS table init error: invalid ATS index %d",
-                          AtsIndex);
+        CFE_EVS_SendEvent(SC_INIT_ATSTBL_INV_INDEX_ERR_EID, CFE_EVS_EventType_ERROR,
+                          "ATS table init error: invalid ATS index %d", AtsIndex);
         return;
     }
-        
+
     /* loop through and set the ATS tables to zero */
     for (i = 0; i < SC_MAX_ATS_CMDS; i++)
     {
@@ -346,31 +341,29 @@ void SC_InitAtsTables(uint16 AtsIndex)
 /* Initializes the info table entry for an RTS                     */
 /*                                                                 */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-void SC_LoadRts (uint16 RtsIndex)
-{    
+void SC_LoadRts(uint16 RtsIndex)
+{
     /* validate RTS array index */
     if (RtsIndex < SC_NUMBER_OF_RTS)
     {
         /* Clear out the RTS info table */
-        SC_OperData.RtsInfoTblAddr[RtsIndex].RtsStatus = SC_LOADED;
-        SC_OperData.RtsInfoTblAddr[RtsIndex].UseCtr = 0;
-        SC_OperData.RtsInfoTblAddr[RtsIndex].CmdCtr = 0;
-        SC_OperData.RtsInfoTblAddr[RtsIndex].CmdErrCtr = 0;
+        SC_OperData.RtsInfoTblAddr[RtsIndex].RtsStatus       = SC_LOADED;
+        SC_OperData.RtsInfoTblAddr[RtsIndex].UseCtr          = 0;
+        SC_OperData.RtsInfoTblAddr[RtsIndex].CmdCtr          = 0;
+        SC_OperData.RtsInfoTblAddr[RtsIndex].CmdErrCtr       = 0;
         SC_OperData.RtsInfoTblAddr[RtsIndex].NextCommandTime = 0;
-        SC_OperData.RtsInfoTblAddr[RtsIndex].NextCommandPtr = 0;
+        SC_OperData.RtsInfoTblAddr[RtsIndex].NextCommandPtr  = 0;
 
         /* Make sure the RTS is disabled */
-        SC_OperData.RtsInfoTblAddr[RtsIndex].DisabledFlag = true   ;
+        SC_OperData.RtsInfoTblAddr[RtsIndex].DisabledFlag = true;
     }
     else
     {
-        CFE_EVS_SendEvent(SC_LOADRTS_INV_INDEX_ERR_EID,
-                          CFE_EVS_EventType_ERROR,
-                          "RTS table init error: invalid RTS index %d",
-                          RtsIndex);
+        CFE_EVS_SendEvent(SC_LOADRTS_INV_INDEX_ERR_EID, CFE_EVS_EventType_ERROR,
+                          "RTS table init error: invalid RTS index %d", RtsIndex);
         return;
     }
-        
+
 } /* SC_LoadRts */
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -396,16 +389,13 @@ int32 SC_ValidateAts(void *TableData)
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 bool SC_ParseRts(uint32 Buffer32[])
 {
-    uint16                  i;
-    bool                    Done;
-    bool                    Error;
-    CFE_MSG_Message_t *     RtsCmd;
-    SC_RtsEntryHeaderBuf_t *RtsEntryPtr;
-    CFE_MSG_Size_t          RtsCmdSize = 0;
-    uint32 *                Buffer = Buffer32;
-    uint32                  TempBuf[SC_RTS_HDR_32BIT_WORDS];
-    CFE_MSG_Size_t          MessageSize = 0;
-    CFE_SB_MsgId_t          MessageID   = CFE_SB_INVALID_MSG_ID;
+    uint16         i;
+    bool           Done;
+    bool           Error;
+    SC_RtsEntry_t *EntryPtr;
+    CFE_MSG_Size_t CmdSize    = 0;
+    uint16         IndexDelta = 0;
+    CFE_SB_MsgId_t MessageID  = CFE_SB_INVALID_MSG_ID;
 
     i    = 0;
     Done = Error = false;
@@ -422,53 +412,54 @@ bool SC_ParseRts(uint32 Buffer32[])
              ** Cast a header to the RTS buffer current location
              ** and get the size of the packet
              */
-            memcpy(TempBuf, &Buffer32[i], (SC_RTS_HDR_WORDS * SC_BYTES_IN_WORD));
-            RtsEntryPtr = (SC_RtsEntryHeaderBuf_t *)TempBuf;
-            RtsCmd      = (CFE_MSG_Message_t *)((uint8_t *)&RtsEntryPtr->Header + SC_RTS_HEADER_SIZE);
+            EntryPtr = (SC_RtsEntry_t *)&Buffer32[i];
 
-            CFE_MSG_GetSize(RtsCmd, &RtsCmdSize);
-            RtsCmdSize += SC_RTS_HEADER_SIZE;
+            CFE_MSG_GetSize(&EntryPtr->Msg, &CmdSize);
 
-            CFE_MSG_GetMsgId(RtsCmd, &MessageID);
+            /* Add header size, round up to boundary, convert to index delta  */
+            IndexDelta = (CmdSize + SC_RTS_HEADER_SIZE + SC_ROUND_UP_BYTES) / sizeof(Buffer32[0]);
 
-            if ((RtsEntryPtr->Header.TimeTag == 0) && (MessageID == 0))
+            CFE_MSG_GetMsgId(&EntryPtr->Msg, &MessageID);
+
+            if (!CFE_SB_IsValidMsgId(MessageID))
             {
-                Done = true; /* assumed end of file */
-            }
-            else if (MessageID == 0)
-            {
-                CFE_EVS_SendEvent(SC_RTS_INVLD_MID_ERR_EID, CFE_EVS_EventType_ERROR,
-                                  "RTS cmd loaded with invalid MID at %d", i);
-
-                Error = true; /* invalid message id */
+                if (EntryPtr->Header.TimeTag == 0)
+                {
+                    Done = true; /* assumed end of file */
+                }
+                else
+                {
+                    CFE_EVS_SendEvent(SC_RTS_INVLD_MID_ERR_EID, CFE_EVS_EventType_ERROR,
+                                      "RTS cmd loaded with invalid MID at %d", i);
+                    Error = true; /* invalid message id */
+                }
             }
             else
             {
-                CFE_MSG_GetSize(RtsCmd, &MessageSize);
                 /* check to see if the length field in the RTS is valid */
-                if (MessageSize < SC_PACKET_MIN_SIZE || MessageSize > SC_PACKET_MAX_SIZE)
+                if (CmdSize < SC_PACKET_MIN_SIZE || CmdSize > SC_PACKET_MAX_SIZE)
                 {
                     CFE_EVS_SendEvent(SC_RTS_LEN_ERR_EID, CFE_EVS_EventType_ERROR,
-                                      "RTS cmd loaded with invalid length at %d, len: %d", i, (int)MessageSize);
+                                      "RTS cmd loaded with invalid length at %d, len: %d", i, (int)CmdSize);
 
                     Error = true; /* Length error */
                 }
 
-                else if ((i + ((RtsCmdSize + SC_ROUND_UP_BYTES) / SC_BYTES_IN_WORD)) > SC_RTS_BUFF_SIZE32)
+                else if ((i + IndexDelta) > SC_RTS_BUFF_SIZE32)
                 {
                     CFE_EVS_SendEvent(SC_RTS_LEN_BUFFER_ERR_EID, CFE_EVS_EventType_ERROR,
                                       "RTS cmd at %d runs off end of buffer", i);
                     Error = true; /* command runs off of the end of the buffer */
                 }
 
-                else if ((i + ((RtsCmdSize + SC_ROUND_UP_BYTES) / SC_BYTES_IN_WORD)) == SC_RTS_BUFF_SIZE32)
+                else if ((i + IndexDelta) == SC_RTS_BUFF_SIZE32)
                 {
                     Done = true;
                 }
                 else
                 { /* command fits in buffer */
 
-                    i += ((RtsCmdSize + SC_ROUND_UP_BYTES) / SC_BYTES_IN_WORD); /* remember 'i' is expressed in words */
+                    i += IndexDelta;
 
                 } /* end if */
 
@@ -481,7 +472,7 @@ bool SC_ParseRts(uint32 Buffer32[])
              ** If it looks like there is data, reject the load,
              ** if it looks empty then we are done
              */
-            if (Buffer[i] == 0)
+            if (Buffer32[i] == 0)
             {
                 Done = true;
             }
@@ -554,14 +545,12 @@ int32 SC_ValidateAppend(void *TableData)
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 void SC_UpdateAppend(void)
 {
-    SC_AtsEntryHeader_t *   Entry;
-    SC_AtsEntryHeaderBuf_t *EntryPtr;
-    CFE_MSG_Message_t *     CmdPacket;
-    CFE_MSG_Size_t          CommandBytes    = 0;
-    int32                   CommandWords;
-    int32                   EntryIndex      = 0;
-    int32                   EntryCount      = 0;
-    bool                    StillProcessing = true;
+    SC_AtsEntry_t *EntryPtr;
+    CFE_MSG_Size_t CommandBytes = 0;
+    int32          CommandWords;
+    int32          EntryIndex      = 0;
+    int32          EntryCount      = 0;
+    bool           StillProcessing = true;
 
     /* Count Append ATS table entries and get total size */
     while (StillProcessing)
@@ -573,20 +562,16 @@ void SC_UpdateAppend(void)
         }
         else
         {
-            EntryPtr = (SC_AtsEntryHeaderBuf_t *)&SC_OperData.AppendTblAddr[EntryIndex];
-            Entry    = &EntryPtr->Header;
+            EntryPtr = (SC_AtsEntry_t *)&SC_OperData.AppendTblAddr[EntryIndex];
 
-            if ((Entry->CmdNumber == 0) || (Entry->CmdNumber > SC_MAX_ATS_CMDS))
+            if ((EntryPtr->Header.CmdNumber == 0) || (EntryPtr->Header.CmdNumber > SC_MAX_ATS_CMDS))
             {
                 /* End of valid command numbers */
                 StillProcessing = false;
             }
             else
             {
-                /* Compute entry command packet length */
-                CmdPacket = (CFE_MSG_Message_t *)((uint8_t *)Entry + SC_ATS_HEADER_SIZE);
-
-                CFE_MSG_GetSize(CmdPacket, &CommandBytes);
+                CFE_MSG_GetSize(&EntryPtr->Msg, &CommandBytes);
                 CommandWords = (CommandBytes + SC_ROUND_UP_BYTES) / SC_BYTES_IN_WORD;
 
                 if ((CommandBytes < SC_PACKET_MIN_SIZE) || (CommandBytes > SC_PACKET_MAX_SIZE))
@@ -629,22 +614,18 @@ void SC_UpdateAppend(void)
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 void SC_ProcessAppend(uint16 AtsIndex)
 {
-    SC_AtsEntryHeader_t *   Entry;
-    SC_AtsEntryHeaderBuf_t *EntryPtr;
-    CFE_MSG_Message_t *     CmdPacket;
-    CFE_MSG_Size_t          CommandBytes = 0;
-    int32                   CommandWords;
-    int32                   EntryIndex;
-    int32                   i;
-    uint16                  CmdIndex;
+    SC_AtsEntry_t *EntryPtr;
+    CFE_MSG_Size_t CommandBytes = 0;
+    int32          CommandWords;
+    int32          EntryIndex;
+    int32          i;
+    uint16         CmdIndex;
 
     /* validate ATS array index */
     if (AtsIndex >= SC_NUMBER_OF_ATS)
     {
-        CFE_EVS_SendEvent(SC_PROCESS_APPEND_INV_INDEX_ERR_EID,
-                          CFE_EVS_EventType_ERROR,
-                          "ATS process append error: invalid ATS index %d",
-                          AtsIndex);
+        CFE_EVS_SendEvent(SC_PROCESS_APPEND_INV_INDEX_ERR_EID, CFE_EVS_EventType_ERROR,
+                          "ATS process append error: invalid ATS index %d", AtsIndex);
         return;
     }
 
@@ -662,11 +643,10 @@ void SC_ProcessAppend(uint16 AtsIndex)
     for (i = 0; i < SC_OperData.HkPacket.AppendEntryCount; i++)
     {
         /* get pointer to next appended entry */
-        EntryPtr = (SC_AtsEntryHeaderBuf_t *)&SC_OperData.AtsTblAddr[AtsIndex][EntryIndex];
-        Entry    = &EntryPtr->Header;
+        EntryPtr = (SC_AtsEntry_t *)&SC_OperData.AtsTblAddr[AtsIndex][EntryIndex];
 
         /* convert base one cmd number to base zero index */
-        CmdIndex = SC_ATS_CMD_NUM_TO_INDEX(Entry->CmdNumber);
+        CmdIndex = SC_ATS_CMD_NUM_TO_INDEX(EntryPtr->Header.CmdNumber);
 
         /* count only new commands, not replaced commands */
         if (SC_OperData.AtsCmdStatusTblAddr[AtsIndex][CmdIndex] == SC_EMPTY)
@@ -679,8 +659,7 @@ void SC_ProcessAppend(uint16 AtsIndex)
         SC_OperData.AtsCmdStatusTblAddr[AtsIndex][CmdIndex] = SC_LOADED;
 
         /* update entry index to point to the next entry */
-        CmdPacket = (CFE_MSG_Message_t *)((uint8_t *)Entry + SC_ATS_HEADER_SIZE);
-        CFE_MSG_GetSize(CmdPacket, &CommandBytes);
+        CFE_MSG_GetSize(&EntryPtr->Msg, &CommandBytes);
         CommandWords = (CommandBytes + SC_ROUND_UP_BYTES) / SC_BYTES_IN_WORD;
         EntryIndex += (SC_ATS_HDR_NOPKT_WORDS + CommandWords);
     }
@@ -782,16 +761,12 @@ int32 SC_VerifyAtsTable(uint32 *Buffer32, int32 BufferWords)
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 int32 SC_VerifyAtsEntry(uint32 *Buffer32, int32 EntryIndex, int32 BufferWords)
 {
-    SC_AtsEntryHeaderBuf_t *EntryPtr;
-    SC_AtsEntryHeader_t *   Entry;
-    CFE_MSG_Message_t *     CmdPacket;
-
+    SC_AtsEntry_t *EntryPtr;
     CFE_MSG_Size_t CommandBytes = 0;
     int32          CommandWords;
     int32          Result = CFE_SUCCESS;
 
-    EntryPtr = (SC_AtsEntryHeaderBuf_t *)&Buffer32[EntryIndex];
-    Entry    = &EntryPtr->Header;
+    EntryPtr = (SC_AtsEntry_t *)&Buffer32[EntryIndex];
 
     /*
     ** Verify the ATS table entry located at the indicated buffer offset
@@ -808,7 +783,7 @@ int32 SC_VerifyAtsEntry(uint32 *Buffer32, int32 EntryIndex, int32 BufferWords)
         /* All done -- end of ATS buffer */
         Result = CFE_SUCCESS;
     }
-    else if (Entry->CmdNumber == 0)
+    else if (EntryPtr->Header.CmdNumber == 0)
     {
         /*
         ** If there is at least one word remaining in the buffer then it
@@ -820,14 +795,14 @@ int32 SC_VerifyAtsEntry(uint32 *Buffer32, int32 EntryIndex, int32 BufferWords)
         /* All done -- end of in-use portion of buffer */
         Result = CFE_SUCCESS;
     }
-    else if (Entry->CmdNumber > SC_MAX_ATS_CMDS)
+    else if (EntryPtr->Header.CmdNumber > SC_MAX_ATS_CMDS)
     {
         /* Error -- invalid command number */
         Result = SC_ERROR;
 
         CFE_EVS_SendEvent(SC_VERIFY_ATS_NUM_ERR_EID, CFE_EVS_EventType_ERROR,
                           "Verify ATS Table error: invalid command number: buf index = %d, cmd num = %d",
-                          (int)EntryIndex, Entry->CmdNumber);
+                          (int)EntryIndex, EntryPtr->Header.CmdNumber);
     }
     else if ((EntryIndex + SC_ATS_HDR_WORDS) > BufferWords)
     {
@@ -836,15 +811,12 @@ int32 SC_VerifyAtsEntry(uint32 *Buffer32, int32 EntryIndex, int32 BufferWords)
 
         CFE_EVS_SendEvent(SC_VERIFY_ATS_END_ERR_EID, CFE_EVS_EventType_ERROR,
                           "Verify ATS Table error: buffer full: buf index = %d, cmd num = %d, buf words = %d",
-                          (int)EntryIndex, Entry->CmdNumber, (int)BufferWords);
+                          (int)EntryIndex, EntryPtr->Header.CmdNumber, (int)BufferWords);
     }
     else
     {
-        /* Now it is OK to de-reference ATS cmd packet */
-        CmdPacket = (CFE_MSG_Message_t *)((uint8_t *)Entry + SC_ATS_HEADER_SIZE);
-
         /* Start with the byte length of the command packet */
-        CFE_MSG_GetSize(CmdPacket, &CommandBytes);
+        CFE_MSG_GetSize(&EntryPtr->Msg, &CommandBytes);
 
         /* Convert packet byte length to word length (round up odd bytes) */
         CommandWords = (CommandBytes + SC_ROUND_UP_BYTES) / SC_BYTES_IN_WORD;
@@ -856,7 +828,7 @@ int32 SC_VerifyAtsEntry(uint32 *Buffer32, int32 EntryIndex, int32 BufferWords)
 
             CFE_EVS_SendEvent(SC_VERIFY_ATS_PKT_ERR_EID, CFE_EVS_EventType_ERROR,
                               "Verify ATS Table error: invalid length: buf index = %d, cmd num = %d, pkt len = %d",
-                              (int)EntryIndex, Entry->CmdNumber, (int)CommandBytes);
+                              (int)EntryIndex, EntryPtr->Header.CmdNumber, (int)CommandBytes);
         }
         else if ((EntryIndex + SC_ATS_HDR_NOPKT_WORDS + CommandWords) > BufferWords)
         {
@@ -865,17 +837,17 @@ int32 SC_VerifyAtsEntry(uint32 *Buffer32, int32 EntryIndex, int32 BufferWords)
 
             CFE_EVS_SendEvent(SC_VERIFY_ATS_BUF_ERR_EID, CFE_EVS_EventType_ERROR,
                               "Verify ATS Table error: buffer overflow: buf index = %d, cmd num = %d, pkt len = %d",
-                              (int)EntryIndex, Entry->CmdNumber, (int)CommandBytes);
+                              (int)EntryIndex, EntryPtr->Header.CmdNumber, (int)CommandBytes);
         }
-        else if (SC_OperData.AtsDupTestArray[SC_ATS_CMD_NUM_TO_INDEX(Entry->CmdNumber)] != SC_DUP_TEST_UNUSED)
+        else if (SC_OperData.AtsDupTestArray[SC_ATS_CMD_NUM_TO_INDEX(EntryPtr->Header.CmdNumber)] != SC_DUP_TEST_UNUSED)
         {
             /* Entry with duplicate command number is invalid */
             Result = SC_ERROR;
 
             CFE_EVS_SendEvent(SC_VERIFY_ATS_DUP_ERR_EID, CFE_EVS_EventType_ERROR,
                               "Verify ATS Table error: dup cmd number: buf index = %d, cmd num = %d, dup index = %d",
-                              (int)EntryIndex, Entry->CmdNumber,
-                              (int)SC_OperData.AtsDupTestArray[SC_ATS_CMD_NUM_TO_INDEX(Entry->CmdNumber)]);
+                              (int)EntryIndex, EntryPtr->Header.CmdNumber,
+                              (int)SC_OperData.AtsDupTestArray[SC_ATS_CMD_NUM_TO_INDEX(EntryPtr->Header.CmdNumber)]);
         }
         else
         {
@@ -883,10 +855,10 @@ int32 SC_VerifyAtsEntry(uint32 *Buffer32, int32 EntryIndex, int32 BufferWords)
             Result = SC_ATS_HDR_NOPKT_WORDS + CommandWords;
 
             /* Mark this ATS command ID as in use at this table index */
-            SC_OperData.AtsDupTestArray[SC_ATS_CMD_NUM_TO_INDEX(Entry->CmdNumber)] = EntryIndex;
+            SC_OperData.AtsDupTestArray[SC_ATS_CMD_NUM_TO_INDEX(EntryPtr->Header.CmdNumber)] = EntryIndex;
         }
     }
-    
+
     return (Result);
 
 } /* End of SC_VerifyAtsEntry */

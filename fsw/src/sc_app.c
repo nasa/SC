@@ -1,26 +1,29 @@
-/*************************************************************************
- ** File: sc_app.c 
- **
- **  Copyright � 2007-2014 United States Government as represented by the
- **  Administrator of the National Aeronautics and Space Administration.
- **  All Other Rights Reserved.
- **
- **  This software was created at NASA's Goddard Space Flight Center.
- **  This software is governed by the NASA Open Source Agreement and may be
- **  used, distributed and modified only pursuant to the terms of that
- **  agreement.
- **
- ** Purpose:
- **     This file contains the Stored Command main event loop function. It also
- **     contains the initialization function. The SC app handles the scheduling
- **     of stored commands for the fsw. The main event loop handles the Software
- **     Bus interface.
- **
- ** References:
- **   Flight Software Branch C Coding Standard Version 1.2
- **   CFS Development Standards Document
- **
- *************************************************************************/
+/************************************************************************
+ * NASA Docket No. GSC-18,924-1, and identified as “Core Flight
+ * System (cFS) Stored Command Application version 3.1.0”
+ *
+ * Copyright (c) 2021 United States Government as represented by the
+ * Administrator of the National Aeronautics and Space Administration.
+ * All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may
+ * not use this file except in compliance with the License. You may obtain
+ * a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ************************************************************************/
+
+/**
+ * @file
+ *     This file contains the Stored Command main event loop function. It also
+ *     contains the initialization function. The SC app handles the scheduling
+ *     of stored commands for the fsw. The main event loop handles the Software
+ *     Bus interface.
+ */
 
 /**************************************************************************
  **
@@ -154,7 +157,7 @@ int32 SC_AppInit(void)
     SC_AppData.NextCmdTime[SC_RTP] = SC_MAX_TIME;
 
     /* Initialize the SC housekeeping packet */
-    CFE_MSG_Init(&SC_OperData.HkPacket.TlmHeader.Msg, SC_HK_TLM_MID, sizeof(SC_HkTlm_t));
+    CFE_MSG_Init(&SC_OperData.HkPacket.TlmHeader.Msg, CFE_SB_ValueToMsgId(SC_HK_TLM_MID), sizeof(SC_HkTlm_t));
 
     /* Select auto-exec RTS to start during first HK request */
     if (CFE_ES_GetResetType(NULL) == CFE_PSP_RST_TYPE_POWERON)
@@ -184,7 +187,7 @@ int32 SC_AppInit(void)
     }
 
     /* Must be able to subscribe to HK request command */
-    Result = CFE_SB_Subscribe(SC_SEND_HK_MID, SC_OperData.CmdPipe);
+    Result = CFE_SB_Subscribe(CFE_SB_ValueToMsgId(SC_SEND_HK_MID), SC_OperData.CmdPipe);
     if (Result != CFE_SUCCESS)
     {
         CFE_EVS_SendEvent(SC_INIT_SB_SUBSCRIBE_HK_ERR_EID, CFE_EVS_EventType_ERROR,
@@ -193,7 +196,7 @@ int32 SC_AppInit(void)
     }
 
     /* Must be able to subscribe to 1Hz wakeup command */
-    Result = CFE_SB_Subscribe(SC_1HZ_WAKEUP_MID, SC_OperData.CmdPipe);
+    Result = CFE_SB_Subscribe(CFE_SB_ValueToMsgId(SC_1HZ_WAKEUP_MID), SC_OperData.CmdPipe);
     if (Result != CFE_SUCCESS)
     {
         CFE_EVS_SendEvent(SC_INIT_SB_SUBSCRIBE_1HZ_ERR_EID, CFE_EVS_EventType_ERROR,
@@ -202,7 +205,7 @@ int32 SC_AppInit(void)
     }
 
     /* Must be able to subscribe to SC commands */
-    Result = CFE_SB_Subscribe(SC_CMD_MID, SC_OperData.CmdPipe);
+    Result = CFE_SB_Subscribe(CFE_SB_ValueToMsgId(SC_CMD_MID), SC_OperData.CmdPipe);
     if (Result != CFE_SUCCESS)
     {
         CFE_EVS_SendEvent(SC_INIT_SB_SUBSCRIBE_CMD_ERR_EID, CFE_EVS_EventType_ERROR,
@@ -342,16 +345,6 @@ int32 SC_RegisterAllTables(void)
         return (Result);
     }
 
-    /* Register dump only Append ATS information table */
-    TableSize = sizeof(SC_AtsInfoTable_t);
-    Result = CFE_TBL_Register(&SC_OperData.AppendInfoHandle, SC_APPENDINFO_TABLE_NAME, TableSize, TableOptions, NULL);
-    if (Result != CFE_SUCCESS)
-    {
-        CFE_EVS_SendEvent(SC_REGISTER_APPEND_INFO_TABLE_ERR_EID, CFE_EVS_EventType_ERROR,
-                          "Append ATS Info table register failed, returned: 0x%08X", (unsigned int)Result);
-        return (Result);
-    }
-
     /* Register dump only ATP control block table */
     TableSize = sizeof(SC_AtpControlBlock_t);
     Result    = CFE_TBL_Register(&SC_OperData.AtsCtrlBlckHandle, SC_ATS_CTRL_TABLE_NAME, TableSize, TableOptions, NULL);
@@ -460,15 +453,6 @@ int32 SC_GetDumpTablePointers(void)
     {
         CFE_EVS_SendEvent(SC_GET_ADDRESS_ATS_INFO_ERR_EID, CFE_EVS_EventType_ERROR,
                           "ATS Info table failed Getting Address, returned: 0x%08X", (unsigned int)Result);
-        return (Result);
-    }
-
-    /* Get buffer address for dump only Append ATS information table */
-    Result = CFE_TBL_GetAddress((void **)&SC_OperData.AppendInfoTblAddr, SC_OperData.AppendInfoHandle);
-    if (Result != CFE_SUCCESS)
-    {
-        CFE_EVS_SendEvent(SC_GET_ADDRESS_APPEND_INFO_ERR_EID, CFE_EVS_EventType_ERROR,
-                          "Append ATS Info table failed Getting Address, returned: 0x%08X", (unsigned int)Result);
         return (Result);
     }
 
@@ -624,37 +608,41 @@ void SC_RegisterManageCmds(void)
     int32 i;
 
     /* Register for RTS info table manage request commands */
-    CFE_TBL_NotifyByMessage(SC_OperData.RtsInfoHandle, SC_CMD_MID, SC_MANAGE_TABLE_CC, SC_TBL_ID_RTS_INFO);
+    CFE_TBL_NotifyByMessage(SC_OperData.RtsInfoHandle, CFE_SB_ValueToMsgId(SC_CMD_MID), SC_MANAGE_TABLE_CC,
+                            SC_TBL_ID_RTS_INFO);
 
     /* Register for RTS control block table manage request commands */
-    CFE_TBL_NotifyByMessage(SC_OperData.RtsCtrlBlckHandle, SC_CMD_MID, SC_MANAGE_TABLE_CC, SC_TBL_ID_RTP_CTRL);
+    CFE_TBL_NotifyByMessage(SC_OperData.RtsCtrlBlckHandle, CFE_SB_ValueToMsgId(SC_CMD_MID), SC_MANAGE_TABLE_CC,
+                            SC_TBL_ID_RTP_CTRL);
 
     /* Register for ATS info table manage request commands */
-    CFE_TBL_NotifyByMessage(SC_OperData.AtsInfoHandle, SC_CMD_MID, SC_MANAGE_TABLE_CC, SC_TBL_ID_ATS_INFO);
-
-    /* Register for ATS Append info table manage request commands */
-    CFE_TBL_NotifyByMessage(SC_OperData.AppendInfoHandle, SC_CMD_MID, SC_MANAGE_TABLE_CC, SC_TBL_ID_APP_INFO);
+    CFE_TBL_NotifyByMessage(SC_OperData.AtsInfoHandle, CFE_SB_ValueToMsgId(SC_CMD_MID), SC_MANAGE_TABLE_CC,
+                            SC_TBL_ID_ATS_INFO);
 
     /* Register for ATS control block table manage request commands */
-    CFE_TBL_NotifyByMessage(SC_OperData.AtsCtrlBlckHandle, SC_CMD_MID, SC_MANAGE_TABLE_CC, SC_TBL_ID_ATP_CTRL);
+    CFE_TBL_NotifyByMessage(SC_OperData.AtsCtrlBlckHandle, CFE_SB_ValueToMsgId(SC_CMD_MID), SC_MANAGE_TABLE_CC,
+                            SC_TBL_ID_ATP_CTRL);
 
     /* Register for ATS Append table manage request commands */
-    CFE_TBL_NotifyByMessage(SC_OperData.AppendTblHandle, SC_CMD_MID, SC_MANAGE_TABLE_CC, SC_TBL_ID_APPEND);
+    CFE_TBL_NotifyByMessage(SC_OperData.AppendTblHandle, CFE_SB_ValueToMsgId(SC_CMD_MID), SC_MANAGE_TABLE_CC,
+                            SC_TBL_ID_APPEND);
 
     for (i = 0; i < SC_NUMBER_OF_ATS; i++)
     {
         /* Register for ATS cmd status table manage request commands */
-        CFE_TBL_NotifyByMessage(SC_OperData.AtsCmdStatusHandle[i], SC_CMD_MID, SC_MANAGE_TABLE_CC,
+        CFE_TBL_NotifyByMessage(SC_OperData.AtsCmdStatusHandle[i], CFE_SB_ValueToMsgId(SC_CMD_MID), SC_MANAGE_TABLE_CC,
                                 SC_TBL_ID_ATS_CMD_0 + i);
 
         /* Register for ATS table manage request commands */
-        CFE_TBL_NotifyByMessage(SC_OperData.AtsTblHandle[i], SC_CMD_MID, SC_MANAGE_TABLE_CC, SC_TBL_ID_ATS_0 + i);
+        CFE_TBL_NotifyByMessage(SC_OperData.AtsTblHandle[i], CFE_SB_ValueToMsgId(SC_CMD_MID), SC_MANAGE_TABLE_CC,
+                                SC_TBL_ID_ATS_0 + i);
     }
 
     for (i = 0; i < SC_NUMBER_OF_RTS; i++)
     {
         /* Register for RTS table manage request commands */
-        CFE_TBL_NotifyByMessage(SC_OperData.RtsTblHandle[i], SC_CMD_MID, SC_MANAGE_TABLE_CC, SC_TBL_ID_RTS_0 + i);
+        CFE_TBL_NotifyByMessage(SC_OperData.RtsTblHandle[i], CFE_SB_ValueToMsgId(SC_CMD_MID), SC_MANAGE_TABLE_CC,
+                                SC_TBL_ID_RTS_0 + i);
     }
 
     return;

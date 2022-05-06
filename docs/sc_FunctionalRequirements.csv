@@ -1,0 +1,177 @@
+Summary,Custom field (Requirement ID),Description,Custom field (Requirement Rationale)
+SC1000,SC1000,"Upon receipt of a No-Op command, SC shall increment the SC Valid Command Counter and generate an event message.",Debug command to verify application is alive.
+SC1001,SC1001,"Upon receipt of a Reset command, SC shall reset the following housekeeping variables to a value of zero:
+a)       Valid Command Counter
+b)       Command Rejected Counter
+c)       ATS Command Counter
+d)       ATS Command Error Counter
+e)       RTS Command Counter
+f)        RTS Command Error Counter
+g)       Number of RTS Started Counter
+h)       Number of RTS Started Error Counter",Important for testing and on-orbit flight operations in order to start with a “clean slate”.
+SC1002,SC1002,"For all SC commands, if the length contained in the message header is not equal to the expected length, SC shall reject the command and issue an event message.",Basic command verification in the event of SEU or memory corruption
+SC1004,SC1004,"If SC accepts any command as valid, SC shall execute the command, increment the SC Valid Command Counter and issue an event message.","Operators require feedback on command execution.
+"
+SC1005,SC1005,"If SC rejects any command, SC shall abort the command execution, increment the SC Command Rejected Counter and issue an error event message.","Operators require feedback on command execution.
+"
+SC2000,SC2000,SC shall define <PLATFORM_DEFINED> bytes of storage for each of two (2) Absolute Time-tagged command Sequence (ATS) tables.,"One table will be used for uploads, while the other is executing."
+SC2000.1,SC2000.1,SC shall resolve time to 1 second for Absolute Time Command Sequences (ATS).,Heritage missions have shown that this is adequate resolution.
+SC2000.2,SC2000.2,SC shall accept a maximum of <PLATFORM_DEFINED> commands per ATS.,Required in order to bound the command number.
+SC2000.3,SC2000.3,"SC shall accept a variable number of variable length commands from each ATS. Each ATS command shall contain:
+a)       A command number
+b)       A time tag denoting the time at which to execute the command
+c)       A variable length command",
+SC2000.4,SC2000.4,SC shall use the <PLATFORM_DEFINED> time format (UTC or TAI).,"Provides flexibility on time format.
+"
+SC2001,SC2001,"Upon receipt of a table update indication for an ATS Table, SC shall validate the following for the ATS table:
+a)       Duplicate command numbers
+b)       Invalid command lengths
+c)       Commands that run off of the end of the table
+d)       Command number",SC application needs to validate the table to ensure gross errors are caught.  cFE Table Services handles the ground interface to tables. 
+SC2002,SC2002,SC shall allocate <PLATFORM_DEFINED> Relative Time-tagged Sequences (RTSs) with each capable of storing <PLATFORM_DEFINED>  bytes of stored command data.,Specifies the limits for table sizing purposes.
+SC2002.1,SC2002.1,SC shall resolve time to 1 second for Relative Time Command Sequences (RTS).,Heritage missions have shown that this is adequate resolution.
+SC2002.2,SC2002.2,SC shall accept variable length packed RTS commands within the <PLATFORM_DEFINED> byte relative time-tagged sequences.,
+SC2002.3,SC2002.3,"Each individual command within the sequence shall consist of:
+a)       Time tag with a one second resolution
+b)       A variable length command, with a maximum length of <PLATFORM_DEFINED> bytes",Each command within an RTS needs to contain a time with a one second resolution.
+SC2003,SC2003,"Upon receipt of a table update indication for an RTS Table, SC shall set the RTS status to DISABLED.","Since the RTS definition table does not include a default state, safer to assume disabled."
+SC2004,SC2004,"SC shall execute commands in the ATS table in ascending order, based upon the time-tag of the commands, regardless of the order in which the commands are stored in the ATS table.","Allows flexibility in ground system tools and load generation (command location within an ATS doesn’t matter; Time matters)."
+SC2005,SC2005,SC shall execute no more than <PLATFORM_DEFINED> commands per second from all currently executing RTS tables and/or ATS tables.,Provides bounds on SC processing.
+SC2005.1,SC2005.1,"SC shall defer execution of pending RTS commands, when the combined execution count, of ATS and RTS, exceeds the command per second limit.",
+SC2005.2,SC2005.2,SC shall allow up to the maximum number of defined RTSs to be active concurrently.,RTSs can run concurrently. The limitation is the number of commands that can be sent in one second.
+SC2006,SC2006,SC shall execute the RTSs in priority order based on the RTS number where RTS #1 has the highest priority.,"Provides a known order to the processing of RTSs so that missions can organize the RTSs appropriately.
+"
+SC2007,SC2007,SC shall define <PLATFORM_DEFINED> bytes of storage for an ATS Append Table.,
+SC2007.1,SC2007.1,The ATS Append Table format is the same as the ATS tables,
+SC2008,SC2008,Upon receipt of an Apply ATS Append Table command SC shall append the ATS Append Table contents to the command-specified ATS table..,
+SC2008.1,SC2008.1,The Append command may be performed on either ATS table.,
+SC2008.2,SC2008.2,If the number of entries in the ATS and ATS Append Table exceeds the size of the ATS table SC shall reject the Apply ATS Append Table command.,
+SC2008.3,SC2008.3,The Apply ATS Append Table command shall add all ATS Append Table data to the end of the command-specified ATS table.,
+SC2008.4,SC2008.4,The Apply ATS Append Table command shall provide the ability to add new commands to the ATS buffer,
+SC2008.5,SC2008.5,The Apply ATS Append Table command shall provide the ability to modify existing commands in the ATS buffer,
+SC2008.6,SC2008.6,"Upon completion of the Apply ATS Append Table Command, SC shall issue an info event message indicating the number of commands that were appended to the ATS",
+SC2008.7,SC2008.7,"Upon completion of the Apply ATS Append Table Command, SC shall recompute the command execution sequence.",
+SC2009,SC2009,"Upon receipt of a table update indication for an ATS Append Table, SC shall validate the following for the ATS table:
+a) Duplicate command numbers
+b) Invalid command lengths
+c) Commands that run off the end of the table
+d) Command number",
+SC3000,SC3000,"Upon receipt of a Start ATS command, SC shall start the command-specified ATS provided all of the following conditions are satisfied:
+a)       The command-specified ATS table identification is valid
+b)       The ATS table contains at least one command
+c)       Neither of the two ATS tables is currently executing",
+SC3000.1,SC3000.1,SC shall mark all ATS commands with time less-than the current time as SKIPPED and an event message shall be generated.,Don’t want to process commands that are tagged with times from the past since there are absolute timed commands. Provides the ground knowledge of which commands were not processed (skipped).
+SC3000.3,SC3000.3,"Prior to the dispatch of each individual ATS command, SC shall verify the Data Integrity Check Value of the stored command.",Provides verification that the ATS is not corrupted or the commands are not malformed. 
+SC3000.3.1,SC3000.3.1,"For any ATS command which fails the Data Integrity Check Value, the following shall be performed:
+a)       Discard the command
+b)       Mark the command with DATA INTEGRITY CHECK VALUE VERIFICATION FAILED
+c)       Issue an event message",Ground needs to know if any commands weren’t executed.
+SC3000.3.2,SC3000.3.2,"If the Continuation Execution of ATS On Error Flag is Disabled, SC shall terminate the execution of the ATS.","Provides ground the ability to abort the ATS execution in the event of a data
+integrity failure."
+SC3001,SC3001,"Upon receipt of a Stop ATS Command, SC shall
+a)       Stop processing the currently executing ATS
+b)       Set the state of that ATS to IDLE",Note that the Stop ATS can be contained in the ATS.
+SC3001.1,SC3001.1,"If no ATS is executing, SC shall increment the Valid Command Counter.",
+SC3002,SC3002,"Upon receipt of a Switch ATS Command, SC shall
+a )       Terminate the processing of the current ATS table after processing all of the commands within the current second
+b)       Start processing of the alternate ATS table",Allows the ground to chain ATS tables.
+SC3002.1,SC3002.1,SC shall begin processing the first ATS command after the next 1 second occurs containing a time which is greater-than-or-equal-to the current time.,Allows ATS tables to overlap each other so that the ground can switch at anytime. Need to wait until the next second occurs to ensure that the overlapping in ATSs doesn’t cause the same commands to be executed twice.
+SC3002.2,SC3002.2,SC shall mark all ATS commands with time less-than the current time as SKIPPED and an event message shall be generated.,Provides the ground knowledge of which commands were not processed (skipped).
+SC3002.3,SC3002.3,"If the alternate ATS table has not been loaded, SC shall reject the command.",Shouldn’t switch to an invalid ATS.
+SC3002.4,SC3002.4,"If the Switch command is located within an ATS, SC shall immediately execute the switch command.","A switch command located within an ATS is handled differently than from the ground. If from the ground, must wait until next second to prevent overlapping of 2 ATS from duplicating commands."
+SC3003,SC3003,"Upon receipt of a Jump Command, SC shall transfer execution to the command within the currently executing ATS table whose time-tag is equal to a command-specified time value.",
+SC3003.1,SC3003.1,"If no command exists that is equal to the command-specified jump time, SC shall wait for the first command after the jump time.",The jump command may contain a time which does not correspond to a command so SC should just wait until the time elapses.
+SC3003.2,SC3003.2,"If the command-specified time value is less-than  or equal-to the current  time, SC shall skip all of the commands in the past.",
+SC3003.2.1,SC3003.2.1,The status of all ATS commands skipped over as a result of the Jump command shall be marked as SKIPPED and an event message shall be generated.,
+SC3003.2.2,SC3003.2.2,"If all of the commands in the ATS have been skipped, SC shall stop the ATS and issue an event message.",This may be an indication of an invalid Jump command.
+SC3003.3,SC3003.3,"If neither of the two ATS tables are currently executing, SC shall  reject the Jump command.",
+SC3003.4,SC3003.4,"If multiple commands exist that satisfy the JUMP condition, the commands shall be executed in ascending command number order (as they exist in the ATS table).","If multiple commands exist with the same time as specified in the JUMP command, execute the first command in the table at that time."
+SC3004,SC3004,"Upon receipt of an Enable Continuation Execution of ATS On Error Command, SC shall set the Continuation Execution of ATS On Error Flag to ENABLED.","Provides control on how serious a data integrity check failure is – in this case, continue to execute the ATS."
+SC3005,SC3005,"Upon receipt of a Disable Continuation Execution of ATS On Error Command, SC shall set the Continuation Execution of ATS On Error Flag to DISABLED.","Provides control on how serious a data integrity check failure is – in this case, terminate the current ATS."
+SC4000,SC4000,"Upon receipt of a Start RTS Command, SC shall execute the command-specified RTS, or range of RTS, provided all of the following conditions are met:
+a) The command-specified RTS, or range of RTS, is not currently executing
+b) The RTS, or range of RTS, table(s) is Enabled 
+c) The RTS, or range of RTS, table(s) has been Loaded",Method for starting an RTS.
+SC4000.1,SC4000.1,"If the conditions are met, SC shall issue an event message indicating the RTS started if the RTS number is less than <PLATFORM_DEFINED> RTS number.","Provides the ground an indication that an RTS started.
+Having a config parameter allows a range of RTSs to be specified such that no event message is sent."
+SC4000.2,SC4000.2,"If the conditions are not met, SC shall reject the command and send an event message.",Ground needs to know if an RTS was not executed.
+SC4001,SC4001,"SC shall dispatch commands within the RTS table, in position order, as the relative time-tag specified in the RTS command expires.",RTS contain relative times between commands.
+SC4001.1,SC4001.1,The time-tag shall be interpreted as the number of seconds to delay relative to the previous RTS command dispatched from that RTS table.,
+SC4001.2,SC4001.2,"For the first command in an RTS table, the delay time shall be relative to the receipt of the RTS Start Command.",Provides the ability to delay the executing of the first command.
+SC4001.3,SC4001.3,"Prior to the dispatch of each individual RTS command, SC shall verify the validity of the following command parameters:
+a)       RTS command length
+b)       Embedded command Data Integrity Check Value",Basic verification that the RTS is not corrupt.
+SC4001.3.1,SC4001.3.1,"In the event an RTS command fails the validation checks,  SC shall:
+a) Discard the invalid RTS command
+b) Generate an event message 
+c)  ABORT the execution of that specific RTS",
+SC4001.4,SC4001.4,"Upon completion of the execution of the RTS, SC shall send an event message indicating that the RTS completed.",Gives the ground indication that all of the commands in an RTS executed.
+SC4002,SC4002,"SC shall terminate the execution of an RTS table upon detection of:
+a)       A Stop RTS Command within the RTS command table
+b)       Null data
+c)       The physical end of the RTS table",Note that there is a separate requirement for stopping an RTS via a command.
+SC4003,SC4003,"Upon receipt of a Stop RTS Command, SC shall terminate the execution of the command-specified RTS table, or range of RTS table.",
+SC4004,SC4004,"Upon receipt of an Enable RTS Command, SC shall set the status of the command-specified RTS to Enabled.",
+SC4005,SC4005,"Upon receipt of an Disable RTS Command, SC shall set the status of the command-specified RTS to Disabled.",
+SC4005.1,SC4005.1,"If the RTS is currently executing when the Disable RTS Command is received, the current execution of this RTS table shall:
+a)       Be executed until completion
+b)       Set to RTS state to Disabled, preventing it from future execution",Executes the current RTS to completion and then allows an RTS to be disabled thus preventing a Start RTS to execute the RTS (must be enabled first).
+SC8000,SC8000,"SC shall generate a housekeeping message containing the following:
+a)       Valid  Command Counter
+b)       Command Rejected Counter
+c)       Total count of commands dispatched from ATSs
+d)       Total count of commands dispatched from RTSs
+e)       Total count of commands which failed dispatch from ATSs
+f)        Total count of commands which failed dispatch from RTSs
+g)       ATS Table #1 free byte count h)       ATS Table #2 free byte count
+i)        Absolute Time Command Processing State
+j)        Identifier of the active ATS table  
+k)       Number of the next ATS command pending execution
+l)        ATS switch pending flag
+m)      Time the next ATS command is due to be dispatched
+n)       The identifier of the ATS table for which the most recent ATS command failed to dispatch
+o)       The identifier of most recent ATS command which failed to dispatch from the ATS tables
+p)       RTS table activation count
+q)       RTS table activation error count
+r)        Number of active RTSs
+s)       Identifier of the next RTS table to dispatch a command
+t)        Time the next RTS command is due to be dispatched
+u)       Execution status for each RTS table
+v)       Enable status for each RTS table
+w)      Identifier of the RTS table for which the most recent RTS command dispatch error occurred
+x)       The word offset within the RTS for the most recent RTS command which failed to dispatch 
+y)       ATS Continue-On-Failure status
+z)       The last append ApId
+aa)      The last ATS Append Table command count
+bb)      The last appended count",Housekeeping telemetry to indicate basic SC status.
+SC9000,SC9000,"Upon a power-on or processor reset SC shall initialize the following Housekeeping data to Zero (or value specified):
+a)       Valid Command Counter
+b)       Command Rejected Counter
+c)       Total count of commands dispatched from ATSs
+d)       Total count of commands dispatched from RTSs
+e)       Total count of commands which failed dispatch from ATSs
+f)        Total count of commands which failed dispatch from RTSs
+g)       ATS Table #1 free byte count
+h)       ATS Table #2 free byte count
+i)         Absolute Time Command Processing State - DISABLED
+j)         Identifier of the active ATS table  - None
+k)       Number of the next ATS command pending execution
+l)          ATS switch pending flag
+m)      Time of the next ATS command dispatch
+n)       The identifier of the ATS table for which the most recent ATS command failed to dispatch
+o)       The identifier of most recent ATS command which failed to dispatch from the ATS tables
+p)       RTS table activation count
+q)       RTS table activation error count
+r)        Number of active RTSs
+s)       Identifier of the next RTS table to dispatch a command
+t)        Time the next RTS command is due to be dispatched
+u)       Execution status for each RTS table - IDLE
+v)       Status for each RTS table - DISABLED
+w)      Identifier of the RTS table for which the most recent RTS command dispatch error occurred
+x)        The word offset within the RTS for the most recent RTS command which failed to dispatch 
+y)       ATS Continue-On-Failure status <PLATFORM_DEFINED>
+z)       The last append ApId
+aa)      The last ATS Append Table command count
+bb)      The last appended count",Need to initialize values to a default state on cFE Power-on reset.
+SC9004,SC9004,"Upon a power-on reset, SC shall start RTS #1.","Want to reserve an RTS such that commands or a series of commands can be executed on startup. RTS #1 is reserved for initialization commands that can be easily changed, rather than inline, hardcoding of the startup procedures."
+SC9005,SC9005,"Upon a processor reset, SC shall start RTS #2.","Want to reserve an RTS such that commands or a series of commands can be executed on startup. RTS #1 is reserved for initialization commands that can be easily changed, rather than inline, hardcoding of the startup procedures."

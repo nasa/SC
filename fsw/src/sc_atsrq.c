@@ -1,25 +1,28 @@
-/*************************************************************************
-** File: sc_atsrq.c 
-**
-**  Copyright � 2007-2014 United States Government as represented by the
-**  Administrator of the National Aeronautics and Space Administration.
-**  All Other Rights Reserved.
-**
-**  This software was created at NASA's Goddard Space Flight Center.
-**  This software is governed by the NASA Open Source Agreement and may be
-**  used, distributed and modified only pursuant to the terms of that
-**  agreement.
-**
-** Purpose:
-**     This file contains functions to handle all of the ATS
-**     executive requests and internal reuqests to control
-**     the ATP and ATSs.
-**
-** References:
-**   Flight Software Branch C Coding Standard Version 1.2
-**   CFS Development Standards Document
-**
-*************************************************************************/
+/************************************************************************
+ * NASA Docket No. GSC-18,924-1, and identified as “Core Flight
+ * System (cFS) Stored Command Application version 3.1.0”
+ *
+ * Copyright (c) 2021 United States Government as represented by the
+ * Administrator of the National Aeronautics and Space Administration.
+ * All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may
+ * not use this file except in compliance with the License. You may obtain
+ * a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ************************************************************************/
+
+/**
+ * @file
+ *     This file contains functions to handle all of the ATS
+ *     executive requests and internal reuqests to control
+ *     the ATP and ATSs.
+ */
 
 /**************************************************************************
  **
@@ -46,19 +49,19 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 void SC_StartAtsCmd(const CFE_SB_Buffer_t *BufPtr)
 {
-    uint16         AtsId;              /* ATS ID */
-    uint16         AtsIndex;           /* ATS array index */
+    uint16 AtsId;    /* ATS ID */
+    uint16 AtsIndex; /* ATS array index */
 
     if (SC_VerifyCmdLength(&BufPtr->Msg, sizeof(SC_StartAtsCmd_t)))
-    {        
-        AtsId = ((SC_StartAtsCmd_t*)BufPtr)->AtsId;
-        
+    {
+        AtsId = ((SC_StartAtsCmd_t *)BufPtr)->AtsId;
+
         /* validate ATS ID */
         if ((AtsId > 0) && (AtsId <= SC_NUMBER_OF_ATS))
         {
-            /* convert ATS ID to array index */ 
+            /* convert ATS ID to array index */
             AtsIndex = SC_ATS_ID_TO_INDEX(AtsId);
-            
+
             /* make sure that there is no ATS running on the ATP */
             if (SC_OperData.AtsCtrlBlckAddr->AtpState == SC_IDLE)
             {
@@ -109,12 +112,10 @@ void SC_StartAtsCmd(const CFE_SB_Buffer_t *BufPtr)
         }
         else
         { /* the specified ATS id is not valid */
-            
-            CFE_EVS_SendEvent(SC_STARTATS_CMD_INVLD_ID_ERR_EID,
-                              CFE_EVS_EventType_ERROR,
-                              "Start ATS %d Rejected: Invalid ATS ID",
-                              AtsId);
-            
+
+            CFE_EVS_SendEvent(SC_STARTATS_CMD_INVLD_ID_ERR_EID, CFE_EVS_EventType_ERROR,
+                              "Start ATS %d Rejected: Invalid ATS ID", AtsId);
+
             /* increment the command request error counter */
             SC_OperData.HkPacket.CmdErrCtr++;
 
@@ -179,26 +180,25 @@ void SC_StopAtsCmd(const CFE_SB_Buffer_t *BufPtr)
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 bool SC_BeginAts(uint16 AtsIndex, uint16 TimeOffset)
 {
-    SC_AtsEntryHeader_t   *Entry;         /* ATS table entry pointer */
-    int32                  EntryIndex;    /* ATS entry location in table */
-    SC_AbsTimeTag_t        ListCmdTime;   /* list entry execution time */
-    int32                  TimeIndex;     /* the current time buffer index */
-    int32                  CmdIndex;      /* ATS command index (cmd num - 1) */
-    bool                   ReturnCode;
-    SC_AbsTimeTag_t        TimeToStartAts;    /* the REAL time to start the ATS */
-    uint16                 CmdsSkipped = 0;
+    SC_AtsEntryHeader_t *Entry;       /* ATS table entry pointer */
+    int32                EntryIndex;  /* ATS entry location in table */
+    SC_AbsTimeTag_t      ListCmdTime; /* list entry execution time */
+    int32                TimeIndex;   /* the current time buffer index */
+    int32                CmdIndex;    /* ATS command index (cmd num - 1) */
+    bool                 ReturnCode;
+    SC_AbsTimeTag_t      TimeToStartAts; /* the REAL time to start the ATS */
+    uint16               CmdsSkipped = 0;
 
     /* validate ATS array index */
     if (AtsIndex >= SC_NUMBER_OF_ATS)
     {
-        CFE_EVS_SendEvent(SC_BEGINATS_INVLD_INDEX_ERR_EID,
-                          CFE_EVS_EventType_ERROR,
-                         "Begin ATS error: invalid ATS index %d", AtsIndex);
+        CFE_EVS_SendEvent(SC_BEGINATS_INVLD_INDEX_ERR_EID, CFE_EVS_EventType_ERROR,
+                          "Begin ATS error: invalid ATS index %d", AtsIndex);
         return false;
     }
-    
-    TimeToStartAts = SC_ComputeAbsTime (TimeOffset);
-    
+
+    TimeToStartAts = SC_ComputeAbsTime(TimeOffset);
+
     /*
      ** Loop through the commands until a time tag is found that
      ** has a time greater than or equal to the current time OR
@@ -213,7 +213,7 @@ bool SC_BeginAts(uint16 AtsIndex, uint16 TimeOffset)
         /* then get the entry index from the cmd index table */
         EntryIndex = SC_AppData.AtsCmdIndexBuffer[AtsIndex][CmdIndex];
         /* then get a pointer to the ATS entry data */
-        Entry = &((SC_AtsEntryHeaderBuf_t *)&SC_OperData.AtsTblAddr[AtsIndex][EntryIndex])->Header;
+        Entry = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[AtsIndex][EntryIndex];
         /* then get cmd execution time from the ATS entry */
         ListCmdTime = SC_GetAtsEntryTime(Entry);
 
@@ -540,7 +540,7 @@ void SC_JumpAtsCmd(const CFE_SB_Buffer_t *BufPtr)
                 /* then get the entry index from the cmd index table */
                 EntryIndex = SC_AppData.AtsCmdIndexBuffer[AtsIndex][CmdIndex];
                 /* then get a pointer to the ATS entry data */
-                Entry = &((SC_AtsEntryHeaderBuf_t *)&SC_OperData.AtsTblAddr[AtsIndex][EntryIndex])->Header;
+                Entry = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[AtsIndex][EntryIndex];
                 /* then get cmd execution time from the ATS entry */
                 ListCmdTime = SC_GetAtsEntryTime(Entry);
 
@@ -673,20 +673,20 @@ void SC_AppendAtsCmd(const CFE_SB_Buffer_t *BufPtr)
 
     if (SC_VerifyCmdLength(&BufPtr->Msg, sizeof(SC_AppendAtsCmd_t)))
     {
-        if((AppendCmd->AtsId == 0) || (AppendCmd->AtsId > SC_NUMBER_OF_ATS))
+        if ((AppendCmd->AtsId == 0) || (AppendCmd->AtsId > SC_NUMBER_OF_ATS))
         {
             /* invalid target ATS selection */
             SC_OperData.HkPacket.CmdErrCtr++;
 
             CFE_EVS_SendEvent(SC_APPEND_CMD_ARG_ERR_EID, CFE_EVS_EventType_ERROR,
-                             "Append ATS error: invalid ATS ID = %d", AppendCmd->AtsId);
-            
+                              "Append ATS error: invalid ATS ID = %d", AppendCmd->AtsId);
+
             return;
         }
-        
+
         /* create base zero array index from base one ID value */
-        AtsIndex = SC_ATS_ID_TO_INDEX(AppendCmd->AtsId);            
-        
+        AtsIndex = SC_ATS_ID_TO_INDEX(AppendCmd->AtsId);
+
         if (SC_OperData.AtsInfoTblAddr[AtsIndex].NumberOfCommands == 0)
         {
             /* target ATS table is empty */

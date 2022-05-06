@@ -1,23 +1,26 @@
-/*************************************************************************
-** File: sc_utils.c 
-**
-**  Copyright � 2007-2014 United States Government as represented by the
-**  Administrator of the National Aeronautics and Space Administration.
-**  All Other Rights Reserved.
-**
-**  This software was created at NASA's Goddard Space Flight Center.
-**  This software is governed by the NASA Open Source Agreement and may be
-**  used, distributed and modified only pursuant to the terms of that
-**  agreement.
-**
-** Purpose:
-**   This file contains the utilty functions for Stored Command
-**
-** References:
-**   Flight Software Branch C Coding Standard Version 1.2
-**   CFS Development Standards Document
-**
-*************************************************************************/
+/************************************************************************
+ * NASA Docket No. GSC-18,924-1, and identified as “Core Flight
+ * System (cFS) Stored Command Application version 3.1.0”
+ *
+ * Copyright (c) 2021 United States Government as represented by the
+ * Administrator of the National Aeronautics and Space Administration.
+ * All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may
+ * not use this file except in compliance with the License. You may obtain
+ * a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ************************************************************************/
+
+/**
+ * @file
+ *   This file contains the utilty functions for Stored Command
+ */
 
 /**************************************************************************
  **
@@ -87,7 +90,7 @@ SC_AbsTimeTag_t SC_GetAtsEntryTime(SC_AtsEntryHeader_t *Entry)
 /* Compute Absolute time from relative time                       */
 /*                                                                 */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-SC_AbsTimeTag_t SC_ComputeAbsTime(uint16 RelTime)
+SC_AbsTimeTag_t SC_ComputeAbsTime(SC_RelTimeTag_t RelTime)
 {
     CFE_TIME_SysTime_t AbsoluteTimeWSubs;
     CFE_TIME_SysTime_t RelTimeWSubs;
@@ -164,10 +167,11 @@ bool SC_VerifyCmdLength(const CFE_MSG_Message_t *Msg, size_t ExpectedLength)
         CFE_MSG_GetFcnCode(Msg, &CommandCode);
 
         CFE_EVS_SendEvent(SC_LEN_ERR_EID, CFE_EVS_EventType_ERROR,
-                          "Invalid msg length: ID = 0x%08X, CC = %d, Len = %d, Expected = %d", MessageID, CommandCode,
-                          (int)ActualLength, (int)ExpectedLength);
+                          "Invalid msg length: ID = 0x%08lX, CC = %d, Len = %d, Expected = %d",
+                          (unsigned long)CFE_SB_MsgIdToValue(MessageID), CommandCode, (int)ActualLength,
+                          (int)ExpectedLength);
         Result = false;
-        if (MessageID == SC_CMD_MID)
+        if (CFE_SB_MsgIdToValue(MessageID) == SC_CMD_MID)
         {
             SC_OperData.HkPacket.CmdErrCtr++;
         }

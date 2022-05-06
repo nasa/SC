@@ -1,25 +1,28 @@
-/*************************************************************************
-** File: sc_state.c
-**
-**  Copyright � 2007-2014 United States Government as represented by the
-**  Administrator of the National Aeronautics and Space Administration.
-**  All Other Rights Reserved.
-**
-**  This software was created at NASA's Goddard Space Flight Center.
-**  This software is governed by the NASA Open Source Agreement and may be
-**  used, distributed and modified only pursuant to the terms of that
-**  agreement.
-**
-** Purpose:
-**   This file contains functions to handle getting the next time of
-**   commands for the ATP and RTP  as well as updating the time for
-**   Stored Command.
-**
-** References:
-**   Flight Software Branch C Coding Standard Version 1.2
-**   CFS Development Standards Document
-**
-*************************************************************************/
+/************************************************************************
+ * NASA Docket No. GSC-18,924-1, and identified as “Core Flight
+ * System (cFS) Stored Command Application version 3.1.0”
+ *
+ * Copyright (c) 2021 United States Government as represented by the
+ * Administrator of the National Aeronautics and Space Administration.
+ * All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may
+ * not use this file except in compliance with the License. You may obtain
+ * a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ************************************************************************/
+
+/**
+ * @file
+ *   This file contains functions to handle getting the next time of
+ *   commands for the ATP and RTP  as well as updating the time for
+ *   Stored Command.
+ */
 
 /**************************************************************************
  **
@@ -143,14 +146,10 @@ void SC_UpdateNextTime(void)
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 void SC_GetNextRtsCommand(void)
 {
-    uint16                  RtsIndex;
-    uint16                  CmdOffset;
-    CFE_MSG_Message_t *     CmdPtr;
-    SC_RtsEntryHeaderBuf_t *RtsEntryPtr;
-    CFE_MSG_Size_t          CmdLength = 0;
-    uint32                  TempBuf[SC_RTS_HDR_32BIT_WORDS];
-
-    memset(TempBuf, 0, SC_RTS_HDR_32BIT_WORDS * sizeof(uint32));
+    uint16         RtsIndex;
+    uint16         CmdOffset;
+    SC_RtsEntry_t *EntryPtr;
+    CFE_MSG_Size_t CmdLength = 0;
 
     /*
      ** Make sure that the RTP is executing some RTS
@@ -169,12 +168,9 @@ void SC_GetNextRtsCommand(void)
              ** Get the information needed to find the next command
              */
             CmdOffset = SC_OperData.RtsInfoTblAddr[RtsIndex].NextCommandPtr;
-            memcpy(TempBuf, &(SC_OperData.RtsTblAddr[RtsIndex][CmdOffset]), (SC_RTS_HDR_WORDS * SC_BYTES_IN_WORD));
-            RtsEntryPtr = (SC_RtsEntryHeaderBuf_t *)TempBuf;
+            EntryPtr  = (SC_RtsEntry_t *)&SC_OperData.RtsTblAddr[RtsIndex][CmdOffset];
 
-            CmdPtr = (CFE_MSG_Message_t *)((uint8_t *)&RtsEntryPtr->Header + SC_RTS_HEADER_SIZE);
-
-            CFE_MSG_GetSize(CmdPtr, &CmdLength);
+            CFE_MSG_GetSize(&EntryPtr->Msg, &CmdLength);
             CmdLength += SC_RTS_HEADER_SIZE;
 
             /*
@@ -195,19 +191,14 @@ void SC_GetNextRtsCommand(void)
             if (CmdOffset <= (SC_RTS_BUFF_SIZE32 - SC_RTS_HDR_WORDS))
             {
                 /*
-                 ** Get a pointer to the next RTS command
+                 ** Get the next RTS command
                  */
-                memset(TempBuf, 0, SC_RTS_HDR_32BIT_WORDS * sizeof(uint32));
-
-                memcpy(TempBuf, &(SC_OperData.RtsTblAddr[RtsIndex][CmdOffset]), (SC_RTS_HDR_WORDS * SC_BYTES_IN_WORD));
-                RtsEntryPtr = (SC_RtsEntryHeaderBuf_t *)TempBuf;
-
-                CmdPtr = (CFE_MSG_Message_t *)((uint8_t *)&RtsEntryPtr->Header + SC_RTS_HEADER_SIZE);
+                EntryPtr = (SC_RtsEntry_t *)&SC_OperData.RtsTblAddr[RtsIndex][CmdOffset];
 
                 /*
                  ** get the length of the new command
                  */
-                CFE_MSG_GetSize(CmdPtr, &CmdLength);
+                CFE_MSG_GetSize(&EntryPtr->Msg, &CmdLength);
                 CmdLength += SC_RTS_HEADER_SIZE;
 
                 /*
@@ -235,7 +226,7 @@ void SC_GetNextRtsCommand(void)
                              ** Update the proper next command time for that RTS
                              */
                             SC_OperData.RtsInfoTblAddr[RtsIndex].NextCommandTime =
-                                SC_ComputeAbsTime(RtsEntryPtr->Header.TimeTag);
+                                SC_ComputeAbsTime(EntryPtr->Header.TimeTag);
 
                             /*
                              ** Update the appropriate RTS info table current command pointer
@@ -323,10 +314,10 @@ void SC_GetNextRtsCommand(void)
 void SC_GetNextAtsCommand(void)
 {
 
-    uint16                  AtsIndex;  /* ats array index */
-    uint16                  TimeIndex; /* a time index pointer */
-    uint16                  CmdIndex;  /* ats command array index */
-    SC_AtsEntryHeaderBuf_t *EntryBuf;
+    uint16         AtsIndex;  /* ats array index */
+    uint16         TimeIndex; /* a time index pointer */
+    uint16         CmdIndex;  /* ats command array index */
+    SC_AtsEntry_t *EntryPtr;
 
     if (SC_OperData.AtsCtrlBlckAddr->AtpState == SC_EXECUTING)
     {
@@ -348,9 +339,10 @@ void SC_GetNextAtsCommand(void)
             SC_OperData.AtsCtrlBlckAddr->CmdNumber    = SC_AppData.AtsTimeIndexBuffer[AtsIndex][TimeIndex];
 
             /* update the next command time */
-            CmdIndex = SC_AppData.AtsCmdIndexBuffer[AtsIndex][SC_OperData.AtsCtrlBlckAddr->CmdNumber];
-            EntryBuf = (SC_AtsEntryHeaderBuf_t *)&SC_OperData.AtsTblAddr[AtsIndex][CmdIndex];
-            SC_AppData.NextCmdTime[SC_ATP] = SC_GetAtsEntryTime(&EntryBuf->Header);
+            CmdIndex =
+                SC_AppData.AtsCmdIndexBuffer[AtsIndex][SC_ATS_CMD_NUM_TO_INDEX(SC_OperData.AtsCtrlBlckAddr->CmdNumber)];
+            EntryPtr                       = (SC_AtsEntry_t *)&SC_OperData.AtsTblAddr[AtsIndex][CmdIndex];
+            SC_AppData.NextCmdTime[SC_ATP] = SC_GetAtsEntryTime(&EntryPtr->Header);
         }
         else
         { /* the end is near... of the ATS buffer that is */

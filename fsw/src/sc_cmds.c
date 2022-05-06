@@ -1,24 +1,27 @@
-/*************************************************************************
-** File: sc_cmds.c 
-**
-**  Copyright � 2007-2015 United States Government as represented by the
-**  Administrator of the National Aeronautics and Space Administration.
-**  All Other Rights Reserved.
-**
-**  This software was created at NASA's Goddard Space Flight Center.
-**  This software is governed by the NASA Open Source Agreement and may be
-**  used, distributed and modified only pursuant to the terms of that
-**  agreement.
-**
-** Purpose:
-**   This file contains the functions to handle processing of ground
-**   command requests, housekeeping requests, and table updates
-**
-** References:
-**   Flight Software Branch C Coding Standard Version 1.2
-**   CFS Development Standards Document
-**
-*************************************************************************/
+/************************************************************************
+ * NASA Docket No. GSC-18,924-1, and identified as “Core Flight
+ * System (cFS) Stored Command Application version 3.1.0”
+ *
+ * Copyright (c) 2021 United States Government as represented by the
+ * Administrator of the National Aeronautics and Space Administration.
+ * All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may
+ * not use this file except in compliance with the License. You may obtain
+ * a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ************************************************************************/
+
+/**
+ * @file
+ *   This file contains the functions to handle processing of ground
+ *   command requests, housekeeping requests, and table updates
+ */
 
 /**************************************************************************
  **
@@ -53,18 +56,16 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 void SC_ProcessAtpCmd(void)
 {
-    CFE_MSG_Message_t *     BufPtr;     /* ATS command pointer */
-    SC_AtsEntryHeader_t *   Entry;      /* ATS entry pointer */
-    int32                   EntryIndex; /* ATS entry location in table */
-    uint8                   AtsIndex;   /* ATS selection index */
-    uint32                  CmdIndex;   /* ATS command index */
-    char                    TempAtsChar = ' ';
-    int32                   Result;
-    bool                    AbortATS = false;
-    SC_AtsEntryHeaderBuf_t *EntryPtr;
-    CFE_SB_MsgId_t          MessageID     = CFE_SB_INVALID_MSG_ID;
-    CFE_MSG_FcnCode_t       CommandCode   = 0;
-    bool                    ChecksumValid = 0;
+    int32             EntryIndex; /* ATS entry location in table */
+    uint8             AtsIndex;   /* ATS selection index */
+    uint32            CmdIndex;   /* ATS command index */
+    char              TempAtsChar = ' ';
+    int32             Result;
+    bool              AbortATS = false;
+    SC_AtsEntry_t *   EntryPtr;
+    CFE_SB_MsgId_t    MessageID     = CFE_SB_INVALID_MSG_ID;
+    CFE_MSG_FcnCode_t CommandCode   = 0;
+    bool              ChecksumValid = 0;
 
     /*
      ** The following conditions must be met before the ATS command will be
@@ -83,9 +84,7 @@ void SC_ProcessAtpCmd(void)
         AtsIndex   = SC_ATS_NUM_TO_INDEX(SC_OperData.AtsCtrlBlckAddr->AtsNumber); /* remember 0..1 */
         CmdIndex   = SC_ATS_CMD_NUM_TO_INDEX(SC_OperData.AtsCtrlBlckAddr->CmdNumber);
         EntryIndex = SC_AppData.AtsCmdIndexBuffer[AtsIndex][CmdIndex];
-        EntryPtr   = (SC_AtsEntryHeaderBuf_t *)&SC_OperData.AtsTblAddr[AtsIndex][EntryIndex];
-        Entry      = &EntryPtr->Header;
-        BufPtr     = (CFE_MSG_Message_t *)((uint8_t *)Entry + SC_ATS_HEADER_SIZE);
+        EntryPtr   = (SC_AtsEntry_t *)&SC_OperData.AtsTblAddr[AtsIndex][EntryIndex];
 
         /*
          ** Make sure the command has not been executed, skipped or has any other bad status
@@ -96,13 +95,13 @@ void SC_ProcessAtpCmd(void)
              ** Make sure the command number matches what the command
              ** number is supposed to be
              */
-            if (Entry->CmdNumber == (SC_ATS_CMD_INDEX_TO_NUM(CmdIndex)))
+            if (EntryPtr->Header.CmdNumber == (SC_ATS_CMD_INDEX_TO_NUM(CmdIndex)))
             {
                 /*
                  ** Check the checksum on the command
                  **
                  */
-                CFE_MSG_ValidateChecksum(BufPtr, &ChecksumValid);
+                CFE_MSG_ValidateChecksum(&EntryPtr->Msg, &ChecksumValid);
                 if (ChecksumValid == true)
                 {
                     /*
@@ -123,10 +122,10 @@ void SC_ProcessAtpCmd(void)
                      **  SC immediately executes the switch command.
                      */
 
-                    CFE_MSG_GetMsgId(BufPtr, &MessageID);
-                    CFE_MSG_GetFcnCode(BufPtr, &CommandCode);
+                    CFE_MSG_GetMsgId(&EntryPtr->Msg, &MessageID);
+                    CFE_MSG_GetFcnCode(&EntryPtr->Msg, &CommandCode);
 
-                    if (MessageID == SC_CMD_MID && CommandCode == SC_SWITCH_ATS_CC)
+                    if (CFE_SB_MsgIdToValue(MessageID) == SC_CMD_MID && CommandCode == SC_SWITCH_ATS_CC)
                     {
                         /*
                          ** call the ground switch module
@@ -152,7 +151,7 @@ void SC_ProcessAtpCmd(void)
                     }
                     else
                     {
-                        Result = CFE_SB_TransmitMsg(BufPtr, true);
+                        Result = CFE_SB_TransmitMsg(&EntryPtr->Msg, true);
 
                         if (Result == CFE_SUCCESS)
                         {
@@ -169,7 +168,7 @@ void SC_ProcessAtpCmd(void)
 
                             CFE_EVS_SendEvent(SC_ATS_DIST_ERR_EID, CFE_EVS_EventType_ERROR,
                                               "ATS Command Distribution Failed, Cmd Number: %d, SB returned: 0x%08X",
-                                              Entry->CmdNumber, (unsigned int)Result);
+                                              EntryPtr->Header.CmdNumber, (unsigned int)Result);
 
                             if (SC_OperData.AtsCtrlBlckAddr->AtsNumber == SC_ATSA)
                                 TempAtsChar = 'A';
@@ -187,7 +186,7 @@ void SC_ProcessAtpCmd(void)
                      ** Send an event message to report the invalid command status
                      */
                     CFE_EVS_SendEvent(SC_ATS_CHKSUM_ERR_EID, CFE_EVS_EventType_ERROR,
-                                      "ATS Command Failed Checksum: Command #%d Skipped", Entry->CmdNumber);
+                                      "ATS Command Failed Checksum: Command #%d Skipped", EntryPtr->Header.CmdNumber);
                     /*
                      ** Increment the ATS error counter
                      */
@@ -225,7 +224,7 @@ void SC_ProcessAtpCmd(void)
 
                 CFE_EVS_SendEvent(SC_ATS_MSMTCH_ERR_EID, CFE_EVS_EventType_ERROR,
                                   "ATS Command Number Mismatch: Command Skipped, expected: %d received: %d",
-                                  (int)SC_ATS_CMD_INDEX_TO_NUM(CmdIndex), Entry->CmdNumber);
+                                  (int)SC_ATS_CMD_INDEX_TO_NUM(CmdIndex), EntryPtr->Header.CmdNumber);
                 /*
                  ** Increment the ATS error counter
                  */
@@ -304,13 +303,11 @@ void SC_ProcessAtpCmd(void)
 void SC_ProcessRtpCommand(void)
 {
 
-    CFE_MSG_Message_t *     BufPtr;      /* a pointer to an RTS entry command */
-    SC_RtsEntryHeaderBuf_t *RtsEntryPtr; /* a pointer to an RTS entry header */
-    uint16                  RtsIndex;    /* the RTS index for the cmd */
-    uint16                  CmdOffset;   /* the location of the cmd    */
-    uint32                  Result;
-    uint32 *                Buf32;
-    bool                    ChecksumValid = false;
+    SC_RtsEntry_t *EntryPtr;  /* a pointer to an RTS entry header */
+    uint16         RtsIndex;  /* the RTS index for the cmd */
+    uint16         CmdOffset; /* the location of the cmd    */
+    uint32         Result;
+    bool           ChecksumValid = false;
 
     /*
      ** The following conditions must be met before a RTS command is executed:
@@ -343,18 +340,16 @@ void SC_ProcessRtpCommand(void)
         /*
          ** Get a pointer to the RTS entry using the RTS number and the offset
          */
-        Buf32       = &SC_OperData.RtsTblAddr[RtsIndex][CmdOffset];
-        RtsEntryPtr = (SC_RtsEntryHeaderBuf_t *)Buf32;
+        EntryPtr = (SC_RtsEntry_t *)&SC_OperData.RtsTblAddr[RtsIndex][CmdOffset];
 
-        BufPtr = (CFE_MSG_Message_t *)((uint8_t *)RtsEntryPtr + SC_RTS_HEADER_SIZE);
-        CFE_MSG_ValidateChecksum(BufPtr, &ChecksumValid);
+        CFE_MSG_ValidateChecksum(&EntryPtr->Msg, &ChecksumValid);
         if (ChecksumValid == true)
         {
             /*
              ** Try Sending the command on the Software Bus
              */
 
-            Result = CFE_SB_TransmitMsg(BufPtr, true);
+            Result = CFE_SB_TransmitMsg(&EntryPtr->Msg, true);
 
             if (Result == CFE_SUCCESS)
             {
@@ -544,7 +539,7 @@ void SC_ProcessRequest(const CFE_SB_Buffer_t *BufPtr)
      */
     SC_GetCurrentTime();
 
-    switch (MessageID)
+    switch (CFE_SB_MsgIdToValue(MessageID))
     {
         case SC_CMD_MID:
             /* request from the ground */
@@ -626,8 +621,8 @@ void SC_ProcessRequest(const CFE_SB_Buffer_t *BufPtr)
             break;
 
         default:
-            CFE_EVS_SendEvent(SC_MID_ERR_EID, CFE_EVS_EventType_ERROR, "Invalid command pipe message ID: 0x%08X",
-                              MessageID);
+            CFE_EVS_SendEvent(SC_MID_ERR_EID, CFE_EVS_EventType_ERROR, "Invalid command pipe message ID: 0x%08lX",
+                              (unsigned long)CFE_SB_MsgIdToValue(MessageID));
 
             SC_OperData.HkPacket.CmdErrCtr++;
             break;
@@ -722,7 +717,8 @@ void SC_ProcessCommand(const CFE_SB_Buffer_t *BufPtr)
 
         default:
             CFE_EVS_SendEvent(SC_INVLD_CMD_ERR_EID, CFE_EVS_EventType_ERROR,
-                              "Invalid Command Code: MID =  0x%08X CC =  %d", MessageID, CommandCode);
+                              "Invalid Command Code: MID =  0x%08lX CC =  %d",
+                              (unsigned long)CFE_SB_MsgIdToValue(MessageID), CommandCode);
             SC_OperData.HkPacket.CmdErrCtr++;
             break;
     } /* end switch */
@@ -769,11 +765,6 @@ void SC_TableManageCmd(const CFE_SB_Buffer_t *BufPtr)
         /* No need to release dump only table pointer */
         CFE_TBL_Manage(SC_OperData.AtsInfoHandle);
     }
-    else if (TableID == SC_TBL_ID_APP_INFO)
-    {
-        /* No need to release dump only table pointer */
-        CFE_TBL_Manage(SC_OperData.AppendInfoHandle);
-    }
     else if (TableID == SC_TBL_ID_ATP_CTRL)
     {
         /* No need to release dump only table pointer */
@@ -809,10 +800,8 @@ void SC_ManageRtsTable(int32 ArrayIndex)
     /* validate RTS array index */
     if (ArrayIndex >= SC_NUMBER_OF_RTS)
     {
-        CFE_EVS_SendEvent(SC_TABLE_MANAGE_RTS_INV_INDEX_ERR_EID,
-                          CFE_EVS_EventType_ERROR,
-                          "RTS table manage error: invalid RTS index %d", 
-                          ArrayIndex);
+        CFE_EVS_SendEvent(SC_TABLE_MANAGE_RTS_INV_INDEX_ERR_EID, CFE_EVS_EventType_ERROR,
+                          "RTS table manage error: invalid RTS index %d", ArrayIndex);
         return;
     }
 
@@ -854,8 +843,7 @@ void SC_ManageAtsTable(int32 ArrayIndex)
     /* validate ATS array index */
     if (ArrayIndex >= SC_NUMBER_OF_ATS)
     {
-        CFE_EVS_SendEvent(SC_TABLE_MANAGE_ATS_INV_INDEX_ERR_EID,
-                          CFE_EVS_EventType_ERROR,
+        CFE_EVS_SendEvent(SC_TABLE_MANAGE_ATS_INV_INDEX_ERR_EID, CFE_EVS_EventType_ERROR,
                           "ATS table manage error: invalid ATS index %d", ArrayIndex);
         return;
     }
