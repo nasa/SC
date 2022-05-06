@@ -1,36 +1,23 @@
- /*************************************************************************
- ** File:
- **   $Id: sc_utils.h 1.2 2015/10/08 15:21:10EDT sstrege Exp  $
- **
- **  Copyright © 2007-2014 United States Government as represented by the 
- **  Administrator of the National Aeronautics and Space Administration. 
- **  All Other Rights Reserved.  
- **
- **  This software was created at NASA's Goddard Space Flight Center.
- **  This software is governed by the NASA Open Source Agreement and may be 
- **  used, distributed and modified only pursuant to the terms of that 
- **  agreement.
- **
- ** Purpose: 
- **   This file contains the utilty functions for Stored Command
- **
- ** References:
- **   Flight Software Branch C Coding Standard Version 1.2
- **   CFS Development Standards Document
- ** Notes:
- **
- **   $Log: sc_utils.h  $
- **   Revision 1.2 2015/10/08 15:21:10EDT sstrege 
- **   Restoration from MKS 2009 Trunk
- **   Revision 1.5 2015/03/02 12:59:01EST sstrege 
- **   Added copyright information
- **   Revision 1.4 2010/09/28 10:32:30EDT lwalling 
- **   Update list of included header files
- **   Revision 1.3 2010/03/26 18:03:50EDT lwalling 
- **   Remove pad from ATS and RTS structures, change 32 bit ATS time to two 16 bit values
- **   Revision 1.2 2009/01/05 08:27:00EST nyanchik 
- **   Check in after code review changes
- *************************************************************************/
+/*************************************************************************
+** File: sc_utils.h 
+**
+**  Copyright © 2007-2014 United States Government as represented by the
+**  Administrator of the National Aeronautics and Space Administration.
+**  All Other Rights Reserved.
+**
+**  This software was created at NASA's Goddard Space Flight Center.
+**  This software is governed by the NASA Open Source Agreement and may be
+**  used, distributed and modified only pursuant to the terms of that
+**  agreement.
+**
+** Purpose:
+**   This file contains the utilty functions for Stored Command
+**
+** References:
+**   Flight Software Branch C Coding Standard Version 1.2
+**   CFS Development Standards Document
+**
+*************************************************************************/
 #ifndef _sc_utils_
 #define _sc_utils_
 
@@ -39,29 +26,47 @@
 
 /************************************************************************/
 /** \brief Gets the current time from CFE
- **  
+ **
  **  \par Description
  **       Queries the CFE TIME services and retieves the Current time
- **       
- **       
+ **
+ **
  **  \par Assumptions, External Events, and Notes:
  **        This routine stores the time in #SC_AppData
  **
  **
  *************************************************************************/
-void SC_GetCurrentTime (void);
+void SC_GetCurrentTime(void);
 
-SC_AbsTimeTag_t SC_GetAtsEntryTime (SC_AtsEntryHeader_t *Entry);
-
+/************************************************************************/
+/** \brief Gets the absolute time from an ATS entry
+ **
+ **  \par Description
+ **       This function returns the absolute time tag contained within
+ **       the ATS entry passed into the function
+ **
+ **
+ **  \par Assumptions, External Events, and Notes:
+ **        None
+ **
+ **  \param [in]        Entry         A #SC_AtsEntryHeader_t* pointer to
+ **                                   the ATS entry
+ **
+ **  \returns
+ **  \retstmt Returns the absolute time tag  \endcode
+ **  \endreturns
+ **
+ *************************************************************************/
+SC_AbsTimeTag_t SC_GetAtsEntryTime(SC_AtsEntryHeader_t *Entry);
 
 /************************************************************************/
 /** \brief Computes an absolute time from relative time
- **  
+ **
  **  \par Description
- **       This function computes an absolute time from 'now' and the 
+ **       This function computes an absolute time from 'now' and the
  **       relative time passed into the function
- **       
- **       
+ **
+ **
  **  \par Assumptions, External Events, and Notes:
  **        None
  **
@@ -72,16 +77,16 @@ SC_AbsTimeTag_t SC_GetAtsEntryTime (SC_AtsEntryHeader_t *Entry);
  **  \endreturns
  **
  *************************************************************************/
-SC_AbsTimeTag_t SC_ComputeAbsTime (uint16 RelTime);
+SC_AbsTimeTag_t SC_ComputeAbsTime(uint16 RelTime);
 
 /************************************************************************/
 /** \brief Compares absolute time
- **  
+ **
  **  \par Description
- **       
- **       This function compares two absolutes time. 
- **       
- **       
+ **
+ **       This function compares two absolutes time.
+ **
+ **
  **  \par Assumptions, External Events, and Notes:
  **        None
  **
@@ -90,17 +95,16 @@ SC_AbsTimeTag_t SC_ComputeAbsTime (uint16 RelTime);
  **  \param [in]    AbsTime2            The second time to compare
  **
  **  \returns
- **  \retstmt Returns TRUE  if AbsTime1 is greater than AbsTime2 \endcode
- **  \retstmt Returns FALSE  if AbsTime1 is less than AbsTime2 \endcode
+ **  \retstmt Returns true  if AbsTime1 is greater than AbsTime2 \endcode
+ **  \retstmt Returns false  if AbsTime1 is less than AbsTime2 \endcode
  **  \endreturns
  **
  *************************************************************************/
-
-boolean SC_CompareAbsTime (SC_AbsTimeTag_t AbsTime1, SC_AbsTimeTag_t AbsTime2);
+bool SC_CompareAbsTime(SC_AbsTimeTag_t AbsTime1, SC_AbsTimeTag_t AbsTime2);
 
 /************************************************************************/
 /** \brief Verify command message length
- **  
+ **
  **  \par Description
  **       This routine will check if the actual length of a software bus
  **       command message matches the expected length and send an
@@ -108,23 +112,44 @@ boolean SC_CompareAbsTime (SC_AbsTimeTag_t AbsTime1, SC_AbsTimeTag_t AbsTime2);
  **
  **  \par Assumptions, External Events, and Notes:
  **       None
- **       
- **  \param [in]   msg              A #CFE_SB_MsgPtr_t pointer that
- **                                 references the software bus message 
+ **
+ **  \param [in]   Msg              A #CFE_SB_Buffer_t* pointer that
+ **                                 references the software bus message
  **
  **  \param [in]   ExpectedLength   The expected length of the message
  **                                 based upon the command code
  **
  **  \returns
- **  \retstmt Returns TRUE if the length is as expected      \endcode
- **  \retstmt Returns FALSE if the length is not as expected \endcode
+ **  \retstmt Returns true if the length is as expected      \endcode
+ **  \retstmt Returns false if the length is not as expected \endcode
  **  \endreturns
  **
  **  \sa #SC_LEN_ERR_EID
  **
  *************************************************************************/
-boolean SC_VerifyCmdLength(CFE_SB_MsgPtr_t msg, 
-                           uint16          ExpectedLength);
+bool SC_VerifyCmdLength(const CFE_MSG_Message_t *Msg, size_t ExpectedLength);
+
+/************************************************************************/
+/** \brief Toggles the ATS index
+ **
+ **  \par Description
+ **       This function toggles the ATS index between 0 and 1.  This
+ **       function does not modify global data, but rather returns a
+ **       new ATS index that can be used and saved by the calling
+ **       function.
+ **
+ **  \par Assumptions, External Events, and Notes:
+ **       None
+ **
+ **  \returns
+ **  \retstmt Returns 0 if the current ATS index is 1   \endcode
+ **  \retstmt Returns 1 if the current ATS index is 0   \endcode
+ **  \endreturns
+ **
+ **  \sa #SC_LEN_ERR_EID
+ **
+ *************************************************************************/
+uint16 SC_ToggleAtsIndex(void);
 
 #endif /*_sc_utils_*/
 

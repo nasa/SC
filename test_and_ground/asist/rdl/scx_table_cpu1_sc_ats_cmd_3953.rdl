@@ -1,0 +1,42 @@
+!==============================================================================
+!
+!                Originator: W. Moleski
+!                Responsible SC:  
+!                Responsible CSE: 
+!                Rev:  Last Change: Jan 04 2012
+
+!
+!                    Telemetry Packet #3953  (dec)
+!                 =================================
+!
+!       Packet Application ID: 3953 (Hex '0F71')
+!       Packet Title:  SCX CPU1 SC ATS Command Status table
+!       Packet Length:  ?? Bytes (Including ?? Bytes Of Header)
+!	Collect             Frequency:         SEC
+!  
+!       REFERENCES:
+!
+!       NOTES:
+!
+!       HISTORY: 
+!  	2009/01/14 WFM	: Initial implementation
+!       2012/01/04 WFM  : Removed VARYING from Packet definition
+!	2012/01/04	: Created from template 'template_table_SC_ATS_CMD_TBL.rdl'
+!	with parameters spacecraft='SCX' and processor='CPU1'.
+!==============================================================================
+!
+#include "sc_platform_cfg.h"
+!
+!
+PACKET P0F71 APID=3953, DESC="SCX CPU1 SC ATS Command Status Table"
+!
+#include "cfe_file_header.rdl"
+#include "cfe_tbl_header.rdl" 
+!
+      UB SCX_CPU1_SC_ATSCMDStatus[SC_MAX_ATS_CMDS] DESC="The current status of each command",
+			DISCRETE,DRANGE=(0,1,2,3,4,5,6,7,8),
+			DLABEL=("Empty","Loaded","Idle","Executed","Skipped",
+				"Executing","Failed Checksum","Failed Distrib",
+				"Starting")
+!
+END
