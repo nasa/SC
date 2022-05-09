@@ -550,8 +550,8 @@ void SC_LoadDefaultTables(void)
     char      TableName[OS_MAX_PATH_LEN];
     osal_id_t FileDesc = OS_OBJECT_ID_UNDEFINED;
     int32     RtsIndex;
-    int32     RtsCount = 0;
-    int32     Status   = OS_SUCCESS;
+    int32     NotLoadedCount = 0;
+    int32     Status         = OS_SUCCESS;
 
     /*
     ** Currently, only RTS tables are loaded during initialization.
@@ -572,7 +572,7 @@ void SC_LoadDefaultTables(void)
             Status = CFE_TBL_Load(SC_OperData.RtsTblHandle[RtsIndex], CFE_TBL_SRC_FILE, TableName);
             if (Status != CFE_SUCCESS)
             {
-                RtsCount++;
+                NotLoadedCount++;
 
                 /* send an event for each failed load */
                 CFE_EVS_SendEvent(SC_RTS_LOAD_FAIL_DBG_EID, CFE_EVS_EventType_DEBUG,
@@ -581,7 +581,7 @@ void SC_LoadDefaultTables(void)
         }
         else
         {
-            RtsCount++;
+            NotLoadedCount++;
 
             /* send an event for each failed open */
             CFE_EVS_SendEvent(SC_RTS_OPEN_FAIL_DBG_EID, CFE_EVS_EventType_DEBUG,
@@ -589,9 +589,9 @@ void SC_LoadDefaultTables(void)
         }
     }
 
-    /* Display startup RTS load failure count */
+    /* Display startup RTS not loaded count */
     CFE_EVS_SendEvent(SC_RTS_LOAD_FAIL_COUNT_INFO_EID, CFE_EVS_EventType_INFORMATION,
-                      "RTS table file load failure count = %d", (int)RtsCount);
+                      "RTS table files not loaded at initialization = %d of %d", (int)NotLoadedCount, SC_NUMBER_OF_RTS);
 
     return;
 

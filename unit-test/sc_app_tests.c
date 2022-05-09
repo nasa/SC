@@ -591,14 +591,6 @@ void SC_AppInit_Test_InitTablesError(void)
 
 void SC_InitTables_Test_Nominal(void)
 {
-    uint32 ReturnValue;
-    int32  strCmpResult;
-    char   ExpectedEventString[2][CFE_MISSION_EVS_MAX_MESSAGE_LENGTH];
-
-    snprintf(ExpectedEventString[0], CFE_MISSION_EVS_MAX_MESSAGE_LENGTH, "RTS table file load failure count = %%d");
-
-    snprintf(ExpectedEventString[1], CFE_MISSION_EVS_MAX_MESSAGE_LENGTH, "SC Initialized. Version %%d.%%d.%%d.%%d");
-
     /* Prevents error messages in call to SC_GetLoadTablePointers */
     SC_APP_TEST_CFE_TBL_GetAddressHookCount = 0;
     UT_SetHookFunction(UT_KEY(CFE_TBL_GetAddress), CFE_TBL_GetAddressHookNominal, NULL);
@@ -608,32 +600,11 @@ void SC_InitTables_Test_Nominal(void)
     UT_SetHookFunction(UT_KEY(CFE_TBL_Register), CFE_TBL_RegisterHook1, NULL);
 
     /* Execute the function being tested */
-    ReturnValue = SC_AppInit();
-
-    /* Verify results */
-    UtAssert_True(ReturnValue == CFE_SUCCESS, "ReturnValue == CFE_SUCCESS");
+    UtAssert_INT32_EQ(SC_AppInit(), CFE_SUCCESS);
 
     UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_RTS_LOAD_FAIL_COUNT_INFO_EID);
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventType, CFE_EVS_EventType_INFORMATION);
-
-    strCmpResult =
-        strncmp(ExpectedEventString[0], context_CFE_EVS_SendEvent[0].Spec, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH);
-
-    UtAssert_True(strCmpResult == 0, "Event string matched expected result, '%s'", context_CFE_EVS_SendEvent[0].Spec);
-
     UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[1].EventID, SC_INIT_INF_EID);
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[1].EventType, CFE_EVS_EventType_INFORMATION);
-
-    strCmpResult =
-        strncmp(ExpectedEventString[1], context_CFE_EVS_SendEvent[1].Spec, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH);
-
-    UtAssert_True(strCmpResult == 0, "Event string matched expected result, '%s'", context_CFE_EVS_SendEvent[1].Spec);
-
-    call_count_CFE_EVS_SendEvent = UT_GetStubCount(UT_KEY(CFE_EVS_SendEvent));
-
-    UtAssert_True(call_count_CFE_EVS_SendEvent == 2, "CFE_EVS_SendEvent was called %u time(s), expected 2",
-                  call_count_CFE_EVS_SendEvent);
-
+    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 2);
 } /* end SC_InitTables_Test_Nominal */
 
 void SC_InitTables_Test_ErrorRegisterAllTables(void)
@@ -1332,17 +1303,6 @@ void SC_GetLoadTablePointers_Test_ErrorGetAddressLoadableRTS(void)
 
 void SC_LoadDefaultTables_Test(void)
 {
-    int32 strCmpResult;
-    char  ExpectedEventString[3][CFE_MISSION_EVS_MAX_MESSAGE_LENGTH];
-
-    snprintf(ExpectedEventString[0], CFE_MISSION_EVS_MAX_MESSAGE_LENGTH,
-             "RTS table %%d failed to load, returned: 0x%%08X");
-
-    snprintf(ExpectedEventString[1], CFE_MISSION_EVS_MAX_MESSAGE_LENGTH,
-             "RTS table %%d file open failed, returned: 0x%%08X");
-
-    snprintf(ExpectedEventString[2], CFE_MISSION_EVS_MAX_MESSAGE_LENGTH, "RTS table file load failure count = %%d");
-
     /* Set OS_open to return 1, in order to enter if-block "if (FileDesc >= 0)" */
     UT_SetDeferredRetcode(UT_KEY(OS_OpenCreate), 1, OS_SUCCESS);
 
@@ -1353,38 +1313,14 @@ void SC_LoadDefaultTables_Test(void)
     UT_SetDeferredRetcode(UT_KEY(OS_OpenCreate), 1, -1);
 
     /* Execute the function being tested */
-    SC_LoadDefaultTables();
+    UtAssert_VOIDCALL(SC_LoadDefaultTables());
 
     /* Verify results */
     UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_RTS_LOAD_FAIL_DBG_EID);
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventType, CFE_EVS_EventType_DEBUG);
-
-    strCmpResult =
-        strncmp(ExpectedEventString[0], context_CFE_EVS_SendEvent[0].Spec, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH);
-
-    UtAssert_True(strCmpResult == 0, "Event string matched expected result, '%s'", context_CFE_EVS_SendEvent[0].Spec);
-
     UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[1].EventID, SC_RTS_OPEN_FAIL_DBG_EID);
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[1].EventType, CFE_EVS_EventType_DEBUG);
-
-    strCmpResult =
-        strncmp(ExpectedEventString[1], context_CFE_EVS_SendEvent[1].Spec, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH);
-
-    UtAssert_True(strCmpResult == 0, "Event string matched expected result, '%s'", context_CFE_EVS_SendEvent[1].Spec);
-
     UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[2].EventID, SC_RTS_LOAD_FAIL_COUNT_INFO_EID);
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[2].EventType, CFE_EVS_EventType_INFORMATION);
 
-    strCmpResult =
-        strncmp(ExpectedEventString[2], context_CFE_EVS_SendEvent[2].Spec, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH);
-
-    UtAssert_True(strCmpResult == 0, "Event string matched expected result, '%s'", context_CFE_EVS_SendEvent[2].Spec);
-
-    call_count_CFE_EVS_SendEvent = UT_GetStubCount(UT_KEY(CFE_EVS_SendEvent));
-
-    UtAssert_True(call_count_CFE_EVS_SendEvent == 3, "CFE_EVS_SendEvent was called %u time(s), expected 3",
-                  call_count_CFE_EVS_SendEvent);
-
+    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 3);
 } /* end SC_LoadDefaultTables_Test */
 
 void UtTest_Setup(void)
