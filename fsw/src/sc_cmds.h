@@ -40,11 +40,11 @@
  *  \par Assumptions, External Events, and Notes:
  *       None
  *
- *  \param[in] CmdPacket Pointer to Software Bus buffer
+ *  \param[in] BufPtr Pointer to Software Bus buffer
  *
  *  \sa #SC_MANAGE_TABLE_CC
  */
-void SC_TableManageCmd(const CFE_SB_Buffer_t *CmdPacket);
+void SC_TableManageCmd(const CFE_SB_Buffer_t *BufPtr);
 
 /**
  * \brief Manage pending update to an RTS table
@@ -112,9 +112,9 @@ void SC_ManageAppendTable(void);
  *  \par Assumptions, External Events, and Notes:
  *        None
  *
- *  \param[in] CmdPacket Pointer to Software Bus buffer
+ *  \param[in] BufPtr Pointer to Software Bus buffer
  */
-void SC_ProcessRequest(const CFE_SB_Buffer_t *CmdPacket);
+void SC_ProcessRequest(const CFE_SB_Buffer_t *BufPtr);
 
 /**
  * \brief Processes commands
@@ -126,9 +126,9 @@ void SC_ProcessRequest(const CFE_SB_Buffer_t *CmdPacket);
  *  \par Assumptions, External Events, and Notes:
  *        None
  *
- *  \param[in] CmdPacket Pointer to Software Bus buffer
+ *  \param[in] BufPtr Pointer to Software Bus buffer
  */
-void SC_ProcessCommand(const CFE_SB_Buffer_t *CmdPacket);
+void SC_ProcessCommand(const CFE_SB_Buffer_t *BufPtr);
 
 /**
  * \brief Sends out an Event message
@@ -139,11 +139,11 @@ void SC_ProcessCommand(const CFE_SB_Buffer_t *CmdPacket);
  *  \par Assumptions, External Events, and Notes:
  *        None
  *
- *  \param[in] CmdPacket Pointer to Software Bus buffer
+ *  \param[in] BufPtr Pointer to Software Bus buffer
  *
  *  \sa #SC_NOOP_CC
  */
-void SC_NoOpCmd(const CFE_SB_Buffer_t *CmdPacket);
+void SC_NoOpCmd(const CFE_SB_Buffer_t *BufPtr);
 
 /**
  * \brief Reset Counters Command
@@ -154,11 +154,11 @@ void SC_NoOpCmd(const CFE_SB_Buffer_t *CmdPacket);
  *  \par Assumptions, External Events, and Notes:
  *        None
  *
- *  \param[in] CmdPacket Pointer to Software Bus buffer
+ *  \param[in] BufPtr Pointer to Software Bus buffer
  *
  *  \sa #SC_RESET_COUNTERS_CC
  */
-void SC_ResetCountersCmd(const CFE_SB_Buffer_t *CmdPacket);
+void SC_ResetCountersCmd(const CFE_SB_Buffer_t *BufPtr);
 
 /**
  * \brief Send Hk Packet to the ground

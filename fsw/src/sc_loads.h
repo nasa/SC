@@ -38,13 +38,13 @@
  *  \par Assumptions, External Events, and Notes:
  *        None
  *
- *  \param [in]    Buffer          A pointer to the area to validate
+ *  \param [in]    Buffer32 Pointer to the area to validate
  *
  *  \return Boolean RTS valid status
  *  \retval true  RTS was valid
  *  \retval false RTS was NOT valid
  */
-bool SC_ParseRts(uint32 Buffer[]);
+bool SC_ParseRts(uint32 Buffer32[]);
 
 /**
  * \brief Buids the Time index buffer for the ATS
@@ -107,7 +107,7 @@ void SC_InitAtsTables(uint16 AtsIndex);
  *  \retval #CFE_SUCCESS Table validation success
  *  \retval #SC_ERROR    Table not valid
  */
-int32 SC_VerifyAtsTable(uint32 *Buffer, int32 BufferWords);
+int32 SC_VerifyAtsTable(uint32 *Buffer32, int32 BufferWords);
 
 /**
  * \brief Validation function for a single ATS or Append ATS table entry
@@ -123,7 +123,7 @@ int32 SC_VerifyAtsTable(uint32 *Buffer, int32 BufferWords);
  *  \retval #CFE_SUCCESS Empty entry
  *  \retval #SC_ERROR    Entry is invalid
  */
-int32 SC_VerifyAtsEntry(uint32 *Buffer, int32 EntryIndex, int32 BufferWords);
+int32 SC_VerifyAtsEntry(uint32 *Buffer32, int32 EntryIndex, int32 BufferWords);
 
 /**
  * \brief Loads an ATS into the data structures in SC
