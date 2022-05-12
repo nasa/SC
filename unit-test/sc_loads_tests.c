@@ -125,6 +125,8 @@ void SC_LoadAts_Test_CmdRunOffEndOfBuffer(void)
     int                  MaxBufEntries;
     int                  i, j;
 
+    memset(&AtsInfoTbl, 0, sizeof(AtsInfoTbl));
+
     SC_InitTables();
 
     SC_OperData.AtsCmdStatusTblAddr[AtsIndex] = &SC_APP_TEST_GlobalAtsCmdStatusTbl[0];
@@ -175,6 +177,8 @@ void SC_LoadAts_Test_CmdLengthInvalid(void)
     uint32               AtsTable[SC_ATS_BUFF_SIZE32];
     uint8                AtsIndex = 0;
 
+    memset(&AtsInfoTbl, 0, sizeof(AtsInfoTbl));
+
     SC_InitTables();
 
     SC_OperData.AtsCmdStatusTblAddr[AtsIndex] = &SC_APP_TEST_GlobalAtsCmdStatusTbl[0];
@@ -217,6 +221,8 @@ void SC_LoadAts_Test_CmdLengthZero(void)
     SC_AtsInfoTable_t    AtsInfoTbl;
     uint32               AtsTable[SC_ATS_BUFF_SIZE32];
     uint8                AtsIndex = 0;
+
+    memset(&AtsInfoTbl, 0, sizeof(AtsInfoTbl));
 
     SC_InitTables();
 
@@ -261,6 +267,8 @@ void SC_LoadAts_Test_CmdNumberInvalid(void)
     uint32               AtsTable[SC_ATS_BUFF_SIZE32];
     uint8                AtsIndex = 0;
 
+    memset(&AtsInfoTbl, 0, sizeof(AtsInfoTbl));
+
     SC_InitTables();
 
     SC_OperData.AtsCmdStatusTblAddr[AtsIndex] = &SC_APP_TEST_GlobalAtsCmdStatusTbl[0];
@@ -303,6 +311,8 @@ void SC_LoadAts_Test_EndOfLoadReached(void)
     SC_AtsInfoTable_t    AtsInfoTbl;
     uint32               AtsTable[SC_ATS_BUFF_SIZE32];
     uint8                AtsIndex = 0;
+
+    memset(&AtsInfoTbl, 0, sizeof(AtsInfoTbl));
 
     SC_InitTables();
 
@@ -350,6 +360,8 @@ void SC_LoadAts_Test_AtsBufferTooSmall(void)
     int                  BufEntrySize;
     int                  MaxBufEntries;
     int                  i, j;
+
+    memset(&AtsInfoTbl, 0, sizeof(AtsInfoTbl));
 
     SC_InitTables();
 
