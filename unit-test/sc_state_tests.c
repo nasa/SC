@@ -445,12 +445,11 @@ void SC_GetNextRtsCommand_Test_RtsNumberOverMax(void)
 
     SC_OperData.RtsTblAddr[SC_NUMBER_OF_RTS - 1] = &RtsTable[0];
 
-    SC_AppData.NextCmdTime[SC_RTP]                                                   = 0;
-    SC_AppData.CurrentTime                                                           = 1;
-    SC_AppData.NextProcNumber                                                        = SC_RTP;
-    SC_OperData.RtsCtrlBlckAddr->RtsNumber                                           = SC_NUMBER_OF_RTS + 1;
-    SC_OperData.RtsInfoTblAddr[SC_OperData.RtsCtrlBlckAddr->RtsNumber - 1].RtsStatus = SC_EXECUTING;
-    SC_OperData.AtsInfoTblAddr[1].NumberOfCommands                                   = 1;
+    SC_AppData.NextCmdTime[SC_RTP]                 = 0;
+    SC_AppData.CurrentTime                         = 1;
+    SC_AppData.NextProcNumber                      = SC_RTP;
+    SC_OperData.RtsCtrlBlckAddr->RtsNumber         = SC_NUMBER_OF_RTS + 1;
+    SC_OperData.AtsInfoTblAddr[1].NumberOfCommands = 1;
 
     Entry = (SC_RtsEntryHeader_t *)&SC_OperData.RtsTblAddr[SC_NUMBER_OF_RTS - 1][0];
 
