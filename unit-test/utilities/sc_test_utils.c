@@ -80,8 +80,8 @@ void SC_Test_Setup(void)
     /* initialize test environment to default state for every test */
     UT_ResetState(0);
 
-    memset(&SC_OperData, 0, sizeof(SC_OperData_t));
-    memset(&SC_AppData, 0, sizeof(SC_AppData_t));
+    memset(&SC_OperData, 0, sizeof(SC_OperData));
+    memset(&SC_AppData, 0, sizeof(SC_AppData));
     memset(RtsInfoTbl, 0, sizeof(RtsInfoTbl));
 
     memset(context_CFE_EVS_SendEvent, 0, sizeof(context_CFE_EVS_SendEvent));
