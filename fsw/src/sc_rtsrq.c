@@ -599,6 +599,8 @@ void SC_AutoStartRts(uint16 RtsNumber)
 {
     SC_RtsCmd_t CmdPkt; /* the command packet to start an RTS */
 
+    memset(&CmdPkt, 0, sizeof(CmdPkt));
+
     /* validate RTS ID */
     if ((RtsNumber > 0) && (RtsNumber <= SC_NUMBER_OF_RTS))
     {

@@ -91,8 +91,6 @@ void SC_ProcessAtpCmd_Test_SwitchCmd(void)
     SC_OperData.AtsCmdStatusTblAddr[0][0] = SC_LOADED;
     SC_AppData.AtsCmdIndexBuffer[0][0]    = 0;
 
-    SC_OperData.AtsInfoTblAddr[1].NumberOfCommands = 1;
-
     /* Set return value for CFE_TIME_Compare to make SC_CompareAbsTime return false, to satisfy first if-statement of
      * SC_ProcessAtpCmd, and for all other calls to CFE_TIME_Compare called from subfunctions reached by this test */
     UT_SetHookFunction(UT_KEY(CFE_TIME_Compare), Ut_CFE_TIME_CompareHookAlessthanB, NULL);
@@ -159,8 +157,6 @@ void SC_ProcessAtpCmd_Test_NonSwitchCmd(void)
     SC_OperData.AtsCmdStatusTblAddr[0][0] = SC_LOADED;
     SC_AppData.AtsCmdIndexBuffer[0][0]    = 0;
 
-    SC_OperData.AtsInfoTblAddr[1].NumberOfCommands = 1;
-
     /* Set return value for CFE_TIME_Compare to make SC_CompareAbsTime return false, to satisfy first if-statement of
      * SC_ProcessAtpCmd, and for all other calls to CFE_TIME_Compare called from subfunctions reached by this test */
     UT_SetHookFunction(UT_KEY(CFE_TIME_Compare), Ut_CFE_TIME_CompareHookAlessthanB, NULL);
@@ -226,8 +222,6 @@ void SC_ProcessAtpCmd_Test_InlineSwitchError(void)
 
     SC_OperData.AtsCmdStatusTblAddr[0][0] = SC_LOADED;
     SC_AppData.AtsCmdIndexBuffer[0][0]    = 0;
-
-    SC_OperData.AtsInfoTblAddr[1].NumberOfCommands = 1;
 
     /* Set return value for CFE_TIME_Compare to make SC_CompareAbsTime return false, to satisfy first if-statement of
      * SC_ProcessAtpCmd, and for all other calls to CFE_TIME_Compare called from subfunctions reached by this test */
@@ -305,8 +299,6 @@ void SC_ProcessAtpCmd_Test_SBErrorAtsA(void)
 
     SC_OperData.AtsCmdStatusTblAddr[0][0] = SC_LOADED;
     SC_AppData.AtsCmdIndexBuffer[0][0]    = 0;
-
-    SC_OperData.AtsInfoTblAddr[1].NumberOfCommands = 1;
 
     /* Set to return true in order to satisfy the if-statement from which the function is called */
     ChecksumValid = true;
@@ -394,8 +386,6 @@ void SC_ProcessAtpCmd_Test_SBErrorAtsB(void)
 
     SC_OperData.AtsCmdStatusTblAddr[1][0] = SC_LOADED;
     SC_AppData.AtsCmdIndexBuffer[1][0]    = 0;
-
-    SC_OperData.AtsInfoTblAddr[1].NumberOfCommands = 1;
 
     /* Set to return true in order to satisfy the if-statement from which the function is called */
     ChecksumValid = true;
@@ -1066,8 +1056,6 @@ void SC_ProcessAtpCmd_Test_CmdMid(void)
 
     SC_OperData.AtsCmdStatusTblAddr[0][0] = SC_LOADED;
     SC_AppData.AtsCmdIndexBuffer[0][0]    = 0;
-
-    SC_OperData.AtsInfoTblAddr[1].NumberOfCommands = 1;
 
     /* Set return value for CFE_TIME_Compare to make SC_CompareAbsTime return false, to satisfy first if-statement of
      * SC_ProcessAtpCmd, and for all other calls to CFE_TIME_Compare called from subfunctions reached by this test */
