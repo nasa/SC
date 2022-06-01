@@ -251,11 +251,11 @@ void SC_AppInit_Test_NominalPowerOnReset(void)
 
     /* Set global data structures to non-zero values, to verify that SC_AppInit sets values to 0 (with some exceptions)
      */
-    memset(&SC_OperData, 1, sizeof(SC_OperData_t));
-    memset(&SC_AppData, 1, sizeof(SC_AppData_t));
+    memset(&SC_OperData, 1, sizeof(SC_OperData));
+    memset(&SC_AppData, 1, sizeof(SC_AppData));
 
-    memset(&Expected_SC_OperData, 0, sizeof(SC_OperData_t));
-    memset(&Expected_SC_AppData, 0, sizeof(SC_AppData_t));
+    memset(&Expected_SC_OperData, 0, sizeof(Expected_SC_OperData));
+    memset(&Expected_SC_AppData, 0, sizeof(Expected_SC_AppData));
 
     Expected_SC_AppData.NextProcNumber      = SC_NONE;
     Expected_SC_AppData.NextCmdTime[SC_ATP] = SC_MAX_TIME;
@@ -337,11 +337,11 @@ void SC_AppInit_Test_Nominal(void)
 
     /* Set global data structures to non-zero values, to verify that SC_AppInit sets values to 0 (with some exceptions)
      */
-    memset(&SC_OperData, 1, sizeof(SC_OperData_t));
-    memset(&SC_AppData, 1, sizeof(SC_AppData_t));
+    memset(&SC_OperData, 1, sizeof(SC_OperData));
+    memset(&SC_AppData, 1, sizeof(SC_AppData));
 
-    memset(&Expected_SC_OperData, 0, sizeof(SC_OperData_t));
-    memset(&Expected_SC_AppData, 0, sizeof(SC_AppData_t));
+    memset(&Expected_SC_OperData, 0, sizeof(Expected_SC_OperData));
+    memset(&Expected_SC_AppData, 0, sizeof(Expected_SC_AppData));
 
     Expected_SC_AppData.NextProcNumber      = SC_NONE;
     Expected_SC_AppData.NextCmdTime[SC_ATP] = SC_MAX_TIME;

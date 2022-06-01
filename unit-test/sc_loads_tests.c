@@ -1623,9 +1623,6 @@ void SC_ProcessAppend_Test(void)
     uint32               AtsAppendTable[SC_APPEND_BUFF_SIZE32];
     size_t               MsgSize;
 
-    /* Setting memcpy to return success, otherwise the test will cause a seg fault */
-    UT_SetDeferredRetcode(UT_KEY(CFE_PSP_MemCpy), 1, CFE_PSP_SUCCESS);
-
     SC_InitTables();
 
     memset(&AtsTable, 0, sizeof(AtsTable));
@@ -1690,9 +1687,6 @@ void SC_ProcessAppend_Test_CmdLoaded(void)
     uint32               AtsAppendTable[SC_APPEND_BUFF_SIZE32];
     size_t               MsgSize;
 
-    /* Setting memcpy to return success, otherwise the test will cause a seg fault */
-    UT_SetDeferredRetcode(UT_KEY(CFE_PSP_MemCpy), 1, CFE_PSP_SUCCESS);
-
     SC_InitTables();
 
     memset(&AtsTable, 0, sizeof(AtsTable));
@@ -1754,9 +1748,6 @@ void SC_ProcessAppend_Test_NotExecuting(void)
     uint32               AtsAppendTable[SC_APPEND_BUFF_SIZE32];
     size_t               MsgSize;
 
-    /* Setting memcpy to return success, otherwise the test will cause a seg fault */
-    UT_SetDeferredRetcode(UT_KEY(CFE_PSP_MemCpy), 1, CFE_PSP_SUCCESS);
-
     SC_InitTables();
 
     memset(&AtsTable, 0, sizeof(AtsTable));
@@ -1816,9 +1807,6 @@ void SC_ProcessAppend_Test_AtsNumber(void)
     SC_AtsInfoTable_t    AtsInfoTbl;
     uint32               AtsAppendTable[SC_APPEND_BUFF_SIZE32];
     size_t               MsgSize;
-
-    /* Setting memcpy to return success, otherwise the test will cause a seg fault */
-    UT_SetDeferredRetcode(UT_KEY(CFE_PSP_MemCpy), 1, CFE_PSP_SUCCESS);
 
     SC_InitTables();
 

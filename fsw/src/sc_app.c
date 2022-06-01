@@ -142,8 +142,8 @@ int32 SC_AppInit(void)
     int32 Result;
 
     /* Clear global data structures */
-    memset(&SC_OperData, 0, sizeof(SC_OperData_t));
-    memset(&SC_AppData, 0, sizeof(SC_AppData_t));
+    memset(&SC_OperData, 0, sizeof(SC_OperData));
+    memset(&SC_AppData, 0, sizeof(SC_AppData));
 
     /* Number of ATS and RTS commands already executed this second */
     SC_OperData.NumCmdsSec = 0;

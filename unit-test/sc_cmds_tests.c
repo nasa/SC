@@ -104,9 +104,6 @@ void SC_ProcessAtpCmd_Test_SwitchCmd(void)
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
 
-    /* Same return value as default, but bypasses default hook function to simplify test */
-    UT_SetDeferredRetcode(UT_KEY(CFE_PSP_MemCpy), 1, CFE_PSP_SUCCESS);
-
     UT_SetDeferredRetcode(UT_KEY(SC_InlineSwitch), 1, true);
 
     /* Execute the function being tested */
@@ -170,9 +167,6 @@ void SC_ProcessAtpCmd_Test_NonSwitchCmd(void)
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
 
-    /* Same return value as default, but bypasses default hook function to simplify test */
-    UT_SetDeferredRetcode(UT_KEY(CFE_PSP_MemCpy), 1, CFE_PSP_SUCCESS);
-
     UT_SetDeferredRetcode(UT_KEY(SC_InlineSwitch), 1, true);
 
     /* Execute the function being tested */
@@ -235,9 +229,6 @@ void SC_ProcessAtpCmd_Test_InlineSwitchError(void)
      * called */
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-
-    /* Same return value as default, but bypasses default hook function to simplify test */
-    UT_SetDeferredRetcode(UT_KEY(CFE_PSP_MemCpy), 1, CFE_PSP_SUCCESS);
 
     UT_SetDeferredRetcode(UT_KEY(SC_InlineSwitch), 1, false);
 
@@ -487,9 +478,6 @@ void SC_ProcessAtpCmd_Test_ChecksumFailedAtsA(void)
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
 
-    /* Same return value as default, but bypasses default hook function to simplify test */
-    UT_SetDeferredRetcode(UT_KEY(CFE_PSP_MemCpy), 1, CFE_PSP_SUCCESS);
-
     UT_SetDeferredRetcode(UT_KEY(SC_InlineSwitch), 1, true);
 
     /* Execute the function being tested */
@@ -577,9 +565,6 @@ void SC_ProcessAtpCmd_Test_ChecksumFailedAtsB(void)
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
 
-    /* Same return value as default, but bypasses default hook function to simplify test */
-    UT_SetDeferredRetcode(UT_KEY(CFE_PSP_MemCpy), 1, CFE_PSP_SUCCESS);
-
     UT_SetDeferredRetcode(UT_KEY(SC_InlineSwitch), 1, true);
 
     /* Execute the function being tested */
@@ -666,9 +651,6 @@ void SC_ProcessAtpCmd_Test_ChecksumFailedAtsAContinue(void)
      * called */
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-
-    /* Same return value as default, but bypasses default hook function to simplify test */
-    UT_SetDeferredRetcode(UT_KEY(CFE_PSP_MemCpy), 1, CFE_PSP_SUCCESS);
 
     UT_SetDeferredRetcode(UT_KEY(SC_InlineSwitch), 1, true);
 
@@ -1069,9 +1051,6 @@ void SC_ProcessAtpCmd_Test_CmdMid(void)
      * called */
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-
-    /* Same return value as default, but bypasses default hook function to simplify test */
-    UT_SetDeferredRetcode(UT_KEY(CFE_PSP_MemCpy), 1, CFE_PSP_SUCCESS);
 
     UT_SetDeferredRetcode(UT_KEY(SC_InlineSwitch), 1, true);
 
