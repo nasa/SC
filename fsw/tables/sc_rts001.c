@@ -21,104 +21,76 @@
  * @file
  *   CFS Stored Command (SC) sample RTS table 1
  *
- * @note
- * Note 1: The following source code demonstrates how to create a sample
- *         Stored Command RTS table.  The preferred method for creating
- *         flight versions of RTS tables is to use custom ground system
- *         tools that output the binary table files, skipping this step
- *         altogether.
+ * The following source code demonstrates how to create a sample
+ * Stored Command RTS table using the software defined command structures.
+ * It's also possible to create this table via alternative tools
+ * (ground system) and or system agnostic data definitions (XTCE/EDS/JSON).
  *
- * Note 2: This source file creates a sample RTS table that contains only
- *         the following commands that are scheduled as follows:
+ * This source file creates a sample RTS table that contains only
+ * the following commands that are scheduled as follows:
  *
- *         SC NOOP command, execution time relative to start of RTS = 0
- *         SC Enable RTS #2 command, execution time relative to prev cmd = 5
- *         SC Start RTS #2 command, execution time relative to prev cmd = 5
- *
- * Note 3: The byte following the command code in each command packet
- *         secondary header must contain an 8 bit checksum.  Refer to
- *         the SC Users Guide for information on how to calculate this
- *         checksum.
- *
- * Note 4: If the command length (in bytes) is odd, a pad byte must be added
- *         to the RTS command structure (opt data portion) to ensure the next
- *         command starts on a word (uint16) boundary.
+ * SC NOOP command, execution time relative to start of RTS = 0
+ * SC Enable RTS #2 command, execution time relative to prev cmd = 5
+ * SC Start RTS #2 command, execution time relative to prev cmd = 5
  */
 
 #include "cfe.h"
 #include "cfe_tbl_filedef.h"
-#include "cfe_endian.h"
 
+#include "sc_tbldefs.h"      /* defines SC table headers */
 #include "sc_platform_cfg.h" /* defines table buffer size */
 #include "sc_msgdefs.h"      /* defines SC command code values */
 #include "sc_msgids.h"       /* defines SC packet msg ID's */
+#include "sc_msg.h"          /* defines SC message structures */
 
-/*
-** Execution time for each sample command
-*/
-#define CMD1_TIME 0
-#define CMD2_TIME 5
-#define CMD3_TIME 5
+/* Checksum for each sample command */
+#ifndef SC_NOOP_CKSUM
+#define SC_NOOP_CKSUM (0x8F)
+#endif
+#ifndef SC_ENABLE_RTS2_CKSUM
+#define SC_ENABLE_RTS2_CKSUM (0x8E)
+#endif
+#ifndef SC_START_RTS2_CKSUM
+#define SC_START_RTS2_CKSUM (0x8D)
+#endif
 
-/*
-** Calculate checksum for each sample command
-*/
-#define CMD1_XSUM 0x008F
-#define CMD2_XSUM 0x0088
-#define CMD3_XSUM 0x008B
+/* Custom table structure, modify as needed to add desired commands */
+typedef struct
+{
+    SC_RtsEntryHeader_t hdr1;
+    SC_NoArgsCmd_t      cmd1;
+    SC_RtsEntryHeader_t hdr2;
+    SC_RtsCmd_t         cmd2;
+    SC_RtsEntryHeader_t hdr3;
+    SC_RtsCmd_t         cmd3;
+} SC_RtsStruct001_t;
 
-/*
-** Optional command data values
-*/
-#define CMD2_ARG 0x0200
-#define CMD3_ARG 0x0200
+/* Define the union to size the table correctly */
+typedef union
+{
+    SC_RtsStruct001_t rts;
+    uint16            buf[SC_RTS_BUFF_SIZE];
+} SC_RtsTable001_t;
 
-/*
-** Command packet segment flags and sequence counter
-** - 2 bits of segment flags (0xC000 = start and end of packet)
-** - 14 bits of sequence count (unused for command packets)
-*/
-#define PKT_FLAGS 0xC000
+/* Helper macro to get size of structure elements */
+#define SC_MEMBER_SIZE(member) (sizeof(((SC_RtsStruct001_t *)0)->member))
 
-/*
-** Length of cmd pkt data (in bytes minus one) that follows primary header (thus, 0xFFFF = 64k)
-*/
-#define CMD1_LENGTH 1
-#define CMD2_LENGTH 5
-#define CMD3_LENGTH 5
+/* Used designated intializers to be verbose, modify as needed/desired */
+SC_RtsTable001_t SC_Rts001 = {
+    /* 1 */
+    .rts.hdr1.TimeTag   = 0,
+    .rts.cmd1.CmdHeader = CFE_MSG_CMD_HDR_INIT(SC_CMD_MID, SC_MEMBER_SIZE(cmd1), SC_NOOP_CC, SC_NOOP_CKSUM),
 
-/*
-** Sample cFE Table Header
-*/
-static CFE_TBL_FileDef_t CFE_TBL_FileDef __attribute__((__used__)) = {
-    "RTS_Table001", "SC.RTS_TBL001", "SC Sample RTS_TBL001", "sc_rts001.tbl", (SC_RTS_BUFF_SIZE * sizeof(uint16))};
+    /* 2 */
+    .rts.hdr2.TimeTag = 5,
+    .rts.cmd2.CmdHeader =
+        CFE_MSG_CMD_HDR_INIT(SC_CMD_MID, SC_MEMBER_SIZE(cmd2), SC_ENABLE_RTS_CC, SC_ENABLE_RTS2_CKSUM),
+    .rts.cmd2.RtsId = 2,
 
-/*
-** Sample RTS Table Data
-*/
-uint16 RTS_Table001[SC_RTS_BUFF_SIZE] = {
-    /*  cmd time,  <---------------------------- cmd pkt primary header ---------------------------->  <----- cmd pkt
-       2nd header ---->   <-- opt data ---> */
-    0x0000,
-    CMD1_TIME,
-    CFE_MAKE_BIG16(SC_CMD_MID),
-    CFE_MAKE_BIG16(PKT_FLAGS),
-    CFE_MAKE_BIG16(CMD1_LENGTH),
-    CFE_MAKE_BIG16((SC_NOOP_CC << 8) | CMD1_XSUM),
-    0x0000,
-    CMD2_TIME,
-    CFE_MAKE_BIG16(SC_CMD_MID),
-    CFE_MAKE_BIG16(PKT_FLAGS),
-    CFE_MAKE_BIG16(CMD2_LENGTH),
-    CFE_MAKE_BIG16((SC_ENABLE_RTS_CC << 8) | CMD2_XSUM),
-    CMD2_ARG,
-    0x0000,
-    0x0000,
-    CMD3_TIME,
-    CFE_MAKE_BIG16(SC_CMD_MID),
-    CFE_MAKE_BIG16(PKT_FLAGS),
-    CFE_MAKE_BIG16(CMD3_LENGTH),
-    CFE_MAKE_BIG16((SC_START_RTS_CC << 8) | CMD3_XSUM),
-    CMD3_ARG,
-    0x0000,
-};
+    /* 3 */
+    .rts.hdr3.TimeTag   = 5,
+    .rts.cmd3.CmdHeader = CFE_MSG_CMD_HDR_INIT(SC_CMD_MID, SC_MEMBER_SIZE(cmd3), SC_START_RTS_CC, SC_START_RTS2_CKSUM),
+    .rts.cmd3.RtsId     = 2};
+
+/* Macro for table structure */
+CFE_TBL_FILEDEF(SC_Rts001, SC.RTS_TBL001, SC Example RTS_TBL001, sc_rts001.tbl)
