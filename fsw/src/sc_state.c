@@ -125,7 +125,7 @@ void SC_UpdateNextTime(void)
      ** This is determined by the RTS number in the RTP control block
      ** If it is zero, there is no RTS that needs to run
      */
-    if (SC_OperData.RtsCtrlBlckAddr->RtsNumber > 0 && SC_OperData.RtsCtrlBlckAddr->RtsNumber <= SC_NUMBER_OF_RTS)
+    if (SC_OperData.RtsCtrlBlckAddr->RtsNumber > 0)
     {
         /*
          ** If the RTP needs to send commands, only send them if
