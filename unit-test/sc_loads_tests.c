@@ -1182,13 +1182,12 @@ void SC_ParseRts_Test_CmdLengthEqualsBufferLength(void)
 
 void SC_ParseRts_Test_CmdDoesNotFitBufferEmpty(void)
 {
-    SC_RtsEntryHeader_t *Entry;
-    uint8                RtsIndex = 0;
-    uint32               RtsTable[SC_RTS_BUFF_SIZE32];
-    CFE_SB_MsgId_t       TestMsgId = SC_UT_MID_1;
-    size_t               MsgSize1  = SC_PACKET_MAX_SIZE;
-    size_t               MsgSize2;
-    int                  BufEntrySize;
+    uint8          RtsIndex = 0;
+    uint32         RtsTable[SC_RTS_BUFF_SIZE32];
+    CFE_SB_MsgId_t TestMsgId = SC_UT_MID_1;
+    size_t         MsgSize1  = SC_PACKET_MAX_SIZE;
+    size_t         MsgSize2;
+    int            BufEntrySize;
 
     SC_InitTables();
 
@@ -1196,18 +1195,15 @@ void SC_ParseRts_Test_CmdDoesNotFitBufferEmpty(void)
 
     SC_OperData.RtsTblAddr[RtsIndex] = &RtsTable[0];
 
-    Entry          = (SC_RtsEntryHeader_t *)&SC_OperData.RtsTblAddr[RtsIndex][0];
-    Entry->TimeTag = 1;
-
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
 
+    /* Maximum size first command */
     BufEntrySize = (MsgSize1 + SC_ROUND_UP_BYTES) / SC_BYTES_IN_WORD + SC_RTS_HDR_NOPKT_WORDS;
-
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &MsgSize1, sizeof(MsgSize1), false);
 
-    /* Use the remaining buffer space to calculate the final message size */
-    MsgSize2 = ((SC_RTS_BUFF_SIZE32 - SC_RTS_HDR_NOPKT_WORDS - BufEntrySize) * SC_BYTES_IN_WORD);
+    /* All but last 32 bits for 2nd command */
+    MsgSize2 = ((SC_RTS_BUFF_SIZE32 - SC_RTS_HDR_NOPKT_WORDS - BufEntrySize - 1) * SC_BYTES_IN_WORD);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &MsgSize2, sizeof(MsgSize2), false);
 
     /* Execute the function being tested */
@@ -1240,11 +1236,11 @@ void SC_ParseRts_Test_CmdDoesNotFitBufferNotEmpty(void)
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
 
+    /* Maximum size first command */
     BufEntrySize = (MsgSize1 + SC_ROUND_UP_BYTES) / SC_BYTES_IN_WORD + SC_RTS_HDR_NOPKT_WORDS;
-
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &MsgSize1, sizeof(MsgSize1), false);
 
-    /* Use all but one 32-bit "word" of remaining space */
+    /* All but last 32 bits for 2nd command */
     MsgSize2 = ((SC_RTS_BUFF_SIZE32 - SC_RTS_HDR_NOPKT_WORDS - BufEntrySize - 1) * SC_BYTES_IN_WORD);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &MsgSize2, sizeof(MsgSize2), false);
 
