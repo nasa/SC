@@ -117,15 +117,16 @@ void SC_AppMain_Test_Nominal(void)
     CFE_SB_MsgId_t TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
     size_t         MsgSize   = sizeof(SC_NoArgsCmd_t);
 
-    /* Same return value as default, but bypasses default hook function to simplify test */
-    UT_SetDeferredRetcode(UT_KEY(CFE_SB_ReceiveBuffer), 1, CFE_SUCCESS);
-
     /* Called in a subfunction.  Set here to prevent segmentation fault. */
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &MsgSize, sizeof(MsgSize), false);
 
-    /* Set to make loop execute exactly once */
+    /* Load return buffer to make loop execute twice */
     UT_SetDeferredRetcode(UT_KEY(CFE_ES_RunLoop), 1, true);
+    UT_SetDeferredRetcode(UT_KEY(CFE_ES_RunLoop), 1, true);
+
+    /* Return timeout first time through, will default to success on second */
+    UT_SetDeferredRetcode(UT_KEY(CFE_SB_ReceiveBuffer), 1, CFE_SB_TIME_OUT);
 
     /* Prevents error messages in call to SC_GetLoadTablePointers */
     SC_APP_TEST_CFE_TBL_GetAddressHookCount = 0;

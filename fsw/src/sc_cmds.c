@@ -170,11 +170,6 @@ void SC_ProcessAtpCmd(void)
                                               "ATS Command Distribution Failed, Cmd Number: %d, SB returned: 0x%08X",
                                               EntryPtr->Header.CmdNumber, (unsigned int)Result);
 
-                            if (SC_OperData.AtsCtrlBlckAddr->AtsNumber == SC_ATSA)
-                                TempAtsChar = 'A';
-                            else if (SC_OperData.AtsCtrlBlckAddr->AtsNumber == SC_ATSB)
-                                TempAtsChar = 'B';
-
                             /* Mark this ATS for abortion */
                             AbortATS = true;
                         }
@@ -202,15 +197,7 @@ void SC_ProcessAtpCmd(void)
                     SC_OperData.AtsCmdStatusTblAddr[AtsIndex][CmdIndex] = SC_FAILED_CHECKSUM;
 
                     if (SC_OperData.HkPacket.ContinueAtsOnFailureFlag == false)
-                    { /* Stop ATS execution */
-                        /*
-                         ** Set the temp ATS ID if it is valid
-                         */
-                        if (SC_OperData.AtsCtrlBlckAddr->AtsNumber == SC_ATSA)
-                            TempAtsChar = 'A';
-                        else if (SC_OperData.AtsCtrlBlckAddr->AtsNumber == SC_ATSB)
-                            TempAtsChar = 'B';
-
+                    {
                         /* Mark this ATS for abortion */
                         AbortATS = true;
                     }
@@ -238,14 +225,6 @@ void SC_ProcessAtpCmd(void)
 
                 /* update the command status index table */
                 SC_OperData.AtsCmdStatusTblAddr[AtsIndex][CmdIndex] = SC_SKIPPED;
-
-                /*
-                ** Set the temp ATS ID if it is valid
-                */
-                if (SC_OperData.AtsCtrlBlckAddr->AtsNumber == SC_ATSA)
-                    TempAtsChar = 'A';
-                else if (SC_OperData.AtsCtrlBlckAddr->AtsNumber == SC_ATSB)
-                    TempAtsChar = 'B';
 
                 /* Mark this ATS for abortion */
                 AbortATS = true;
@@ -277,6 +256,15 @@ void SC_ProcessAtpCmd(void)
 
         if (AbortATS == true)
         {
+            if (SC_OperData.AtsCtrlBlckAddr->AtsNumber == SC_ATSA)
+            {
+                TempAtsChar = 'A';
+            }
+            else
+            {
+                TempAtsChar = 'B';
+            }
+
             CFE_EVS_SendEvent(SC_ATS_ABT_ERR_EID, CFE_EVS_EventType_ERROR, "ATS %c Aborted", TempAtsChar);
 
             /* Stop the ATS from executing */
