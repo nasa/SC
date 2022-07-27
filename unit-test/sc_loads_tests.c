@@ -1581,7 +1581,6 @@ void SC_UpdateAppend_Test_CmdNumberTooHigh(void)
     SC_OperData.AppendTblAddr = &AtsAppendTable[0];
     Entry                     = (SC_AtsEntryHeader_t *)&SC_OperData.AppendTblAddr[EntryIndex];
     Entry->CmdNumber          = SC_MAX_ATS_CMDS + 1;
-    ;
 
     /* Cause condition to be met: "(Entry->CmdNumber > SC_MAX_ATS_CMDS)" */
     MsgSize = 50;
