@@ -75,8 +75,8 @@ void SC_ProcessAtpCmd(void)
      ** 3.) The atp is currently EXECUTING
      */
 
-    if ((!SC_CompareAbsTime(SC_AppData.NextCmdTime[SC_ATP], SC_AppData.CurrentTime)) &&
-        (SC_AppData.NextProcNumber == SC_ATP) && (SC_OperData.AtsCtrlBlckAddr->AtpState == SC_EXECUTING))
+    if ((SC_OperData.AtsCtrlBlckAddr->AtpState == SC_EXECUTING) && (SC_AppData.NextProcNumber == SC_ATP) &&
+        (!SC_CompareAbsTime(SC_AppData.NextCmdTime[SC_ATP], SC_AppData.CurrentTime)))
     {
         /*
          ** Get a pointer to the next ats command
@@ -125,7 +125,7 @@ void SC_ProcessAtpCmd(void)
                     CFE_MSG_GetMsgId(&EntryPtr->Msg, &MessageID);
                     CFE_MSG_GetFcnCode(&EntryPtr->Msg, &CommandCode);
 
-                    if (CFE_SB_MsgIdToValue(MessageID) == SC_CMD_MID && CommandCode == SC_SWITCH_ATS_CC)
+                    if (CommandCode == SC_SWITCH_ATS_CC && CFE_SB_MsgIdToValue(MessageID) == SC_CMD_MID)
                     {
                         /*
                          ** call the ground switch module
