@@ -563,8 +563,7 @@ void SC_AppInit_Test_InitTablesError(void)
     int32  strCmpResult;
     char   ExpectedEventString[CFE_MISSION_EVS_MAX_MESSAGE_LENGTH];
 
-    snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH,
-             "RTS info table register failed, returned: 0x%%08X");
+    snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH, "%%s table register failed, returned: 0x%%08X");
 
     /* Set CFE_TBL_Register to return -1 in order to reach return statement immediately after
      * comment "Must be able to create and initialize tables" */
@@ -614,8 +613,7 @@ void SC_InitTables_Test_ErrorRegisterAllTables(void)
     int32  strCmpResult;
     char   ExpectedEventString[CFE_MISSION_EVS_MAX_MESSAGE_LENGTH];
 
-    snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH,
-             "RTS info table register failed, returned: 0x%%08X");
+    snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH, "%%s table register failed, returned: 0x%%08X");
 
     /* Set CFE_TBL_Register to return -1 in order to reach return statement immediately after
      * comment "Must be able to create and initialize tables" */
@@ -648,7 +646,7 @@ void SC_InitTables_Test_ErrorGetDumpTablePointers(void)
     char   ExpectedEventString[CFE_MISSION_EVS_MAX_MESSAGE_LENGTH];
 
     snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH,
-             "RTS Info table failed Getting Address, returned: 0x%%08X");
+             "Table failed Getting Address, returned: 0x%%08X");
 
     /* Set CFE_TBL_GetAddress to return -1 in order to cause SC_GetDumpTablePointers to return -1, in order to reach
      * "return(Result)" after SC_GetDumpTablePointers */
@@ -738,8 +736,7 @@ void SC_RegisterAllTables_Test_ErrorRegisterRTSInformation(void)
     int32 strCmpResult;
     char  ExpectedEventString[CFE_MISSION_EVS_MAX_MESSAGE_LENGTH];
 
-    snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH,
-             "RTS info table register failed, returned: 0x%%08X");
+    snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH, "%%s table register failed, returned: 0x%%08X");
 
     /* Set CFE_TBL_Register to return -1 on the 1st call in order to generate error message
      * SC_REGISTER_RTS_INFO_TABLE_ERR_EID */
@@ -771,8 +768,7 @@ void SC_RegisterAllTables_Test_ErrorRegisterRTPControl(void)
     int32 strCmpResult;
     char  ExpectedEventString[CFE_MISSION_EVS_MAX_MESSAGE_LENGTH];
 
-    snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH,
-             "RTS control block table register failed, returned: 0x%%08X");
+    snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH, "%%s table register failed, returned: 0x%%08X");
 
     /* Set CFE_TBL_Register to return -1 on the 2nd call in order to generate error message
      * SC_REGISTER_RTS_CTRL_BLK_TABLE_ERR_EID */
@@ -804,8 +800,7 @@ void SC_RegisterAllTables_Test_ErrorRegisterATSInformation(void)
     int32 strCmpResult;
     char  ExpectedEventString[CFE_MISSION_EVS_MAX_MESSAGE_LENGTH];
 
-    snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH,
-             "ATS Info table register failed, returned: 0x%%08X");
+    snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH, "%%s table register failed, returned: 0x%%08X");
 
     /* Set CFE_TBL_Register to return -1 on the 3rd call in order to generate error message
      * SC_REGISTER_ATS_INFO_TABLE_ERR_EID */
@@ -837,8 +832,7 @@ void SC_RegisterAllTables_Test_ErrorRegisterATPControl(void)
     int32 strCmpResult;
     char  ExpectedEventString[CFE_MISSION_EVS_MAX_MESSAGE_LENGTH];
 
-    snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH,
-             "ATS control block table register failed, returned: 0x%%08X");
+    snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH, "%%s table register failed, returned: 0x%%08X");
 
     /* Set CFE_TBL_Register to return -1 on the 4th call in order to generate error message
      * SC_REGISTER_ATS_CTRL_BLK_TABLE_ERR_EID */
@@ -904,7 +898,7 @@ void SC_RegisterAllTables_Test_ErrorRegisterLoadableRTS(void)
     char  ExpectedEventString[CFE_MISSION_EVS_MAX_MESSAGE_LENGTH];
 
     snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH,
-             "RTS Table Registration Failed for RTS %%d, returned: 0x%%08X");
+             "Table Registration Failed for %%s %%d, returned: 0x%%08X");
 
     /* Set CFE_TBL_Register to return -1 on the last call when registering loadable RTS tables in order to generate
      * error message SC_REGISTER_RTS_TBL_ERR_EID */
@@ -937,7 +931,7 @@ void SC_RegisterAllTables_Test_ErrorRegisterLoadableATS(void)
     char  ExpectedEventString[CFE_MISSION_EVS_MAX_MESSAGE_LENGTH];
 
     snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH,
-             "ATS Table Registration Failed for ATS %%d, returned: 0x%%08X");
+             "Table Registration Failed for %%s %%d, returned: 0x%%08X");
 
     /* Set CFE_TBL_Register to return -1 on the last call when registering loadable ATS tables in order to generate
      * error message SC_REGISTER_ATS_TBL_ERR_EID */
@@ -996,6 +990,34 @@ void SC_RegisterAllTables_Test_ErrorRegisterLoadableAppendATS(void)
 
 } /* end SC_RegisterAllTables_Test_ErrorRegisterLoadableAppendATS */
 
+void SC_RegisterDumpOnlyTables_Test_Nominal(void)
+{
+    int32 ReturnValue;
+
+    /* Execute the function being tested */
+    ReturnValue = SC_RegisterDumpOnlyTables();
+
+    /* Verify results */
+    UtAssert_True(ReturnValue == CFE_SUCCESS, "ReturnValue == CFE_SUCCESS");
+    UtAssert_STUB_COUNT(CFE_TBL_Register, 6);
+    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
+
+} /* end SC_RegisterDumpOnlyTables_Test_Nominal */
+
+void SC_RegisterLoadableTables_Test_Nominal(void)
+{
+    int32 ReturnValue;
+
+    /* Execute the function being tested */
+    ReturnValue = SC_RegisterLoadableTables();
+
+    /* Verify results */
+    UtAssert_True(ReturnValue == CFE_SUCCESS, "ReturnValue == CFE_SUCCESS");
+    UtAssert_STUB_COUNT(CFE_TBL_Register, 67);
+    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
+
+} /* end SC_RegisterLoadableTables_Test_Nominal */
+
 void SC_GetDumpTablePointers_Test_Nominal(void)
 {
     int32 ReturnValue;
@@ -1022,7 +1044,7 @@ void SC_GetDumpTablePointers_Test_ErrorGetAddressRTSInformation(void)
     char  ExpectedEventString[CFE_MISSION_EVS_MAX_MESSAGE_LENGTH];
 
     snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH,
-             "RTS Info table failed Getting Address, returned: 0x%%08X");
+             "Table failed Getting Address, returned: 0x%%08X");
 
     /* Need to set CFE_TBL_GetAddress to return -1 on 1st call (to generate error message
      * SC_GET_ADDRESS_RTS_INFO_ERR_EID) and CFE_SUCCESS on all other calls.  This could have been done using just a hook
@@ -1059,7 +1081,7 @@ void SC_GetDumpTablePointers_Test_ErrorGetAddressRTPControl(void)
     char  ExpectedEventString[CFE_MISSION_EVS_MAX_MESSAGE_LENGTH];
 
     snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH,
-             "RTS Ctrl Blck table failed Getting Address, returned: 0x%%08X");
+             "Table failed Getting Address, returned: 0x%%08X");
 
     /* Need to set CFE_TBL_GetAddress to return -1 on 2nd call (to generate error message
      * SC_GET_ADDRESS_RTS_CTRL_BLCK_ERR_EID) */
@@ -1091,7 +1113,7 @@ void SC_GetDumpTablePointers_Test_ErrorGetAddressATSInformation(void)
     char  ExpectedEventString[CFE_MISSION_EVS_MAX_MESSAGE_LENGTH];
 
     snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH,
-             "ATS Info table failed Getting Address, returned: 0x%%08X");
+             "Table failed Getting Address, returned: 0x%%08X");
 
     /* Need to set CFE_TBL_GetAddress to return -1 on 3rd call (to generate error message
      * SC_GET_ADDRESS_ATS_INFO_ERR_EID) */
@@ -1123,7 +1145,7 @@ void SC_GetDumpTablePointers_Test_ErrorGetAddressATPControl(void)
     char  ExpectedEventString[CFE_MISSION_EVS_MAX_MESSAGE_LENGTH];
 
     snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH,
-             "ATS Ctrl Blck table failed Getting Address, returned: 0x%%08X");
+             "Table failed Getting Address, returned: 0x%%08X");
 
     /* Need to set CFE_TBL_GetAddress to return -1 on 5th call (to generate error message
      * SC_GET_ADDRESS_ATS_CTRL_BLCK_ERR_EID) */
@@ -1365,6 +1387,10 @@ void UtTest_Setup(void)
                "SC_RegisterAllTables_Test_ErrorRegisterLoadableATS");
     UtTest_Add(SC_RegisterAllTables_Test_ErrorRegisterLoadableAppendATS, SC_Test_Setup, SC_Test_TearDown,
                "SC_RegisterAllTables_Test_ErrorRegisterLoadableAppendATS");
+    UtTest_Add(SC_RegisterDumpOnlyTables_Test_Nominal, SC_Test_Setup, SC_Test_TearDown,
+               "SC_RegisterDumpOnlyTables_Test_Nominal");
+    UtTest_Add(SC_RegisterLoadableTables_Test_Nominal, SC_Test_Setup, SC_Test_TearDown,
+               "SC_RegisterLoadableTables_Test_Nominal");
     UtTest_Add(SC_GetDumpTablePointers_Test_Nominal, SC_Test_Setup, SC_Test_TearDown,
                "SC_GetDumpTablePointers_Test_Nominal");
     UtTest_Add(SC_GetDumpTablePointers_Test_ErrorGetAddressRTSInformation, SC_Test_Setup, SC_Test_TearDown,

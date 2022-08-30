@@ -306,61 +306,60 @@ int32 SC_InitTables(void)
 
 int32 SC_RegisterAllTables(void)
 {
-    int    i;
-    int32  Result;
-    int32  TableSize;
-    uint16 TableOptions;
-    char   TableName[CFE_MISSION_TBL_MAX_NAME_LENGTH];
+    int32 Result;
 
-    /* Set table options for dump only tables */
-    TableOptions = (CFE_TBL_OPT_DEFAULT | CFE_TBL_OPT_SNGL_BUFFER | CFE_TBL_OPT_DUMP_ONLY);
-
-    /* Register dump only RTS information table */
-    TableSize = sizeof(SC_RtsInfoEntry_t) * SC_NUMBER_OF_RTS;
-    Result    = CFE_TBL_Register(&SC_OperData.RtsInfoHandle, SC_RTSINFO_TABLE_NAME, TableSize, TableOptions, NULL);
+    Result = SC_RegisterDumpOnlyTables();
     if (Result != CFE_SUCCESS)
     {
-        CFE_EVS_SendEvent(SC_REGISTER_RTS_INFO_TABLE_ERR_EID, CFE_EVS_EventType_ERROR,
-                          "RTS info table register failed, returned: 0x%08X", (unsigned int)Result);
         return (Result);
     }
 
-    /* Register dump only RTP control block table */
-    TableSize = sizeof(SC_RtpControlBlock_t);
-    Result    = CFE_TBL_Register(&SC_OperData.RtsCtrlBlckHandle, SC_RTP_CTRL_TABLE_NAME, TableSize, TableOptions, NULL);
+    Result = SC_RegisterLoadableTables();
     if (Result != CFE_SUCCESS)
     {
-        CFE_EVS_SendEvent(SC_REGISTER_RTS_CTRL_BLK_TABLE_ERR_EID, CFE_EVS_EventType_ERROR,
-                          "RTS control block table register failed, returned: 0x%08X", (unsigned int)Result);
         return (Result);
     }
 
-    /* Register dump only ATS information table */
-    TableSize = sizeof(SC_AtsInfoTable_t) * SC_NUMBER_OF_ATS;
-    Result    = CFE_TBL_Register(&SC_OperData.AtsInfoHandle, SC_ATSINFO_TABLE_NAME, TableSize, TableOptions, NULL);
-    if (Result != CFE_SUCCESS)
-    {
-        CFE_EVS_SendEvent(SC_REGISTER_ATS_INFO_TABLE_ERR_EID, CFE_EVS_EventType_ERROR,
-                          "ATS Info table register failed, returned: 0x%08X", (unsigned int)Result);
-        return (Result);
-    }
+    return (CFE_SUCCESS);
 
-    /* Register dump only ATP control block table */
-    TableSize = sizeof(SC_AtpControlBlock_t);
-    Result    = CFE_TBL_Register(&SC_OperData.AtsCtrlBlckHandle, SC_ATS_CTRL_TABLE_NAME, TableSize, TableOptions, NULL);
-    if (Result != CFE_SUCCESS)
+} /* end SC_RegisterAllTables() */
+
+int32 SC_RegisterDumpOnlyTables(void)
+{
+    int   i;
+    int32 Result;
+    char  TableName[CFE_MISSION_TBL_MAX_NAME_LENGTH];
+
+    CFE_TBL_Handle_t *TblHandlePtr[4] = {&SC_OperData.RtsInfoHandle, &SC_OperData.RtsCtrlBlckHandle,
+                                         &SC_OperData.AtsInfoHandle, &SC_OperData.AtsCtrlBlckHandle};
+    const char *      Name[4]         = {SC_RTSINFO_TABLE_NAME, SC_RTP_CTRL_TABLE_NAME, SC_ATSINFO_TABLE_NAME,
+                           SC_ATS_CTRL_TABLE_NAME};
+    int32             TableSize[4]    = {sizeof(SC_RtsInfoEntry_t) * SC_NUMBER_OF_RTS, sizeof(SC_RtpControlBlock_t),
+                          sizeof(SC_AtsInfoTable_t) * SC_NUMBER_OF_ATS, sizeof(SC_AtpControlBlock_t)};
+    uint16            EventID[4]      = {SC_REGISTER_RTS_INFO_TABLE_ERR_EID, SC_REGISTER_RTS_CTRL_BLK_TABLE_ERR_EID,
+                         SC_REGISTER_ATS_INFO_TABLE_ERR_EID, SC_REGISTER_ATS_CTRL_BLK_TABLE_ERR_EID};
+    const char *      Spec[4]         = {"RTS info", "RTS control block", "ATS Info", "ATS control block"};
+    uint16            TableOptions    = (CFE_TBL_OPT_DEFAULT | CFE_TBL_OPT_SNGL_BUFFER | CFE_TBL_OPT_DUMP_ONLY);
+
+    for (i = 0; i < 4; i++)
     {
-        CFE_EVS_SendEvent(SC_REGISTER_ATS_CTRL_BLK_TABLE_ERR_EID, CFE_EVS_EventType_ERROR,
-                          "ATS control block table register failed, returned: 0x%08X", (unsigned int)Result);
-        return (Result);
+        /* Register dump only table */
+        Result = CFE_TBL_Register(TblHandlePtr[i], Name[i], TableSize[i], TableOptions, NULL);
+        if (Result != CFE_SUCCESS)
+        {
+            CFE_EVS_SendEvent(EventID[i], CFE_EVS_EventType_ERROR, "%s table register failed, returned: 0x%08X",
+                              Spec[i], (unsigned int)Result);
+            return (Result);
+        }
     }
 
     /* Register dump only ATS command status tables */
-    TableSize = SC_MAX_ATS_CMDS * sizeof(uint32);
     for (i = 0; i < SC_NUMBER_OF_ATS; i++)
     {
         snprintf(TableName, CFE_MISSION_TBL_MAX_NAME_LENGTH, "%s%d", SC_ATS_CMD_STAT_TABLE_NAME, i + 1);
-        Result = CFE_TBL_Register(&SC_OperData.AtsCmdStatusHandle[i], TableName, TableSize, TableOptions, NULL);
+        Result = CFE_TBL_Register(&SC_OperData.AtsCmdStatusHandle[i], TableName, SC_MAX_ATS_CMDS * sizeof(uint32),
+                                  TableOptions, NULL);
+
         if (Result != CFE_SUCCESS)
         {
             CFE_EVS_SendEvent(SC_REGISTER_ATS_CMD_STATUS_TABLE_ERR_EID, CFE_EVS_EventType_ERROR,
@@ -370,43 +369,47 @@ int32 SC_RegisterAllTables(void)
         }
     }
 
-    /* Register loadable RTS tables */
-    TableOptions = CFE_TBL_OPT_DEFAULT | CFE_TBL_OPT_SNGL_BUFFER;
-    TableSize    = SC_RTS_BUFF_SIZE32 * SC_BYTES_IN_WORD;
-    for (i = 0; i < SC_NUMBER_OF_RTS; i++)
-    {
-        snprintf(TableName, CFE_MISSION_TBL_MAX_NAME_LENGTH, "%s%03d", SC_RTS_TABLE_NAME, i + 1);
-        Result = CFE_TBL_Register(&SC_OperData.RtsTblHandle[i], TableName, TableSize, TableOptions, SC_ValidateRts);
-        if (Result != CFE_SUCCESS)
-        {
-            CFE_EVS_SendEvent(SC_REGISTER_RTS_TBL_ERR_EID, CFE_EVS_EventType_ERROR,
-                              "RTS Table Registration Failed for RTS %d, returned: 0x%08X", i + 1,
-                              (unsigned int)Result);
-            return (Result);
-        }
-    }
+    return (CFE_SUCCESS);
 
-    /* Register loadable ATS tables */
-    TableOptions = CFE_TBL_OPT_DBL_BUFFER;
-    TableSize    = SC_ATS_BUFF_SIZE32 * SC_BYTES_IN_WORD;
-    for (i = 0; i < SC_NUMBER_OF_ATS; i++)
+} /* end SC_RegisterDumpOnlyTables() */
+
+int32 SC_RegisterLoadableTables(void)
+{
+    int   i, j;
+    int32 Result;
+    char  TableName[CFE_MISSION_TBL_MAX_NAME_LENGTH];
+
+    uint16            NumTables[2]    = {SC_NUMBER_OF_RTS, SC_NUMBER_OF_ATS};
+    const char *      StrFormat[2]    = {"%s%03d", "%s%d"};
+    const char *      Name[2]         = {SC_RTS_TABLE_NAME, SC_ATS_TABLE_NAME};
+    CFE_TBL_Handle_t *TblHandlePtr[2] = {SC_OperData.RtsTblHandle, SC_OperData.AtsTblHandle};
+    int32             TableSize[2]    = {SC_RTS_BUFF_SIZE32 * SC_BYTES_IN_WORD, SC_ATS_BUFF_SIZE32 * SC_BYTES_IN_WORD};
+    uint16            TableOptions[2] = {(CFE_TBL_OPT_DEFAULT | CFE_TBL_OPT_SNGL_BUFFER), CFE_TBL_OPT_DBL_BUFFER};
+    uint16            EventID[2]      = {SC_REGISTER_RTS_TBL_ERR_EID, SC_REGISTER_ATS_TBL_ERR_EID};
+    const char *      Spec[2]         = {"RTS", "ATS"};
+    CFE_TBL_CallbackFuncPtr_t TblValidationFuncPtr[2] = {SC_ValidateRts, SC_ValidateAts};
+
+    for (i = 0; i < 2; i++)
     {
-        snprintf(TableName, CFE_MISSION_TBL_MAX_NAME_LENGTH, "%s%d", SC_ATS_TABLE_NAME, i + 1);
-        Result = CFE_TBL_Register(&SC_OperData.AtsTblHandle[i], TableName, TableSize, TableOptions, SC_ValidateAts);
-        if (Result != CFE_SUCCESS)
+        for (j = 0; j < NumTables[i]; j++)
         {
-            CFE_EVS_SendEvent(SC_REGISTER_ATS_TBL_ERR_EID, CFE_EVS_EventType_ERROR,
-                              "ATS Table Registration Failed for ATS %d, returned: 0x%08X", i + 1,
-                              (unsigned int)Result);
-            return (Result);
+            snprintf(TableName, CFE_MISSION_TBL_MAX_NAME_LENGTH, StrFormat[i], Name[i], j + 1);
+            Result = CFE_TBL_Register(&TblHandlePtr[i][j], TableName, TableSize[i], TableOptions[i],
+                                      TblValidationFuncPtr[i]);
+
+            if (Result != CFE_SUCCESS)
+            {
+                CFE_EVS_SendEvent(EventID[i], CFE_EVS_EventType_ERROR,
+                                  "Table Registration Failed for %s %d, returned: 0x%08X", Spec[i], j + 1,
+                                  (unsigned int)Result);
+                return (Result);
+            }
         }
     }
 
     /* Register loadable Append ATS table */
-    TableOptions = CFE_TBL_OPT_DBL_BUFFER;
-    TableSize    = SC_APPEND_BUFF_SIZE32 * SC_BYTES_IN_WORD;
-    Result       = CFE_TBL_Register(&SC_OperData.AppendTblHandle, SC_APPEND_TABLE_NAME, TableSize, TableOptions,
-                              SC_ValidateAppend);
+    Result = CFE_TBL_Register(&SC_OperData.AppendTblHandle, SC_APPEND_TABLE_NAME,
+                              SC_APPEND_BUFF_SIZE32 * SC_BYTES_IN_WORD, CFE_TBL_OPT_DBL_BUFFER, SC_ValidateAppend);
     if (Result != CFE_SUCCESS)
     {
         CFE_EVS_SendEvent(SC_REGISTER_APPEND_TBL_ERR_EID, CFE_EVS_EventType_ERROR,
@@ -416,7 +419,7 @@ int32 SC_RegisterAllTables(void)
 
     return (CFE_SUCCESS);
 
-} /* end SC_RegisterAllTables() */
+} /* end SC_RegisterLoadableTables() */
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /*                                                                 */
@@ -429,40 +432,22 @@ int32 SC_GetDumpTablePointers(void)
     int   i;
     int32 Result;
 
-    /* Get buffer address for dump only RTS information table */
-    Result = CFE_TBL_GetAddress((void **)&SC_OperData.RtsInfoTblAddr, SC_OperData.RtsInfoHandle);
-    if (Result != CFE_SUCCESS)
-    {
-        CFE_EVS_SendEvent(SC_GET_ADDRESS_RTS_INFO_ERR_EID, CFE_EVS_EventType_ERROR,
-                          "RTS Info table failed Getting Address, returned: 0x%08X", (unsigned int)Result);
-        return (Result);
-    }
+    void **          TblAddr[4]   = {(void **)&SC_OperData.RtsInfoTblAddr, (void **)&SC_OperData.RtsCtrlBlckAddr,
+                         (void **)&SC_OperData.AtsInfoTblAddr, (void **)&SC_OperData.AtsCtrlBlckAddr};
+    CFE_TBL_Handle_t TblHandle[4] = {SC_OperData.RtsInfoHandle, SC_OperData.RtsCtrlBlckHandle,
+                                     SC_OperData.AtsInfoHandle, SC_OperData.AtsCtrlBlckHandle};
+    uint16           EventID[4]   = {SC_GET_ADDRESS_RTS_INFO_ERR_EID, SC_GET_ADDRESS_RTS_CTRL_BLCK_ERR_EID,
+                         SC_GET_ADDRESS_ATS_INFO_ERR_EID, SC_GET_ADDRESS_ATS_CTRL_BLCK_ERR_EID};
 
-    /* Get buffer address for dump only RTP control block table */
-    Result = CFE_TBL_GetAddress((void **)&SC_OperData.RtsCtrlBlckAddr, SC_OperData.RtsCtrlBlckHandle);
-    if (Result != CFE_SUCCESS)
+    for (i = 0; i < 4; i++)
     {
-        CFE_EVS_SendEvent(SC_GET_ADDRESS_RTS_CTRL_BLCK_ERR_EID, CFE_EVS_EventType_ERROR,
-                          "RTS Ctrl Blck table failed Getting Address, returned: 0x%08X", (unsigned int)Result);
-        return (Result);
-    }
-
-    /* Get buffer address for dump only ATS information table */
-    Result = CFE_TBL_GetAddress((void **)&SC_OperData.AtsInfoTblAddr, SC_OperData.AtsInfoHandle);
-    if (Result != CFE_SUCCESS)
-    {
-        CFE_EVS_SendEvent(SC_GET_ADDRESS_ATS_INFO_ERR_EID, CFE_EVS_EventType_ERROR,
-                          "ATS Info table failed Getting Address, returned: 0x%08X", (unsigned int)Result);
-        return (Result);
-    }
-
-    /* Get buffer address for dump only ATP control block table */
-    Result = CFE_TBL_GetAddress((void **)&SC_OperData.AtsCtrlBlckAddr, SC_OperData.AtsCtrlBlckHandle);
-    if (Result != CFE_SUCCESS)
-    {
-        CFE_EVS_SendEvent(SC_GET_ADDRESS_ATS_CTRL_BLCK_ERR_EID, CFE_EVS_EventType_ERROR,
-                          "ATS Ctrl Blck table failed Getting Address, returned: 0x%08X", (unsigned int)Result);
-        return (Result);
+        Result = CFE_TBL_GetAddress(TblAddr[i], TblHandle[i]);
+        if (Result != CFE_SUCCESS)
+        {
+            CFE_EVS_SendEvent(EventID[i], CFE_EVS_EventType_ERROR, "Table failed Getting Address, returned: 0x%08X",
+                              (unsigned int)Result);
+            return (Result);
+        }
     }
 
     /* Get buffer address for dump only ATS command status tables */
@@ -481,7 +466,6 @@ int32 SC_GetDumpTablePointers(void)
     return (CFE_SUCCESS);
 
 } /* end SC_GetDumpTablePointers() */
-
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /*                                                                 */
 /* Get buffer pointers for loadable tables                         */
@@ -607,25 +591,16 @@ void SC_RegisterManageCmds(void)
 {
     int32 i;
 
-    /* Register for RTS info table manage request commands */
-    CFE_TBL_NotifyByMessage(SC_OperData.RtsInfoHandle, CFE_SB_ValueToMsgId(SC_CMD_MID), SC_MANAGE_TABLE_CC,
-                            SC_TBL_ID_RTS_INFO);
+    CFE_TBL_Handle_t TblHandles[5] = {SC_OperData.RtsInfoHandle, SC_OperData.RtsCtrlBlckHandle,
+                                      SC_OperData.AtsInfoHandle, SC_OperData.AtsCtrlBlckHandle,
+                                      SC_OperData.AppendTblHandle};
+    uint32           params[5]     = {SC_TBL_ID_RTS_INFO, SC_TBL_ID_RTP_CTRL, SC_TBL_ID_ATS_INFO, SC_TBL_ID_ATP_CTRL,
+                        SC_TBL_ID_APPEND};
 
-    /* Register for RTS control block table manage request commands */
-    CFE_TBL_NotifyByMessage(SC_OperData.RtsCtrlBlckHandle, CFE_SB_ValueToMsgId(SC_CMD_MID), SC_MANAGE_TABLE_CC,
-                            SC_TBL_ID_RTP_CTRL);
-
-    /* Register for ATS info table manage request commands */
-    CFE_TBL_NotifyByMessage(SC_OperData.AtsInfoHandle, CFE_SB_ValueToMsgId(SC_CMD_MID), SC_MANAGE_TABLE_CC,
-                            SC_TBL_ID_ATS_INFO);
-
-    /* Register for ATS control block table manage request commands */
-    CFE_TBL_NotifyByMessage(SC_OperData.AtsCtrlBlckHandle, CFE_SB_ValueToMsgId(SC_CMD_MID), SC_MANAGE_TABLE_CC,
-                            SC_TBL_ID_ATP_CTRL);
-
-    /* Register for ATS Append table manage request commands */
-    CFE_TBL_NotifyByMessage(SC_OperData.AppendTblHandle, CFE_SB_ValueToMsgId(SC_CMD_MID), SC_MANAGE_TABLE_CC,
-                            SC_TBL_ID_APPEND);
+    for (i = 0; i < 5; i++)
+    {
+        CFE_TBL_NotifyByMessage(TblHandles[i], CFE_SB_ValueToMsgId(SC_CMD_MID), SC_MANAGE_TABLE_CC, params[i]);
+    }
 
     for (i = 0; i < SC_NUMBER_OF_ATS; i++)
     {
