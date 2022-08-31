@@ -731,7 +731,7 @@ void SC_TableManageCmd(const CFE_SB_Buffer_t *BufPtr)
     }
     else if (TableID == SC_TBL_ID_APPEND)
     {
-        SC_ManageAppendTable();
+        SC_ManageTable(APPEND, -1);
     }
     else if ((TableID >= SC_TBL_ID_RTS_0) && (TableID < (SC_TBL_ID_RTS_0 + SC_NUMBER_OF_RTS)))
     {
@@ -777,15 +777,13 @@ void SC_TableManageCmd(const CFE_SB_Buffer_t *BufPtr)
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /*                                                                 */
-/* Allow cFE Table Services to manage loadable ATS table           */
+/* Allow cFE Table Services to manage loadable RTS table           */
 /*                                                                 */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 void SC_ManageRtsTable(int32 ArrayIndex)
 {
-    int32 Result;
-
-    /* validate RTS array index */
+    /* validate array index */
     if (ArrayIndex >= SC_NUMBER_OF_RTS)
     {
         CFE_EVS_SendEvent(SC_TABLE_MANAGE_RTS_INV_INDEX_ERR_EID, CFE_EVS_EventType_ERROR,
@@ -793,28 +791,7 @@ void SC_ManageRtsTable(int32 ArrayIndex)
         return;
     }
 
-    /* Release RTS table data pointer */
-    CFE_TBL_ReleaseAddress(SC_OperData.RtsTblHandle[ArrayIndex]);
-
-    /* Allow cFE to manage table */
-    CFE_TBL_Manage(SC_OperData.RtsTblHandle[ArrayIndex]);
-
-    /* Re-acquire RTS table data pointer */
-    Result = CFE_TBL_GetAddress((void *)&SC_OperData.RtsTblAddr[ArrayIndex], SC_OperData.RtsTblHandle[ArrayIndex]);
-    if (Result == CFE_TBL_INFO_UPDATED)
-    {
-        /* Process new RTS table data */
-        SC_LoadRts(ArrayIndex);
-    }
-    else if ((Result != CFE_SUCCESS) && (Result != CFE_TBL_ERR_NEVER_LOADED))
-    {
-        /* Ignore successful dump or validate and cmds before first activate. */
-        CFE_EVS_SendEvent(SC_TABLE_MANAGE_RTS_ERR_EID, CFE_EVS_EventType_ERROR,
-                          "RTS table manage process error: RTS = %d, Result = 0x%X",
-                          (int)SC_RTS_INDEX_TO_NUM(ArrayIndex), (unsigned int)Result);
-    }
-
-    return;
+    SC_ManageTable(RTS, ArrayIndex);
 
 } /* End SC_ManageRtsTable() */
 
@@ -826,9 +803,7 @@ void SC_ManageRtsTable(int32 ArrayIndex)
 
 void SC_ManageAtsTable(int32 ArrayIndex)
 {
-    int32 Result;
-
-    /* validate ATS array index */
+    /* validate array index */
     if (ArrayIndex >= SC_NUMBER_OF_ATS)
     {
         CFE_EVS_SendEvent(SC_TABLE_MANAGE_ATS_INV_INDEX_ERR_EID, CFE_EVS_EventType_ERROR,
@@ -836,64 +811,86 @@ void SC_ManageAtsTable(int32 ArrayIndex)
         return;
     }
 
-    /* Release ATS table data pointer */
-    CFE_TBL_ReleaseAddress(SC_OperData.AtsTblHandle[ArrayIndex]);
-
-    /* Allow cFE to manage table */
-    CFE_TBL_Manage(SC_OperData.AtsTblHandle[ArrayIndex]);
-
-    /* Re-acquire ATS table data pointer */
-    Result = CFE_TBL_GetAddress((void *)&SC_OperData.AtsTblAddr[ArrayIndex], SC_OperData.AtsTblHandle[ArrayIndex]);
-    if (Result == CFE_TBL_INFO_UPDATED)
-    {
-        /* Process new ATS table data */
-        SC_LoadAts(ArrayIndex);
-    }
-    else if ((Result != CFE_SUCCESS) && (Result != CFE_TBL_ERR_NEVER_LOADED))
-    {
-        /* Ignore successful dump or validate and cmds before first activate. */
-        CFE_EVS_SendEvent(SC_TABLE_MANAGE_ATS_ERR_EID, CFE_EVS_EventType_ERROR,
-                          "ATS table manage process error: ATS = %d, Result = 0x%X",
-                          (int)SC_RTS_INDEX_TO_NUM(ArrayIndex), (unsigned int)Result);
-    }
-
-    return;
+    SC_ManageTable(ATS, ArrayIndex);
 
 } /* End SC_ManageAtsTable() */
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /*                                                                 */
-/* Allow cFE Table Services to manage loadable ATS Append table    */
+/* Allow cFE Table Services to manage loadable table    */
 /*                                                                 */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-void SC_ManageAppendTable(void)
+void SC_ManageTable(SC_TableType type, int32 ArrayIndex)
 {
-    int32 Result;
+    int32            Result;
+    CFE_TBL_Handle_t TblHandle;
+    uint32 *         TblAddr;
 
-    /* Release ATS Append table data pointer */
-    CFE_TBL_ReleaseAddress(SC_OperData.AppendTblHandle);
+    switch (type)
+    {
+        case ATS:
+            TblHandle = SC_OperData.AtsTblHandle[ArrayIndex];
+            TblAddr   = SC_OperData.AtsTblAddr[ArrayIndex];
+            break;
+        case RTS:
+            TblHandle = SC_OperData.RtsTblHandle[ArrayIndex];
+            TblAddr   = SC_OperData.RtsTblAddr[ArrayIndex];
+            break;
+        case APPEND:
+        default:
+            TblHandle = SC_OperData.AppendTblHandle;
+            TblAddr   = SC_OperData.AppendTblAddr;
+            break;
+    }
+
+    /* Release table data pointer */
+    CFE_TBL_ReleaseAddress(TblHandle);
 
     /* Allow cFE to manage table */
-    CFE_TBL_Manage(SC_OperData.AppendTblHandle);
+    CFE_TBL_Manage(TblHandle);
 
-    /* Re-acquire ATS Append table data pointer */
-    Result = CFE_TBL_GetAddress((void *)&SC_OperData.AppendTblAddr, SC_OperData.AppendTblHandle);
+    /* Re-acquire table data pointer */
+    Result = CFE_TBL_GetAddress((void *)&TblAddr, TblHandle);
     if (Result == CFE_TBL_INFO_UPDATED)
     {
-        /* Process new ATS Append table data */
-        SC_UpdateAppend();
+        /* Process new table data */
+        if (type == ATS)
+        {
+            SC_LoadAts(ArrayIndex);
+        }
+        else if (type == RTS)
+        {
+            SC_LoadRts(ArrayIndex);
+        }
+        else
+        {
+            SC_UpdateAppend();
+        }
     }
     else if ((Result != CFE_SUCCESS) && (Result != CFE_TBL_ERR_NEVER_LOADED))
     {
         /* Ignore successful dump or validate and cmds before first activate. */
-        CFE_EVS_SendEvent(SC_TABLE_MANAGE_APPEND_ERR_EID, CFE_EVS_EventType_ERROR,
-                          "ATS Append table manage process error: Result = 0x%X", (unsigned int)Result);
+        if (type == ATS)
+        {
+            CFE_EVS_SendEvent(SC_TABLE_MANAGE_ATS_ERR_EID, CFE_EVS_EventType_ERROR,
+                              "ATS table manage process error: ATS = %d, Result = 0x%X",
+                              (int)SC_RTS_INDEX_TO_NUM(ArrayIndex), (unsigned int)Result);
+        }
+        else if (type == RTS)
+        {
+            CFE_EVS_SendEvent(SC_TABLE_MANAGE_RTS_ERR_EID, CFE_EVS_EventType_ERROR,
+                              "RTS table manage process error: RTS = %d, Result = 0x%X",
+                              (int)SC_RTS_INDEX_TO_NUM(ArrayIndex), (unsigned int)Result);
+        }
+        else
+        {
+            CFE_EVS_SendEvent(SC_TABLE_MANAGE_APPEND_ERR_EID, CFE_EVS_EventType_ERROR,
+                              "ATS Append table manage process error: Result = 0x%X", (unsigned int)Result);
+        }
     }
 
-    return;
-
-} /* End SC_ManageAppendTable() */
+} /* End SC_ManageTable() */
 
 /************************/
 /*  End of File Comment */

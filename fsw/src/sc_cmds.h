@@ -27,6 +27,13 @@
 
 #include "cfe.h"
 
+typedef enum
+{
+    ATS,
+    RTS,
+    APPEND
+} SC_TableType;
+
 /**
  * \brief Table manage request command handler
  *
@@ -85,11 +92,11 @@ void SC_ManageRtsTable(int32 ArrayIndex);
 void SC_ManageAtsTable(int32 ArrayIndex);
 
 /**
- * \brief Manage pending update to the ATS Append table
+ * \brief Manage pending update to a table
  *
  *  \par Description
  *       This function is invoked in response to a command from cFE Table
- *       Services indicating that the ATS Append table has a pending update.
+ *       Services indicating that a table has a pending update.
  *       The function will release the data pointer for the specified table,
  *       allow cFE Table Services to update the table data and re-acquire
  *       the table data pointer.
@@ -99,7 +106,7 @@ void SC_ManageAtsTable(int32 ArrayIndex);
  *
  *  \sa #SC_TableManageCmd
  */
-void SC_ManageAppendTable(void);
+void SC_ManageTable(SC_TableType type, int32 ArrayIndex);
 
 /**
  * \brief Routes commands to be processed
