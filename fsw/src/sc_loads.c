@@ -207,18 +207,14 @@ void SC_BuildTimeIndexTable(uint16 AtsIndex)
         return;
     }
 
+    /* initialize sorted list length */
+    ListLength = 0;
+
     /* initialize sorted list contents */
     for (i = 0; i < SC_MAX_ATS_CMDS; i++)
     {
         SC_AppData.AtsTimeIndexBuffer[AtsIndex][i] = SC_INVALID_CMD_NUMBER;
-    }
 
-    /* initialize sorted list length */
-    ListLength = 0;
-
-    /* create time sorted list */
-    for (i = 0; i < SC_MAX_ATS_CMDS; i++)
-    {
         /* add in-use command entries to time sorted list */
         if (SC_AppData.AtsCmdIndexBuffer[AtsIndex][i] != SC_ERROR)
         {
