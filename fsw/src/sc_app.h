@@ -150,9 +150,6 @@ int32 SC_GetLoadTablePointers(void);
  *
  *  \par Assumptions, External Events, and Notes:
  *        None
- *
- *  \return Execution status, see \ref CFEReturnCodes
- *  \retval #CFE_SUCCESS \copybrief CFE_SUCCESS
  */
 void SC_LoadDefaultTables(void);
 
