@@ -770,9 +770,6 @@ void SC_TableManageCmd(const CFE_SB_Buffer_t *BufPtr)
         CFE_EVS_SendEvent(SC_TABLE_MANAGE_ID_ERR_EID, CFE_EVS_EventType_ERROR,
                           "Table manage command packet error: table ID = %d", (int)TableID);
     }
-
-    return;
-
 } /* End SC_TableManageCmd() */
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */

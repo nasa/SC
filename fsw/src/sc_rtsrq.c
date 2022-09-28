@@ -260,9 +260,6 @@ void SC_StartRtsGrpCmd(const CFE_SB_Buffer_t *CmdPacket)
             SC_OperData.HkPacket.CmdErrCtr++;
         }
     }
-
-    return;
-
 } /* end SC_StartRtsGrpCmd */
 #endif
 
@@ -356,9 +353,6 @@ void SC_StopRtsGrpCmd(const CFE_SB_Buffer_t *CmdPacket)
             SC_OperData.HkPacket.CmdErrCtr++;
         }
     }
-
-    return;
-
 } /* end SC_StopRtsGrpCmd */
 #endif
 
@@ -452,9 +446,6 @@ void SC_DisableRtsGrpCmd(const CFE_SB_Buffer_t *CmdPacket)
             SC_OperData.HkPacket.CmdErrCtr++;
         }
     }
-
-    return;
-
 } /* end SC_DisableRtsGrpCmd */
 #endif
 
@@ -549,9 +540,6 @@ void SC_EnableRtsGrpCmd(const CFE_SB_Buffer_t *CmdPacket)
             SC_OperData.HkPacket.CmdErrCtr++;
         }
     }
-
-    return;
-
 } /* end SC_EnableRtsGrpCmd */
 #endif
 
