@@ -105,6 +105,10 @@ int32 SC_InitTables(void);
  */
 int32 SC_RegisterAllTables(void);
 
+int32 SC_RegisterDumpOnlyTables(void);
+
+int32 SC_RegisterLoadableTables(void);
+
 /**
  * \brief Get dump only table buffer pointers
  *
