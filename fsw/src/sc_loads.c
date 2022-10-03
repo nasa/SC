@@ -171,7 +171,7 @@ void SC_LoadAts(uint16 AtsIndex)
 
     /*
      **   Now the commands are parsed through, need to build the tables
-     **   if the load was a sucess, need to build the tables
+     **   if the load was a success, need to build the tables
      */
     /* if the load finished without errors and there was at least one command */
     if ((Result == CFE_SUCCESS) && (SC_OperData.AtsInfoTblAddr[AtsIndex].NumberOfCommands > 0))
@@ -599,8 +599,6 @@ void SC_UpdateAppend(void)
     CFE_EVS_SendEvent(SC_UPDATE_APPEND_EID, CFE_EVS_EventType_INFORMATION,
                       "Update Append ATS Table: load count = %d, command count = %d, byte count = %d",
                       SC_OperData.HkPacket.AppendLoadCount, (int)EntryCount, (int)EntryIndex * SC_BYTES_IN_WORD);
-    return;
-
 } /* end SC_UpdateAppend */
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -680,9 +678,6 @@ void SC_ProcessAppend(uint16 AtsIndex)
 
     /* notify cFE that we have modified the ats table */
     CFE_TBL_Modified(SC_OperData.AtsTblHandle[AtsIndex]);
-
-    return;
-
 } /* end SC_ProcessAppend */
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */

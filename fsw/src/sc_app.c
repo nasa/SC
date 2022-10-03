@@ -576,9 +576,6 @@ void SC_LoadDefaultTables(void)
     /* Display startup RTS not loaded count */
     CFE_EVS_SendEvent(SC_RTS_LOAD_FAIL_COUNT_INFO_EID, CFE_EVS_EventType_INFORMATION,
                       "RTS table files not loaded at initialization = %d of %d", (int)NotLoadedCount, SC_NUMBER_OF_RTS);
-
-    return;
-
 } /* end SC_LoadDefaultTables() */
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -619,9 +616,6 @@ void SC_RegisterManageCmds(void)
         CFE_TBL_NotifyByMessage(SC_OperData.RtsTblHandle[i], CFE_SB_ValueToMsgId(SC_CMD_MID), SC_MANAGE_TABLE_CC,
                                 SC_TBL_ID_RTS_0 + i);
     }
-
-    return;
-
 } /* End SC_RegisterManageCmds() */
 
 /************************/
