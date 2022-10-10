@@ -57,7 +57,6 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 void SC_GetNextRtsTime(void)
 {
-
     int16           i;        /* loop counter MUST be SIGNED !*/
     uint16          NextRts;  /* the next rts to schedule */
     SC_AbsTimeTag_t NextTime; /* the next time for the RTS */
@@ -93,8 +92,7 @@ void SC_GetNextRtsTime(void)
         SC_OperData.RtsCtrlBlckAddr->RtsNumber = NextRts + 1;
         SC_AppData.NextCmdTime[SC_RTP]         = NextTime;
     } /* end if */
-
-} /* end SC_GetNextRtsTime */
+}
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /*                                                                 */
@@ -137,7 +135,7 @@ void SC_UpdateNextTime(void)
             SC_AppData.NextProcNumber = SC_RTP;
         }
     } /* end if */
-} /* end SC_UpdateNextTime */
+}
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /*                                                                 */
@@ -303,8 +301,7 @@ void SC_GetNextRtsCommand(void)
         } /* end if the RTS status is EXECUTING */
 
     } /* end if the RTS number is valid */
-
-} /* end SC_GetNextRtsCommand */
+}
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /*                                                                 */
@@ -313,7 +310,6 @@ void SC_GetNextRtsCommand(void)
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 void SC_GetNextAtsCommand(void)
 {
-
     uint16         AtsIndex;  /* ats array index */
     uint16         TimeIndex; /* a time index pointer */
     uint16         CmdIndex;  /* ats command array index */
@@ -321,7 +317,6 @@ void SC_GetNextAtsCommand(void)
 
     if (SC_OperData.AtsCtrlBlckAddr->AtpState == SC_EXECUTING)
     {
-
         /*
          ** Get the information that is needed to find the next command
          */
@@ -333,7 +328,6 @@ void SC_GetNextAtsCommand(void)
          */
         if (TimeIndex < SC_OperData.AtsInfoTblAddr[AtsIndex].NumberOfCommands)
         {
-
             /* get the information for the next command in the ATP control block */
             SC_OperData.AtsCtrlBlckAddr->TimeIndexPtr = TimeIndex;
             SC_OperData.AtsCtrlBlckAddr->CmdNumber    = SC_AppData.AtsTimeIndexBuffer[AtsIndex][TimeIndex];
@@ -372,9 +366,4 @@ void SC_GetNextAtsCommand(void)
         SC_OperData.AtsCtrlBlckAddr->AtpState = SC_EXECUTING;
 
     } /* end if ATS is EXECUTING*/
-
-} /* end SC_GetNextAtsCommand */
-
-/************************/
-/*  End of File Comment */
-/************************/
+}

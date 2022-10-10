@@ -40,8 +40,7 @@ void SC_GetCurrentTime_Test(void)
 
     /* Verify results */
     UtAssert_True(SC_AppData.CurrentTime != 0, "SC_AppData.CurrentTime != 0");
-
-} /* end SC_GetCurrentTime_Test */
+}
 
 void SC_GetAtsEntryTime_Test(void)
 {
@@ -56,8 +55,7 @@ void SC_GetAtsEntryTime_Test(void)
 
     /* Verify results */
     UtAssert_True(AbsTimeTag == 10, "AbsTimeTag == 10");
-
-} /* end SC_GetAtsEntryTime_Test */
+}
 
 void SC_ComputeAbsTime_Test(void)
 {
@@ -72,8 +70,7 @@ void SC_ComputeAbsTime_Test(void)
 
     /* The CFE_TIME_Add stub increments when status >= 0 */
     UtAssert_True(AbsTimeTag == 1, "AbsTimeTag == 1");
-
-} /* end SC_ComputeAbsTime_Test */
+}
 
 void SC_CompareAbsTime_Test_True(void)
 {
@@ -89,8 +86,7 @@ void SC_CompareAbsTime_Test_True(void)
 
     /* Verify results */
     UtAssert_True(Result == true, "Result == true");
-
-} /* end SC_CompareAbsTime_Test_True */
+}
 
 void SC_CompareAbsTime_Test_False(void)
 {
@@ -106,8 +102,7 @@ void SC_CompareAbsTime_Test_False(void)
 
     /* Verify results */
     UtAssert_True(Result == false, "Result == false");
-
-} /* end SC_CompareAbsTime_Test_False */
+}
 
 void SC_VerifyCmdLength_Test_Nominal(void)
 {
@@ -134,8 +129,7 @@ void SC_VerifyCmdLength_Test_Nominal(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 0, "CFE_EVS_SendEvent was called %u time(s), expected 0",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_VerifyCmdLength_Test_Nominal */
+}
 
 void SC_VerifyCmdLength_Test_LenError(void)
 {
@@ -175,8 +169,7 @@ void SC_VerifyCmdLength_Test_LenError(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_VerifyCmdLength_Test_LenError */
+}
 
 void SC_VerifyCmdLength_Test_LenErrorNotMID(void)
 {
@@ -215,8 +208,7 @@ void SC_VerifyCmdLength_Test_LenErrorNotMID(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_VerifyCmdLength_Test_LenErrorNotMID */
+}
 
 void SC_ToggleAtsIndex_Test(void)
 {
@@ -237,8 +229,7 @@ void SC_ToggleAtsIndex_Test(void)
     Result = SC_ToggleAtsIndex();
 
     UtAssert_True(Result == 0, "Result == 0");
-
-} /* end SC_ToggleAtsIndex_Test */
+}
 
 void UtTest_Setup(void)
 {
@@ -252,9 +243,4 @@ void UtTest_Setup(void)
     UtTest_Add(SC_VerifyCmdLength_Test_LenErrorNotMID, SC_Test_Setup, SC_Test_TearDown,
                "SC_VerifyCmdLength_Test_LenErrorNotMID");
     UtTest_Add(SC_ToggleAtsIndex_Test, SC_Test_Setup, SC_Test_TearDown, "SC_ToggleAtsIndex_Test");
-
-} /* end UtTest_Setup */
-
-/************************/
-/*  End of File Comment */
-/************************/
+}

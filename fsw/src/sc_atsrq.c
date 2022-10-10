@@ -121,7 +121,7 @@ void SC_StartAtsCmd(const CFE_SB_Buffer_t *BufPtr)
 
         } /* end if */
     }
-} /* end SC_StartAtsCmd */
+}
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /*                                                                 */
@@ -170,8 +170,7 @@ void SC_StopAtsCmd(const CFE_SB_Buffer_t *BufPtr)
 
         SC_OperData.HkPacket.CmdCtr++;
     }
-
-} /* end SC_StopAtsCmd */
+}
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /*                                                                 */
@@ -238,7 +237,6 @@ bool SC_BeginAts(uint16 AtsIndex, uint16 TimeOffset)
      */
     if (TimeIndex == SC_OperData.AtsInfoTblAddr[AtsIndex].NumberOfCommands)
     {
-
         CFE_EVS_SendEvent(SC_ATS_SKP_ALL_ERR_EID, CFE_EVS_EventType_ERROR,
                           "All ATS commands were skipped, ATS stopped");
 
@@ -271,8 +269,7 @@ bool SC_BeginAts(uint16 AtsIndex, uint16 TimeOffset)
     } /* end if */
 
     return (ReturnCode);
-
-} /* end SC_BeginAts */
+}
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /*                                                                 */
@@ -281,7 +278,6 @@ bool SC_BeginAts(uint16 AtsIndex, uint16 TimeOffset)
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 void SC_KillAts(void)
 {
-
     if (SC_OperData.AtsCtrlBlckAddr->AtpState != SC_IDLE)
     {
         /* Increment the ats use counter */
@@ -294,8 +290,7 @@ void SC_KillAts(void)
 
     /* reset the time of the next ats command */
     SC_AppData.NextCmdTime[SC_ATP] = SC_MAX_TIME;
-
-} /* end SC_KillAts */
+}
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /*                                                                 */
@@ -304,7 +299,6 @@ void SC_KillAts(void)
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 void SC_GroundSwitchCmd(const CFE_SB_Buffer_t *BufPtr)
 {
-
     uint16 NewAtsIndex; /* the index of the ats to switch to*/
 
     if (SC_VerifyCmdLength(&BufPtr->Msg, sizeof(SC_NoArgsCmd_t)))
@@ -318,7 +312,6 @@ void SC_GroundSwitchCmd(const CFE_SB_Buffer_t *BufPtr)
             /* Now check to see if the new ATS has commands in it */
             if (SC_OperData.AtsInfoTblAddr[NewAtsIndex].NumberOfCommands > 0)
             {
-
                 /* set the global switch pend flag */
                 SC_OperData.AtsCtrlBlckAddr->SwitchPendFlag = true;
 
@@ -353,7 +346,7 @@ void SC_GroundSwitchCmd(const CFE_SB_Buffer_t *BufPtr)
 
         } /* end if */
     }
-} /* end SC_GroundSwitchCmd */
+}
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /*                                                                 */
@@ -371,11 +364,9 @@ void SC_ServiceSwitchPend(void)
      */
     if (SC_CompareAbsTime(SC_AppData.NextCmdTime[SC_ATP], SC_AppData.CurrentTime))
     {
-
         /* make sure that an ATS is still running on the ATP */
         if (SC_OperData.AtsCtrlBlckAddr->AtpState == SC_EXECUTING)
         {
-
             /* get the ATS number to switch to and from */
             OldAtsIndex = SC_ATS_NUM_TO_INDEX(SC_OperData.AtsCtrlBlckAddr->AtsNumber);
             NewAtsIndex = SC_ToggleAtsIndex();
@@ -383,7 +374,6 @@ void SC_ServiceSwitchPend(void)
             /* Now check to see if the new ATS has commands in it */
             if (SC_OperData.AtsInfoTblAddr[NewAtsIndex].NumberOfCommands > 0)
             {
-
                 /* stop the current ATS */
                 SC_KillAts();
 
@@ -395,7 +385,6 @@ void SC_ServiceSwitchPend(void)
                  */
                 if (SC_BeginAts(NewAtsIndex, 1))
                 {
-
                     SC_OperData.AtsCtrlBlckAddr->AtpState = SC_EXECUTING;
 
                     CFE_EVS_SendEvent(SC_ATS_SERVICE_SWTCH_INF_EID, CFE_EVS_EventType_INFORMATION,
@@ -424,8 +413,7 @@ void SC_ServiceSwitchPend(void)
         SC_OperData.AtsCtrlBlckAddr->SwitchPendFlag = false;
 
     } /* end if */
-
-} /* end SC_ServiceSwitchPend */
+}
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /*                                                                 */
@@ -435,7 +423,6 @@ void SC_ServiceSwitchPend(void)
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 bool SC_InlineSwitch(void)
 {
-
     uint16 NewAtsIndex; /* the index of the ats to switch to*/
     uint16 OldAtsIndex; /* the index of the ats to switch from*/
     bool   ReturnCode;  /* return code for function */
@@ -497,8 +484,7 @@ bool SC_InlineSwitch(void)
     SC_OperData.AtsCtrlBlckAddr->SwitchPendFlag = false;
 
     return (ReturnCode);
-
-} /* end function */
+}
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /*                                                                 */
@@ -627,7 +613,7 @@ void SC_JumpAtsCmd(const CFE_SB_Buffer_t *BufPtr)
 
         } /* end if */
     }
-} /* end SC_JumpAtsCmd */
+}
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /*                                                                 */
@@ -659,7 +645,7 @@ void SC_ContinueAtsOnFailureCmd(const CFE_SB_Buffer_t *BufPtr)
                               "Continue-ATS-On-Failure command, State: %d", State);
         }
     }
-} /* end SC_ContinueAtsOnFailureCmd */
+}
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /*                                                                 */
@@ -729,8 +715,4 @@ void SC_AppendAtsCmd(const CFE_SB_Buffer_t *BufPtr)
                               SC_OperData.HkPacket.AppendEntryCount);
         }
     }
-} /* end SC_AppendAtsCmd */
-
-/************************/
-/*  End of File Comment */
-/************************/
+}

@@ -101,7 +101,6 @@ typedef struct
      the LSB (bit zero) of uint16 array index zero represents RTS number 1, and bit one of uint16 array
      index zero represents RTS number 2, etc.  If an RTS is ENABLED, then the corresponding bit is zero.
      If an RTS is DISABLED, then the corresponding bit is one. */
-
 } SC_HkTlm_t;
 
 /**\}*/

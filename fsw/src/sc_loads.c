@@ -186,8 +186,7 @@ void SC_LoadAts(uint16 AtsIndex)
     { /* there was an error */
         SC_InitAtsTables(AtsIndex);
     } /* end if */
-
-} /* end SC_LoadAts */
+}
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /*                                                                 */
@@ -222,8 +221,7 @@ void SC_BuildTimeIndexTable(uint16 AtsIndex)
             ListLength++;
         }
     }
-
-} /* end SC_BuildTimeIndexTable */
+}
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /*                                                                 */
@@ -299,7 +297,7 @@ void SC_Insert(uint16 AtsIndex, uint32 NewCmdIndex, uint32 ListLength)
     ** In either case, there is an empty slot next to TimeBufIndex
     */
     SC_AppData.AtsTimeIndexBuffer[AtsIndex][TimeBufIndex + 1] = SC_ATS_CMD_INDEX_TO_NUM(NewCmdIndex);
-} /* end SC_Insert */
+}
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /*                                                                 */
@@ -329,8 +327,7 @@ void SC_InitAtsTables(uint16 AtsIndex)
     /* initialize the pointers and counters   */
     SC_OperData.AtsInfoTblAddr[AtsIndex].AtsSize          = 0;
     SC_OperData.AtsInfoTblAddr[AtsIndex].NumberOfCommands = 0;
-
-} /* end SC_InitAtsTables */
+}
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /*                                                                 */
@@ -359,7 +356,6 @@ void SC_LoadRts(uint16 RtsIndex)
                           "RTS table init error: invalid RTS index %d", RtsIndex);
         return;
     }
-
 } /* SC_LoadRts */
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -375,8 +371,7 @@ int32 SC_ValidateAts(void *TableData)
     Result = SC_VerifyAtsTable((uint32 *)TableData, SC_ATS_BUFF_SIZE32);
 
     return (Result);
-
-} /* end SC_ValidateAts */
+}
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /*                                                                 */
@@ -397,13 +392,11 @@ bool SC_ParseRts(uint32 Buffer32[])
     Done = Error = false;
     while (Error == false && Done == false)
     {
-
         /*
          ** Check to see if a minimum command fits within an RTS
          */
         if (i <= (SC_RTS_BUFF_SIZE32 - SC_RTS_HDR_WORDS))
         {
-
             /*
              ** Cast a header to the RTS buffer current location
              ** and get the size of the packet
@@ -488,8 +481,7 @@ bool SC_ParseRts(uint32 Buffer32[])
 
     /* If Error was true   , then SC_ParseRts must return false    */
     return (!Error);
-
-} /* end SC_ParseRts */
+}
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /*                                                                 */
@@ -498,7 +490,6 @@ bool SC_ParseRts(uint32 Buffer32[])
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 int32 SC_ValidateRts(void *TableData)
 {
-
     uint32 *TableDataPtr;
     int32   Result = CFE_SUCCESS;
 
@@ -515,8 +506,7 @@ int32 SC_ValidateRts(void *TableData)
     }
 
     return (Result);
-
-} /* end SC_ValidateRts */
+}
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /*                                                                 */
@@ -531,8 +521,7 @@ int32 SC_ValidateAppend(void *TableData)
     Result = SC_VerifyAtsTable((uint32 *)TableData, SC_APPEND_BUFF_SIZE32);
 
     return (Result);
-
-} /* end SC_ValidateAppend */
+}
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /*                                                                 */
@@ -599,7 +588,7 @@ void SC_UpdateAppend(void)
     CFE_EVS_SendEvent(SC_UPDATE_APPEND_EID, CFE_EVS_EventType_INFORMATION,
                       "Update Append ATS Table: load count = %d, command count = %d, byte count = %d",
                       SC_OperData.HkPacket.AppendLoadCount, (int)EntryCount, (int)EntryIndex * SC_BYTES_IN_WORD);
-} /* end SC_UpdateAppend */
+}
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /*                                                                 */
@@ -678,7 +667,7 @@ void SC_ProcessAppend(uint16 AtsIndex)
 
     /* notify cFE that we have modified the ats table */
     CFE_TBL_Modified(SC_OperData.AtsTblHandle[AtsIndex]);
-} /* end SC_ProcessAppend */
+}
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /*                                                                 */
@@ -742,8 +731,7 @@ int32 SC_VerifyAtsTable(uint32 *Buffer32, int32 BufferWords)
     }
 
     return (Result);
-
-} /* end SC_VerifyAtsTable */
+}
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /*                                                                 */
@@ -851,9 +839,4 @@ int32 SC_VerifyAtsEntry(uint32 *Buffer32, int32 EntryIndex, int32 BufferWords)
     }
 
     return (Result);
-
-} /* End of SC_VerifyAtsEntry */
-
-/************************/
-/*  End of File Comment */
-/************************/
+}

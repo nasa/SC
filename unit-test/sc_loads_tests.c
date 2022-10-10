@@ -61,13 +61,13 @@ int32 SC_LOADS_TEST_CFE_MSG_GetSizeHook1(void *UserObj, int32 StubRetcode, uint3
         SC_OperData.AtsCmdStatusTblAddr[0][1] = SC_LOADED;
 
     return CFE_SUCCESS;
-} /* end SC_LOADS_TEST_CFE_MSG_GetSizeHook1 */
+}
 
 CFE_TIME_Compare_t UT_SC_Insert_CompareHookAgreaterthanB(void *UserObj, int32 StubRetcode, uint32 CallCount,
                                                          const UT_StubContext_t *Context)
 {
     return CFE_TIME_A_GT_B;
-} /* end CFE_TIME_Compare_t UT_SC_StartAtsRq_CompareHookAgreaterthanB */
+}
 
 void SC_LoadAts_Test_Nominal(void)
 {
@@ -106,8 +106,7 @@ void SC_LoadAts_Test_Nominal(void)
     UtAssert_UINT32_EQ(SC_OperData.AtsInfoTblAddr[AtsIndex].NumberOfCommands, 1);
 
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
-
-} /* end SC_LoadAts_Test_Nominal */
+}
 
 void SC_LoadAts_Test_CmdRunOffEndOfBuffer(void)
 {
@@ -161,8 +160,7 @@ void SC_LoadAts_Test_CmdRunOffEndOfBuffer(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 0, "CFE_EVS_SendEvent was called %u time(s), expected 0",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_LoadAts_Test_CmdRunOffEndOfBuffer */
+}
 
 void SC_LoadAts_Test_CmdLengthInvalid(void)
 {
@@ -206,8 +204,7 @@ void SC_LoadAts_Test_CmdLengthInvalid(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 0, "CFE_EVS_SendEvent was called %u time(s), expected 0",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_LoadAts_Test_CmdLengthInvalid */
+}
 
 void SC_LoadAts_Test_CmdLengthZero(void)
 {
@@ -251,8 +248,7 @@ void SC_LoadAts_Test_CmdLengthZero(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 0, "CFE_EVS_SendEvent was called %u time(s), expected 0",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_LoadAts_Test_CmdLengthZero */
+}
 
 void SC_LoadAts_Test_CmdNumberInvalid(void)
 {
@@ -296,8 +292,7 @@ void SC_LoadAts_Test_CmdNumberInvalid(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 0, "CFE_EVS_SendEvent was called %u time(s), expected 0",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_LoadAts_Test_CmdNumberInvalid */
+}
 
 void SC_LoadAts_Test_EndOfLoadReached(void)
 {
@@ -341,8 +336,7 @@ void SC_LoadAts_Test_EndOfLoadReached(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 0, "CFE_EVS_SendEvent was called %u time(s), expected 0",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_LoadAts_Test_EndOfLoadReached */
+}
 
 void SC_LoadAts_Test_AtsBufferTooSmall(void)
 {
@@ -411,8 +405,7 @@ void SC_LoadAts_Test_AtsBufferTooSmall(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 0, "CFE_EVS_SendEvent was called %u time(s), expected 0",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_LoadAts_Test_AtsBufferTooSmall */
+}
 
 void SC_LoadAts_Test_AtsEntryOverflow(void)
 {
@@ -472,8 +465,7 @@ void SC_LoadAts_Test_AtsEntryOverflow(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 0, "CFE_EVS_SendEvent was called %u time(s), expected 0",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_LoadAts_Test_AtsEntryOverflow */
+}
 
 void SC_LoadAts_Test_LoadExactlyBufferLength(void)
 {
@@ -523,8 +515,7 @@ void SC_LoadAts_Test_LoadExactlyBufferLength(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 0, "CFE_EVS_SendEvent was called %u time(s), expected 0",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_LoadAts_Test_LoadExactlyBufferLength */
+}
 
 void SC_LoadAts_Test_CmdNotEmpty(void)
 {
@@ -570,8 +561,7 @@ void SC_LoadAts_Test_CmdNotEmpty(void)
     UtAssert_UINT32_EQ(SC_OperData.AtsInfoTblAddr[AtsIndex].AtsSize, 0);
 
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
-
-} /* end SC_LoadAts_Test_CmdNotEmpty */
+}
 
 void SC_LoadAts_Test_InvalidIndex(void)
 {
@@ -582,8 +572,7 @@ void SC_LoadAts_Test_InvalidIndex(void)
     UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_LOADATS_INV_INDEX_ERR_EID);
     UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventType, CFE_EVS_EventType_ERROR);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
-
-} /* end SC_LoadAts_Test_InvalidIndex */
+}
 
 void SC_BuildTimeIndexTable_Test_InvalidIndex(void)
 {
@@ -611,8 +600,7 @@ void SC_BuildTimeIndexTable_Test_InvalidIndex(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_BuildTimeIndexTable_Test_InvalidIndex */
+}
 
 void SC_Insert_Test(void)
 {
@@ -637,8 +625,7 @@ void SC_Insert_Test(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 0, "CFE_EVS_SendEvent was called %u time(s), expected 0",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_Insert_Test */
+}
 
 void SC_Insert_Test_MiddleOfList(void)
 {
@@ -667,8 +654,7 @@ void SC_Insert_Test_MiddleOfList(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 0, "CFE_EVS_SendEvent was called %u time(s), expected 0",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_Insert_Test_MiddleOfList */
+}
 
 void SC_Insert_Test_MiddleOfListCompareAbsTimeTrue(void)
 {
@@ -697,8 +683,7 @@ void SC_Insert_Test_MiddleOfListCompareAbsTimeTrue(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 0, "CFE_EVS_SendEvent was called %u time(s), expected 0",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_Insert_Test_MiddleOfListCompareAbsTimeTrue */
+}
 
 void SC_Insert_Test_InvalidIndex(void)
 {
@@ -727,8 +712,7 @@ void SC_Insert_Test_InvalidIndex(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_Insert_Test_InvalidIndex */
+}
 
 void SC_InitAtsTables_Test_InvalidIndex(void)
 {
@@ -753,8 +737,7 @@ void SC_InitAtsTables_Test_InvalidIndex(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_InitAtsTables_Test_InvalidIndex */
+}
 
 void SC_ValidateAts_Test(void)
 {
@@ -779,8 +762,7 @@ void SC_ValidateAts_Test(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_ValidateAts_Test */
+}
 
 void SC_ValidateAppend_Test(void)
 {
@@ -805,8 +787,7 @@ void SC_ValidateAppend_Test(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_ValidateAppend_Test */
+}
 
 void SC_ValidateRts_Test(void)
 {
@@ -837,8 +818,7 @@ void SC_ValidateRts_Test(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_ValidateRts_Test */
+}
 
 void SC_ValidateRts_Test_ParseRts(void)
 {
@@ -869,8 +849,7 @@ void SC_ValidateRts_Test_ParseRts(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 0, "CFE_EVS_SendEvent was called %u time(s), expected 0",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_ValidateRts_Test_ParseRts */
+}
 
 void SC_LoadRts_Test_Nominal(void)
 {
@@ -886,8 +865,7 @@ void SC_LoadRts_Test_Nominal(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 0, "CFE_EVS_SendEvent was called %u time(s), expected 0",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_LoadRts_Test_Nominal */
+}
 
 void SC_LoadRts_Test_InvalidIndex(void)
 {
@@ -912,8 +890,7 @@ void SC_LoadRts_Test_InvalidIndex(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_LoadRts_Test_InvalidIndex */
+}
 
 void SC_ParseRts_Test_EndOfFile(void)
 {
@@ -944,8 +921,7 @@ void SC_ParseRts_Test_EndOfFile(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 0, "CFE_EVS_SendEvent was called %u time(s), expected 0",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_ParseRts_Test_EndOfFile */
+}
 
 void SC_ParseRts_Test_InvalidMsgId(void)
 {
@@ -987,8 +963,7 @@ void SC_ParseRts_Test_InvalidMsgId(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_ParseRts_Test_InvalidMsgId */
+}
 
 void SC_ParseRts_Test_LengthErrorTooShort(void)
 {
@@ -1032,8 +1007,7 @@ void SC_ParseRts_Test_LengthErrorTooShort(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_ParseRts_Test_LengthErrorTooShort */
+}
 
 void SC_ParseRts_Test_LengthErrorTooLong(void)
 {
@@ -1077,8 +1051,7 @@ void SC_ParseRts_Test_LengthErrorTooLong(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_ParseRts_Test_LengthErrorTooLong */
+}
 
 void SC_ParseRts_Test_CmdRunsOffEndOfBuffer(void)
 {
@@ -1126,8 +1099,7 @@ void SC_ParseRts_Test_CmdRunsOffEndOfBuffer(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_ParseRts_Test_CmdRunsOffEndOfBuffer */
+}
 
 void SC_ParseRts_Test_CmdLengthEqualsBufferLength(void)
 {
@@ -1172,8 +1144,7 @@ void SC_ParseRts_Test_CmdLengthEqualsBufferLength(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 0, "CFE_EVS_SendEvent was called %u time(s), expected 0",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_ParseRts_Test_CmdLengthEqualsBufferLength */
+}
 
 void SC_ParseRts_Test_CmdDoesNotFitBufferEmpty(void)
 {
@@ -1205,8 +1176,7 @@ void SC_ParseRts_Test_CmdDoesNotFitBufferEmpty(void)
     UtAssert_BOOL_TRUE(SC_ParseRts(SC_OperData.RtsTblAddr[RtsIndex]));
 
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
-
-} /* end SC_ParseRts_Test_CmdDoesNotFitBufferEmpty */
+}
 
 void SC_ParseRts_Test_CmdDoesNotFitBufferNotEmpty(void)
 {
@@ -1250,8 +1220,7 @@ void SC_ParseRts_Test_CmdDoesNotFitBufferNotEmpty(void)
     strCmpResult = strncmp(ExpectedEventString, context_CFE_EVS_SendEvent[0].Spec, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH);
 
     UtAssert_True(strCmpResult == 0, "Event string matched expected result, '%s'", context_CFE_EVS_SendEvent[0].Spec);
-
-} /* end SC_ParseRts_Test_CmdDoesNotFitBufferNotEmpty */
+}
 
 void SC_UpdateAppend_Test_Nominal(void)
 {
@@ -1299,8 +1268,7 @@ void SC_UpdateAppend_Test_Nominal(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_UpdateAppend_Test_Nominal */
+}
 
 void SC_UpdateAppend_Test_CmdDoesNotFitBuffer(void)
 {
@@ -1353,8 +1321,7 @@ void SC_UpdateAppend_Test_CmdDoesNotFitBuffer(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_UpdateAppend_Test_CmdDoesNotFitBuffer */
+}
 
 void SC_UpdateAppend_Test_InvalidCmdLengthTooLow(void)
 {
@@ -1399,8 +1366,7 @@ void SC_UpdateAppend_Test_InvalidCmdLengthTooLow(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_UpdateAppend_Test_InvalidCmdLengthTooLow */
+}
 
 void SC_UpdateAppend_Test_InvalidCmdLengthTooHigh(void)
 {
@@ -1445,8 +1411,7 @@ void SC_UpdateAppend_Test_InvalidCmdLengthTooHigh(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_UpdateAppend_Test_InvalidCmdLengthTooHigh */
+}
 
 void SC_UpdateAppend_Test_EndOfBuffer(void)
 {
@@ -1505,8 +1470,7 @@ void SC_UpdateAppend_Test_EndOfBuffer(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_UpdateAppend_Test_EndOfBuffer */
+}
 
 void SC_UpdateAppend_Test_CmdNumberZero(void)
 {
@@ -1553,8 +1517,7 @@ void SC_UpdateAppend_Test_CmdNumberZero(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_UpdateAppend_Test_CmdNumberZero */
+}
 
 void SC_UpdateAppend_Test_CmdNumberTooHigh(void)
 {
@@ -1601,8 +1564,7 @@ void SC_UpdateAppend_Test_CmdNumberTooHigh(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_UpdateAppend_Test_CmdNumberTooHigh */
+}
 
 void SC_ProcessAppend_Test(void)
 {
@@ -1665,8 +1627,7 @@ void SC_ProcessAppend_Test(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 0, "CFE_EVS_SendEvent was called %u time(s), expected 0",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_ProcessAppend_Test */
+}
 
 void SC_ProcessAppend_Test_CmdLoaded(void)
 {
@@ -1726,8 +1687,7 @@ void SC_ProcessAppend_Test_CmdLoaded(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 0, "CFE_EVS_SendEvent was called %u time(s), expected 0",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_ProcessAppend_Test_CmdLoaded */
+}
 
 void SC_ProcessAppend_Test_NotExecuting(void)
 {
@@ -1786,8 +1746,7 @@ void SC_ProcessAppend_Test_NotExecuting(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 0, "CFE_EVS_SendEvent was called %u time(s), expected 0",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_ProcessAppend_Test_NotExecuting */
+}
 
 void SC_ProcessAppend_Test_AtsNumber(void)
 {
@@ -1847,8 +1806,7 @@ void SC_ProcessAppend_Test_AtsNumber(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 0, "CFE_EVS_SendEvent was called %u time(s), expected 0",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_ProcessAppend_Test_AtsNumber */
+}
 
 void SC_ProcessAppend_Test_InvalidIndex(void)
 {
@@ -1874,8 +1832,7 @@ void SC_ProcessAppend_Test_InvalidIndex(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_ProcessAppend_Test_InvalidIndex */
+}
 
 void SC_VerifyAtsTable_Test_Nominal(void)
 {
@@ -1939,8 +1896,7 @@ void SC_VerifyAtsTable_Test_Nominal(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_VerifyAtsTable_Test_Nominal */
+}
 
 void SC_VerifyAtsTable_Test_InvalidEntry(void)
 {
@@ -1970,8 +1926,7 @@ void SC_VerifyAtsTable_Test_InvalidEntry(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_VerifyAtsTable_Test_InvalidEntry */
+}
 
 void SC_VerifyAtsTable_Test_EmptyTable(void)
 {
@@ -2007,8 +1962,7 @@ void SC_VerifyAtsTable_Test_EmptyTable(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_VerifyAtsTable_Test_EmptyTable */
+}
 
 void SC_VerifyAtsEntry_Test_Nominal(void)
 {
@@ -2042,8 +1996,7 @@ void SC_VerifyAtsEntry_Test_Nominal(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 0, "CFE_EVS_SendEvent was called %u time(s), expected 0",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_VerifyAtsEntry_Test_Nominal */
+}
 
 void SC_VerifyAtsEntry_Test_EndOfBuffer(void)
 {
@@ -2062,8 +2015,7 @@ void SC_VerifyAtsEntry_Test_EndOfBuffer(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 0, "CFE_EVS_SendEvent was called %u time(s), expected 0",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_VerifyAtsEntry_Test_EndOfBuffer */
+}
 
 void SC_VerifyAtsEntry_Test_InvalidCmdNumber(void)
 {
@@ -2100,8 +2052,7 @@ void SC_VerifyAtsEntry_Test_InvalidCmdNumber(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_VerifyAtsEntry_Test_InvalidCmdNumber */
+}
 
 void SC_VerifyAtsEntry_Test_BufferFull(void)
 {
@@ -2138,8 +2089,7 @@ void SC_VerifyAtsEntry_Test_BufferFull(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_VerifyAtsEntry_Test_BufferFull */
+}
 
 void SC_VerifyAtsEntry_Test_InvalidCmdLengthTooLow(void)
 {
@@ -2182,8 +2132,7 @@ void SC_VerifyAtsEntry_Test_InvalidCmdLengthTooLow(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_VerifyAtsEntry_Test_InvalidCmdLengthTooLow */
+}
 
 void SC_VerifyAtsEntry_Test_InvalidCmdLengthTooHigh(void)
 {
@@ -2226,8 +2175,7 @@ void SC_VerifyAtsEntry_Test_InvalidCmdLengthTooHigh(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_VerifyAtsEntry_Test_InvalidCmdLengthTooHigh */
+}
 
 void SC_VerifyAtsEntry_Test_BufferOverflow(void)
 {
@@ -2269,8 +2217,7 @@ void SC_VerifyAtsEntry_Test_BufferOverflow(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_VerifyAtsEntry_Test_BufferOverflow */
+}
 
 void SC_VerifyAtsEntry_Test_DuplicateCmdNumber(void)
 {
@@ -2314,8 +2261,7 @@ void SC_VerifyAtsEntry_Test_DuplicateCmdNumber(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_VerifyAtsEntry_Test_DuplicateCmdNumber */
+}
 
 void UtTest_Setup(void)
 {
@@ -2399,8 +2345,4 @@ void UtTest_Setup(void)
                "SC_VerifyAtsEntry_Test_BufferOverflow");
     UtTest_Add(SC_VerifyAtsEntry_Test_DuplicateCmdNumber, SC_Test_Setup, SC_Test_TearDown,
                "SC_VerifyAtsEntry_Test_DuplicateCmdNumber");
-} /* end UtTest_Setup */
-
-/************************/
-/*  End of File Comment */
-/************************/
+}

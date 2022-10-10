@@ -66,7 +66,7 @@ int32 SC_STATE_TEST_CFE_SB_GetTotalMsgLengthHook(void *UserObj, int32 StubRetcod
         return SC_PACKET_MAX_SIZE;
     else
         return SC_PACKET_MAX_SIZE + 100;
-} /* end SC_STATE_TEST_CFE_SB_GetTotalMsgLengthHook */
+}
 
 void SC_GetNextRtsTime_Test_Nominal(void)
 {
@@ -95,8 +95,7 @@ void SC_GetNextRtsTime_Test_Nominal(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 0, "CFE_EVS_SendEvent was called %u time(s), expected 0",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_GetNextRtsTime_Test_Nominal */
+}
 
 void SC_GetNextRtsTime_Test_InvalidRtsNumber(void)
 {
@@ -127,8 +126,7 @@ void SC_GetNextRtsTime_Test_InvalidRtsNumber(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 0, "CFE_EVS_SendEvent was called %u time(s), expected 0",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_GetNextRtsTime_Test_InvalidRtsNumber */
+}
 
 void SC_GetNextRtsTime_Test_RtsPriority(void)
 {
@@ -160,8 +158,7 @@ void SC_GetNextRtsTime_Test_RtsPriority(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 0, "CFE_EVS_SendEvent was called %u time(s), expected 0",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_GetNextRtsTime_Test_RtsPriority */
+}
 
 void SC_UpdateNextTime_Test_Atp(void)
 {
@@ -191,8 +188,7 @@ void SC_UpdateNextTime_Test_Atp(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 0, "CFE_EVS_SendEvent was called %u time(s), expected 0",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_UpdateNextTime_Test_Atp */
+}
 
 void SC_UpdateNextTime_Test_Atp2(void)
 {
@@ -225,8 +221,7 @@ void SC_UpdateNextTime_Test_Atp2(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 0, "CFE_EVS_SendEvent was called %u time(s), expected 0",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_UpdateNextTime_Test_Atp2 */
+}
 
 void SC_UpdateNextTime_Test_Rtp(void)
 {
@@ -261,8 +256,7 @@ void SC_UpdateNextTime_Test_Rtp(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 0, "CFE_EVS_SendEvent was called %u time(s), expected 0",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_UpdateNextTime_Test_Rtp */
+}
 
 void SC_UpdateNextTime_Test_RtpAtpPriority(void)
 {
@@ -295,8 +289,7 @@ void SC_UpdateNextTime_Test_RtpAtpPriority(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 0, "CFE_EVS_SendEvent was called %u time(s), expected 0",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_UpdateNextTime_Test_RtpAtpPriority */
+}
 
 void SC_GetNextRtsCommand_Test_GetNextCommand(void)
 {
@@ -353,8 +346,7 @@ void SC_GetNextRtsCommand_Test_GetNextCommand(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 0, "CFE_EVS_SendEvent was called %u time(s), expected 0",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_GetNextRtsCommand_Test_GetNextCommand */
+}
 
 void SC_GetNextRtsCommand_Test_RtsNumberZero(void)
 {
@@ -367,8 +359,7 @@ void SC_GetNextRtsCommand_Test_RtsNumberZero(void)
 
     /* Verify results */
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
-
-} /* end SC_GetNextRtsCommand_Test_RtsNumberZero */
+}
 
 void SC_GetNextRtsCommand_Test_RtsNumberMax(void)
 {
@@ -420,8 +411,7 @@ void SC_GetNextRtsCommand_Test_RtsNumberMax(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 0, "CFE_EVS_SendEvent was called %u time(s), expected 0",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_GetNextRtsCommand_Test_RtsNumberMax */
+}
 
 void SC_GetNextRtsCommand_Test_RtsNumberOverMax(void)
 {
@@ -472,8 +462,7 @@ void SC_GetNextRtsCommand_Test_RtsNumberOverMax(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 0, "CFE_EVS_SendEvent was called %u time(s), expected 0",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_GetNextRtsCommand_Test_RtsNumberOverMax */
+}
 
 void SC_GetNextRtsCommand_Test_RtsNotExecuting(void)
 {
@@ -525,8 +514,7 @@ void SC_GetNextRtsCommand_Test_RtsNotExecuting(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 0, "CFE_EVS_SendEvent was called %u time(s), expected 0",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_GetNextRtsCommand_Test_RtsNotExecuting */
+}
 
 void SC_GetNextRtsCommand_Test_RtsLengthError(void)
 {
@@ -605,8 +593,7 @@ void SC_GetNextRtsCommand_Test_RtsLengthError(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_GetNextRtsCommand_Test_RtsLengthError */
+}
 
 void SC_GetNextRtsCommand_Test_CommandLengthError(void)
 {
@@ -685,8 +672,7 @@ void SC_GetNextRtsCommand_Test_CommandLengthError(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_GetNextRtsCommand_Test_CommandLengthError */
+}
 
 void SC_GetNextRtsCommand_Test_ZeroCommandLength(void)
 {
@@ -754,8 +740,7 @@ void SC_GetNextRtsCommand_Test_ZeroCommandLength(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_GetNextRtsCommand_Test_ZeroCommandLength */
+}
 
 void SC_GetNextRtsCommand_Test_ZeroCommandLengthLastRts(void)
 {
@@ -815,8 +800,7 @@ void SC_GetNextRtsCommand_Test_ZeroCommandLengthLastRts(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 0, "CFE_EVS_SendEvent was called %u time(s), expected 0",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_GetNextRtsCommand_Test_ZeroCommandLengthLastRts */
+}
 
 void SC_GetNextRtsCommand_Test_EndOfBuffer(void)
 {
@@ -881,8 +865,7 @@ void SC_GetNextRtsCommand_Test_EndOfBuffer(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_GetNextRtsCommand_Test_EndOfBuffer */
+}
 
 void SC_GetNextRtsCommand_Test_EndOfBufferLastRts(void)
 {
@@ -937,8 +920,7 @@ void SC_GetNextRtsCommand_Test_EndOfBufferLastRts(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 0, "CFE_EVS_SendEvent was called %u time(s), expected 0",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_GetNextRtsCommand_Test_EndOfBufferLastRts */
+}
 
 void SC_GetNextAtsCommand_Test_Starting(void)
 {
@@ -971,8 +953,7 @@ void SC_GetNextAtsCommand_Test_Starting(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 0, "CFE_EVS_SendEvent was called %u time(s), expected 0",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_GetNextAtsCommand_Test_Starting */
+}
 
 void SC_GetNextAtsCommand_Test_Idle(void)
 {
@@ -1005,8 +986,7 @@ void SC_GetNextAtsCommand_Test_Idle(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 0, "CFE_EVS_SendEvent was called %u time(s), expected 0",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_GetNextAtsCommand_Test_Idle */
+}
 
 void SC_GetNextAtsCommand_Test_GetNextCommand(void)
 {
@@ -1058,8 +1038,7 @@ void SC_GetNextAtsCommand_Test_GetNextCommand(void)
     UtAssert_INT32_EQ(SC_AppData.NextCmdTime[SC_ATP], 0);
 
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
-
-} /* end SC_GetNextAtsCommand_Test_GetNextCommand */
+}
 
 void SC_GetNextAtsCommand_Test_ExecutionACompleted(void)
 {
@@ -1119,8 +1098,7 @@ void SC_GetNextAtsCommand_Test_ExecutionACompleted(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_GetNextAtsCommand_Test_ExecutionACompleted */
+}
 
 void SC_GetNextAtsCommand_Test_ExecutionBCompleted(void)
 {
@@ -1180,8 +1158,7 @@ void SC_GetNextAtsCommand_Test_ExecutionBCompleted(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_GetNextAtsCommand_Test_ExecutionBCompleted */
+}
 
 /* Unreachable branch in sc_state.c SC_UpdateNextTime:140.
    RtsNumber can never be assigned a value > SC_NUMBER_RTS
@@ -1230,9 +1207,4 @@ void UtTest_Setup(void)
                "SC_GetNextAtsCommand_Test_ExecutionACompleted");
     UtTest_Add(SC_GetNextAtsCommand_Test_ExecutionBCompleted, SC_Test_Setup, SC_Test_TearDown,
                "SC_GetNextAtsCommand_Test_ExecutionBCompleted");
-
-} /* end UtTest_Setup */
-
-/************************/
-/*  End of File Comment */
-/************************/
+}

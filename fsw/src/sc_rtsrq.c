@@ -170,8 +170,7 @@ void SC_StartRtsCmd(const CFE_SB_Buffer_t *CmdPacket)
     { /* the command length is invalid */
         SC_OperData.HkPacket.RtsActiveErrCtr++;
     }
-
-} /* end SC_StartRts */
+}
 
 #if (SC_ENABLE_GROUP_COMMANDS == true)
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -260,7 +259,7 @@ void SC_StartRtsGrpCmd(const CFE_SB_Buffer_t *CmdPacket)
             SC_OperData.HkPacket.CmdErrCtr++;
         }
     }
-} /* end SC_StartRtsGrpCmd */
+}
 #endif
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -301,7 +300,7 @@ void SC_StopRtsCmd(const CFE_SB_Buffer_t *CmdPacket)
 
         } /* end if */
     }
-} /* end SC_StopRtsCmd */
+}
 
 #if (SC_ENABLE_GROUP_COMMANDS == true)
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -353,7 +352,7 @@ void SC_StopRtsGrpCmd(const CFE_SB_Buffer_t *CmdPacket)
             SC_OperData.HkPacket.CmdErrCtr++;
         }
     }
-} /* end SC_StopRtsGrpCmd */
+}
 #endif
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -393,7 +392,7 @@ void SC_DisableRtsCmd(const CFE_SB_Buffer_t *CmdPacket)
             SC_OperData.HkPacket.CmdErrCtr++;
         } /* end if */
     }
-} /* end SC_DisableRTS */
+}
 
 #if (SC_ENABLE_GROUP_COMMANDS == true)
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -446,7 +445,7 @@ void SC_DisableRtsGrpCmd(const CFE_SB_Buffer_t *CmdPacket)
             SC_OperData.HkPacket.CmdErrCtr++;
         }
     }
-} /* end SC_DisableRtsGrpCmd */
+}
 #endif
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -487,7 +486,7 @@ void SC_EnableRtsCmd(const CFE_SB_Buffer_t *CmdPacket)
 
         } /* end if */
     }
-} /* end SC_EnableRTS */
+}
 
 #if (SC_ENABLE_GROUP_COMMANDS == true)
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -540,7 +539,7 @@ void SC_EnableRtsGrpCmd(const CFE_SB_Buffer_t *CmdPacket)
             SC_OperData.HkPacket.CmdErrCtr++;
         }
     }
-} /* end SC_EnableRtsGrpCmd */
+}
 #endif
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -575,8 +574,7 @@ void SC_KillRts(uint16 RtsIndex)
             SC_OperData.RtsCtrlBlckAddr->NumRtsActive--;
         }
     }
-
-} /* end SC_KillRts */
+}
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /*                                                                 */
@@ -614,9 +612,4 @@ void SC_AutoStartRts(uint16 RtsNumber)
         CFE_EVS_SendEvent(SC_AUTOSTART_RTS_INV_ID_ERR_EID, CFE_EVS_EventType_ERROR,
                           "RTS autostart error: invalid RTS ID %d", RtsNumber);
     }
-
-} /* end SC_AutoStartRts */
-
-/************************/
-/*  End of File Comment */
-/************************/
+}

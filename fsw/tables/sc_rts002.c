@@ -123,7 +123,3 @@ uint16 RTS_Table002[SC_RTS_BUFF_SIZE] = {
     CFE_MAKE_BIG16(CMD3_LENGTH),
     CFE_MAKE_BIG16((SC_NOOP_CC << 8) | CMD3_XSUM),
 };
-
-/************************/
-/*  End of File Comment */
-/************************/

@@ -63,11 +63,9 @@ typedef uint32 SC_RelTimeTag_t;
  */
 typedef struct
 {
-
     uint16 AtsUseCtr;        /**< \brief How many times it has been used */
     uint16 NumberOfCommands; /**< \brief number of commands in the ATS */
     uint32 AtsSize;          /**< \brief size of the ATS */
-
 } SC_AtsInfoTable_t;
 
 /**
@@ -75,13 +73,11 @@ typedef struct
  */
 typedef struct
 {
-
     uint8  AtpState;       /**< \brief execution state of the ATP */
     uint8  AtsNumber;      /**< \brief current ATS running if any */
     uint32 CmdNumber;      /**< \brief current cmd number to run if any */
     uint16 TimeIndexPtr;   /**< \brief time index pointer for current cmd */
     uint16 SwitchPendFlag; /**< \brief indicates that a buffer switch is waiting */
-
 } SC_AtpControlBlock_t;
 
 /**
@@ -93,10 +89,8 @@ typedef struct
  */
 typedef struct
 {
-
     uint16 NumRtsActive; /**< \brief number of RTSs currently active */
     uint16 RtsNumber;    /**< \brief next RTS number */
-
 } SC_RtpControlBlock_t;
 
 /**
@@ -104,7 +98,6 @@ typedef struct
  */
 typedef struct
 {
-
     uint8           RtsStatus;       /**< \brief status of the RTS */
     bool            DisabledFlag;    /**< \brief disabled/enabled flag */
     uint8           CmdCtr;          /**< \brief Cmds executed in current rts */
@@ -112,7 +105,6 @@ typedef struct
     SC_AbsTimeTag_t NextCommandTime; /**< \brief next command time for RTS */
     uint16          NextCommandPtr;  /**< \brief where next rts cmd is */
     uint16          UseCtr;          /**< \brief how many times RTS is run */
-
 } SC_RtsInfoEntry_t;
 
 #endif
