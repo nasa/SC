@@ -172,7 +172,3 @@ uint16 ATS_Table1[SC_ATS_BUFF_SIZE] = {
     0,
     0,
     0};
-
-/************************/
-/*  End of File Comment */
-/************************/

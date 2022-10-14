@@ -68,7 +68,7 @@ int32 CFE_TBL_RegisterHook1(void *UserObj, int32 StubRetcode, uint32 CallCount, 
     *TblHandle = (CFE_TBL_Handle_t)SC_APP_TEST_CFE_TBL_RegisterHookCount++;
 
     return CFE_SUCCESS;
-} /* end CFE_TBL_RegisterHook1 */
+}
 
 int32 CFE_TBL_GetAddressHookNominal(void *UserObj, int32 StubRetcode, uint32 CallCount, const UT_StubContext_t *Context)
 {
@@ -86,13 +86,13 @@ int32 CFE_TBL_GetAddressHookNominal(void *UserObj, int32 StubRetcode, uint32 Cal
         return CFE_TBL_INFO_UPDATED;
     else
         return CFE_SUCCESS;
-} /* end CFE_TBL_GetAddressHookNominal */
+}
 
 int32 CFE_TBL_GetAddressHookNominal2(void *UserObj, int32 StubRetcode, uint32 CallCount,
                                      const UT_StubContext_t *Context)
 {
     return CFE_TBL_ERR_NEVER_LOADED;
-} /* end CFE_TBL_GetAddressHookNominal2 */
+}
 
 int32 CFE_TBL_GetAddressHookError1(void *UserObj, int32 StubRetcode, uint32 CallCount, const UT_StubContext_t *Context)
 {
@@ -110,7 +110,7 @@ int32 CFE_TBL_GetAddressHookError1(void *UserObj, int32 StubRetcode, uint32 Call
         return -1;
     else
         return CFE_SUCCESS;
-} /* end CFE_TBL_GetAddressHookError1 */
+}
 
 void SC_AppMain_Test_Nominal(void)
 {
@@ -141,8 +141,7 @@ void SC_AppMain_Test_Nominal(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 2, "CFE_EVS_SendEvent was called %u time(s), expected 2",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_AppMain_Test_Nominal */
+}
 
 void SC_AppMain_Test_AppInitError(void)
 {
@@ -180,8 +179,7 @@ void SC_AppMain_Test_AppInitError(void)
     strCmpResult = strncmp(ExpectedSysLogString, context_CFE_ES_WriteToSysLog.Spec, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH);
 
     UtAssert_True(strCmpResult == 0, "Sys Log string matched expected result, '%s'", context_CFE_ES_WriteToSysLog.Spec);
-
-} /* end SC_AppMain_Test_AppInitError */
+}
 
 void SC_AppMain_Test_RcvMsgError(void)
 {
@@ -223,8 +221,7 @@ void SC_AppMain_Test_RcvMsgError(void)
     strCmpResult = strncmp(ExpectedSysLogString, context_CFE_ES_WriteToSysLog.Spec, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH);
 
     UtAssert_True(strCmpResult == 0, "Sys Log string matched expected result, '%s'", context_CFE_ES_WriteToSysLog.Spec);
-
-} /* end SC_AppMain_Test_RcvMsgError */
+}
 
 void SC_AppInit_Test_NominalPowerOnReset(void)
 {
@@ -309,8 +306,7 @@ void SC_AppInit_Test_NominalPowerOnReset(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 2, "CFE_EVS_SendEvent was called %u time(s), expected 2",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_AppInit_Test_NominalPowerOnReset */
+}
 
 void SC_AppInit_Test_Nominal(void)
 {
@@ -395,8 +391,7 @@ void SC_AppInit_Test_Nominal(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 2, "CFE_EVS_SendEvent was called %u time(s), expected 2",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_AppInit_Test_Nominal */
+}
 
 void SC_AppInit_Test_EVSRegisterError(void)
 {
@@ -424,8 +419,7 @@ void SC_AppInit_Test_EVSRegisterError(void)
     strCmpResult = strncmp(ExpectedSysLogString, context_CFE_ES_WriteToSysLog.Spec, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH);
 
     UtAssert_True(strCmpResult == 0, "Sys Log string matched expected result, '%s'", context_CFE_ES_WriteToSysLog.Spec);
-
-} /* end SC_AppInit_Test_EVSRegisterError */
+}
 
 void SC_AppInit_Test_SBCreatePipeError(void)
 {
@@ -455,8 +449,7 @@ void SC_AppInit_Test_SBCreatePipeError(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_AppInit_Test_SBCreatePipeError */
+}
 
 void SC_AppInit_Test_SBSubscribeHKError(void)
 {
@@ -488,8 +481,7 @@ void SC_AppInit_Test_SBSubscribeHKError(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_AppInit_Test_SBSubscribeHKError */
+}
 
 void SC_AppInit_Test_SubscribeTo1HzError(void)
 {
@@ -521,8 +513,7 @@ void SC_AppInit_Test_SubscribeTo1HzError(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_AppInit_Test_SubscribeTo1HzError */
+}
 
 void SC_AppInit_Test_SBSubscribeToCmdError(void)
 {
@@ -554,8 +545,7 @@ void SC_AppInit_Test_SBSubscribeToCmdError(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_AppInit_Test_SBSubscribeToCmdError */
+}
 
 void SC_AppInit_Test_InitTablesError(void)
 {
@@ -586,8 +576,7 @@ void SC_AppInit_Test_InitTablesError(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_AppInit_Test_InitTablesError */
+}
 
 void SC_InitTables_Test_Nominal(void)
 {
@@ -605,7 +594,7 @@ void SC_InitTables_Test_Nominal(void)
     UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_RTS_LOAD_FAIL_COUNT_INFO_EID);
     UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[1].EventID, SC_INIT_INF_EID);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 2);
-} /* end SC_InitTables_Test_Nominal */
+}
 
 void SC_InitTables_Test_ErrorRegisterAllTables(void)
 {
@@ -636,8 +625,7 @@ void SC_InitTables_Test_ErrorRegisterAllTables(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_InitTables_Test_ErrorRegisterAllTables */
+}
 
 void SC_InitTables_Test_ErrorGetDumpTablePointers(void)
 {
@@ -669,8 +657,7 @@ void SC_InitTables_Test_ErrorGetDumpTablePointers(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_InitTables_Test_ErrorGetDumpTablePointers */
+}
 
 void SC_InitTables_Test_ErrorGetLoadTablePointers(void)
 {
@@ -711,8 +698,7 @@ void SC_InitTables_Test_ErrorGetLoadTablePointers(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 2, "CFE_EVS_SendEvent was called %u time(s), expected 2",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_InitTables_Test_ErrorGetLoadTablePointers */
+}
 
 void SC_RegisterAllTables_Test_Nominal(void)
 {
@@ -727,8 +713,7 @@ void SC_RegisterAllTables_Test_Nominal(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 0, "CFE_EVS_SendEvent was called %u time(s), expected 0",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_RegisterAllTables_Test_Nominal */
+}
 
 void SC_RegisterAllTables_Test_ErrorRegisterRTSInformation(void)
 {
@@ -759,8 +744,7 @@ void SC_RegisterAllTables_Test_ErrorRegisterRTSInformation(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_RegisterAllTables_Test_ErrorRegisterRTSInformation */
+}
 
 void SC_RegisterAllTables_Test_ErrorRegisterRTPControl(void)
 {
@@ -791,8 +775,7 @@ void SC_RegisterAllTables_Test_ErrorRegisterRTPControl(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_RegisterAllTables_Test_ErrorRegisterRTPControl */
+}
 
 void SC_RegisterAllTables_Test_ErrorRegisterATSInformation(void)
 {
@@ -823,8 +806,7 @@ void SC_RegisterAllTables_Test_ErrorRegisterATSInformation(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_RegisterAllTables_Test_ErrorRegisterATSInformation */
+}
 
 void SC_RegisterAllTables_Test_ErrorRegisterATPControl(void)
 {
@@ -855,8 +837,7 @@ void SC_RegisterAllTables_Test_ErrorRegisterATPControl(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_RegisterAllTables_Test_ErrorRegisterATPControl */
+}
 
 void SC_RegisterAllTables_Test_ErrorRegisterATSCommandStatus(void)
 {
@@ -888,8 +869,7 @@ void SC_RegisterAllTables_Test_ErrorRegisterATSCommandStatus(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_RegisterAllTables_Test_ErrorRegisterATSCommandStatus */
+}
 
 void SC_RegisterAllTables_Test_ErrorRegisterLoadableRTS(void)
 {
@@ -921,8 +901,7 @@ void SC_RegisterAllTables_Test_ErrorRegisterLoadableRTS(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_RegisterAllTables_Test_ErrorRegisterLoadableRTS */
+}
 
 void SC_RegisterAllTables_Test_ErrorRegisterLoadableATS(void)
 {
@@ -954,8 +933,7 @@ void SC_RegisterAllTables_Test_ErrorRegisterLoadableATS(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_RegisterAllTables_Test_ErrorRegisterLoadableATS */
+}
 
 void SC_RegisterAllTables_Test_ErrorRegisterLoadableAppendATS(void)
 {
@@ -987,8 +965,7 @@ void SC_RegisterAllTables_Test_ErrorRegisterLoadableAppendATS(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_RegisterAllTables_Test_ErrorRegisterLoadableAppendATS */
+}
 
 void SC_RegisterDumpOnlyTables_Test_Nominal(void)
 {
@@ -1001,8 +978,7 @@ void SC_RegisterDumpOnlyTables_Test_Nominal(void)
     UtAssert_True(ReturnValue == CFE_SUCCESS, "ReturnValue == CFE_SUCCESS");
     UtAssert_STUB_COUNT(CFE_TBL_Register, 6);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
-
-} /* end SC_RegisterDumpOnlyTables_Test_Nominal */
+}
 
 void SC_RegisterLoadableTables_Test_Nominal(void)
 {
@@ -1015,8 +991,7 @@ void SC_RegisterLoadableTables_Test_Nominal(void)
     UtAssert_True(ReturnValue == CFE_SUCCESS, "ReturnValue == CFE_SUCCESS");
     UtAssert_STUB_COUNT(CFE_TBL_Register, 67);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
-
-} /* end SC_RegisterLoadableTables_Test_Nominal */
+}
 
 void SC_GetDumpTablePointers_Test_Nominal(void)
 {
@@ -1034,8 +1009,7 @@ void SC_GetDumpTablePointers_Test_Nominal(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 0, "CFE_EVS_SendEvent was called %u time(s), expected 0",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_GetDumpTablePointers_Test_Nominal */
+}
 
 void SC_GetDumpTablePointers_Test_ErrorGetAddressRTSInformation(void)
 {
@@ -1071,8 +1045,7 @@ void SC_GetDumpTablePointers_Test_ErrorGetAddressRTSInformation(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_GetDumpTablePointers_Test_ErrorGetAddressRTSInformation */
+}
 
 void SC_GetDumpTablePointers_Test_ErrorGetAddressRTPControl(void)
 {
@@ -1103,8 +1076,7 @@ void SC_GetDumpTablePointers_Test_ErrorGetAddressRTPControl(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_GetDumpTablePointers_Test_ErrorGetAddressRTPControl */
+}
 
 void SC_GetDumpTablePointers_Test_ErrorGetAddressATSInformation(void)
 {
@@ -1135,8 +1107,7 @@ void SC_GetDumpTablePointers_Test_ErrorGetAddressATSInformation(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_GetDumpTablePointers_Test_ErrorGetAddressATSInformation */
+}
 
 void SC_GetDumpTablePointers_Test_ErrorGetAddressATPControl(void)
 {
@@ -1167,8 +1138,7 @@ void SC_GetDumpTablePointers_Test_ErrorGetAddressATPControl(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_GetDumpTablePointers_Test_ErrorGetAddressATPControl */
+}
 
 void SC_GetDumpTablePointers_Test_ErrorGetAddressATSCommandStatus(void)
 {
@@ -1199,8 +1169,7 @@ void SC_GetDumpTablePointers_Test_ErrorGetAddressATSCommandStatus(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_GetDumpTablePointers_Test_ErrorGetAddressATSCommandStatus */
+}
 
 void SC_GetLoadTablePointers_Test_Nominal(void)
 {
@@ -1218,8 +1187,7 @@ void SC_GetLoadTablePointers_Test_Nominal(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 0, "CFE_EVS_SendEvent was called %u time(s), expected 0",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_GetLoadTablePointers_Test_Nominal */
+}
 
 void SC_GetLoadTablePointers_Test_ErrorGetAddressLoadableATS(void)
 {
@@ -1250,8 +1218,7 @@ void SC_GetLoadTablePointers_Test_ErrorGetAddressLoadableATS(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_GetLoadTablePointers_Test_ErrorGetAddressLoadableATS */
+}
 
 void SC_GetLoadTablePointers_Test_ErrorGetAddressLoadableATSAppend(void)
 {
@@ -1285,8 +1252,7 @@ void SC_GetLoadTablePointers_Test_ErrorGetAddressLoadableATSAppend(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_GetLoadTablePointers_Test_ErrorGetAddressLoadableATSAppend */
+}
 
 void SC_GetLoadTablePointers_Test_ErrorGetAddressLoadableRTS(void)
 {
@@ -1321,8 +1287,7 @@ void SC_GetLoadTablePointers_Test_ErrorGetAddressLoadableRTS(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_GetLoadTablePointers_Test_ErrorGetAddressLoadableRTS */
+}
 
 void SC_LoadDefaultTables_Test(void)
 {
@@ -1344,7 +1309,7 @@ void SC_LoadDefaultTables_Test(void)
     UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[2].EventID, SC_RTS_LOAD_FAIL_COUNT_INFO_EID);
 
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 3);
-} /* end SC_LoadDefaultTables_Test */
+}
 
 void UtTest_Setup(void)
 {
@@ -1412,9 +1377,4 @@ void UtTest_Setup(void)
     UtTest_Add(SC_GetLoadTablePointers_Test_ErrorGetAddressLoadableRTS, SC_Test_Setup, SC_Test_TearDown,
                "SC_GetLoadTablePointers_Test_ErrorGetAddressLoadableRTS");
     UtTest_Add(SC_LoadDefaultTables_Test, SC_Test_Setup, SC_Test_TearDown, "SC_LoadDefaultTables_Test");
-
-} /* end UtTest_Setup */
-
-/************************/
-/*  End of File Comment */
-/************************/
+}

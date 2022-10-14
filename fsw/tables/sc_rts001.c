@@ -122,7 +122,3 @@ uint16 RTS_Table001[SC_RTS_BUFF_SIZE] = {
     CMD3_ARG,
     0x0000,
 };
-
-/************************/
-/*  End of File Comment */
-/************************/

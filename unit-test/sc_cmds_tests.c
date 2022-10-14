@@ -49,7 +49,7 @@ CFE_TIME_Compare_t Ut_CFE_TIME_CompareHookAlessthanB(void *UserObj, int32 StubRe
                                                      const UT_StubContext_t *Context)
 {
     return CFE_TIME_A_LT_B;
-} /* end Ut_CFE_TIME_CompareHookAlessthanB */
+}
 
 uint8 SC_CMDS_TEST_SC_UpdateNextTimeHook_RunCount;
 int32 Ut_SC_UpdateNextTimeHook(void *UserObj, int32 StubRetcode, uint32 CallCount, const UT_StubContext_t *Context)
@@ -120,8 +120,7 @@ void SC_ProcessAtpCmd_Test_SwitchCmd(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 0, "CFE_EVS_SendEvent was called %u time(s), expected 0",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_ProcessAtpCmd_Test_SwitchCmd */
+}
 
 void SC_ProcessAtpCmd_Test_NonSwitchCmd(void)
 {
@@ -183,8 +182,7 @@ void SC_ProcessAtpCmd_Test_NonSwitchCmd(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 0, "CFE_EVS_SendEvent was called %u time(s), expected 0",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_ProcessAtpCmd_Test_NonSwitchCmd */
+}
 
 void SC_ProcessAtpCmd_Test_InlineSwitchError(void)
 {
@@ -248,8 +246,7 @@ void SC_ProcessAtpCmd_Test_InlineSwitchError(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 0, "CFE_EVS_SendEvent was called %u time(s), expected 0",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_ProcessAtpCmd_Test_InlineSwitchError */
+}
 
 void SC_ProcessAtpCmd_Test_SBErrorAtsA(void)
 {
@@ -335,8 +332,7 @@ void SC_ProcessAtpCmd_Test_SBErrorAtsA(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 2, "CFE_EVS_SendEvent was called %u time(s), expected 2",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_ProcessAtpCmd_Test_SBErrorAtsA */
+}
 
 void SC_ProcessAtpCmd_Test_SBErrorAtsB(void)
 {
@@ -422,8 +418,7 @@ void SC_ProcessAtpCmd_Test_SBErrorAtsB(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 2, "CFE_EVS_SendEvent was called %u time(s), expected 2",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_ProcessAtpCmd_Test_SBErrorAtsB */
+}
 
 void SC_ProcessAtpCmd_Test_ChecksumFailedAtsA(void)
 {
@@ -511,8 +506,7 @@ void SC_ProcessAtpCmd_Test_ChecksumFailedAtsA(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 2, "CFE_EVS_SendEvent was called %u time(s), expected 2",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_ProcessAtpCmd_Test_ChecksumFailedAtsA */
+}
 
 void SC_ProcessAtpCmd_Test_ChecksumFailedAtsB(void)
 {
@@ -598,8 +592,7 @@ void SC_ProcessAtpCmd_Test_ChecksumFailedAtsB(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 2, "CFE_EVS_SendEvent was called %u time(s), expected 2",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_ProcessAtpCmd_Test_ChecksumFailedAtsB */
+}
 
 void SC_ProcessAtpCmd_Test_ChecksumFailedAtsAContinue(void)
 {
@@ -676,8 +669,7 @@ void SC_ProcessAtpCmd_Test_ChecksumFailedAtsAContinue(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_ProcessAtpCmd_Test_ChecksumFailedAtsAContinue */
+}
 
 void SC_ProcessAtpCmd_Test_CmdNumberMismatchAtsA(void)
 {
@@ -747,8 +739,7 @@ void SC_ProcessAtpCmd_Test_CmdNumberMismatchAtsA(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 2, "CFE_EVS_SendEvent was called %u time(s), expected 2",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_ProcessAtpCmd_Test_CmdNumberMismatchAtsA */
+}
 
 void SC_ProcessAtpCmd_Test_CmdNumberMismatchAtsB(void)
 {
@@ -818,8 +809,7 @@ void SC_ProcessAtpCmd_Test_CmdNumberMismatchAtsB(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 2, "CFE_EVS_SendEvent was called %u time(s), expected 2",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_ProcessAtpCmd_Test_CmdNumberMismatchAtsB */
+}
 
 void SC_ProcessAtpCmd_Test_CmdNotLoaded(void)
 {
@@ -877,8 +867,7 @@ void SC_ProcessAtpCmd_Test_CmdNotLoaded(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_ProcessAtpCmd_Test_CmdNotLoaded */
+}
 
 void SC_ProcessAtpCmd_Test_CompareAbsTime(void)
 {
@@ -921,8 +910,7 @@ void SC_ProcessAtpCmd_Test_CompareAbsTime(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 0, "CFE_EVS_SendEvent was called %u time(s), expected 0",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_ProcessAtpCmd_Test_CompareAbsTime */
+}
 
 void SC_ProcessAtpCmd_Test_NextProcNumber(void)
 {
@@ -963,8 +951,7 @@ void SC_ProcessAtpCmd_Test_NextProcNumber(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 0, "CFE_EVS_SendEvent was called %u time(s), expected 0",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_ProcessAtpCmd_Test_NextProcNumber */
+}
 
 void SC_ProcessAtpCmd_Test_AtpState(void)
 {
@@ -1005,8 +992,7 @@ void SC_ProcessAtpCmd_Test_AtpState(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 0, "CFE_EVS_SendEvent was called %u time(s), expected 0",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_ProcessAtpCmd_Test_AtpState */
+}
 
 void SC_ProcessAtpCmd_Test_CmdMid(void)
 {
@@ -1067,8 +1053,7 @@ void SC_ProcessAtpCmd_Test_CmdMid(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 0, "CFE_EVS_SendEvent was called %u time(s), expected 0",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_ProcessAtpCmd_Test_CmdMid */
+}
 
 void SC_ProcessRtpCommand_Test_Nominal(void)
 {
@@ -1107,8 +1092,7 @@ void SC_ProcessRtpCommand_Test_Nominal(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 0, "CFE_EVS_SendEvent was called %u time(s), expected 0",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_ProcessRtpCommand_Test_Nominal */
+}
 
 void SC_ProcessRtpCommand_Test_BadSoftwareBusReturn(void)
 {
@@ -1164,8 +1148,7 @@ void SC_ProcessRtpCommand_Test_BadSoftwareBusReturn(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_ProcessRtpCommand_Test_BadSoftwareBusReturn */
+}
 
 void SC_ProcessRtpCommand_Test_BadChecksum(void)
 {
@@ -1217,8 +1200,7 @@ void SC_ProcessRtpCommand_Test_BadChecksum(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_ProcessRtpCommand_Test_BadChecksum */
+}
 
 void SC_ProcessRtpCommand_Test_NextCmdTime(void)
 {
@@ -1246,8 +1228,7 @@ void SC_ProcessRtpCommand_Test_NextCmdTime(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 0, "CFE_EVS_SendEvent was called %u time(s), expected 0",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_ProcessRtpCommand_Test_NextCmdTime */
+}
 
 void SC_ProcessRtpCommand_Test_ProcNumber(void)
 {
@@ -1275,8 +1256,7 @@ void SC_ProcessRtpCommand_Test_ProcNumber(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 0, "CFE_EVS_SendEvent was called %u time(s), expected 0",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_ProcessRtpCommand_Test_ProcNumber */
+}
 
 void SC_ProcessRtpCommand_Test_RtsNumberZero(void)
 {
@@ -1303,8 +1283,7 @@ void SC_ProcessRtpCommand_Test_RtsNumberZero(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 0, "CFE_EVS_SendEvent was called %u time(s), expected 0",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_ProcessRtpCommand_Test_RtsNumberZero */
+}
 
 void SC_ProcessRtpCommand_Test_RtsNumberHigh(void)
 {
@@ -1332,8 +1311,7 @@ void SC_ProcessRtpCommand_Test_RtsNumberHigh(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 0, "CFE_EVS_SendEvent was called %u time(s), expected 0",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_ProcessRtpCommand_Test_RtsNumberHigh */
+}
 
 void SC_ProcessRtpCommand_Test_RtsStatus(void)
 {
@@ -1361,8 +1339,7 @@ void SC_ProcessRtpCommand_Test_RtsStatus(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 0, "CFE_EVS_SendEvent was called %u time(s), expected 0",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_ProcessRtpCommand_Test_RtsStatus */
+}
 
 void SC_SendHkPacket_Test(void)
 {
@@ -1489,8 +1466,7 @@ void SC_SendHkPacket_Test(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 0, "CFE_EVS_SendEvent was called %u time(s), expected 0",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_SendHkPacket_Test */
+}
 
 void SC_ProcessRequest_Test_CmdMID(void)
 {
@@ -1529,8 +1505,7 @@ void SC_ProcessRequest_Test_CmdMID(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_ProcessRequest_Test_CmdMID */
+}
 
 void SC_ProcessRequest_Test_HkMID(void)
 {
@@ -1569,8 +1544,7 @@ void SC_ProcessRequest_Test_HkMID(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 0, "CFE_EVS_SendEvent was called %u time(s), expected 0",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_ProcessRequest_Test_HkMID */
+}
 
 void SC_ProcessRequest_Test_HkMIDNoVerifyCmdLength(void)
 {
@@ -1607,8 +1581,7 @@ void SC_ProcessRequest_Test_HkMIDNoVerifyCmdLength(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 0, "CFE_EVS_SendEvent was called %u time(s), expected 0",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_ProcessRequest_Test_HkMIDNoVerifyCmdLength */
+}
 
 void SC_ProcessRequest_Test_HkMIDAutoStartRts(void)
 {
@@ -1652,8 +1625,7 @@ void SC_ProcessRequest_Test_HkMIDAutoStartRts(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 0, "CFE_EVS_SendEvent was called %u time(s), expected 0",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_ProcessRequest_Test_HkMIDAutoStartRts */
+}
 
 void SC_ProcessRequest_Test_HkMIDAutoStartRtsLoaded(void)
 {
@@ -1698,8 +1670,7 @@ void SC_ProcessRequest_Test_HkMIDAutoStartRtsLoaded(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 0, "CFE_EVS_SendEvent was called %u time(s), expected 0",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_ProcessRequest_Test_HkMIDAutoStartRtsLoaded */
+}
 
 void SC_ProcessRequest_Test_1HzWakeupNONE(void)
 {
@@ -1745,8 +1716,7 @@ void SC_ProcessRequest_Test_1HzWakeupNONE(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 0, "CFE_EVS_SendEvent was called %u time(s), expected 0",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_ProcessRequest_Test_1HzWakeupNONE */
+}
 
 void SC_ProcessRequest_Test_1HzWakeupNoSwitchPending(void)
 {
@@ -1792,8 +1762,7 @@ void SC_ProcessRequest_Test_1HzWakeupNoSwitchPending(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 0, "CFE_EVS_SendEvent was called %u time(s), expected 0",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_ProcessRequest_Test_1HzWakeupNoSwitchPending */
+}
 
 void SC_ProcessRequest_Test_1HzWakeupAtpNotExecutionTime(void)
 {
@@ -1840,8 +1809,7 @@ void SC_ProcessRequest_Test_1HzWakeupAtpNotExecutionTime(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 0, "CFE_EVS_SendEvent was called %u time(s), expected 0",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_ProcessRequest_Test_1HzWakeupAtpNotExecutionTime */
+}
 
 void SC_ProcessRequest_Test_1HzWakeupRtpExecutionTime(void)
 {
@@ -1905,8 +1873,7 @@ void SC_ProcessRequest_Test_1HzWakeupRtpExecutionTime(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 0, "CFE_EVS_SendEvent was called %u time(s), expected 0",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_ProcessRequest_Test_1HzWakeupRtpExecutionTime */
+}
 
 void SC_ProcessRequest_Test_1HzWakeupRtpExecutionTimeTooManyCmds(void)
 {
@@ -1961,8 +1928,7 @@ void SC_ProcessRequest_Test_1HzWakeupRtpExecutionTimeTooManyCmds(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 0, "CFE_EVS_SendEvent was called %u time(s), expected 0",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_ProcessRequest_Test_1HzWakeupRtpExecutionTimeTooManyCmds */
+}
 
 void SC_ProcessRequest_Test_MIDError(void)
 {
@@ -1996,8 +1962,7 @@ void SC_ProcessRequest_Test_MIDError(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_ProcessRequest_Test_MIDError */
+}
 
 void SC_ProcessCommand_Test_NoOp(void)
 {
@@ -2039,8 +2004,7 @@ void SC_ProcessCommand_Test_NoOp(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_ProcessCommand_Test_NoOp */
+}
 
 void SC_ProcessCommand_Test_NoOpNoVerifyCmdLength(void)
 {
@@ -2069,8 +2033,7 @@ void SC_ProcessCommand_Test_NoOpNoVerifyCmdLength(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 0, "CFE_EVS_SendEvent was called %u time(s), expected 0",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_ProcessCommand_Test_NoOpNoVerifyCmdLength */
+}
 
 void SC_ProcessCommand_Test_ResetCounters(void)
 {
@@ -2118,8 +2081,7 @@ void SC_ProcessCommand_Test_ResetCounters(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_ProcessCommand_Test_ResetCounters */
+}
 
 void SC_ProcessCommand_Test_ResetCountersNoVerifyCmdLength(void)
 {
@@ -2145,8 +2107,7 @@ void SC_ProcessCommand_Test_ResetCountersNoVerifyCmdLength(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 0, "CFE_EVS_SendEvent was called %u time(s), expected 0",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_ProcessCommand_Test_ResetCountersNoVerifyCmdLength */
+}
 
 void SC_ProcessCommand_Test_StartAts(void)
 {
@@ -2172,8 +2133,7 @@ void SC_ProcessCommand_Test_StartAts(void)
     SC_ProcessCommand(&UT_CmdBuf.Buf);
 
     /* This function is already verified to work correctly in another file, so no verifications here. */
-
-} /* end SC_ProcessCommand_Test_StartAts */
+}
 
 void SC_ProcessCommand_Test_StopAts(void)
 {
@@ -2197,8 +2157,7 @@ void SC_ProcessCommand_Test_StopAts(void)
     SC_ProcessCommand(&UT_CmdBuf.Buf);
 
     /* This function is already verified to work correctly in another file, so no verifications here. */
-
-} /* end SC_ProcessCommand_Test_StopAts */
+}
 
 void SC_ProcessCommand_Test_StartRts(void)
 {
@@ -2222,8 +2181,7 @@ void SC_ProcessCommand_Test_StartRts(void)
     SC_ProcessCommand(&UT_CmdBuf.Buf);
 
     /* This function is already verified to work correctly in another file, so no verifications here. */
-
-} /* end SC_ProcessCommand_Test_StartRts */
+}
 
 void SC_ProcessCommand_Test_StopRts(void)
 {
@@ -2247,8 +2205,7 @@ void SC_ProcessCommand_Test_StopRts(void)
     SC_ProcessCommand(&UT_CmdBuf.Buf);
 
     /* This function is already verified to work correctly in another file, so no verifications here. */
-
-} /* end SC_ProcessCommand_Test_StopRts */
+}
 
 void SC_ProcessCommand_Test_DisableRts(void)
 {
@@ -2272,8 +2229,7 @@ void SC_ProcessCommand_Test_DisableRts(void)
     SC_ProcessCommand(&UT_CmdBuf.Buf);
 
     /* This function is already verified to work correctly in another file, so no verifications here. */
-
-} /* end SC_ProcessCommand_Test_DisableRts */
+}
 
 void SC_ProcessCommand_Test_EnableRts(void)
 {
@@ -2297,8 +2253,7 @@ void SC_ProcessCommand_Test_EnableRts(void)
     SC_ProcessCommand(&UT_CmdBuf.Buf);
 
     /* This function is already verified to work correctly in another file, so no verifications here. */
-
-} /* end SC_ProcessCommand_Test_EnableRts */
+}
 
 void SC_ProcessCommand_Test_SwitchAts(void)
 {
@@ -2322,8 +2277,7 @@ void SC_ProcessCommand_Test_SwitchAts(void)
     SC_ProcessCommand(&UT_CmdBuf.Buf);
 
     /* This function is already verified to work correctly in another file, so no verifications here. */
-
-} /* end SC_ProcessCommand_Test_SwitchAts */
+}
 
 void SC_ProcessCommand_Test_JumpAts(void)
 {
@@ -2347,8 +2301,7 @@ void SC_ProcessCommand_Test_JumpAts(void)
     SC_ProcessCommand(&UT_CmdBuf.Buf);
 
     /* This function is already verified to work correctly in another file, so no verifications here. */
-
-} /* end SC_ProcessCommand_Test_JumpAts */
+}
 
 void SC_ProcessCommand_Test_ContinueAtsOnFailure(void)
 {
@@ -2372,8 +2325,7 @@ void SC_ProcessCommand_Test_ContinueAtsOnFailure(void)
     SC_ProcessCommand(&UT_CmdBuf.Buf);
 
     /* This function is already verified to work correctly in another file, so no verifications here. */
-
-} /* end SC_ProcessCommand_Test_ContinueAtsOnFailure */
+}
 
 void SC_ProcessCommand_Test_AppendAts(void)
 {
@@ -2397,8 +2349,7 @@ void SC_ProcessCommand_Test_AppendAts(void)
     SC_ProcessCommand(&UT_CmdBuf.Buf);
 
     /* This function is already verified to work correctly in another file, so no verifications here. */
-
-} /* end SC_ProcessCommand_Test_AppendAts */
+}
 
 void SC_ProcessCommand_Test_TableManageAtsTableNominal(void)
 {
@@ -2434,8 +2385,7 @@ void SC_ProcessCommand_Test_TableManageAtsTableNominal(void)
     SC_ProcessCommand(&UT_CmdBuf.Buf);
 
     /* This function is already verified to work correctly in another file, so no verifications here. */
-
-} /* end SC_ProcessCommand_Test_TableManageAtsTableNominal */
+}
 
 void SC_ProcessCommand_Test_TableManageAtsTableGetAddressError(void)
 {
@@ -2480,8 +2430,7 @@ void SC_ProcessCommand_Test_TableManageAtsTableGetAddressError(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_ProcessCommand_Test_TableManageAtsTableGetAddressError */
+}
 
 void SC_ProcessCommand_Test_TableManageAtsTableID(void)
 {
@@ -2518,8 +2467,7 @@ void SC_ProcessCommand_Test_TableManageAtsTableID(void)
     SC_ProcessCommand(&UT_CmdBuf.Buf);
 
     /* This function is already verified to work correctly in another file, so no verifications here. */
-
-} /* end SC_ProcessCommand_Test_TableManageAtsTableID */
+}
 
 void SC_ProcessCommand_Test_TableManageAtsTable_InvalidIndex(void)
 {
@@ -2544,8 +2492,7 @@ void SC_ProcessCommand_Test_TableManageAtsTable_InvalidIndex(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_ProcessCommand_Test_TableManageAtsTable_InvalidIndex */
+}
 
 void SC_ProcessCommand_Test_TableManageAtsTableGetAddressNeverLoaded(void)
 {
@@ -2580,8 +2527,7 @@ void SC_ProcessCommand_Test_TableManageAtsTableGetAddressNeverLoaded(void)
     SC_ProcessCommand(&UT_CmdBuf.Buf);
 
     /* This function is already verified to work correctly in another file, so no verifications here. */
-
-} /* end SC_ProcessCommand_Test_TableManageAtsTableGetAddressNeverLoaded */
+}
 
 void SC_ProcessCommand_Test_TableManageAtsTableGetAddressSuccess(void)
 {
@@ -2616,8 +2562,7 @@ void SC_ProcessCommand_Test_TableManageAtsTableGetAddressSuccess(void)
     SC_ProcessCommand(&UT_CmdBuf.Buf);
 
     /* This function is already verified to work correctly in another file, so no verifications here. */
-
-} /* end SC_ProcessCommand_Test_TableManageAtsTableGetAddressSuccess */
+}
 
 void SC_ProcessCommand_Test_TableManageAppendTableNominal(void)
 {
@@ -2653,8 +2598,7 @@ void SC_ProcessCommand_Test_TableManageAppendTableNominal(void)
     SC_ProcessCommand(&UT_CmdBuf.Buf);
 
     /* This function is already verified to work correctly in another file, so no verifications here. */
-
-} /* end SC_ProcessCommand_Test_TableManageAppendTableNominal */
+}
 
 void SC_ProcessCommand_Test_TableManageAppendTableGetAddressError(void)
 {
@@ -2699,8 +2643,7 @@ void SC_ProcessCommand_Test_TableManageAppendTableGetAddressError(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_ProcessCommand_Test_TableManageAppendTableGetAddressError */
+}
 
 void SC_ProcessCommand_Test_TableManageAppendTableGetAddressNeverLoaded(void)
 {
@@ -2735,8 +2678,7 @@ void SC_ProcessCommand_Test_TableManageAppendTableGetAddressNeverLoaded(void)
     SC_ProcessCommand(&UT_CmdBuf.Buf);
 
     /* This function is already verified to work correctly in another file, so no verifications here. */
-
-} /* end SC_ProcessCommand_Test_TableManageAppendTableGetAddressNeverLoaded */
+}
 
 void SC_ProcessCommand_Test_TableManageAppendTableGetAddressSuccess(void)
 {
@@ -2771,8 +2713,7 @@ void SC_ProcessCommand_Test_TableManageAppendTableGetAddressSuccess(void)
     SC_ProcessCommand(&UT_CmdBuf.Buf);
 
     /* This function is already verified to work correctly in another file, so no verifications here. */
-
-} /* end SC_ProcessCommand_Test_TableManageAppendTableGetAddressSuccess */
+}
 
 void SC_ProcessCommand_Test_TableManageRtsTableNominal(void)
 {
@@ -2804,8 +2745,7 @@ void SC_ProcessCommand_Test_TableManageRtsTableNominal(void)
     SC_ProcessCommand(&UT_CmdBuf.Buf);
 
     /* This function is already verified to work correctly in another file, so no verifications here. */
-
-} /* end SC_ProcessCommand_Test_TableManageRtsTableNominal */
+}
 
 void SC_ProcessCommand_Test_TableManageRtsTableGetAddressError(void)
 {
@@ -2850,8 +2790,7 @@ void SC_ProcessCommand_Test_TableManageRtsTableGetAddressError(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_ProcessCommand_Test_TableManageRtsTableGetAddressError */
+}
 
 void SC_ProcessCommand_Test_TableManageRtsTableID(void)
 {
@@ -2884,8 +2823,7 @@ void SC_ProcessCommand_Test_TableManageRtsTableID(void)
     SC_ProcessCommand(&UT_CmdBuf.Buf);
 
     /* This function is already verified to work correctly in another file, so no verifications here. */
-
-} /* end SC_ProcessCommand_Test_TableManageRtsTableID */
+}
 
 void SC_ProcessCommand_Test_TableManageRtsTable_InvalidIndex(void)
 {
@@ -2910,8 +2848,7 @@ void SC_ProcessCommand_Test_TableManageRtsTable_InvalidIndex(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_ProcessCommand_Test_TableManageRtsTable_InvalidIndex */
+}
 
 void SC_ProcessCommand_Test_TableManageRtsTableGetAddressNeverLoaded(void)
 {
@@ -2942,8 +2879,7 @@ void SC_ProcessCommand_Test_TableManageRtsTableGetAddressNeverLoaded(void)
     SC_ProcessCommand(&UT_CmdBuf.Buf);
 
     /* This function is already verified to work correctly in another file, so no verifications here. */
-
-} /* end SC_ProcessCommand_Test_TableManageRtsTableGetAddressNeverLoaded */
+}
 
 void SC_ProcessCommand_Test_TableManageRtsTableGetAddressSuccess(void)
 {
@@ -2974,8 +2910,7 @@ void SC_ProcessCommand_Test_TableManageRtsTableGetAddressSuccess(void)
     SC_ProcessCommand(&UT_CmdBuf.Buf);
 
     /* This function is already verified to work correctly in another file, so no verifications here. */
-
-} /* end SC_ProcessCommand_Test_TableManageRtsTableGetAddressSuccess */
+}
 
 void SC_ProcessCommand_Test_TableManageRtsInfo(void)
 {
@@ -3001,8 +2936,7 @@ void SC_ProcessCommand_Test_TableManageRtsInfo(void)
     SC_ProcessCommand(&UT_CmdBuf.Buf);
 
     /* This function is already verified to work correctly in another file, so no verifications here. */
-
-} /* end SC_ProcessCommand_Test_TableManageRtsInfo */
+}
 
 void SC_ProcessCommand_Test_TableManageRtpCtrl(void)
 {
@@ -3028,8 +2962,7 @@ void SC_ProcessCommand_Test_TableManageRtpCtrl(void)
     SC_ProcessCommand(&UT_CmdBuf.Buf);
 
     /* This function is already verified to work correctly in another file, so no verifications here. */
-
-} /* end SC_ProcessCommand_Test_TableManageRtpCtrl */
+}
 
 void SC_ProcessCommand_Test_TableManageAtsInfo(void)
 {
@@ -3055,8 +2988,7 @@ void SC_ProcessCommand_Test_TableManageAtsInfo(void)
     SC_ProcessCommand(&UT_CmdBuf.Buf);
 
     /* This function is already verified to work correctly in another file, so no verifications here. */
-
-} /* end SC_ProcessCommand_Test_TableManageAtsInfo */
+}
 
 void SC_ProcessCommand_Test_TableManageAtpCtrl(void)
 {
@@ -3082,8 +3014,7 @@ void SC_ProcessCommand_Test_TableManageAtpCtrl(void)
     SC_ProcessCommand(&UT_CmdBuf.Buf);
 
     /* This function is already verified to work correctly in another file, so no verifications here. */
-
-} /* end SC_ProcessCommand_Test_TableManageAtpCtrl */
+}
 
 void SC_ProcessCommand_Test_TableManageAtsCmdStatus(void)
 {
@@ -3109,8 +3040,7 @@ void SC_ProcessCommand_Test_TableManageAtsCmdStatus(void)
     SC_ProcessCommand(&UT_CmdBuf.Buf);
 
     /* This function is already verified to work correctly in another file, so no verifications here. */
-
-} /* end SC_ProcessCommand_Test_TableManageAtsCmdStatus */
+}
 
 void SC_ProcessCommand_Test_TableManageInvalidTableID(void)
 {
@@ -3152,8 +3082,7 @@ void SC_ProcessCommand_Test_TableManageInvalidTableID(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_ProcessCommand_Test_TableManageInvalidTableID */
+}
 
 void SC_ProcessCommand_Test_StartRtsGrp(void)
 {
@@ -3177,8 +3106,7 @@ void SC_ProcessCommand_Test_StartRtsGrp(void)
     SC_ProcessCommand(&UT_CmdBuf.Buf);
 
     /* This function is already verified to work correctly in another file, so no verifications here. */
-
-} /* end SC_ProcessCommand_Test_StartRtsGrp */
+}
 
 void SC_ProcessCommand_Test_StopRtsGrp(void)
 {
@@ -3202,8 +3130,7 @@ void SC_ProcessCommand_Test_StopRtsGrp(void)
     SC_ProcessCommand(&UT_CmdBuf.Buf);
 
     /* This function is already verified to work correctly in another file, so no verifications here. */
-
-} /* end SC_ProcessCommand_Test_StopRtsGrp */
+}
 
 void SC_ProcessCommand_Test_DisableRtsGrp(void)
 {
@@ -3227,8 +3154,7 @@ void SC_ProcessCommand_Test_DisableRtsGrp(void)
     SC_ProcessCommand(&UT_CmdBuf.Buf);
 
     /* This function is already verified to work correctly in another file, so no verifications here. */
-
-} /* end SC_ProcessCommand_Test_DisableRtsGrp */
+}
 
 void SC_ProcessCommand_Test_EnableRtsGrp(void)
 {
@@ -3252,8 +3178,7 @@ void SC_ProcessCommand_Test_EnableRtsGrp(void)
     SC_ProcessCommand(&UT_CmdBuf.Buf);
 
     /* This function is already verified to work correctly in another file, so no verifications here. */
-
-} /* end SC_ProcessCommand_Test_EnableRtsGrp */
+}
 
 void SC_ProcessCommand_Test_InvalidCmdError(void)
 {
@@ -3296,8 +3221,7 @@ void SC_ProcessCommand_Test_InvalidCmdError(void)
 
     UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
                   call_count_CFE_EVS_SendEvent);
-
-} /* end SC_ProcessCommand_Test_InvalidCmdError */
+}
 
 /* Unreachable branches in sc_cmds.c SC_ProcessAtpCmd:236, 274, 310.
    There are only 2 ATS IDs defined, invalid IDs are already handled. */
@@ -3435,9 +3359,4 @@ void UtTest_Setup(void)
                "SC_ProcessCommand_Test_EnableRtsGrp");
     UtTest_Add(SC_ProcessCommand_Test_InvalidCmdError, SC_Test_Setup, SC_Test_TearDown,
                "SC_ProcessCommand_Test_InvalidCmdError");
-
-} /* end UtTest_Setup */
-
-/************************/
-/*  End of File Comment */
-/************************/
+}

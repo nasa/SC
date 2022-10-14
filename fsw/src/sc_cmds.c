@@ -280,7 +280,7 @@ void SC_ProcessAtpCmd(void)
         }
 
     } /* end if next ATS command time */
-} /* end SC_ProcessAtpCmd */
+}
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /*                                                                 */
@@ -290,7 +290,6 @@ void SC_ProcessAtpCmd(void)
 
 void SC_ProcessRtpCommand(void)
 {
-
     SC_RtsEntry_t *EntryPtr;  /* a pointer to an RTS entry header */
     uint16         RtsIndex;  /* the RTS index for the cmd */
     uint16         CmdOffset; /* the location of the cmd    */
@@ -395,7 +394,7 @@ void SC_ProcessRtpCommand(void)
             SC_KillRts(RtsIndex);
         } /* end if */
     }     /* end if */
-} /* end SC_ProcessRtpCommand */
+}
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /*                                                                 */
@@ -444,7 +443,6 @@ void SC_SendHkPacket(void)
      */
     for (i = 0; i < (SC_NUMBER_OF_RTS + (SC_NUMBER_OF_RTS_IN_UINT16 - 1)) / SC_NUMBER_OF_RTS_IN_UINT16; i++)
     {
-
         SC_OperData.HkPacket.RtsExecutingStatus[i] = 0;
         SC_OperData.HkPacket.RtsDisabledStatus[i]  = 0;
 
@@ -452,7 +450,6 @@ void SC_SendHkPacket(void)
 
     for (i = 0; i < SC_NUMBER_OF_RTS; i++)
     {
-
         if (SC_OperData.RtsInfoTblAddr[i].DisabledFlag == true)
         {
             CFE_SET(SC_OperData.HkPacket.RtsDisabledStatus[i / SC_NUMBER_OF_RTS_IN_UINT16],
@@ -468,8 +465,7 @@ void SC_SendHkPacket(void)
     /* send the status packet */
     CFE_SB_TimeStampMsg(&SC_OperData.HkPacket.TlmHeader.Msg);
     CFE_SB_TransmitMsg(&SC_OperData.HkPacket.TlmHeader.Msg, true);
-
-} /* end SC_SendHkPacket */
+}
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /*                                                                 */
@@ -492,7 +488,7 @@ void SC_ResetCountersCmd(const CFE_SB_Buffer_t *BufPtr)
         SC_OperData.HkPacket.RtsActiveCtr    = 0;
         SC_OperData.HkPacket.RtsActiveErrCtr = 0;
     }
-} /* end SC_ResetCountersCmd */
+}
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /*                                                                 */
@@ -507,7 +503,7 @@ void SC_NoOpCmd(const CFE_SB_Buffer_t *BufPtr)
         CFE_EVS_SendEvent(SC_NOOP_INF_EID, CFE_EVS_EventType_INFORMATION, "No-op command. Version %d.%d.%d.%d",
                           SC_MAJOR_VERSION, SC_MINOR_VERSION, SC_REVISION, SC_MISSION_REV);
     }
-} /* End SC_NoOpCmd */
+}
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /*                                                                 */
@@ -537,7 +533,6 @@ void SC_ProcessRequest(const CFE_SB_Buffer_t *BufPtr)
         case SC_SEND_HK_MID:
             if (SC_VerifyCmdLength(&BufPtr->Msg, sizeof(SC_NoArgsCmd_t)))
             {
-
                 /* set during init to power on or processor reset auto-exec RTS */
                 if (SC_AppData.AutoStartRTS != 0)
                 {
@@ -615,7 +610,7 @@ void SC_ProcessRequest(const CFE_SB_Buffer_t *BufPtr)
             SC_OperData.HkPacket.CmdErrCtr++;
             break;
     } /* end switch */
-} /* end SC_ProcessRequest */
+}
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /*                                                                 */
@@ -710,7 +705,7 @@ void SC_ProcessCommand(const CFE_SB_Buffer_t *BufPtr)
             SC_OperData.HkPacket.CmdErrCtr++;
             break;
     } /* end switch */
-} /* end ProcessSequenceRequest */
+}
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /*                                                                 */
@@ -770,7 +765,7 @@ void SC_TableManageCmd(const CFE_SB_Buffer_t *BufPtr)
         CFE_EVS_SendEvent(SC_TABLE_MANAGE_ID_ERR_EID, CFE_EVS_EventType_ERROR,
                           "Table manage command packet error: table ID = %d", (int)TableID);
     }
-} /* End SC_TableManageCmd() */
+}
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /*                                                                 */
@@ -789,8 +784,7 @@ void SC_ManageRtsTable(int32 ArrayIndex)
     }
 
     SC_ManageTable(RTS, ArrayIndex);
-
-} /* End SC_ManageRtsTable() */
+}
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /*                                                                 */
@@ -809,8 +803,7 @@ void SC_ManageAtsTable(int32 ArrayIndex)
     }
 
     SC_ManageTable(ATS, ArrayIndex);
-
-} /* End SC_ManageAtsTable() */
+}
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /*                                                                 */
@@ -886,9 +879,4 @@ void SC_ManageTable(SC_TableType type, int32 ArrayIndex)
                               "ATS Append table manage process error: Result = 0x%X", (unsigned int)Result);
         }
     }
-
-} /* End SC_ManageTable() */
-
-/************************/
-/*  End of File Comment */
-/************************/
+}

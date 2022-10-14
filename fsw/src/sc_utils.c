@@ -61,8 +61,7 @@ void SC_GetCurrentTime(void)
 
     /* We don't care about subseconds */
     SC_AppData.CurrentTime = TempTime.Seconds;
-
-} /* end of SC_GetCurrentTime */
+}
 
 SC_AbsTimeTag_t SC_GetAtsEntryTime(SC_AtsEntryHeader_t *Entry)
 {
@@ -82,8 +81,7 @@ SC_AbsTimeTag_t SC_GetAtsEntryTime(SC_AtsEntryHeader_t *Entry)
     */
 
     return ((Entry->TimeTag_MS << 16) + Entry->TimeTag_LS);
-
-} /* End of SC_GetAtsEntryTime() */
+}
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /*                                                                 */
@@ -110,8 +108,7 @@ SC_AbsTimeTag_t SC_ComputeAbsTime(SC_RelTimeTag_t RelTime)
 
     /* We don't need subseconds */
     return (ResultTimeWSubs.Seconds);
-
-} /* end of SC_ComputeAbsTime */
+}
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /*                                                                 */
@@ -143,8 +140,7 @@ bool SC_CompareAbsTime(SC_AbsTimeTag_t AbsTime1, SC_AbsTimeTag_t AbsTime2)
     }
 
     return Status;
-
-} /* end of SC_CompareAbsTime */
+}
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /*                                                                 */
@@ -177,7 +173,7 @@ bool SC_VerifyCmdLength(const CFE_MSG_Message_t *Msg, size_t ExpectedLength)
         }
     }
     return (Result);
-} /* End of SC_VerifyCmdLength */
+}
 
 uint16 SC_ToggleAtsIndex(void)
 {
@@ -185,7 +181,3 @@ uint16 SC_ToggleAtsIndex(void)
 
     return (1 - CurrAtsIndex);
 }
-
-/************************/
-/*  End of File Comment */
-/************************/
