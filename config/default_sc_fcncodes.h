@@ -56,7 +56,7 @@
  *
  *  \par Evidence of failure may be found in the following telemetry:
  *       - #SC_HkTlm_Payload_t.CmdErrCtr will increment
- *       - Error specific event message #SC_LEN_ERR_EID
+ *       - Error specific event message #SC_CMD_LEN_ERR_EID
  *
  *  \par Criticality
  *       None
@@ -87,7 +87,7 @@
  *
  *  \par Evidence of failure may be found in the following telemetry:
  *       - #SC_HkTlm_Payload_t.CmdErrCtr will increment
- *       - Error specific event message #SC_LEN_ERR_EID
+ *       - Error specific event message #SC_CMD_LEN_ERR_EID
  *
  *  \par Criticality
  *       None
@@ -476,7 +476,7 @@
  *
  *  \par Evidence of failure may be found in the following telemetry:
  *       - #SC_HkTlm_Payload_t.CmdErrCtr will increment
- *       - The #SC_LEN_ERR_EID event will indicate invalid command packet length.
+ *       - The #SC_CMD_LEN_ERR_EID event will indicate invalid command packet length.
  *       - The #SC_STARTRTSGRP_CMD_ERR_EID event will indicate invalid group definition.
  *
  *  \par Criticality
@@ -516,7 +516,7 @@
  *
  *  \par Evidence of failure may be found in the following telemetry:
  *       - #SC_HkTlm_Payload_t.CmdErrCtr will increment
- *       - The #SC_LEN_ERR_EID event will indicate invalid command packet length.
+ *       - The #SC_CMD_LEN_ERR_EID event will indicate invalid command packet length.
  *       - The #SC_STOPRTSGRP_CMD_ERR_EID event will indicate invalid group definition.
  *
  *  \par Criticality
@@ -554,7 +554,7 @@
  *
  *  \par Evidence of failure may be found in the following telemetry:
  *       - #SC_HkTlm_Payload_t.CmdErrCtr will increment
- *       - The #SC_LEN_ERR_EID event will indicate invalid command packet length.
+ *       - The #SC_CMD_LEN_ERR_EID event will indicate invalid command packet length.
  *       - The #SC_DISRTSGRP_CMD_ERR_EID event will indicate invalid group definition.
  *
  *  \par Criticality
@@ -592,7 +592,7 @@
  *
  *  \par Evidence of failure may be found in the following telemetry:
  *       - #SC_HkTlm_Payload_t.CmdErrCtr will increment
- *       - The #SC_LEN_ERR_EID event will indicate invalid command packet length.
+ *       - The #SC_CMD_LEN_ERR_EID event will indicate invalid command packet length.
  *       - The #SC_ENARTSGRP_CMD_ERR_EID event will indicate invalid group definition.
  *
  *  \par Criticality
