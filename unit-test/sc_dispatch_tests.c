@@ -128,7 +128,7 @@ void SC_VerifyCmdLength_Test_LenError(void)
     UtAssert_UINT32_EQ(SC_OperData.HkPacket.Payload.CmdCtr, 0);
     UtAssert_UINT32_EQ(SC_OperData.HkPacket.Payload.CmdErrCtr, 1);
 
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_LEN_ERR_EID);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_CMD_LEN_ERR_EID);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
 }
 
@@ -149,7 +149,7 @@ void SC_VerifyCmdLength_Test_LenErrorNotMID(void)
     /* Verify results */
     UtAssert_UINT32_EQ(SC_OperData.HkPacket.Payload.CmdCtr, 0);
 
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_LEN_ERR_EID);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_CMD_LEN_ERR_EID);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
 }
 
@@ -210,7 +210,7 @@ void SC_ProcessRequest_Test_SendHkCmdInvalidLength(void)
 
     /* Verify results */
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_LEN_ERR_EID);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_CMD_LEN_ERR_EID);
     UtAssert_STUB_COUNT(SC_SendHkCmd, 0);
 }
 
@@ -251,7 +251,7 @@ void SC_ProcessRequest_Test_OneHzWakeupCmdInvalidLength(void)
 
     /* Verify results */
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_LEN_ERR_EID);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_CMD_LEN_ERR_EID);
     UtAssert_STUB_COUNT(SC_OneHzWakeupCmd, 0);
 }
 
@@ -293,7 +293,7 @@ void SC_ProcessCommand_Test_NoopCmdInvalidLength(void)
     UtAssert_UINT32_EQ(SC_OperData.HkPacket.Payload.CmdErrCtr, 1);
 
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_LEN_ERR_EID);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_CMD_LEN_ERR_EID);
     UtAssert_STUB_COUNT(SC_NoopCmd, 0);
 }
 
@@ -314,7 +314,7 @@ void SC_ProcessCommand_Test_ResetCounterCmdInvalidLength(void)
     UtAssert_UINT32_EQ(SC_OperData.HkPacket.Payload.CmdErrCtr, 1);
 
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_LEN_ERR_EID);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_CMD_LEN_ERR_EID);
     UtAssert_STUB_COUNT(SC_ResetCountersCmd, 0);
 }
 
@@ -335,7 +335,7 @@ void SC_ProcessCommand_Test_StartAtsCmdInvalidLength(void)
     UtAssert_UINT32_EQ(SC_OperData.HkPacket.Payload.CmdErrCtr, 1);
 
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_LEN_ERR_EID);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_CMD_LEN_ERR_EID);
 }
 
 void SC_ProcessCommand_Test_StopAtsCmdInvalidLength(void)
@@ -355,7 +355,7 @@ void SC_ProcessCommand_Test_StopAtsCmdInvalidLength(void)
     UtAssert_UINT32_EQ(SC_OperData.HkPacket.Payload.CmdErrCtr, 1);
 
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_LEN_ERR_EID);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_CMD_LEN_ERR_EID);
 }
 
 void SC_ProcessCommand_Test_StartRtsCmdInvalidLength(void)
@@ -375,7 +375,7 @@ void SC_ProcessCommand_Test_StartRtsCmdInvalidLength(void)
     UtAssert_UINT32_EQ(SC_OperData.HkPacket.Payload.CmdErrCtr, 1);
 
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_LEN_ERR_EID);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_CMD_LEN_ERR_EID);
 }
 
 void SC_ProcessCommand_Test_StopRtsCmdInvalidLength(void)
@@ -395,7 +395,7 @@ void SC_ProcessCommand_Test_StopRtsCmdInvalidLength(void)
     UtAssert_UINT32_EQ(SC_OperData.HkPacket.Payload.CmdErrCtr, 1);
 
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_LEN_ERR_EID);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_CMD_LEN_ERR_EID);
 }
 
 void SC_ProcessCommand_Test_DisableRtsCmdInvalidLength(void)
@@ -415,7 +415,7 @@ void SC_ProcessCommand_Test_DisableRtsCmdInvalidLength(void)
     UtAssert_UINT32_EQ(SC_OperData.HkPacket.Payload.CmdErrCtr, 1);
 
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_LEN_ERR_EID);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_CMD_LEN_ERR_EID);
 }
 
 void SC_ProcessCommand_Test_EnableRtsCmdInvalidLength(void)
@@ -435,7 +435,7 @@ void SC_ProcessCommand_Test_EnableRtsCmdInvalidLength(void)
     UtAssert_UINT32_EQ(SC_OperData.HkPacket.Payload.CmdErrCtr, 1);
 
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_LEN_ERR_EID);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_CMD_LEN_ERR_EID);
 }
 
 void SC_ProcessCommand_Test_SwitchAtsCmdInvalidLength(void)
@@ -455,7 +455,7 @@ void SC_ProcessCommand_Test_SwitchAtsCmdInvalidLength(void)
     UtAssert_UINT32_EQ(SC_OperData.HkPacket.Payload.CmdErrCtr, 1);
 
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_LEN_ERR_EID);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_CMD_LEN_ERR_EID);
 }
 
 void SC_ProcessCommand_Test_JumpAtsCmdInvalidLength(void)
@@ -475,7 +475,7 @@ void SC_ProcessCommand_Test_JumpAtsCmdInvalidLength(void)
     UtAssert_UINT32_EQ(SC_OperData.HkPacket.Payload.CmdErrCtr, 1);
 
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_LEN_ERR_EID);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_CMD_LEN_ERR_EID);
 }
 
 void SC_ProcessCommand_Test_ContinueAtsOnFailureCmdInvalidLength(void)
@@ -495,7 +495,7 @@ void SC_ProcessCommand_Test_ContinueAtsOnFailureCmdInvalidLength(void)
     UtAssert_UINT32_EQ(SC_OperData.HkPacket.Payload.CmdErrCtr, 1);
 
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_LEN_ERR_EID);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_CMD_LEN_ERR_EID);
 }
 
 void SC_ProcessCommand_Test_AppendAtsCmdInvalidLength(void)
@@ -515,7 +515,7 @@ void SC_ProcessCommand_Test_AppendAtsCmdInvalidLength(void)
     UtAssert_UINT32_EQ(SC_OperData.HkPacket.Payload.CmdErrCtr, 1);
 
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_LEN_ERR_EID);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_CMD_LEN_ERR_EID);
 }
 
 void SC_ProcessCommand_Test_TableManageCmdInvalidLength(void)
@@ -535,7 +535,7 @@ void SC_ProcessCommand_Test_TableManageCmdInvalidLength(void)
     UtAssert_UINT32_EQ(SC_OperData.HkPacket.Payload.CmdErrCtr, 1);
 
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_LEN_ERR_EID);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_CMD_LEN_ERR_EID);
 }
 
 void SC_ProcessCommand_Test_StartRtsGrpCmdInvalidLength(void)
@@ -555,7 +555,7 @@ void SC_ProcessCommand_Test_StartRtsGrpCmdInvalidLength(void)
     UtAssert_UINT32_EQ(SC_OperData.HkPacket.Payload.CmdErrCtr, 1);
 
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_LEN_ERR_EID);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_CMD_LEN_ERR_EID);
 }
 
 void SC_ProcessCommand_Test_StopRtsGrpCmdInvalidLength(void)
@@ -575,7 +575,7 @@ void SC_ProcessCommand_Test_StopRtsGrpCmdInvalidLength(void)
     UtAssert_UINT32_EQ(SC_OperData.HkPacket.Payload.CmdErrCtr, 1);
 
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_LEN_ERR_EID);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_CMD_LEN_ERR_EID);
 }
 
 void SC_ProcessCommand_Test_DisableRtsGrpCmdInvalidLength(void)
@@ -595,7 +595,7 @@ void SC_ProcessCommand_Test_DisableRtsGrpCmdInvalidLength(void)
     UtAssert_UINT32_EQ(SC_OperData.HkPacket.Payload.CmdErrCtr, 1);
 
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_LEN_ERR_EID);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_CMD_LEN_ERR_EID);
 }
 
 void SC_ProcessCommand_Test_EnableRtsGrpCmdInvalidLength(void)
@@ -615,7 +615,7 @@ void SC_ProcessCommand_Test_EnableRtsGrpCmdInvalidLength(void)
     UtAssert_UINT32_EQ(SC_OperData.HkPacket.Payload.CmdErrCtr, 1);
 
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_LEN_ERR_EID);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_CMD_LEN_ERR_EID);
 }
 
 void SC_ProcessCommand_Test_NoopCmdNominal(void)
@@ -913,7 +913,7 @@ void SC_ProcessCommand_Test_InvalidCmdError(void)
     UtAssert_UINT32_EQ(SC_OperData.HkPacket.Payload.CmdCtr, 0);
     UtAssert_UINT32_EQ(SC_OperData.HkPacket.Payload.CmdErrCtr, 1);
 
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_INVLD_CMD_ERR_EID);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_CC_ERR_EID);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
 }
 

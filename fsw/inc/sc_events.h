@@ -50,7 +50,7 @@
  *  This event message is issued when a command is received, but it is not of the expected
  *  length
  */
-#define SC_LEN_ERR_EID 2
+#define SC_CMD_LEN_ERR_EID 2
 
 /**
  * \brief SC Create Pipe Failed Event ID
@@ -61,7 +61,7 @@
  *  This event message is issued when #CFE_SB_CreatePipe returns an
  *  error
  */
-#define SC_INIT_SB_CREATE_ERR_EID 3
+#define SC_CR_PIPE_ERR_EID 3
 
 /**
  * \brief SC Housekeeping Request Subscribe Failed Event ID
@@ -508,7 +508,7 @@
  *  \par Cause:
  *  This event message is issued when the #SC_RESET_COUNTERS_CC command was received
  */
-#define SC_RESET_DEB_EID 51
+#define SC_RESET_INF_EID 51
 
 /**
  * \brief SC No-op Command Event ID
@@ -585,7 +585,7 @@
  *  This event message is issued when an invalid command code was received in
  *  the command pipe
  */
-#define SC_INVLD_CMD_ERR_EID 64
+#define SC_CC_ERR_EID 64
 
 /**
  * \brief SC RTS Info Table Get Address Failed Event ID
