@@ -59,7 +59,7 @@ void SC_ProcessAtpCmd(void)
     int32             EntryIndex; /* ATS entry location in table */
     uint8             AtsIndex;   /* ATS selection index */
     uint32            CmdIndex;   /* ATS command index */
-    char              TempAtsChar = ' ';
+    char              TempAtsChar;
     int32             Result;
     bool              AbortATS = false;
     SC_AtsEntry_t *   EntryPtr;

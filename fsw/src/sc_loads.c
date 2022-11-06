@@ -384,9 +384,9 @@ bool SC_ParseRts(uint32 Buffer32[])
     bool           Done;
     bool           Error;
     SC_RtsEntry_t *EntryPtr;
-    CFE_MSG_Size_t CmdSize    = 0;
-    uint16         IndexDelta = 0;
-    CFE_SB_MsgId_t MessageID  = CFE_SB_INVALID_MSG_ID;
+    CFE_MSG_Size_t CmdSize = 0;
+    uint16         IndexDelta;
+    CFE_SB_MsgId_t MessageID = CFE_SB_INVALID_MSG_ID;
 
     i    = 0;
     Done = Error = false;
