@@ -815,22 +815,23 @@ void SC_ManageTable(SC_TableType type, int32 ArrayIndex)
 {
     int32            Result;
     CFE_TBL_Handle_t TblHandle;
-    uint32 *         TblAddr;
+    uint32 **        TblAddr;
+    void *           TblPtrNew;
 
     switch (type)
     {
         case ATS:
             TblHandle = SC_OperData.AtsTblHandle[ArrayIndex];
-            TblAddr   = SC_OperData.AtsTblAddr[ArrayIndex];
+            TblAddr   = &SC_OperData.AtsTblAddr[ArrayIndex];
             break;
         case RTS:
             TblHandle = SC_OperData.RtsTblHandle[ArrayIndex];
-            TblAddr   = SC_OperData.RtsTblAddr[ArrayIndex];
+            TblAddr   = &SC_OperData.RtsTblAddr[ArrayIndex];
             break;
         case APPEND:
         default:
             TblHandle = SC_OperData.AppendTblHandle;
-            TblAddr   = SC_OperData.AppendTblAddr;
+            TblAddr   = &SC_OperData.AppendTblAddr;
             break;
     }
 
@@ -841,7 +842,8 @@ void SC_ManageTable(SC_TableType type, int32 ArrayIndex)
     CFE_TBL_Manage(TblHandle);
 
     /* Re-acquire table data pointer */
-    Result = CFE_TBL_GetAddress((void *)&TblAddr, TblHandle);
+    Result   = CFE_TBL_GetAddress(&TblPtrNew, TblHandle);
+    *TblAddr = TblPtrNew; /* Note that CFE_TBL_GetAddress() sets this to NULL if it fails */
     if (Result == CFE_TBL_INFO_UPDATED)
     {
         /* Process new table data */
@@ -879,4 +881,5 @@ void SC_ManageTable(SC_TableType type, int32 ArrayIndex)
                               "ATS Append table manage process error: Result = 0x%X", (unsigned int)Result);
         }
     }
-}
+
+} /* End SC_ManageTable() */
