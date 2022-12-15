@@ -30,6 +30,12 @@
 #include "cfe.h"
 #include "sc_platform_cfg.h"
 
+/*************************************************************************
+ * Macro Definitions
+ *************************************************************************/
+#define SC_ATS_HEADER_SIZE (sizeof(SC_AtsEntryHeader_t)) /**< \brief ATS header size in bytes */
+#define SC_RTS_HEADER_SIZE (sizeof(SC_RtsEntryHeader_t)) /**< \brief RTS header size in bytes */
+
 /**
  * \defgroup cfscstblids ID definitions for cFE Table Services manage table request command
  * \{
@@ -106,5 +112,56 @@ typedef struct
     uint16          NextCommandPtr;  /**< \brief where next rts cmd is */
     uint16          UseCtr;          /**< \brief how many times RTS is run */
 } SC_RtsInfoEntry_t;
+
+/**
+ *  \brief ATS Table Entry Header Type
+ */
+typedef struct
+{
+    uint16 Pad; /**< \brief Structure padding */
+
+    uint16 CmdNumber; /**< \brief command number, range = 1 to SC_MAX_ATS_CMDS */
+
+    uint16 TimeTag_MS; /**< \brief Time tag most significant 16 bits */
+    uint16 TimeTag_LS; /**< \brief Time tag least significant 16 bits */
+
+    /*
+     * Note: the command packet data is variable length,
+     *       the command packet header (not shown here),
+     *       comes directly after the time tag
+     */
+} SC_AtsEntryHeader_t;
+
+/**
+ * \brief ATS header and message header
+ */
+typedef struct
+{
+    SC_AtsEntryHeader_t Header; /**< \brief ATS header */
+    CFE_MSG_Message_t   Msg;    /**< \brief MSG header */
+} SC_AtsEntry_t;
+
+/**
+ * \brief RTS Command Header Type
+ */
+typedef struct
+{
+    SC_RelTimeTag_t TimeTag; /**< \brief Relative time tag */
+
+    /*
+     * Note: the command packet data is variable length,
+     *       the command packet header (not shown here),
+     *       comes directly after Time tag.
+     */
+} SC_RtsEntryHeader_t;
+
+/**
+ * \brief RTS header and message header
+ */
+typedef struct
+{
+    SC_RtsEntryHeader_t Header; /**< \brief RTS header */
+    CFE_MSG_Message_t   Msg;    /**< \brief MSG header */
+} SC_RtsEntry_t;
 
 #endif

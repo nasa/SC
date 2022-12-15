@@ -184,9 +184,6 @@ void SC_RegisterManageCmds(void);
 
 #define SC_BYTES_IN_WORD 4 /**< \brief Number of bytes in "word" used to define table lengths */
 
-#define SC_ATS_HEADER_SIZE (sizeof(SC_AtsEntryHeader_t)) /**< \brief ATS header size in bytes */
-#define SC_RTS_HEADER_SIZE (sizeof(SC_RtsEntryHeader_t)) /**< \brief RTS header size in bytes */
-
 #define SC_ATS_BUFF_SIZE32    (SC_ATS_BUFF_SIZE / 2)    /**< \brief ATS buffer number of 32-bit elements */
 #define SC_RTS_BUFF_SIZE32    (SC_RTS_BUFF_SIZE / 2)    /**< \brief RTS buffer number of 32-bit elements */
 #define SC_APPEND_BUFF_SIZE32 (SC_APPEND_BUFF_SIZE / 2) /**< \brief Append buffer number of 32-bit elements */
@@ -224,57 +221,6 @@ void SC_RegisterManageCmds(void);
 #define SC_RTS_INDEX_TO_NUM(index)     ((index) + 1) /**< \brief Convert RTS table index to number */
 #define SC_RTS_ID_TO_INDEX(id)         ((id)-1)      /**< \brief Convert RTS ID to index */
 #define SC_RTS_INDEX_TO_ID(index)      ((index) + 1) /**< \brief Convert RTS table index to ID */
-
-/**
- *  \brief ATS Table Entry Header Type
- */
-typedef struct
-{
-    uint16 Pad; /**< \brief Structure padding */
-
-    uint16 CmdNumber; /**< \brief command number, range = 1 to SC_MAX_ATS_CMDS */
-
-    uint16 TimeTag_MS; /**< \brief Time tag most significant 16 bits */
-    uint16 TimeTag_LS; /**< \brief Time tag least significant 16 bits */
-
-    /*
-     * Note: the command packet data is variable length,
-     *       the command packet header (not shown here),
-     *       comes directly after the time tag
-     */
-} SC_AtsEntryHeader_t;
-
-/**
- * \brief ATS header and message header
- */
-typedef struct
-{
-    SC_AtsEntryHeader_t Header; /**< \brief ATS header */
-    CFE_MSG_Message_t   Msg;    /**< \brief MSG header */
-} SC_AtsEntry_t;
-
-/**
- * \brief RTS Command Header Type
- */
-typedef struct
-{
-    SC_RelTimeTag_t TimeTag; /**< \brief Relative time tag */
-
-    /*
-     * Note: the command packet data is variable length,
-     *       the command packet header (not shown here),
-     *       comes directly after Time tag.
-     */
-} SC_RtsEntryHeader_t;
-
-/**
- * \brief RTS header and message header
- */
-typedef struct
-{
-    SC_RtsEntryHeader_t Header; /**< \brief RTS header */
-    CFE_MSG_Message_t   Msg;    /**< \brief MSG header */
-} SC_RtsEntry_t;
 
 /**
  *  \brief SC Operational Data Structure
