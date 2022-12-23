@@ -47,7 +47,7 @@
  *  \par Type: ERROR
  *
  *  \par Cause:
- *  This event message is issued when a command is recieved, but it is not of the expected
+ *  This event message is issued when a command is received, but it is not of the expected
  *  length
  */
 #define SC_LEN_ERR_EID 2
@@ -417,7 +417,7 @@
  *  \par Type: DEBUG
  *
  *  \par Cause:
- *  This event message is issued when the #SC_CONTINUE_ATS_ON_FAILURE_CC command was recieved and
+ *  This event message is issued when the #SC_CONTINUE_ATS_ON_FAILURE_CC command was received and
  *  the state was changed successfully
  */
 #define SC_CONT_CMD_DEB_EID 43
@@ -495,7 +495,7 @@
  *  \par Type: ERROR
  *
  *  \par Cause:
- *  This event message is issued when an RTS comand was about to be sent out,
+ *  This event message is issued when an RTS command was about to be sent out,
  *  but the command failed checksum validation
  */
 #define SC_RTS_CHKSUM_ERR_EID 50
@@ -571,7 +571,7 @@
  *  \par Type: ERROR
  *
  *  \par Cause:
- *  This event message is issued when an invalid message Id is recieved in the
+ *  This event message is issued when an invalid message Id is received in the
  *  command pipe
  */
 #define SC_MID_ERR_EID 63
@@ -582,7 +582,7 @@
  *  \par Type: ERROR
  *
  *  \par Cause:
- *  This event message is issued when an invalid command code was recieved in
+ *  This event message is issued when an invalid command code was received in
  *  the command pipe
  */
 #define SC_INVLD_CMD_ERR_EID 64
@@ -670,7 +670,7 @@
  *  \par Type: DEBUG
  *
  *  \par Cause:
- *  This event message is issued when a #SC_START_RTS_CC cmd is recieved and is sucessful
+ *  This event message is issued when a #SC_START_RTS_CC cmd is received and is successful
  */
 #define SC_STARTRTS_CMD_DBG_EID 72
 
@@ -680,7 +680,7 @@
  *  \par Type: INFORMATIONAL
  *
  *  \par Cause:
- *  This event message is issued when an RTS is started sucessfully
+ *  This event message is issued when an RTS is started successfully
  */
 #define SC_RTS_START_INF_EID 73
 
@@ -711,7 +711,7 @@
  *  \par Type: ERROR
  *
  *  \par Cause:
- *  This event message is issued when a #SC_START_RTS_CC command was recieved, but the
+ *  This event message is issued when a #SC_START_RTS_CC command was received, but the
  *  RTS is disabled
  */
 #define SC_STARTRTS_CMD_DISABLED_ERR_EID 76
@@ -722,7 +722,7 @@
  *  \par Type: ERROR
  *
  *  \par Cause:
- *  This event message is issued when a #SC_START_RTS_CC command was recieved, but the
+ *  This event message is issued when a #SC_START_RTS_CC command was received, but the
  *  RTS Id was invalid
  */
 #define SC_STARTRTS_CMD_INVALID_ERR_EID 77
@@ -733,7 +733,7 @@
  *  \par Type: INFORMATIONAL
  *
  *  \par Cause:
- *  This event message is issued when an #SC_STOP_RTS_CC command is received and exexuted sucessfully
+ *  This event message is issued when an #SC_STOP_RTS_CC command is received and exexuted successfully
  */
 #define SC_STOPRTS_CMD_INF_EID 78
 
@@ -754,7 +754,7 @@
  *  \par Type: DEBUG
  *
  *  \par Cause:
- *  This event message is issued when a #SC_DISABLE_RTS_CC command was recieved, and executed sucessfully
+ *  This event message is issued when a #SC_DISABLE_RTS_CC command was received, and executed successfully
  */
 #define SC_DISABLE_RTS_DEB_EID 80
 
@@ -764,7 +764,7 @@
  *  \par Type: ERROR
  *
  *  \par Cause:
- *  This event message is issued when a #SC_DISABLE_RTS_CC command was recieved,
+ *  This event message is issued when a #SC_DISABLE_RTS_CC command was received,
  *  but the RTS Id given was invalid
  */
 #define SC_DISRTS_CMD_ERR_EID 81
@@ -775,7 +775,7 @@
  *  \par Type: DEBUG
  *
  *  \par Cause:
- *  This event message is issued when a #SC_ENABLE_RTS_CC command was recieved, and executed sucessfully
+ *  This event message is issued when a #SC_ENABLE_RTS_CC command was received, and executed successfully
  */
 #define SC_ENABLE_RTS_DEB_EID 82
 
@@ -785,7 +785,7 @@
  *  \par Type: ERROR
  *
  *  \par Cause:
- *  This event message is issued when a #SC_DISABLE_RTS_CC command was recieved,
+ *  This event message is issued when a #SC_DISABLE_RTS_CC command was received,
  *  but the RTS Id given was invalid
  */
 #define SC_ENARTS_CMD_ERR_EID 83
@@ -945,7 +945,7 @@
 #define SC_VERIFY_ATS_EID 103
 
 /**
- * \brief SC ATS Or Append Table Verification Table Entry Comamnd Number Invalid Event ID
+ * \brief SC ATS Or Append Table Verification Table Entry Command Number Invalid Event ID
  *
  *  \par Type: ERROR
  *
@@ -1226,7 +1226,7 @@
  *  \par Type: ERROR
  *
  *  \par Cause:
- *  This event message is issued when a #SC_START_RTSGRP_CC command was recieved, but an
+ *  This event message is issued when a #SC_START_RTSGRP_CC command was received, but an
  *  RTS is marked as #SC_LOADED
  */
 #define SC_STARTRTSGRP_CMD_NOT_LDED_ERR_EID 126

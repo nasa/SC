@@ -24,10 +24,7 @@
  *
  * @note
  *   Constants and enumerated types related to these message structures
- *   are defined in sc_msgdefs.h. They are kept separate to allow easy
- *   integration with ASIST RDL files which can't handle typedef
- *   declarations (see the main comment block in sc_msgdefs.h for more
- *   info).
+ *   are defined in sc_msgdefs.h.
  */
 #ifndef SC_MSG_H
 #define SC_MSG_H
@@ -104,7 +101,6 @@ typedef struct
      the LSB (bit zero) of uint16 array index zero represents RTS number 1, and bit one of uint16 array
      index zero represents RTS number 2, etc.  If an RTS is ENABLED, then the corresponding bit is zero.
      If an RTS is DISABLED, then the corresponding bit is one. */
-
 } SC_HkTlm_t;
 
 /**\}*/
