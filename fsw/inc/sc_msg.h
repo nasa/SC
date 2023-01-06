@@ -32,9 +32,9 @@
 /************************************************************************
  * Includes
  ************************************************************************/
-#include "cfe.h"
-#include "sc_platform_cfg.h"
-#include "sc_msgdefs.h"
+#include <cfe.h>
+#include <sc_platform_cfg.h>
+#include <sc_msgdefs.h>
 
 /************************************************************************
  * Macro Definitions
