@@ -265,7 +265,7 @@ bool SC_BeginAts(SC_AtsIndex_t AtsIndex, uint16 TimeOffset)
 
     } /* end if */
 
-    return (ReturnCode);
+    return ReturnCode;
 }
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -492,7 +492,7 @@ bool SC_InlineSwitch(void)
     /* clear out the global ground-switch pend flag */
     SC_OperData.AtsCtrlBlckAddr->SwitchPendFlag = false;
 
-    return (ReturnCode);
+    return ReturnCode;
 }
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */

@@ -179,7 +179,7 @@ CFE_Status_t SC_AppInit(void)
     if (Result != CFE_SUCCESS)
     {
         CFE_ES_WriteToSysLog("Event Services Register returned: 0x%08X\n", (unsigned int)Result);
-        return (Result);
+        return Result;
     }
 
     /* Must be able to create Software Bus message pipe */
@@ -188,7 +188,7 @@ CFE_Status_t SC_AppInit(void)
     {
         CFE_EVS_SendEvent(SC_INIT_SB_CREATE_ERR_EID, CFE_EVS_EventType_ERROR,
                           "Software Bus Create Pipe returned: 0x%08X", (unsigned int)Result);
-        return (Result);
+        return Result;
     }
 
     /* Must be able to subscribe to HK request command */
@@ -197,7 +197,7 @@ CFE_Status_t SC_AppInit(void)
     {
         CFE_EVS_SendEvent(SC_INIT_SB_SUBSCRIBE_HK_ERR_EID, CFE_EVS_EventType_ERROR,
                           "Software Bus subscribe to housekeeping returned: 0x%08X", (unsigned int)Result);
-        return (Result);
+        return Result;
     }
 
     /* Must be able to subscribe to 1Hz wakeup command */
@@ -206,7 +206,7 @@ CFE_Status_t SC_AppInit(void)
     {
         CFE_EVS_SendEvent(SC_INIT_SB_SUBSCRIBE_ONEHZ_ERR_EID, CFE_EVS_EventType_ERROR,
                           "Software Bus subscribe to 1 Hz cycle returned: 0x%08X", (unsigned int)Result);
-        return (Result);
+        return Result;
     }
 
     /* Must be able to subscribe to SC commands */
@@ -215,21 +215,21 @@ CFE_Status_t SC_AppInit(void)
     {
         CFE_EVS_SendEvent(SC_INIT_SB_SUBSCRIBE_CMD_ERR_EID, CFE_EVS_EventType_ERROR,
                           "Software Bus subscribe to command returned: 0x%08X", (unsigned int)Result);
-        return (Result);
+        return Result;
     }
 
     /* Must be able to create and initialize tables */
     Result = SC_InitTables();
     if (Result != CFE_SUCCESS)
     {
-        return (Result);
+        return Result;
     }
 
     /* Send application startup event */
     CFE_EVS_SendEvent(SC_INIT_INF_EID, CFE_EVS_EventType_INFORMATION, "SC Initialized. Version %d.%d.%d.%d",
                       SC_MAJOR_VERSION, SC_MINOR_VERSION, SC_REVISION, SC_MISSION_REV);
 
-    return (CFE_SUCCESS);
+    return CFE_SUCCESS;
 }
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -250,14 +250,14 @@ CFE_Status_t SC_InitTables(void)
     Result = SC_RegisterAllTables();
     if (Result != CFE_SUCCESS)
     {
-        return (Result);
+        return Result;
     }
 
     /* Must be able to get dump only table pointers */
     Result = SC_GetDumpTablePointers();
     if (Result != CFE_SUCCESS)
     {
-        return (Result);
+        return Result;
     }
 
     /* ATP control block status table */
@@ -298,13 +298,13 @@ CFE_Status_t SC_InitTables(void)
     Result = SC_GetLoadTablePointers();
     if (Result != CFE_SUCCESS)
     {
-        return (Result);
+        return Result;
     }
 
     /* Register for table update notification commands */
     SC_RegisterManageCmds();
 
-    return (CFE_SUCCESS);
+    return CFE_SUCCESS;
 }
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -320,16 +320,16 @@ CFE_Status_t SC_RegisterAllTables(void)
     Result = SC_RegisterDumpOnlyTables();
     if (Result != CFE_SUCCESS)
     {
-        return (Result);
+        return Result;
     }
 
     Result = SC_RegisterLoadableTables();
     if (Result != CFE_SUCCESS)
     {
-        return (Result);
+        return Result;
     }
 
-    return (CFE_SUCCESS);
+    return CFE_SUCCESS;
 }
 
 CFE_Status_t SC_RegisterDumpOnlyTables(void)
@@ -357,7 +357,7 @@ CFE_Status_t SC_RegisterDumpOnlyTables(void)
         {
             CFE_EVS_SendEvent(EventID[i], CFE_EVS_EventType_ERROR, "%s table register failed, returned: 0x%08X",
                               Spec[i], (unsigned int)Result);
-            return (Result);
+            return Result;
         }
     }
 
@@ -373,11 +373,11 @@ CFE_Status_t SC_RegisterDumpOnlyTables(void)
             CFE_EVS_SendEvent(SC_REGISTER_ATS_CMD_STATUS_TABLE_ERR_EID, CFE_EVS_EventType_ERROR,
                               "ATS command status table register failed for ATS %d, returned: 0x%08X", i + 1,
                               (unsigned int)Result);
-            return (Result);
+            return Result;
         }
     }
 
-    return (CFE_SUCCESS);
+    return CFE_SUCCESS;
 }
 
 CFE_Status_t SC_RegisterLoadableTables(void)
@@ -410,7 +410,7 @@ CFE_Status_t SC_RegisterLoadableTables(void)
                 CFE_EVS_SendEvent(EventID[i], CFE_EVS_EventType_ERROR,
                                   "Table Registration Failed for %s %d, returned: 0x%08X", Spec[i], j + 1,
                                   (unsigned int)Result);
-                return (Result);
+                return Result;
             }
         }
     }
@@ -422,10 +422,10 @@ CFE_Status_t SC_RegisterLoadableTables(void)
     {
         CFE_EVS_SendEvent(SC_REGISTER_APPEND_TBL_ERR_EID, CFE_EVS_EventType_ERROR,
                           "Append ATS Table Registration Failed, returned: 0x%08X", (unsigned int)Result);
-        return (Result);
+        return Result;
     }
 
-    return (CFE_SUCCESS);
+    return CFE_SUCCESS;
 }
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -453,7 +453,7 @@ CFE_Status_t SC_GetDumpTablePointers(void)
         {
             CFE_EVS_SendEvent(EventID[i], CFE_EVS_EventType_ERROR, "Table failed Getting Address, returned: 0x%08X",
                               (unsigned int)Result);
-            return (Result);
+            return Result;
         }
     }
 
@@ -466,11 +466,11 @@ CFE_Status_t SC_GetDumpTablePointers(void)
             CFE_EVS_SendEvent(SC_GET_ADDRESS_ATS_CMD_STAT_ERR_EID, CFE_EVS_EventType_ERROR,
                               "ATS Cmd Status table for ATS %d failed Getting Address, returned: 0x%08X", i + 1,
                               (unsigned int)Result);
-            return (Result);
+            return Result;
         }
     }
 
-    return (CFE_SUCCESS);
+    return CFE_SUCCESS;
 }
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -493,7 +493,7 @@ CFE_Status_t SC_GetLoadTablePointers(void)
         {
             CFE_EVS_SendEvent(SC_GET_ADDRESS_ATS_ERR_EID, CFE_EVS_EventType_ERROR,
                               "ATS table %d failed Getting Address, returned: 0x%08X", i + 1, (unsigned int)Result);
-            return (Result);
+            return Result;
         }
     }
 
@@ -504,7 +504,7 @@ CFE_Status_t SC_GetLoadTablePointers(void)
     {
         CFE_EVS_SendEvent(SC_GET_ADDRESS_APPEND_ERR_EID, CFE_EVS_EventType_ERROR,
                           "Append ATS table failed Getting Address, returned: 0x%08X", (unsigned int)Result);
-        return (Result);
+        return Result;
     }
 
     /* Get buffer address for loadable RTS tables */
@@ -516,7 +516,7 @@ CFE_Status_t SC_GetLoadTablePointers(void)
         {
             CFE_EVS_SendEvent(SC_GET_ADDRESS_RTS_ERR_EID, CFE_EVS_EventType_ERROR,
                               "RTS table %d failed Getting Address, returned: 0x%08X", i + 1, (unsigned int)Result);
-            return (Result);
+            return Result;
         }
 
         /* Process new RTS table data */
@@ -526,7 +526,7 @@ CFE_Status_t SC_GetLoadTablePointers(void)
         }
     }
 
-    return (CFE_SUCCESS);
+    return CFE_SUCCESS;
 }
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
