@@ -504,7 +504,7 @@
   time tag in the overlap region (including the switch command) this logic 
   does not get used. In either case, the switch can be performed without 
   sending any duplicate commands to be sent out. There are certain conditions 
-  that can cause a ATS switch that is pending to be canceled. If the ATP is 
+  that can cause an ATS switch that is pending to be canceled. If the ATP is 
   stopped by the ground while the ATP is waiting for a "safe" time to switch, 
   then the switch will not occur. Also if the ATP detects the end of the ATS 
   buffer before there is a "safe" time to switch, the switch will be canceled. 
