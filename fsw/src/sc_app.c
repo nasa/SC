@@ -370,7 +370,8 @@ CFE_Status_t SC_RegisterDumpOnlyTables(void)
 
 CFE_Status_t SC_RegisterLoadableTables(void)
 {
-    int          i, j;
+    int          i;
+    int          j;
     CFE_Status_t Result;
     char         TableName[CFE_MISSION_TBL_MAX_NAME_LENGTH];
 
