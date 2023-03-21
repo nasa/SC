@@ -1209,16 +1209,6 @@
 #define SC_RTS_LOAD_FAIL_DBG_EID 124
 
 /**
- * \brief SC RTS Table Open Failed Event ID
- *
- *  \par Type: DEBUG
- *
- *  \par Cause:
- *  This event message is issued when an RTS file fails to open at startup.
- */
-#define SC_RTS_OPEN_FAIL_DBG_EID 125
-
-/**
  * \brief SC Start RTS Group RTS Not Loaded Or In Use Event ID
  *
  *  \par Type: ERROR
