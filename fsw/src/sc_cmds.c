@@ -452,13 +452,13 @@ void SC_SendHkPacket(void)
     {
         if (SC_OperData.RtsInfoTblAddr[i].DisabledFlag == true)
         {
-            CFE_SET(SC_OperData.HkPacket.RtsDisabledStatus[i / SC_NUMBER_OF_RTS_IN_UINT16],
-                    i % SC_NUMBER_OF_RTS_IN_UINT16);
+            SC_OperData.HkPacket.RtsDisabledStatus[i / SC_NUMBER_OF_RTS_IN_UINT16] |=
+                (1 << (i % SC_NUMBER_OF_RTS_IN_UINT16));
         }
         if (SC_OperData.RtsInfoTblAddr[i].RtsStatus == SC_EXECUTING)
         {
-            CFE_SET(SC_OperData.HkPacket.RtsExecutingStatus[i / SC_NUMBER_OF_RTS_IN_UINT16],
-                    i % SC_NUMBER_OF_RTS_IN_UINT16);
+            SC_OperData.HkPacket.RtsExecutingStatus[i / SC_NUMBER_OF_RTS_IN_UINT16] |=
+                (1 << (i % SC_NUMBER_OF_RTS_IN_UINT16));
         }
     } /* end for */
 
