@@ -681,19 +681,19 @@ void SC_ProcessCommand(const CFE_SB_Buffer_t *BufPtr)
 
 #if (SC_ENABLE_GROUP_COMMANDS == true)
 
-        case SC_START_RTSGRP_CC:
+        case SC_START_RTS_GRP_CC:
             SC_StartRtsGrpCmd(BufPtr);
             break;
 
-        case SC_STOP_RTSGRP_CC:
+        case SC_STOP_RTS_GRP_CC:
             SC_StopRtsGrpCmd(BufPtr);
             break;
 
-        case SC_DISABLE_RTSGRP_CC:
+        case SC_DISABLE_RTS_GRP_CC:
             SC_DisableRtsGrpCmd(BufPtr);
             break;
 
-        case SC_ENABLE_RTSGRP_CC:
+        case SC_ENABLE_RTS_GRP_CC:
             SC_EnableRtsGrpCmd(BufPtr);
             break;
 #endif
