@@ -67,7 +67,7 @@ SC_OperData_t SC_OperData; /* SC Operational Data */
 void SC_AppMain(void)
 {
     uint32           RunStatus = CFE_ES_RunStatus_APP_RUN;
-    int32            Result;
+    CFE_Status_t     Result;
     CFE_SB_Buffer_t *BufPtr = NULL;
 
     /* Performance Log (start time counter) */
@@ -136,9 +136,9 @@ void SC_AppMain(void)
 /*                                                                 */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-int32 SC_AppInit(void)
+CFE_Status_t SC_AppInit(void)
 {
-    int32 Result;
+    CFE_Status_t Result;
 
     /* Clear global data structures */
     memset(&SC_OperData, 0, sizeof(SC_OperData));
@@ -232,11 +232,11 @@ int32 SC_AppInit(void)
 /*                                                                 */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-int32 SC_InitTables(void)
+CFE_Status_t SC_InitTables(void)
 {
-    int32 Result;
-    int32 i;
-    int32 j;
+    CFE_Status_t Result;
+    int32        i;
+    int32        j;
 
     /* Must be able to register all tables with cFE Table Services */
     Result = SC_RegisterAllTables();
@@ -301,9 +301,9 @@ int32 SC_InitTables(void)
 /*                                                                 */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-int32 SC_RegisterAllTables(void)
+CFE_Status_t SC_RegisterAllTables(void)
 {
-    int32 Result;
+    CFE_Status_t Result;
 
     Result = SC_RegisterDumpOnlyTables();
     if (Result != CFE_SUCCESS)
@@ -320,11 +320,11 @@ int32 SC_RegisterAllTables(void)
     return (CFE_SUCCESS);
 }
 
-int32 SC_RegisterDumpOnlyTables(void)
+CFE_Status_t SC_RegisterDumpOnlyTables(void)
 {
-    int   i;
-    int32 Result;
-    char  TableName[CFE_MISSION_TBL_MAX_NAME_LENGTH];
+    int          i;
+    CFE_Status_t Result;
+    char         TableName[CFE_MISSION_TBL_MAX_NAME_LENGTH];
 
     CFE_TBL_Handle_t *TblHandlePtr[4] = {&SC_OperData.RtsInfoHandle, &SC_OperData.RtsCtrlBlckHandle,
                                          &SC_OperData.AtsInfoHandle, &SC_OperData.AtsCtrlBlckHandle};
@@ -368,11 +368,11 @@ int32 SC_RegisterDumpOnlyTables(void)
     return (CFE_SUCCESS);
 }
 
-int32 SC_RegisterLoadableTables(void)
+CFE_Status_t SC_RegisterLoadableTables(void)
 {
-    int   i, j;
-    int32 Result;
-    char  TableName[CFE_MISSION_TBL_MAX_NAME_LENGTH];
+    int          i, j;
+    CFE_Status_t Result;
+    char         TableName[CFE_MISSION_TBL_MAX_NAME_LENGTH];
 
     uint16            NumTables[2]    = {SC_NUMBER_OF_RTS, SC_NUMBER_OF_ATS};
     const char *      StrFormat[2]    = {"%s%03d", "%s%d"};
@@ -421,10 +421,10 @@ int32 SC_RegisterLoadableTables(void)
 /*                                                                 */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-int32 SC_GetDumpTablePointers(void)
+CFE_Status_t SC_GetDumpTablePointers(void)
 {
-    int   i;
-    int32 Result;
+    int          i;
+    CFE_Status_t Result;
 
     void **          TblAddr[4]   = {(void **)&SC_OperData.RtsInfoTblAddr, (void **)&SC_OperData.RtsCtrlBlckAddr,
                          (void **)&SC_OperData.AtsInfoTblAddr, (void **)&SC_OperData.AtsCtrlBlckAddr};
@@ -466,10 +466,10 @@ int32 SC_GetDumpTablePointers(void)
 /*                                                                 */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-int32 SC_GetLoadTablePointers(void)
+CFE_Status_t SC_GetLoadTablePointers(void)
 {
-    int   i;
-    int32 Result;
+    int          i;
+    CFE_Status_t Result;
 
     /* Get buffer address for loadable ATS tables */
     for (i = 0; i < SC_NUMBER_OF_ATS; i++)

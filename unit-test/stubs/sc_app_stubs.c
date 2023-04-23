@@ -36,27 +36,27 @@ void SC_AppMain(void)
     UT_DEFAULT_IMPL(SC_AppMain);
 }
 
-int32 SC_AppInit(void)
+CFE_Status_t SC_AppInit(void)
 {
     return UT_DEFAULT_IMPL(SC_AppMain);
 }
 
-int32 SC_InitTables(void)
+CFE_Status_t SC_InitTables(void)
 {
     return UT_DEFAULT_IMPL(SC_InitTables);
 }
 
-int32 SC_RegisterAllTables(void)
+CFE_Status_t SC_RegisterAllTables(void)
 {
     return UT_DEFAULT_IMPL(SC_RegisterAllTables);
 }
 
-int32 SC_GetDumpTablePointers(void)
+CFE_Status_t SC_GetDumpTablePointers(void)
 {
     return UT_DEFAULT_IMPL(SC_GetDumpTablePointers);
 }
 
-int32 SC_GetLoadTablePointers(void)
+CFE_Status_t SC_GetLoadTablePointers(void)
 {
     return UT_DEFAULT_IMPL(SC_GetLoadTablePointers);
 }

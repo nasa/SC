@@ -69,7 +69,7 @@ void SC_AppMain(void);
  *  \return Execution status, see \ref CFEReturnCodes
  *  \retval #CFE_SUCCESS \copybrief CFE_SUCCESS
  */
-int32 SC_AppInit(void);
+CFE_Status_t SC_AppInit(void);
 
 /**
  * \brief Initialize application tables
@@ -86,7 +86,7 @@ int32 SC_AppInit(void);
  *  \return Execution status, see \ref CFEReturnCodes
  *  \retval #CFE_SUCCESS \copybrief CFE_SUCCESS
  */
-int32 SC_InitTables(void);
+CFE_Status_t SC_InitTables(void);
 
 /**
  * \brief Register tables with cFE Table Services
@@ -103,11 +103,11 @@ int32 SC_InitTables(void);
  *  \return Execution status, see \ref CFEReturnCodes
  *  \retval #CFE_SUCCESS \copybrief CFE_SUCCESS
  */
-int32 SC_RegisterAllTables(void);
+CFE_Status_t SC_RegisterAllTables(void);
 
-int32 SC_RegisterDumpOnlyTables(void);
+CFE_Status_t SC_RegisterDumpOnlyTables(void);
 
-int32 SC_RegisterLoadableTables(void);
+CFE_Status_t SC_RegisterLoadableTables(void);
 
 /**
  * \brief Get dump only table buffer pointers
@@ -124,7 +124,7 @@ int32 SC_RegisterLoadableTables(void);
  *  \return Execution status, see \ref CFEReturnCodes
  *  \retval #CFE_SUCCESS \copybrief CFE_SUCCESS
  */
-int32 SC_GetDumpTablePointers(void);
+CFE_Status_t SC_GetDumpTablePointers(void);
 
 /**
  * \brief Get loadable table buffer pointers
@@ -141,7 +141,7 @@ int32 SC_GetDumpTablePointers(void);
  *  \return Execution status, see \ref CFEReturnCodes
  *  \retval #CFE_SUCCESS \copybrief CFE_SUCCESS
  */
-int32 SC_GetLoadTablePointers(void);
+CFE_Status_t SC_GetLoadTablePointers(void);
 
 /**
  * \brief Load default RTS tables
