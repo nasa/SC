@@ -1192,12 +1192,18 @@ void UtTest_Setup(void)
                "SC_GetNextRtsCommand_Test_CommandLengthError");
     UtTest_Add(SC_GetNextRtsCommand_Test_ZeroCommandLength, SC_Test_Setup, SC_Test_TearDown,
                "SC_GetNextRtsCommand_Test_ZeroCommandLength");
-    UtTest_Add(SC_GetNextRtsCommand_Test_ZeroCommandLengthLastRts, SC_Test_Setup, SC_Test_TearDown,
-               "SC_GetNextRtsCommand_Test_ZeroCommandLengthLastRts");
+
+    /* Only run if SC_LAST_RTS_WITH_EVENTS < SC_NUMBER_OF_RTS */
+    if (SC_LAST_RTS_WITH_EVENTS < SC_NUMBER_OF_RTS)
+    {
+        UtTest_Add(SC_GetNextRtsCommand_Test_ZeroCommandLengthLastRts, SC_Test_Setup, SC_Test_TearDown,
+                   "SC_GetNextRtsCommand_Test_ZeroCommandLengthLastRts");
+        UtTest_Add(SC_GetNextRtsCommand_Test_EndOfBufferLastRts, SC_Test_Setup, SC_Test_TearDown,
+                   "SC_GetNextRtsCommand_Test_EndOfBufferLastRts");
+    }
+
     UtTest_Add(SC_GetNextRtsCommand_Test_EndOfBuffer, SC_Test_Setup, SC_Test_TearDown,
                "SC_GetNextRtsCommand_Test_EndOfBuffer");
-    UtTest_Add(SC_GetNextRtsCommand_Test_EndOfBufferLastRts, SC_Test_Setup, SC_Test_TearDown,
-               "SC_GetNextRtsCommand_Test_EndOfBufferLastRts");
     UtTest_Add(SC_GetNextAtsCommand_Test_Starting, SC_Test_Setup, SC_Test_TearDown,
                "SC_GetNextAtsCommand_Test_Starting");
     UtTest_Add(SC_GetNextAtsCommand_Test_Idle, SC_Test_Setup, SC_Test_TearDown, "SC_GetNextAtsCommand_Test_Idle");

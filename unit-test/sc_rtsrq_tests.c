@@ -117,10 +117,6 @@ void SC_StartRtsCmd_Test_StartRtsNoEvents(void)
     uint32               RtsTable[SC_RTS_BUFF_SIZE32];
     SC_RtpControlBlock_t RtsCtrlBlck;
     size_t               MsgSize;
-    int32                strCmpResult;
-    char                 ExpectedEventString[CFE_MISSION_EVS_MAX_MESSAGE_LENGTH];
-
-    snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH, "Start RTS #%%d command");
 
     SC_InitTables();
 
@@ -165,17 +161,19 @@ void SC_StartRtsCmd_Test_StartRtsNoEvents(void)
     UtAssert_True(SC_OperData.HkPacket.RtsActiveCtr == 1, "SC_OperData.HkPacket.RtsActiveCtr == 1");
     UtAssert_True(SC_OperData.HkPacket.CmdCtr == 1, "SC_OperData.HkPacket.CmdCtr == 1");
 
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_STARTRTS_CMD_DBG_EID);
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventType, CFE_EVS_EventType_DEBUG);
+    /* Handle if SC_LAST_RTS_WITH_EVENTS is the same as SC_NUM_OF_RTS */
+    if (UT_CmdBuf.RtsCmd.RtsId > SC_LAST_RTS_WITH_EVENTS)
+    {
+        UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_STARTRTS_CMD_DBG_EID);
+        UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventType, CFE_EVS_EventType_DEBUG);
+    }
+    else
+    {
+        UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_RTS_START_INF_EID);
+        UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventType, CFE_EVS_EventType_INFORMATION);
+    }
 
-    strCmpResult = strncmp(ExpectedEventString, context_CFE_EVS_SendEvent[0].Spec, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH);
-
-    UtAssert_True(strCmpResult == 0, "Event string matched expected result, '%s'", context_CFE_EVS_SendEvent[0].Spec);
-
-    call_count_CFE_EVS_SendEvent = UT_GetStubCount(UT_KEY(CFE_EVS_SendEvent));
-
-    UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
-                  call_count_CFE_EVS_SendEvent);
+    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
 }
 
 void SC_StartRtsCmd_Test_InvalidCommandLength1(void)
