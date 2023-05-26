@@ -81,6 +81,7 @@ typedef struct
 {
     uint8  AtpState;       /**< \brief execution state of the ATP */
     uint8  AtsNumber;      /**< \brief current ATS running if any */
+    uint16 Padding;        /**< \brief Structure padding to align to 32-bit boundaries */
     uint32 CmdNumber;      /**< \brief current cmd number to run if any */
     uint16 TimeIndexPtr;   /**< \brief time index pointer for current cmd */
     uint16 SwitchPendFlag; /**< \brief indicates that a buffer switch is waiting */
