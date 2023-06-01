@@ -190,7 +190,7 @@ typedef struct
 /**
  *  \brief RTS Group Command
  *
- *  For command details see #SC_START_RTSGRP_CC, #SC_STOP_RTSGRP_CC, #SC_DISABLE_RTSGRP_CC, #SC_ENABLE_RTSGRP_CC
+ *  For command details see #SC_START_RTS_GRP_CC, #SC_STOP_RTS_GRP_CC, #SC_DISABLE_RTS_GRP_CC, #SC_ENABLE_RTS_GRP_CC
  */
 typedef struct
 {

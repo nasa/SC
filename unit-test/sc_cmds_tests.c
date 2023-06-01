@@ -3095,7 +3095,7 @@ void SC_ProcessCommand_Test_StartRtsGrp(void)
      **/
 
     CFE_SB_MsgId_t    TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
-    CFE_MSG_FcnCode_t FcnCode   = SC_START_RTSGRP_CC;
+    CFE_MSG_FcnCode_t FcnCode   = SC_START_RTS_GRP_CC;
 
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
@@ -3119,7 +3119,7 @@ void SC_ProcessCommand_Test_StopRtsGrp(void)
      **/
 
     CFE_SB_MsgId_t    TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
-    CFE_MSG_FcnCode_t FcnCode   = SC_STOP_RTSGRP_CC;
+    CFE_MSG_FcnCode_t FcnCode   = SC_STOP_RTS_GRP_CC;
 
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
@@ -3143,7 +3143,7 @@ void SC_ProcessCommand_Test_DisableRtsGrp(void)
      **/
 
     CFE_SB_MsgId_t    TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
-    CFE_MSG_FcnCode_t FcnCode   = SC_DISABLE_RTSGRP_CC;
+    CFE_MSG_FcnCode_t FcnCode   = SC_DISABLE_RTS_GRP_CC;
 
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
@@ -3167,7 +3167,7 @@ void SC_ProcessCommand_Test_EnableRtsGrp(void)
      **/
 
     CFE_SB_MsgId_t    TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
-    CFE_MSG_FcnCode_t FcnCode   = SC_ENABLE_RTSGRP_CC;
+    CFE_MSG_FcnCode_t FcnCode   = SC_ENABLE_RTS_GRP_CC;
 
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);

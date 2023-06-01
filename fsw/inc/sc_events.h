@@ -1092,7 +1092,7 @@
  *
  *  \par Cause:
  *  This event message is issued following the successful execution of
- *  a #SC_START_RTSGRP_CC command.
+ *  a #SC_START_RTS_GRP_CC command.
  */
 #define SC_STARTRTSGRP_CMD_INF_EID 115
 
@@ -1102,7 +1102,7 @@
  *  \par Type: ERROR
  *
  *  \par Cause:
- *  This event message is issued when a #SC_START_RTSGRP_CC command was
+ *  This event message is issued when a #SC_START_RTS_GRP_CC command was
  *  rejected because the RTS group definition was invalid:
  *  - First RTS ID must be 1 through #SC_NUMBER_OF_RTS
  *  - Last RTS ID must be 1 through #SC_NUMBER_OF_RTS
@@ -1117,7 +1117,7 @@
  *
  *  \par Cause:
  *  This event message is issued following the successful execution of
- *  a #SC_STOP_RTSGRP_CC command.
+ *  a #SC_STOP_RTS_GRP_CC command.
  */
 #define SC_STOPRTSGRP_CMD_INF_EID 117
 
@@ -1127,7 +1127,7 @@
  *  \par Type: ERROR
  *
  *  \par Cause:
- *  This event message is issued when a #SC_STOP_RTSGRP_CC command was
+ *  This event message is issued when a #SC_STOP_RTS_GRP_CC command was
  *  rejected because the RTS group definition was invalid:
  *  - First RTS ID must be 1 through #SC_NUMBER_OF_RTS
  *  - Last RTS ID must be 1 through #SC_NUMBER_OF_RTS
@@ -1142,7 +1142,7 @@
  *
  *  \par Cause:
  *  This event message is issued following the successful execution of
- *  a #SC_DISABLE_RTSGRP_CC command.
+ *  a #SC_DISABLE_RTS_GRP_CC command.
  */
 #define SC_DISRTSGRP_CMD_INF_EID 119
 
@@ -1152,7 +1152,7 @@
  *  \par Type: ERROR
  *
  *  \par Cause:
- *  This event message is issued when a #SC_DISABLE_RTSGRP_CC command was
+ *  This event message is issued when a #SC_DISABLE_RTS_GRP_CC command was
  *  rejected because the RTS group definition was invalid:
  *  - First RTS ID must be 1 through #SC_NUMBER_OF_RTS
  *  - Last RTS ID must be 1 through #SC_NUMBER_OF_RTS
@@ -1167,7 +1167,7 @@
  *
  *  \par Cause:
  *  This event message is issued following the successful execution of
- *  a #SC_ENABLE_RTSGRP_CC command.
+ *  a #SC_ENABLE_RTS_GRP_CC command.
  */
 #define SC_ENARTSGRP_CMD_INF_EID 121
 
@@ -1177,7 +1177,7 @@
  *  \par Type: ERROR
  *
  *  \par Cause:
- *  This event message is issued when a #SC_ENABLE_RTSGRP_CC command was
+ *  This event message is issued when a #SC_ENABLE_RTS_GRP_CC command was
  *  rejected because the RTS group definition was invalid:
  *  - First RTS ID must be 1 through #SC_NUMBER_OF_RTS
  *  - Last RTS ID must be 1 through #SC_NUMBER_OF_RTS
@@ -1226,7 +1226,7 @@
  *  \par Type: ERROR
  *
  *  \par Cause:
- *  This event message is issued when a #SC_START_RTSGRP_CC command was received, but an
+ *  This event message is issued when a #SC_START_RTS_GRP_CC command was received, but an
  *  RTS is marked as #SC_LOADED
  */
 #define SC_STARTRTSGRP_CMD_NOT_LDED_ERR_EID 126
@@ -1237,7 +1237,7 @@
  *  \par Type: ERROR
  *
  *  \par Cause:
- *  This event message is issued when a #SC_START_RTSGRP_CC command was received, but an
+ *  This event message is issued when a #SC_START_RTS_GRP_CC command was received, but an
  *  RTS is disabled
  */
 #define SC_STARTRTSGRP_CMD_DISABLED_ERR_EID 127

@@ -56,7 +56,7 @@ void SC_StartRtsCmd(const CFE_SB_Buffer_t *CmdPacket);
  *
  *  \param [in]         CmdPacket      Pointer to Software Bus buffer
  *
- *  \sa #SC_START_RTSGRP_CC
+ *  \sa #SC_START_RTS_GRP_CC
  */
 void SC_StartRtsGrpCmd(const CFE_SB_Buffer_t *CmdPacket);
 #endif
@@ -155,7 +155,7 @@ void SC_EnableRtsCmd(const CFE_SB_Buffer_t *CmdPacket);
  *
  *  \param [in]         CmdPacket      Pointer to Software Bus buffer
  *
- *  \sa #SC_ENABLE_RTSGRP_CC
+ *  \sa #SC_ENABLE_RTS_GRP_CC
  */
 void SC_EnableRtsGrpCmd(const CFE_SB_Buffer_t *CmdPacket);
 #endif

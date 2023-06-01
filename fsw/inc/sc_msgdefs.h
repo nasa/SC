@@ -543,9 +543,9 @@
  *  \par Criticality
  *       None
  *
- *  \sa #SC_STOP_RTSGRP_CC
+ *  \sa #SC_STOP_RTS_GRP_CC
  */
-#define SC_START_RTSGRP_CC 13
+#define SC_START_RTS_GRP_CC 13
 
 /**
  * \brief STOP a group of RTS
@@ -583,9 +583,9 @@
  *  \par Criticality
  *       None
  *
- *  \sa #SC_START_RTSGRP_CC
+ *  \sa #SC_START_RTS_GRP_CC
  */
-#define SC_STOP_RTSGRP_CC 14
+#define SC_STOP_RTS_GRP_CC 14
 
 /**
  * \brief DISABLE a group of RTS
@@ -621,9 +621,9 @@
  *  \par Criticality
  *       None
  *
- *  \sa #SC_ENABLE_RTSGRP_CC
+ *  \sa #SC_ENABLE_RTS_GRP_CC
  */
-#define SC_DISABLE_RTSGRP_CC 15
+#define SC_DISABLE_RTS_GRP_CC 15
 
 /**
  * \brief ENABLE a group of RTS
@@ -659,12 +659,19 @@
  *  \par Criticality
  *       None
  *
- *  \sa #SC_DISABLE_RTSGRP_CC
+ *  \sa #SC_DISABLE_RTS_GRP_CC
  */
-#define SC_ENABLE_RTSGRP_CC 16
+#define SC_ENABLE_RTS_GRP_CC 16
 
 #endif
 
 /**\}*/
+
+#ifndef SC_OMIT_DEPRECATED
+#define SC_START_RTSGRP_CC   SC_START_RTS_GRP_CC
+#define SC_STOP_RTSGRP_CC    SC_STOP_RTS_GRP_CC
+#define SC_DISABLE_RTSGRP_CC SC_DISABLE_RTS_GRP_CC
+#define SC_ENABLE_RTSGRP_CC  SC_ENABLE_RTS_GRP_CC
+#endif
 
 #endif
