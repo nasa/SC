@@ -60,7 +60,7 @@ void SC_ProcessAtpCmd(void)
     uint8             AtsIndex;   /* ATS selection index */
     uint32            CmdIndex;   /* ATS command index */
     char              TempAtsChar;
-    int32             Result;
+    CFE_Status_t      Result;
     bool              AbortATS = false;
     SC_AtsEntry_t *   EntryPtr;
     CFE_SB_MsgId_t    MessageID     = CFE_SB_INVALID_MSG_ID;
@@ -293,7 +293,7 @@ void SC_ProcessRtpCommand(void)
     SC_RtsEntry_t *EntryPtr;  /* a pointer to an RTS entry header */
     uint16         RtsIndex;  /* the RTS index for the cmd */
     uint16         CmdOffset; /* the location of the cmd    */
-    uint32         Result;
+    CFE_Status_t   Result;
     bool           ChecksumValid = false;
 
     /*
@@ -813,7 +813,7 @@ void SC_ManageAtsTable(int32 ArrayIndex)
 
 void SC_ManageTable(SC_TableType type, int32 ArrayIndex)
 {
-    int32            Result;
+    CFE_Status_t     Result;
     CFE_TBL_Handle_t TblHandle;
     uint32 **        TblAddr;
     void *           TblPtrNew;
