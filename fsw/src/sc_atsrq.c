@@ -179,11 +179,11 @@ void SC_StopAtsCmd(const CFE_SB_Buffer_t *BufPtr)
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 bool SC_BeginAts(uint16 AtsIndex, uint16 TimeOffset)
 {
-    SC_AtsEntryHeader_t *Entry;       /* ATS table entry pointer */
-    int32                EntryIndex;  /* ATS entry location in table */
-    SC_AbsTimeTag_t      ListCmdTime; /* list entry execution time */
-    int32                TimeIndex;   /* the current time buffer index */
-    int32                CmdIndex;    /* ATS command index (cmd num - 1) */
+    SC_AtsEntryHeader_t *Entry;           /* ATS table entry pointer */
+    int32                EntryIndex;      /* ATS entry location in table */
+    SC_AbsTimeTag_t      ListCmdTime = 0; /* list entry execution time */
+    int32                TimeIndex;       /* the current time buffer index */
+    int32                CmdIndex;        /* ATS command index (cmd num - 1) */
     bool                 ReturnCode;
     SC_AbsTimeTag_t      TimeToStartAts; /* the REAL time to start the ATS */
     uint16               CmdsSkipped = 0;

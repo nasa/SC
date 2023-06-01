@@ -439,7 +439,7 @@
  *  \par Type: ERROR
  *
  *  \par Cause:
- *  This event message is issued when a ATS command that was about to be sent out
+ *  This event message is issued when an ATS command that was about to be sent out
  *  failed checksum validation, and the Continue-ATS-on_checksum-Failure flag was
  *  set to 'FALSE'
  */
