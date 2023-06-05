@@ -117,7 +117,8 @@ void SC_LoadAts_Test_CmdRunOffEndOfBuffer(void)
     size_t               MsgSize;
     int                  BufEntrySize;
     int                  MaxBufEntries;
-    int                  i, j;
+    int                  i;
+    int                  j;
 
     memset(&AtsInfoTbl, 0, sizeof(AtsInfoTbl));
 
@@ -348,7 +349,8 @@ void SC_LoadAts_Test_AtsBufferTooSmall(void)
     size_t               MsgSize2;
     int                  BufEntrySize;
     int                  MaxBufEntries;
-    int                  i, j;
+    int                  i;
+    int                  j;
 
     memset(&AtsInfoTbl, 0, sizeof(AtsInfoTbl));
 
@@ -417,7 +419,8 @@ void SC_LoadAts_Test_AtsEntryOverflow(void)
     size_t               MsgSize2;
     int                  BufEntrySize;
     int                  MaxBufEntries;
-    int                  i, j;
+    int                  i;
+    int                  j;
 
     memset(&AtsInfoTbl, 0, sizeof(AtsInfoTbl));
     memset(&AtsTable, 0, sizeof(AtsTable));
@@ -477,7 +480,8 @@ void SC_LoadAts_Test_LoadExactlyBufferLength(void)
     size_t               MsgSize2;
     int                  BufEntrySize;
     int                  MaxBufEntries;
-    int                  i, j;
+    int                  i;
+    int                  j;
 
     SC_InitTables();
 
