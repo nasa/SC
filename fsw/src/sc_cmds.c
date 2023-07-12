@@ -475,16 +475,16 @@ void SC_SendHkPacket(void)
 
 void SC_ResetCountersCmd(const CFE_SB_Buffer_t *BufPtr)
 {
-        CFE_EVS_SendEvent(SC_RESET_DEB_EID, CFE_EVS_EventType_DEBUG, "Reset counters command");
+    CFE_EVS_SendEvent(SC_RESET_DEB_EID, CFE_EVS_EventType_DEBUG, "Reset counters command");
 
-        SC_OperData.HkPacket.CmdCtr          = 0;
-        SC_OperData.HkPacket.CmdErrCtr       = 0;
-        SC_OperData.HkPacket.AtsCmdCtr       = 0;
-        SC_OperData.HkPacket.AtsCmdErrCtr    = 0;
-        SC_OperData.HkPacket.RtsCmdCtr       = 0;
-        SC_OperData.HkPacket.RtsCmdErrCtr    = 0;
-        SC_OperData.HkPacket.RtsActiveCtr    = 0;
-        SC_OperData.HkPacket.RtsActiveErrCtr = 0;
+    SC_OperData.HkPacket.CmdCtr          = 0;
+    SC_OperData.HkPacket.CmdErrCtr       = 0;
+    SC_OperData.HkPacket.AtsCmdCtr       = 0;
+    SC_OperData.HkPacket.AtsCmdErrCtr    = 0;
+    SC_OperData.HkPacket.RtsCmdCtr       = 0;
+    SC_OperData.HkPacket.RtsCmdErrCtr    = 0;
+    SC_OperData.HkPacket.RtsActiveCtr    = 0;
+    SC_OperData.HkPacket.RtsActiveErrCtr = 0;
 }
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -494,9 +494,9 @@ void SC_ResetCountersCmd(const CFE_SB_Buffer_t *BufPtr)
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 void SC_NoOpCmd(const CFE_SB_Buffer_t *BufPtr)
 {
-        SC_OperData.HkPacket.CmdCtr++;
-        CFE_EVS_SendEvent(SC_NOOP_INF_EID, CFE_EVS_EventType_INFORMATION, "No-op command. Version %d.%d.%d.%d",
-                          SC_MAJOR_VERSION, SC_MINOR_VERSION, SC_REVISION, SC_MISSION_REV);
+    SC_OperData.HkPacket.CmdCtr++;
+    CFE_EVS_SendEvent(SC_NOOP_INF_EID, CFE_EVS_EventType_INFORMATION, "No-op command. Version %d.%d.%d.%d",
+                      SC_MAJOR_VERSION, SC_MINOR_VERSION, SC_REVISION, SC_MISSION_REV);
 }
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */

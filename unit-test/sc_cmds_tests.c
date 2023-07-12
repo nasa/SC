@@ -2256,7 +2256,6 @@ void SC_ProcessCommand_Test_EnableRtsGrp(void)
     /* This function is already verified to work correctly in another file, so no verifications here. */
 }
 
-
 void SC_ProcessCommand_Test_StartAtsInvalidCmdLength(void)
 {
     CFE_SB_MsgId_t    TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
