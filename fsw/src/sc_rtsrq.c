@@ -55,11 +55,7 @@ void SC_StartRtsCmd(const CFE_SB_Buffer_t *CmdPacket)
     SC_RtsEntryHeader_t *RtsEntryPtr;   /* pointer to an rts entry */
     CFE_MSG_Message_t *  RtsEntryCmd;   /* pointer to an rts command */
     CFE_MSG_Size_t       CmdLength = 0; /* the length of the 1st cmd */
-    /*
-     ** Verify command packet length...
-     */
-    if (SC_VerifyCmdLength(&CmdPacket->Msg, sizeof(SC_RtsCmd_t)))
-    {
+
         /*
          ** Check start RTS parameters
          */
@@ -165,11 +161,6 @@ void SC_StartRtsCmd(const CFE_SB_Buffer_t *CmdPacket)
             SC_OperData.HkPacket.CmdErrCtr++;
             SC_OperData.HkPacket.RtsActiveErrCtr++;
         }
-    }
-    else
-    { /* the command length is invalid */
-        SC_OperData.HkPacket.RtsActiveErrCtr++;
-    }
 }
 
 #if (SC_ENABLE_GROUP_COMMANDS == true)
@@ -187,8 +178,6 @@ void SC_StartRtsGrpCmd(const CFE_SB_Buffer_t *CmdPacket)
     uint16 RtsIndex;
     int32  StartCount = 0;
 
-    if (SC_VerifyCmdLength(&CmdPacket->Msg, sizeof(SC_RtsGrpCmd_t)))
-    {
         FirstId = ((SC_RtsGrpCmd_t *)CmdPacket)->FirstRtsId;
         LastId  = ((SC_RtsGrpCmd_t *)CmdPacket)->LastRtsId;
 
@@ -258,7 +247,6 @@ void SC_StartRtsGrpCmd(const CFE_SB_Buffer_t *CmdPacket)
                               "Start RTS group error: FirstID=%d, LastID=%d", FirstId, LastId);
             SC_OperData.HkPacket.CmdErrCtr++;
         }
-    }
 }
 #endif
 
@@ -272,8 +260,6 @@ void SC_StopRtsCmd(const CFE_SB_Buffer_t *CmdPacket)
     uint16 RtsId;    /* RTS ID */
     uint16 RtsIndex; /* RTS array index */
 
-    if (SC_VerifyCmdLength(&CmdPacket->Msg, sizeof(SC_RtsCmd_t)))
-    {
         RtsId = ((SC_RtsCmd_t *)CmdPacket)->RtsId;
 
         /* check the command parameter */
@@ -299,7 +285,6 @@ void SC_StopRtsCmd(const CFE_SB_Buffer_t *CmdPacket)
             SC_OperData.HkPacket.CmdErrCtr++;
 
         } /* end if */
-    }
 }
 
 #if (SC_ENABLE_GROUP_COMMANDS == true)
@@ -317,8 +302,6 @@ void SC_StopRtsGrpCmd(const CFE_SB_Buffer_t *CmdPacket)
     uint16 RtsIndex;
     int32  StopCount = 0;
 
-    if (SC_VerifyCmdLength(&CmdPacket->Msg, sizeof(SC_RtsGrpCmd_t)))
-    {
         FirstId = ((SC_RtsGrpCmd_t *)CmdPacket)->FirstRtsId;
         LastId  = ((SC_RtsGrpCmd_t *)CmdPacket)->LastRtsId;
 
@@ -351,7 +334,6 @@ void SC_StopRtsGrpCmd(const CFE_SB_Buffer_t *CmdPacket)
                               "Stop RTS group error: FirstID=%d, LastID=%d", FirstId, LastId);
             SC_OperData.HkPacket.CmdErrCtr++;
         }
-    }
 }
 #endif
 
@@ -365,8 +347,6 @@ void SC_DisableRtsCmd(const CFE_SB_Buffer_t *CmdPacket)
     uint16 RtsId;    /* RTS ID */
     uint16 RtsIndex; /* RTS array index */
 
-    if (SC_VerifyCmdLength(&CmdPacket->Msg, sizeof(SC_RtsCmd_t)))
-    {
         RtsId = ((SC_RtsCmd_t *)CmdPacket)->RtsId;
 
         /* make sure tha specified rts is valid */
@@ -391,7 +371,6 @@ void SC_DisableRtsCmd(const CFE_SB_Buffer_t *CmdPacket)
             /* update the command error status */
             SC_OperData.HkPacket.CmdErrCtr++;
         } /* end if */
-    }
 }
 
 #if (SC_ENABLE_GROUP_COMMANDS == true)
@@ -409,8 +388,6 @@ void SC_DisableRtsGrpCmd(const CFE_SB_Buffer_t *CmdPacket)
     uint16 RtsIndex;
     int32  DisableCount = 0;
 
-    if (SC_VerifyCmdLength(&CmdPacket->Msg, sizeof(SC_RtsGrpCmd_t)))
-    {
         FirstId = ((SC_RtsGrpCmd_t *)CmdPacket)->FirstRtsId;
         LastId  = ((SC_RtsGrpCmd_t *)CmdPacket)->LastRtsId;
 
@@ -444,7 +421,6 @@ void SC_DisableRtsGrpCmd(const CFE_SB_Buffer_t *CmdPacket)
                               "Disable RTS group error: FirstID=%d, LastID=%d", FirstId, LastId);
             SC_OperData.HkPacket.CmdErrCtr++;
         }
-    }
 }
 #endif
 
@@ -458,8 +434,6 @@ void SC_EnableRtsCmd(const CFE_SB_Buffer_t *CmdPacket)
     uint16 RtsId;    /* RTS ID */
     uint16 RtsIndex; /* RTS array index */
 
-    if (SC_VerifyCmdLength(&CmdPacket->Msg, sizeof(SC_RtsCmd_t)))
-    {
         RtsId = ((SC_RtsCmd_t *)CmdPacket)->RtsId;
 
         /* make sure the specified rts is valid */
@@ -485,7 +459,6 @@ void SC_EnableRtsCmd(const CFE_SB_Buffer_t *CmdPacket)
             SC_OperData.HkPacket.CmdErrCtr++;
 
         } /* end if */
-    }
 }
 
 #if (SC_ENABLE_GROUP_COMMANDS == true)
@@ -503,8 +476,6 @@ void SC_EnableRtsGrpCmd(const CFE_SB_Buffer_t *CmdPacket)
     uint16 RtsIndex;
     int32  EnableCount = 0;
 
-    if (SC_VerifyCmdLength(&CmdPacket->Msg, sizeof(SC_RtsGrpCmd_t)))
-    {
         FirstId = ((SC_RtsGrpCmd_t *)CmdPacket)->FirstRtsId;
         LastId  = ((SC_RtsGrpCmd_t *)CmdPacket)->LastRtsId;
 
@@ -538,7 +509,6 @@ void SC_EnableRtsGrpCmd(const CFE_SB_Buffer_t *CmdPacket)
                               "Enable RTS group error: FirstID=%d, LastID=%d", FirstId, LastId);
             SC_OperData.HkPacket.CmdErrCtr++;
         }
-    }
 }
 #endif
 

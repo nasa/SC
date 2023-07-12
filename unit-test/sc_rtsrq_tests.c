@@ -63,7 +63,6 @@ void SC_StartRtsCmd_Test_Nominal(void)
     MsgSize = sizeof(SC_RtsCmd_t);
 
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &MsgSize, sizeof(MsgSize), false);
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_StartRtsCmd(&UT_CmdBuf.Buf));
@@ -108,7 +107,6 @@ void SC_StartRtsCmd_Test_StartRtsNoEvents(void)
     MsgSize = sizeof(SC_RtsCmd_t);
 
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &MsgSize, sizeof(MsgSize), false);
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_StartRtsCmd(&UT_CmdBuf.Buf));
@@ -159,7 +157,6 @@ void SC_StartRtsCmd_Test_InvalidCommandLength1(void)
     MsgSize = 0;
 
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &MsgSize, sizeof(MsgSize), false);
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_StartRtsCmd(&UT_CmdBuf.Buf));
@@ -188,7 +185,6 @@ void SC_StartRtsCmd_Test_InvalidCommandLength2(void)
     MsgSize = SC_PACKET_MAX_SIZE + 1;
 
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &MsgSize, sizeof(MsgSize), false);
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_StartRtsCmd(&UT_CmdBuf.Buf));
@@ -211,10 +207,6 @@ void SC_StartRtsCmd_Test_RtsNotLoadedOrInUse(void)
     SC_OperData.RtsInfoTblAddr[RtsIndex].DisabledFlag = false;
     SC_OperData.RtsInfoTblAddr[RtsIndex].RtsStatus    = SC_IDLE;
 
-    /* Set message size in order to satisfy if-statement after comment "Make sure the command is big enough, but not too
-     * big" */
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
-
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_StartRtsCmd(&UT_CmdBuf.Buf));
 
@@ -236,10 +228,6 @@ void SC_StartRtsCmd_Test_RtsDisabled(void)
     SC_OperData.RtsInfoTblAddr[RtsIndex].DisabledFlag = true;
     SC_OperData.RtsInfoTblAddr[RtsIndex].RtsStatus    = SC_LOADED;
 
-    /* Set message size in order to satisfy if-statement after comment "Make sure the command is big enough, but not too
-     * big" */
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
-
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_StartRtsCmd(&UT_CmdBuf.Buf));
 
@@ -251,10 +239,6 @@ void SC_StartRtsCmd_Test_RtsDisabled(void)
 void SC_StartRtsCmd_Test_InvalidRtsId(void)
 {
     UT_CmdBuf.RtsCmd.RtsId = SC_NUMBER_OF_RTS * 2;
-
-    /* Set message size in order to satisfy if-statement after comment "Make sure the command is big enough, but not too
-     * big" */
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_StartRtsCmd(&UT_CmdBuf.Buf));
@@ -268,27 +252,12 @@ void SC_StartRtsCmd_Test_InvalidRtsIdZero(void)
 {
     UT_CmdBuf.RtsCmd.RtsId = 0;
 
-    /* Set message size in order to satisfy if-statement after comment "Make sure the command is big enough, but not too
-     * big" */
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
-
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_StartRtsCmd(&UT_CmdBuf.Buf));
 
     /* Verify results */
     UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_STARTRTS_CMD_INVALID_ERR_EID);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
-}
-
-void SC_StartRtsCmd_Test_NoVerifyLength(void)
-{
-    /* Execute the function being tested */
-    UtAssert_VOIDCALL(SC_StartRtsCmd(&UT_CmdBuf.Buf));
-
-    /* Verify results */
-    UtAssert_True(SC_OperData.HkPacket.RtsActiveErrCtr == 1, "SC_OperData.HkPacket.RtsActiveErrCtr == 1");
-
-    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
 }
 
 void SC_StartRtsGrpCmd_Test_Nominal(void)
@@ -300,9 +269,6 @@ void SC_StartRtsGrpCmd_Test_Nominal(void)
 
     UT_CmdBuf.RtsGrpCmd.FirstRtsId = 1;
     UT_CmdBuf.RtsGrpCmd.LastRtsId  = 1;
-
-    /* Set message size so SC_VerifyCmdLength will return true, to satisfy first if-statement */
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_StartRtsGrpCmd(&UT_CmdBuf.Buf));
@@ -330,9 +296,6 @@ void SC_StartRtsGrpCmd_Test_StartRtsGroupError(void)
     UT_CmdBuf.RtsGrpCmd.FirstRtsId = SC_NUMBER_OF_RTS * 2;
     UT_CmdBuf.RtsGrpCmd.LastRtsId  = SC_NUMBER_OF_RTS * 2;
 
-    /* Set message size so SC_VerifyCmdLength will return true, to satisfy first if-statement */
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
-
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_StartRtsGrpCmd(&UT_CmdBuf.Buf));
 
@@ -343,22 +306,10 @@ void SC_StartRtsGrpCmd_Test_StartRtsGroupError(void)
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
 }
 
-void SC_StartRtsGrpCmd_Test_NoVerifyLength(void)
-{
-    /* Execute the function being tested */
-    UtAssert_VOIDCALL(SC_StartRtsGrpCmd(&UT_CmdBuf.Buf));
-
-    /* Verify results */
-    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
-}
-
 void SC_StartRtsGrpCmd_Test_FirstRtsIndex(void)
 {
     UT_CmdBuf.RtsGrpCmd.FirstRtsId = SC_NUMBER_OF_RTS + 1;
     UT_CmdBuf.RtsGrpCmd.LastRtsId  = 1;
-
-    /* Set message size so SC_VerifyCmdLength will return true, to satisfy first if-statement */
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_StartRtsGrpCmd(&UT_CmdBuf.Buf));
@@ -375,9 +326,6 @@ void SC_StartRtsGrpCmd_Test_FirstRtsIndexZero(void)
     UT_CmdBuf.RtsGrpCmd.FirstRtsId = 0;
     UT_CmdBuf.RtsGrpCmd.LastRtsId  = 1;
 
-    /* Set message size so SC_VerifyCmdLength will return true, to satisfy first if-statement */
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
-
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_StartRtsGrpCmd(&UT_CmdBuf.Buf));
 
@@ -392,9 +340,6 @@ void SC_StartRtsGrpCmd_Test_LastRtsIndex(void)
 {
     UT_CmdBuf.RtsGrpCmd.FirstRtsId = 1;
     UT_CmdBuf.RtsGrpCmd.LastRtsId  = SC_NUMBER_OF_RTS + 1;
-
-    /* Set message size so SC_VerifyCmdLength will return true, to satisfy first if-statement */
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_StartRtsGrpCmd(&UT_CmdBuf.Buf));
@@ -411,9 +356,6 @@ void SC_StartRtsGrpCmd_Test_LastRtsIndexZero(void)
     UT_CmdBuf.RtsGrpCmd.FirstRtsId = 1;
     UT_CmdBuf.RtsGrpCmd.LastRtsId  = 0;
 
-    /* Set message size so SC_VerifyCmdLength will return true, to satisfy first if-statement */
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
-
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_StartRtsGrpCmd(&UT_CmdBuf.Buf));
 
@@ -428,9 +370,6 @@ void SC_StartRtsGrpCmd_Test_FirstLastRtsIndex(void)
 {
     UT_CmdBuf.RtsGrpCmd.FirstRtsId = 2;
     UT_CmdBuf.RtsGrpCmd.LastRtsId  = 1;
-
-    /* Set message size so SC_VerifyCmdLength will return true, to satisfy first if-statement */
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_StartRtsGrpCmd(&UT_CmdBuf.Buf));
@@ -454,9 +393,6 @@ void SC_StartRtsGrpCmd_Test_DisabledFlag(void)
 
     UT_CmdBuf.RtsGrpCmd.FirstRtsId = 1;
     UT_CmdBuf.RtsGrpCmd.LastRtsId  = 1;
-
-    /* Set message size so SC_VerifyCmdLength will return true, to satisfy first if-statement */
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_StartRtsGrpCmd(&UT_CmdBuf.Buf));
@@ -491,9 +427,6 @@ void SC_StartRtsGrpCmd_Test_RtsStatus(void)
     UT_CmdBuf.RtsGrpCmd.FirstRtsId = 1;
     UT_CmdBuf.RtsGrpCmd.LastRtsId  = 1;
 
-    /* Set message size so SC_VerifyCmdLength will return true, to satisfy first if-statement */
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
-
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_StartRtsGrpCmd(&UT_CmdBuf.Buf));
 
@@ -521,9 +454,6 @@ void SC_StopRtsCmd_Test_Nominal(void)
 {
     UT_CmdBuf.RtsCmd.RtsId = 1;
 
-    /* Set message size so SC_VerifyCmdLength will return true, to satisfy first if-statement */
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
-
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_StopRtsCmd(&UT_CmdBuf.Buf));
 
@@ -538,9 +468,6 @@ void SC_StopRtsCmd_Test_InvalidRts(void)
 {
     UT_CmdBuf.RtsCmd.RtsId = SC_NUMBER_OF_RTS * 2;
 
-    /* Set message size so SC_VerifyCmdLength will return true, to satisfy first if-statement */
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
-
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_StopRtsCmd(&UT_CmdBuf.Buf));
 
@@ -551,22 +478,10 @@ void SC_StopRtsCmd_Test_InvalidRts(void)
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
 }
 
-void SC_StopRtsCmd_Test_NoVerifyLength(void)
-{
-    /* Execute the function being tested */
-    UtAssert_VOIDCALL(SC_StopRtsCmd(&UT_CmdBuf.Buf));
-
-    /* Verify results */
-    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
-}
-
 void SC_StopRtsGrpCmd_Test_Nominal(void)
 {
     UT_CmdBuf.RtsGrpCmd.FirstRtsId = 1;
     UT_CmdBuf.RtsGrpCmd.LastRtsId  = 1;
-
-    /* Set message size so SC_VerifyCmdLength will return true, to satisfy first if-statement */
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_StopRtsGrpCmd(&UT_CmdBuf.Buf));
@@ -583,9 +498,6 @@ void SC_StopRtsGrpCmd_Test_Error(void)
     UT_CmdBuf.RtsGrpCmd.FirstRtsId = SC_NUMBER_OF_RTS * 2;
     UT_CmdBuf.RtsGrpCmd.LastRtsId  = SC_NUMBER_OF_RTS * 2;
 
-    /* Set message size so SC_VerifyCmdLength will return true, to satisfy first if-statement */
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
-
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_StopRtsGrpCmd(&UT_CmdBuf.Buf));
 
@@ -596,15 +508,6 @@ void SC_StopRtsGrpCmd_Test_Error(void)
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
 }
 
-void SC_StopRtsGrpCmd_Test_NoVerifyLength(void)
-{
-    /* Execute the function being tested */
-    UtAssert_VOIDCALL(SC_StopRtsGrpCmd(&UT_CmdBuf.Buf));
-
-    /* Verify results */
-    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
-}
-
 void SC_StopRtsGrpCmd_Test_NotExecuting(void)
 {
     uint8 RtsIndex = 0;
@@ -613,9 +516,6 @@ void SC_StopRtsGrpCmd_Test_NotExecuting(void)
 
     UT_CmdBuf.RtsGrpCmd.FirstRtsId = 1;
     UT_CmdBuf.RtsGrpCmd.LastRtsId  = 1;
-
-    /* Set message size so SC_VerifyCmdLength will return true, to satisfy first if-statement */
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_StopRtsGrpCmd(&UT_CmdBuf.Buf));
@@ -632,9 +532,6 @@ void SC_StopRtsGrpCmd_Test_FirstRtsIndex(void)
     UT_CmdBuf.RtsGrpCmd.FirstRtsId = SC_NUMBER_OF_RTS + 1;
     UT_CmdBuf.RtsGrpCmd.LastRtsId  = 1;
 
-    /* Set message size so SC_VerifyCmdLength will return true, to satisfy first if-statement */
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
-
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_StopRtsGrpCmd(&UT_CmdBuf.Buf));
 
@@ -649,9 +546,6 @@ void SC_StopRtsGrpCmd_Test_FirstRtsIndexZero(void)
 {
     UT_CmdBuf.RtsGrpCmd.FirstRtsId = 0;
     UT_CmdBuf.RtsGrpCmd.LastRtsId  = 1;
-
-    /* Set message size so SC_VerifyCmdLength will return true, to satisfy first if-statement */
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_StopRtsGrpCmd(&UT_CmdBuf.Buf));
@@ -668,9 +562,6 @@ void SC_StopRtsGrpCmd_Test_LastRtsIndex(void)
     UT_CmdBuf.RtsGrpCmd.FirstRtsId = 1;
     UT_CmdBuf.RtsGrpCmd.LastRtsId  = SC_NUMBER_OF_RTS + 1;
 
-    /* Set message size so SC_VerifyCmdLength will return true, to satisfy first if-statement */
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
-
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_StopRtsGrpCmd(&UT_CmdBuf.Buf));
 
@@ -686,9 +577,6 @@ void SC_StopRtsGrpCmd_Test_LastRtsIndexZero(void)
     UT_CmdBuf.RtsGrpCmd.FirstRtsId = 1;
     UT_CmdBuf.RtsGrpCmd.LastRtsId  = 0;
 
-    /* Set message size so SC_VerifyCmdLength will return true, to satisfy first if-statement */
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
-
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_StopRtsGrpCmd(&UT_CmdBuf.Buf));
 
@@ -703,9 +591,6 @@ void SC_StopRtsGrpCmd_Test_FirstLastRtsIndex(void)
 {
     UT_CmdBuf.RtsGrpCmd.FirstRtsId = 2;
     UT_CmdBuf.RtsGrpCmd.LastRtsId  = 1;
-
-    /* Set message size so SC_VerifyCmdLength will return true, to satisfy first if-statement */
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_StopRtsGrpCmd(&UT_CmdBuf.Buf));
@@ -723,9 +608,6 @@ void SC_DisableRtsCmd_Test_Nominal(void)
 
     UT_CmdBuf.RtsCmd.RtsId = 1;
 
-    /* Set message size so SC_VerifyCmdLength will return true, to satisfy first if-statement */
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
-
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_DisableRtsCmd(&UT_CmdBuf.Buf));
 
@@ -742,9 +624,6 @@ void SC_DisableRtsCmd_Test_InvalidRtsID(void)
 {
     UT_CmdBuf.RtsCmd.RtsId = SC_NUMBER_OF_RTS * 2;
 
-    /* Set message size so SC_VerifyCmdLength will return true, to satisfy first if-statement */
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
-
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_DisableRtsCmd(&UT_CmdBuf.Buf));
 
@@ -755,24 +634,12 @@ void SC_DisableRtsCmd_Test_InvalidRtsID(void)
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
 }
 
-void SC_DisableRtsCmd_Test_NoVerifyLength(void)
-{
-    /* Execute the function being tested */
-    UtAssert_VOIDCALL(SC_DisableRtsCmd(&UT_CmdBuf.Buf));
-
-    /* Verify results */
-    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
-}
-
 void SC_DisableRtsGrpCmd_Test_Nominal(void)
 {
     uint8 RtsIndex = 0; /* RtsId - 1 */
 
     UT_CmdBuf.RtsGrpCmd.FirstRtsId = 1;
     UT_CmdBuf.RtsGrpCmd.LastRtsId  = 1;
-
-    /* Set message size so SC_VerifyCmdLength will return true, to satisfy first if-statement */
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_DisableRtsGrpCmd(&UT_CmdBuf.Buf));
@@ -791,9 +658,6 @@ void SC_DisableRtsGrpCmd_Test_Error(void)
     UT_CmdBuf.RtsGrpCmd.FirstRtsId = SC_NUMBER_OF_RTS * 2;
     UT_CmdBuf.RtsGrpCmd.LastRtsId  = SC_NUMBER_OF_RTS * 2;
 
-    /* Set message size so SC_VerifyCmdLength will return true, to satisfy first if-statement */
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
-
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_DisableRtsGrpCmd(&UT_CmdBuf.Buf));
 
@@ -804,22 +668,10 @@ void SC_DisableRtsGrpCmd_Test_Error(void)
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
 }
 
-void SC_DisableRtsGrpCmd_Test_NoVerifyLength(void)
-{
-    /* Execute the function being tested */
-    UtAssert_VOIDCALL(SC_DisableRtsGrpCmd(&UT_CmdBuf.Buf));
-
-    /* Verify results */
-    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
-}
-
 void SC_DisableRtsGrpCmd_Test_FirstRtsIndex(void)
 {
     UT_CmdBuf.RtsGrpCmd.FirstRtsId = SC_NUMBER_OF_RTS + 1;
     UT_CmdBuf.RtsGrpCmd.LastRtsId  = 1;
-
-    /* Set message size so SC_VerifyCmdLength will return true, to satisfy first if-statement */
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_DisableRtsGrpCmd(&UT_CmdBuf.Buf));
@@ -836,9 +688,6 @@ void SC_DisableRtsGrpCmd_Test_FirstRtsIndexZero(void)
     UT_CmdBuf.RtsGrpCmd.FirstRtsId = 0;
     UT_CmdBuf.RtsGrpCmd.LastRtsId  = 1;
 
-    /* Set message size so SC_VerifyCmdLength will return true, to satisfy first if-statement */
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
-
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_DisableRtsGrpCmd(&UT_CmdBuf.Buf));
 
@@ -853,9 +702,6 @@ void SC_DisableRtsGrpCmd_Test_LastRtsIndex(void)
 {
     UT_CmdBuf.RtsGrpCmd.FirstRtsId = 1;
     UT_CmdBuf.RtsGrpCmd.LastRtsId  = SC_NUMBER_OF_RTS + 1;
-
-    /* Set message size so SC_VerifyCmdLength will return true, to satisfy first if-statement */
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_DisableRtsGrpCmd(&UT_CmdBuf.Buf));
@@ -872,9 +718,6 @@ void SC_DisableRtsGrpCmd_Test_LastRtsIndexZero(void)
     UT_CmdBuf.RtsGrpCmd.FirstRtsId = 1;
     UT_CmdBuf.RtsGrpCmd.LastRtsId  = 0;
 
-    /* Set message size so SC_VerifyCmdLength will return true, to satisfy first if-statement */
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
-
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_DisableRtsGrpCmd(&UT_CmdBuf.Buf));
 
@@ -889,9 +732,6 @@ void SC_DisableRtsGrpCmd_Test_FirstLastRtsIndex(void)
 {
     UT_CmdBuf.RtsGrpCmd.FirstRtsId = 2;
     UT_CmdBuf.RtsGrpCmd.LastRtsId  = 1;
-
-    /* Set message size so SC_VerifyCmdLength will return true, to satisfy first if-statement */
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_DisableRtsGrpCmd(&UT_CmdBuf.Buf));
@@ -912,9 +752,6 @@ void SC_DisableRtsGrpCmd_Test_DisabledFlag(void)
     UT_CmdBuf.RtsGrpCmd.FirstRtsId = 1;
     UT_CmdBuf.RtsGrpCmd.LastRtsId  = 1;
 
-    /* Set message size so SC_VerifyCmdLength will return true, to satisfy first if-statement */
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
-
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_DisableRtsGrpCmd(&UT_CmdBuf.Buf));
 
@@ -933,9 +770,6 @@ void SC_EnableRtsCmd_Test_Nominal(void)
 
     UT_CmdBuf.RtsCmd.RtsId = 1;
 
-    /* Set message size so SC_VerifyCmdLength will return true, to satisfy first if-statement */
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
-
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_EnableRtsCmd(&UT_CmdBuf.Buf));
 
@@ -952,9 +786,6 @@ void SC_EnableRtsCmd_Test_InvalidRtsID(void)
 {
     UT_CmdBuf.RtsCmd.RtsId = SC_NUMBER_OF_RTS * 2;
 
-    /* Set message size so SC_VerifyCmdLength will return true, to satisfy first if-statement */
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
-
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_EnableRtsCmd(&UT_CmdBuf.Buf));
 
@@ -969,9 +800,6 @@ void SC_EnableRtsCmd_Test_InvalidRtsIDZero(void)
 {
     UT_CmdBuf.RtsCmd.RtsId = 0;
 
-    /* Set message size so SC_VerifyCmdLength will return true, to satisfy first if-statement */
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
-
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_EnableRtsCmd(&UT_CmdBuf.Buf));
 
@@ -982,24 +810,12 @@ void SC_EnableRtsCmd_Test_InvalidRtsIDZero(void)
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
 }
 
-void SC_EnableRtsCmd_Test_NoVerifyLength(void)
-{
-    /* Execute the function being tested */
-    UtAssert_VOIDCALL(SC_EnableRtsCmd(&UT_CmdBuf.Buf));
-
-    /* Verify results */
-    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
-}
-
 void SC_EnableRtsGrpCmd_Test_Nominal(void)
 {
     uint8 RtsIndex = 0; /* RtsId - 1 */
 
     UT_CmdBuf.RtsGrpCmd.FirstRtsId = 1;
     UT_CmdBuf.RtsGrpCmd.LastRtsId  = 1;
-
-    /* Set message size so SC_VerifyCmdLength will return true, to satisfy first if-statement */
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_EnableRtsGrpCmd(&UT_CmdBuf.Buf));
@@ -1018,9 +834,6 @@ void SC_EnableRtsGrpCmd_Test_Error(void)
     UT_CmdBuf.RtsGrpCmd.FirstRtsId = SC_NUMBER_OF_RTS * 2;
     UT_CmdBuf.RtsGrpCmd.LastRtsId  = SC_NUMBER_OF_RTS * 2;
 
-    /* Set message size so SC_VerifyCmdLength will return true, to satisfy first if-statement */
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
-
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_EnableRtsGrpCmd(&UT_CmdBuf.Buf));
 
@@ -1031,22 +844,10 @@ void SC_EnableRtsGrpCmd_Test_Error(void)
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
 }
 
-void SC_EnableRtsGrpCmd_Test_NoVerifyLength(void)
-{
-    /* Execute the function being tested */
-    UtAssert_VOIDCALL(SC_EnableRtsGrpCmd(&UT_CmdBuf.Buf));
-
-    /* Verify results */
-    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
-}
-
 void SC_EnableRtsGrpCmd_Test_FirstRtsIndex(void)
 {
     UT_CmdBuf.RtsGrpCmd.FirstRtsId = SC_NUMBER_OF_RTS + 1;
     UT_CmdBuf.RtsGrpCmd.LastRtsId  = 1;
-
-    /* Set message size so SC_VerifyCmdLength will return true, to satisfy first if-statement */
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_EnableRtsGrpCmd(&UT_CmdBuf.Buf));
@@ -1063,9 +864,6 @@ void SC_EnableRtsGrpCmd_Test_FirstRtsIndexZero(void)
     UT_CmdBuf.RtsGrpCmd.FirstRtsId = 0;
     UT_CmdBuf.RtsGrpCmd.LastRtsId  = 1;
 
-    /* Set message size so SC_VerifyCmdLength will return true, to satisfy first if-statement */
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
-
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_EnableRtsGrpCmd(&UT_CmdBuf.Buf));
 
@@ -1080,9 +878,6 @@ void SC_EnableRtsGrpCmd_Test_LastRtsIndex(void)
 {
     UT_CmdBuf.RtsGrpCmd.FirstRtsId = 1;
     UT_CmdBuf.RtsGrpCmd.LastRtsId  = SC_NUMBER_OF_RTS + 1;
-
-    /* Set message size so SC_VerifyCmdLength will return true, to satisfy first if-statement */
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_EnableRtsGrpCmd(&UT_CmdBuf.Buf));
@@ -1099,9 +894,6 @@ void SC_EnableRtsGrpCmd_Test_LastRtsIndexZero(void)
     UT_CmdBuf.RtsGrpCmd.FirstRtsId = 1;
     UT_CmdBuf.RtsGrpCmd.LastRtsId  = 0;
 
-    /* Set message size so SC_VerifyCmdLength will return true, to satisfy first if-statement */
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
-
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_EnableRtsGrpCmd(&UT_CmdBuf.Buf));
 
@@ -1116,9 +908,6 @@ void SC_EnableRtsGrpCmd_Test_FirstLastRtsIndex(void)
 {
     UT_CmdBuf.RtsGrpCmd.FirstRtsId = 2;
     UT_CmdBuf.RtsGrpCmd.LastRtsId  = 1;
-
-    /* Set message size so SC_VerifyCmdLength will return true, to satisfy first if-statement */
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_EnableRtsGrpCmd(&UT_CmdBuf.Buf));
@@ -1138,9 +927,6 @@ void SC_EnableRtsGrpCmd_Test_DisabledFlag(void)
     SC_OperData.RtsInfoTblAddr[1].DisabledFlag        = true;
     UT_CmdBuf.RtsGrpCmd.FirstRtsId                    = 1;
     UT_CmdBuf.RtsGrpCmd.LastRtsId                     = 2;
-
-    /* Set message size so SC_VerifyCmdLength will return true, to satisfy first if-statement */
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_EnableRtsGrpCmd(&UT_CmdBuf.Buf));
@@ -1257,13 +1043,9 @@ void UtTest_Setup(void)
 
     UtTest_Add(SC_StartRtsCmd_Test_InvalidRtsIdZero, SC_Test_Setup, SC_Test_TearDown,
                "SC_StartRtsCmd_Test_InvalidRtsIdZero");
-    UtTest_Add(SC_StartRtsCmd_Test_NoVerifyLength, SC_Test_Setup, SC_Test_TearDown,
-               "SC_StartRtsCmd_Test_NoVerifyLength");
     UtTest_Add(SC_StartRtsGrpCmd_Test_Nominal, SC_Test_Setup, SC_Test_TearDown, "SC_StartRtsGrpCmd_Test_Nominal");
     UtTest_Add(SC_StartRtsGrpCmd_Test_StartRtsGroupError, SC_Test_Setup, SC_Test_TearDown,
                "SC_StartRtsGrpCmd_Test_StartRtsGroupError");
-    UtTest_Add(SC_StartRtsGrpCmd_Test_NoVerifyLength, SC_Test_Setup, SC_Test_TearDown,
-               "SC_StartRtsGrpCmd_Test_NoVerifyLength");
     UtTest_Add(SC_StartRtsGrpCmd_Test_FirstRtsIndex, SC_Test_Setup, SC_Test_TearDown,
                "SC_StartRtsGrpCmd_Test_FirstRtsIndex");
     UtTest_Add(SC_StartRtsGrpCmd_Test_FirstRtsIndexZero, SC_Test_Setup, SC_Test_TearDown,
@@ -1279,11 +1061,8 @@ void UtTest_Setup(void)
     UtTest_Add(SC_StartRtsGrpCmd_Test_RtsStatus, SC_Test_Setup, SC_Test_TearDown, "SC_StartRtsGrpCmd_Test_RtsStatus");
     UtTest_Add(SC_StopRtsCmd_Test_Nominal, SC_Test_Setup, SC_Test_TearDown, "SC_StopRtsCmd_Test_Nominal");
     UtTest_Add(SC_StopRtsCmd_Test_InvalidRts, SC_Test_Setup, SC_Test_TearDown, "SC_StopRtsCmd_Test_InvalidRts");
-    UtTest_Add(SC_StopRtsCmd_Test_NoVerifyLength, SC_Test_Setup, SC_Test_TearDown, "SC_StopRtsCmd_Test_NoVerifyLength");
     UtTest_Add(SC_StopRtsGrpCmd_Test_Nominal, SC_Test_Setup, SC_Test_TearDown, "SC_StopRtsGrpCmd_Test_Nominal");
     UtTest_Add(SC_StopRtsGrpCmd_Test_Error, SC_Test_Setup, SC_Test_TearDown, "SC_StopRtsGrpCmd_Test_Error");
-    UtTest_Add(SC_StopRtsGrpCmd_Test_NoVerifyLength, SC_Test_Setup, SC_Test_TearDown,
-               "SC_StopRtsGrpCmd_Test_NoVerifyLength");
     UtTest_Add(SC_StopRtsGrpCmd_Test_NotExecuting, SC_Test_Setup, SC_Test_TearDown,
                "SC_StopRtsGrpCmd_Test_NotExecuting");
     UtTest_Add(SC_StopRtsGrpCmd_Test_FirstRtsIndex, SC_Test_Setup, SC_Test_TearDown,
@@ -1299,12 +1078,8 @@ void UtTest_Setup(void)
     UtTest_Add(SC_DisableRtsCmd_Test_Nominal, SC_Test_Setup, SC_Test_TearDown, "SC_DisableRtsCmd_Test_Nominal");
     UtTest_Add(SC_DisableRtsCmd_Test_InvalidRtsID, SC_Test_Setup, SC_Test_TearDown,
                "SC_DisableRtsCmd_Test_InvalidRtsID");
-    UtTest_Add(SC_DisableRtsCmd_Test_NoVerifyLength, SC_Test_Setup, SC_Test_TearDown,
-               "SC_DisableRtsCmd_Test_NoVerifyLength");
     UtTest_Add(SC_DisableRtsGrpCmd_Test_Nominal, SC_Test_Setup, SC_Test_TearDown, "SC_DisableRtsGrpCmd_Test_Nominal");
     UtTest_Add(SC_DisableRtsGrpCmd_Test_Error, SC_Test_Setup, SC_Test_TearDown, "SC_DisableRtsGrpCmd_Test_Error");
-    UtTest_Add(SC_DisableRtsGrpCmd_Test_NoVerifyLength, SC_Test_Setup, SC_Test_TearDown,
-               "SC_DisableRtsGrpCmd_Test_NoVerifyLength");
     UtTest_Add(SC_DisableRtsGrpCmd_Test_FirstRtsIndex, SC_Test_Setup, SC_Test_TearDown,
                "SC_DisableRtsGrpCmd_Test_FirstRtsIndex");
     UtTest_Add(SC_DisableRtsGrpCmd_Test_FirstRtsIndexZero, SC_Test_Setup, SC_Test_TearDown,
@@ -1321,12 +1096,8 @@ void UtTest_Setup(void)
     UtTest_Add(SC_EnableRtsCmd_Test_InvalidRtsID, SC_Test_Setup, SC_Test_TearDown, "SC_EnableRtsCmd_Test_InvalidRtsID");
     UtTest_Add(SC_EnableRtsCmd_Test_InvalidRtsIDZero, SC_Test_Setup, SC_Test_TearDown,
                "SC_EnableRtsCmd_Test_InvalidRtsIDZero");
-    UtTest_Add(SC_EnableRtsCmd_Test_NoVerifyLength, SC_Test_Setup, SC_Test_TearDown,
-               "SC_EnableRtsCmd_Test_NoVerifyLength");
     UtTest_Add(SC_EnableRtsGrpCmd_Test_Nominal, SC_Test_Setup, SC_Test_TearDown, "SC_EnableRtsGrpCmd_Test_Nominal");
     UtTest_Add(SC_EnableRtsGrpCmd_Test_Error, SC_Test_Setup, SC_Test_TearDown, "SC_EnableRtsGrpCmd_Test_Error");
-    UtTest_Add(SC_EnableRtsGrpCmd_Test_NoVerifyLength, SC_Test_Setup, SC_Test_TearDown,
-               "SC_EnableRtsGrpCmd_Test_NoVerifyLength");
     UtTest_Add(SC_EnableRtsGrpCmd_Test_FirstRtsIndex, SC_Test_Setup, SC_Test_TearDown,
                "SC_EnableRtsGrpCmd_Test_FirstRtsIndex");
     UtTest_Add(SC_EnableRtsGrpCmd_Test_FirstRtsIndexZero, SC_Test_Setup, SC_Test_TearDown,

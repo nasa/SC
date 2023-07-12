@@ -52,8 +52,6 @@ void SC_StartAtsCmd(const CFE_SB_Buffer_t *BufPtr)
     uint16 AtsId;    /* ATS ID */
     uint16 AtsIndex; /* ATS array index */
 
-    if (SC_VerifyCmdLength(&BufPtr->Msg, sizeof(SC_StartAtsCmd_t)))
-    {
         AtsId = ((SC_StartAtsCmd_t *)BufPtr)->AtsId;
 
         /* validate ATS ID */
@@ -120,7 +118,6 @@ void SC_StartAtsCmd(const CFE_SB_Buffer_t *BufPtr)
             SC_OperData.HkPacket.CmdErrCtr++;
 
         } /* end if */
-    }
 }
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -133,8 +130,6 @@ void SC_StopAtsCmd(const CFE_SB_Buffer_t *BufPtr)
     char  TempAtsChar = ' ';
     int32 Result      = SC_ERROR;
 
-    if (SC_VerifyCmdLength(&BufPtr->Msg, sizeof(SC_NoArgsCmd_t)))
-    {
         /*
          ** Set the temp ATS ID if it is valid
          */
@@ -169,7 +164,6 @@ void SC_StopAtsCmd(const CFE_SB_Buffer_t *BufPtr)
         SC_OperData.AtsCtrlBlckAddr->SwitchPendFlag = false;
 
         SC_OperData.HkPacket.CmdCtr++;
-    }
 }
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -301,8 +295,6 @@ void SC_GroundSwitchCmd(const CFE_SB_Buffer_t *BufPtr)
 {
     uint16 NewAtsIndex; /* the index of the ats to switch to*/
 
-    if (SC_VerifyCmdLength(&BufPtr->Msg, sizeof(SC_NoArgsCmd_t)))
-    {
         /* make sure that an ATS is running on the ATP */
         if (SC_OperData.AtsCtrlBlckAddr->AtpState == SC_EXECUTING)
         {
@@ -345,7 +337,6 @@ void SC_GroundSwitchCmd(const CFE_SB_Buffer_t *BufPtr)
             SC_OperData.AtsCtrlBlckAddr->SwitchPendFlag = false;
 
         } /* end if */
-    }
 }
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -504,8 +495,6 @@ void SC_JumpAtsCmd(const CFE_SB_Buffer_t *BufPtr)
     CFE_TIME_SysTime_t   NewTime;
     uint16               NumSkipped;
 
-    if (SC_VerifyCmdLength(&BufPtr->Msg, sizeof(SC_JumpAtsCmd_t)))
-    {
         if (SC_OperData.AtsCtrlBlckAddr->AtpState == SC_EXECUTING)
         {
             JumpTime = ((SC_JumpAtsCmd_t *)BufPtr)->NewTime;
@@ -612,7 +601,6 @@ void SC_JumpAtsCmd(const CFE_SB_Buffer_t *BufPtr)
             SC_OperData.HkPacket.CmdErrCtr++;
 
         } /* end if */
-    }
 }
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -624,8 +612,6 @@ void SC_ContinueAtsOnFailureCmd(const CFE_SB_Buffer_t *BufPtr)
 {
     uint16 State;
 
-    if (SC_VerifyCmdLength(&BufPtr->Msg, sizeof(SC_SetContinueAtsOnFailureCmd_t)))
-    {
         State = ((SC_SetContinueAtsOnFailureCmd_t *)BufPtr)->ContinueState;
 
         if (State != SC_CONTINUE_TRUE && State != SC_CONTINUE_FALSE)
@@ -644,7 +630,6 @@ void SC_ContinueAtsOnFailureCmd(const CFE_SB_Buffer_t *BufPtr)
             CFE_EVS_SendEvent(SC_CONT_CMD_DEB_EID, CFE_EVS_EventType_DEBUG,
                               "Continue-ATS-On-Failure command, State: %d", State);
         }
-    }
 }
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -657,8 +642,6 @@ void SC_AppendAtsCmd(const CFE_SB_Buffer_t *BufPtr)
     SC_AppendAtsCmd_t *AppendCmd = (SC_AppendAtsCmd_t *)BufPtr;
     uint16             AtsIndex; /* index (not ID) of target ATS */
 
-    if (SC_VerifyCmdLength(&BufPtr->Msg, sizeof(SC_AppendAtsCmd_t)))
-    {
         if ((AppendCmd->AtsId == 0) || (AppendCmd->AtsId > SC_NUMBER_OF_ATS))
         {
             /* invalid target ATS selection */
@@ -714,5 +697,4 @@ void SC_AppendAtsCmd(const CFE_SB_Buffer_t *BufPtr)
                               "Append ATS %c command: %d ATS entries appended", 'A' + AtsIndex,
                               SC_OperData.HkPacket.AppendEntryCount);
         }
-    }
 }

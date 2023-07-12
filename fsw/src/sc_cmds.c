@@ -475,8 +475,6 @@ void SC_SendHkPacket(void)
 
 void SC_ResetCountersCmd(const CFE_SB_Buffer_t *BufPtr)
 {
-    if (SC_VerifyCmdLength(&BufPtr->Msg, sizeof(SC_NoArgsCmd_t)))
-    {
         CFE_EVS_SendEvent(SC_RESET_DEB_EID, CFE_EVS_EventType_DEBUG, "Reset counters command");
 
         SC_OperData.HkPacket.CmdCtr          = 0;
@@ -487,7 +485,6 @@ void SC_ResetCountersCmd(const CFE_SB_Buffer_t *BufPtr)
         SC_OperData.HkPacket.RtsCmdErrCtr    = 0;
         SC_OperData.HkPacket.RtsActiveCtr    = 0;
         SC_OperData.HkPacket.RtsActiveErrCtr = 0;
-    }
 }
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -497,12 +494,9 @@ void SC_ResetCountersCmd(const CFE_SB_Buffer_t *BufPtr)
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 void SC_NoOpCmd(const CFE_SB_Buffer_t *BufPtr)
 {
-    if (SC_VerifyCmdLength(&BufPtr->Msg, sizeof(SC_NoArgsCmd_t)))
-    {
         SC_OperData.HkPacket.CmdCtr++;
         CFE_EVS_SendEvent(SC_NOOP_INF_EID, CFE_EVS_EventType_INFORMATION, "No-op command. Version %d.%d.%d.%d",
                           SC_MAJOR_VERSION, SC_MINOR_VERSION, SC_REVISION, SC_MISSION_REV);
-    }
 }
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -628,73 +622,129 @@ void SC_ProcessCommand(const CFE_SB_Buffer_t *BufPtr)
     switch (CommandCode)
     {
         case SC_NOOP_CC:
-            SC_NoOpCmd(BufPtr);
+            if (SC_VerifyCmdLength(&BufPtr->Msg, sizeof(SC_NoArgsCmd_t)))
+            {
+                SC_NoOpCmd(BufPtr);
+            }
             break;
 
+
         case SC_RESET_COUNTERS_CC:
-            SC_ResetCountersCmd(BufPtr);
+            if (SC_VerifyCmdLength(&BufPtr->Msg, sizeof(SC_NoArgsCmd_t)))
+            {
+                 SC_ResetCountersCmd(BufPtr);
+            }
             break;
 
         case SC_START_ATS_CC:
-            SC_StartAtsCmd(BufPtr);
+            if (SC_VerifyCmdLength(&BufPtr->Msg, sizeof(SC_StartAtsCmd_t)))
+            {
+                 SC_StartAtsCmd(BufPtr);
+            }
             break;
 
         case SC_STOP_ATS_CC:
-            SC_StopAtsCmd(BufPtr);
+            if (SC_VerifyCmdLength(&BufPtr->Msg, sizeof(SC_NoArgsCmd_t)))
+            {
+                 SC_StopAtsCmd(BufPtr);
+            }
             break;
 
         case SC_START_RTS_CC:
-            SC_StartRtsCmd(BufPtr);
+            if (SC_VerifyCmdLength(&BufPtr->Msg, sizeof(SC_RtsCmd_t)))
+            {
+                 SC_StartRtsCmd(BufPtr);
+            }
+            else
+            {
+                SC_OperData.HkPacket.RtsActiveErrCtr++;
+            }
             break;
 
         case SC_STOP_RTS_CC:
-            SC_StopRtsCmd(BufPtr);
+            if (SC_VerifyCmdLength(&BufPtr->Msg, sizeof(SC_RtsCmd_t)))
+            {
+                 SC_StopRtsCmd(BufPtr);
+            }
             break;
 
         case SC_DISABLE_RTS_CC:
-            SC_DisableRtsCmd(BufPtr);
+            if (SC_VerifyCmdLength(&BufPtr->Msg, sizeof(SC_RtsCmd_t)))
+            {
+                 SC_DisableRtsCmd(BufPtr);
+            }
             break;
 
         case SC_ENABLE_RTS_CC:
-            SC_EnableRtsCmd(BufPtr);
+            if (SC_VerifyCmdLength(&BufPtr->Msg, sizeof(SC_RtsCmd_t)))
+            {
+                 SC_EnableRtsCmd(BufPtr);
+            }
             break;
 
         case SC_SWITCH_ATS_CC:
-            SC_GroundSwitchCmd(BufPtr);
+            if (SC_VerifyCmdLength(&BufPtr->Msg, sizeof(SC_NoArgsCmd_t)))
+            {
+                 SC_GroundSwitchCmd(BufPtr);
+            }
             break;
 
         case SC_JUMP_ATS_CC:
-            SC_JumpAtsCmd(BufPtr);
+            if (SC_VerifyCmdLength(&BufPtr->Msg, sizeof(SC_JumpAtsCmd_t)))
+            {
+                 SC_JumpAtsCmd(BufPtr);
+            }
             break;
 
         case SC_CONTINUE_ATS_ON_FAILURE_CC:
-            SC_ContinueAtsOnFailureCmd(BufPtr);
+            if (SC_VerifyCmdLength(&BufPtr->Msg, sizeof(SC_SetContinueAtsOnFailureCmd_t)))
+            {
+                 SC_ContinueAtsOnFailureCmd(BufPtr);
+            }
             break;
 
         case SC_APPEND_ATS_CC:
-            SC_AppendAtsCmd(BufPtr);
+            if (SC_VerifyCmdLength(&BufPtr->Msg, sizeof(SC_AppendAtsCmd_t)))
+            {
+                 SC_AppendAtsCmd(BufPtr);
+            }
             break;
 
         case SC_MANAGE_TABLE_CC:
-            SC_TableManageCmd(BufPtr);
+            if (SC_VerifyCmdLength(&BufPtr->Msg, sizeof(SC_NoArgsCmd_t)))
+            {
+                 SC_TableManageCmd(BufPtr);
+            }
             break;
 
 #if (SC_ENABLE_GROUP_COMMANDS == true)
 
         case SC_START_RTS_GRP_CC:
-            SC_StartRtsGrpCmd(BufPtr);
+            if (SC_VerifyCmdLength(&BufPtr->Msg, sizeof(SC_RtsGrpCmd_t)))
+            {
+                 SC_StartRtsGrpCmd(BufPtr);
+            }
             break;
 
         case SC_STOP_RTS_GRP_CC:
-            SC_StopRtsGrpCmd(BufPtr);
+            if (SC_VerifyCmdLength(&BufPtr->Msg, sizeof(SC_RtsGrpCmd_t)))
+            {
+                 SC_StopRtsGrpCmd(BufPtr);
+            }
             break;
 
         case SC_DISABLE_RTS_GRP_CC:
-            SC_DisableRtsGrpCmd(BufPtr);
+            if (SC_VerifyCmdLength(&BufPtr->Msg, sizeof(SC_RtsGrpCmd_t)))
+            {
+                 SC_DisableRtsGrpCmd(BufPtr);
+            }
             break;
 
         case SC_ENABLE_RTS_GRP_CC:
-            SC_EnableRtsGrpCmd(BufPtr);
+            if (SC_VerifyCmdLength(&BufPtr->Msg, sizeof(SC_RtsGrpCmd_t)))
+            {
+                 SC_EnableRtsGrpCmd(BufPtr);
+            }
             break;
 #endif
 
