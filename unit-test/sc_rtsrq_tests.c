@@ -50,19 +50,10 @@ void SC_StartRtsCmd_Test_Nominal(void)
 {
     SC_RtsEntryHeader_t *Entry;
     uint8                RtsIndex = 0;
-    uint32               RtsTable[SC_RTS_BUFF_SIZE32];
-    SC_RtpControlBlock_t RtsCtrlBlck;
     size_t               MsgSize;
     int32                strCmpResult;
     char                 ExpectedEventString[CFE_MISSION_EVS_MAX_MESSAGE_LENGTH];
     snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH, "RTS Number %%03d Started");
-
-    SC_InitTables();
-
-    memset(&RtsCtrlBlck, 0, sizeof(RtsCtrlBlck));
-
-    SC_OperData.RtsTblAddr[RtsIndex] = &RtsTable[0];
-    SC_OperData.RtsCtrlBlckAddr      = &RtsCtrlBlck;
 
     Entry          = (SC_RtsEntryHeader_t *)&SC_OperData.RtsTblAddr[RtsIndex][0];
     Entry->TimeTag = 0;
@@ -111,21 +102,11 @@ void SC_StartRtsCmd_Test_StartRtsNoEvents(void)
 {
     SC_RtsEntryHeader_t *Entry;
     uint8                RtsIndex;
-    uint32               RtsTable[SC_RTS_BUFF_SIZE32];
-    SC_RtpControlBlock_t RtsCtrlBlck;
     size_t               MsgSize;
-
-    SC_InitTables();
 
     UT_CmdBuf.RtsCmd.RtsId = SC_NUMBER_OF_RTS;
 
     RtsIndex = UT_CmdBuf.RtsCmd.RtsId - 1;
-
-    memset(&RtsCtrlBlck, 0, sizeof(RtsCtrlBlck));
-    memset(&RtsTable, 0, sizeof(RtsTable));
-
-    SC_OperData.RtsTblAddr[RtsIndex] = &RtsTable[0];
-    SC_OperData.RtsCtrlBlckAddr      = &RtsCtrlBlck;
 
     Entry          = (SC_RtsEntryHeader_t *)&SC_OperData.RtsTblAddr[RtsIndex][0];
     Entry->TimeTag = 0;
@@ -177,20 +158,11 @@ void SC_StartRtsCmd_Test_InvalidCommandLength1(void)
 {
     SC_RtsEntryHeader_t *Entry;
     uint8                RtsIndex = 0;
-    uint32               RtsTable[SC_RTS_BUFF_SIZE32];
-    SC_RtpControlBlock_t RtsCtrlBlck;
     size_t               MsgSize;
     int32                strCmpResult;
     char                 ExpectedEventString[CFE_MISSION_EVS_MAX_MESSAGE_LENGTH];
     snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH,
              "Start RTS %%03d Rejected: Invld Len Field for 1st Cmd in Sequence. Invld Cmd Length = %%d");
-
-    SC_InitTables();
-
-    memset(&RtsCtrlBlck, 0, sizeof(RtsCtrlBlck));
-
-    SC_OperData.RtsTblAddr[RtsIndex] = &RtsTable[0];
-    SC_OperData.RtsCtrlBlckAddr      = &RtsCtrlBlck;
 
     Entry          = (SC_RtsEntryHeader_t *)&SC_OperData.RtsTblAddr[RtsIndex][0];
     Entry->TimeTag = 0;
@@ -226,20 +198,11 @@ void SC_StartRtsCmd_Test_InvalidCommandLength2(void)
 {
     SC_RtsEntryHeader_t *Entry;
     uint8                RtsIndex = 0;
-    uint32               RtsTable[SC_RTS_BUFF_SIZE32];
-    SC_RtpControlBlock_t RtsCtrlBlck;
     size_t               MsgSize;
     int32                strCmpResult;
     char                 ExpectedEventString[CFE_MISSION_EVS_MAX_MESSAGE_LENGTH];
     snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH,
              "Start RTS %%03d Rejected: Invld Len Field for 1st Cmd in Sequence. Invld Cmd Length = %%d");
-
-    SC_InitTables();
-
-    memset(&RtsCtrlBlck, 0, sizeof(RtsCtrlBlck));
-
-    SC_OperData.RtsTblAddr[RtsIndex] = &RtsTable[0];
-    SC_OperData.RtsCtrlBlckAddr      = &RtsCtrlBlck;
 
     Entry          = (SC_RtsEntryHeader_t *)&SC_OperData.RtsTblAddr[RtsIndex][0];
     Entry->TimeTag = 0;
@@ -275,19 +238,10 @@ void SC_StartRtsCmd_Test_RtsNotLoadedOrInUse(void)
 {
     SC_RtsEntryHeader_t *Entry;
     uint8                RtsIndex = 0;
-    uint32               RtsTable[SC_RTS_BUFF_SIZE32];
-    SC_RtpControlBlock_t RtsCtrlBlck;
     int32                strCmpResult;
     char                 ExpectedEventString[CFE_MISSION_EVS_MAX_MESSAGE_LENGTH];
     snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH,
              "Start RTS %%03d Rejected: RTS Not Loaded or In Use, Status: %%d");
-
-    SC_InitTables();
-
-    memset(&RtsCtrlBlck, 0, sizeof(RtsCtrlBlck));
-
-    SC_OperData.RtsTblAddr[RtsIndex] = &RtsTable[0];
-    SC_OperData.RtsCtrlBlckAddr      = &RtsCtrlBlck;
 
     Entry          = (SC_RtsEntryHeader_t *)&SC_OperData.RtsTblAddr[RtsIndex][0];
     Entry->TimeTag = 0;
@@ -320,16 +274,9 @@ void SC_StartRtsCmd_Test_RtsDisabled(void)
 {
     SC_RtsEntryHeader_t *Entry;
     uint8                RtsIndex = 0;
-    uint32               RtsTable[SC_RTS_BUFF_SIZE32];
-    SC_RtpControlBlock_t RtsCtrlBlck;
     int32                strCmpResult;
     char                 ExpectedEventString[CFE_MISSION_EVS_MAX_MESSAGE_LENGTH];
     snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH, "Start RTS %%03d Rejected: RTS Disabled");
-
-    SC_InitTables();
-
-    SC_OperData.RtsTblAddr[RtsIndex] = &RtsTable[0];
-    SC_OperData.RtsCtrlBlckAddr      = &RtsCtrlBlck;
 
     Entry          = (SC_RtsEntryHeader_t *)&SC_OperData.RtsTblAddr[RtsIndex][0];
     Entry->TimeTag = 0;
@@ -364,8 +311,6 @@ void SC_StartRtsCmd_Test_InvalidRtsId(void)
     char  ExpectedEventString[CFE_MISSION_EVS_MAX_MESSAGE_LENGTH];
     snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH, "Start RTS %%03d Rejected: Invalid RTS ID");
 
-    SC_InitTables();
-
     UT_CmdBuf.RtsCmd.RtsId = SC_NUMBER_OF_RTS * 2;
 
     /* Set message size in order to satisfy if-statement after comment "Make sure the command is big enough, but not too
@@ -392,8 +337,6 @@ void SC_StartRtsCmd_Test_InvalidRtsIdZero(void)
     int32 strCmpResult;
     char  ExpectedEventString[CFE_MISSION_EVS_MAX_MESSAGE_LENGTH];
     snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH, "Start RTS %%03d Rejected: Invalid RTS ID");
-
-    SC_InitTables();
 
     UT_CmdBuf.RtsCmd.RtsId = 0;
 
@@ -424,27 +367,17 @@ void SC_StartRtsCmd_Test_NoVerifyLength(void)
     /* Verify results */
     UtAssert_True(SC_OperData.HkPacket.RtsActiveErrCtr == 1, "SC_OperData.HkPacket.RtsActiveErrCtr == 1");
 
-
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
 }
 
 void SC_StartRtsGrpCmd_Test_Nominal(void)
 {
     uint8                RtsIndex = 0;
-    uint32               RtsTable[SC_RTS_BUFF_SIZE32];
-    SC_RtpControlBlock_t RtsCtrlBlck;
     int32                strCmpResult;
     char                 ExpectedEventString[CFE_MISSION_EVS_MAX_MESSAGE_LENGTH];
     snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH,
              "Start RTS group: FirstID=%%d, LastID=%%d, Modified=%%d");
 
-    SC_InitTables();
-
-    memset(&RtsCtrlBlck, 0, sizeof(RtsCtrlBlck));
-    memset(&RtsTable, 0, sizeof(RtsTable));
-
-    SC_OperData.RtsTblAddr[RtsIndex]               = &RtsTable[0];
-    SC_OperData.RtsCtrlBlckAddr                    = &RtsCtrlBlck;
     SC_OperData.RtsInfoTblAddr[RtsIndex].RtsStatus = SC_LOADED;
     SC_OperData.RtsInfoTblAddr[RtsIndex].UseCtr    = 0;
 
@@ -488,8 +421,6 @@ void SC_StartRtsGrpCmd_Test_StartRtsGroupError(void)
     char  ExpectedEventString[CFE_MISSION_EVS_MAX_MESSAGE_LENGTH];
     snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH, "Start RTS group error: FirstID=%%d, LastID=%%d");
 
-    SC_InitTables();
-
     UT_CmdBuf.RtsGrpCmd.FirstRtsId = SC_NUMBER_OF_RTS * 2;
     UT_CmdBuf.RtsGrpCmd.LastRtsId  = SC_NUMBER_OF_RTS * 2;
 
@@ -530,8 +461,6 @@ void SC_StartRtsGrpCmd_Test_FirstRtsIndex(void)
 
     snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH, "Start RTS group error: FirstID=%%d, LastID=%%d");
 
-    SC_InitTables();
-
     UT_CmdBuf.RtsGrpCmd.FirstRtsId = SC_NUMBER_OF_RTS + 1;
     UT_CmdBuf.RtsGrpCmd.LastRtsId  = 1;
 
@@ -560,8 +489,6 @@ void SC_StartRtsGrpCmd_Test_FirstRtsIndexZero(void)
     int32 strCmpResult;
     char  ExpectedEventString[CFE_MISSION_EVS_MAX_MESSAGE_LENGTH];
     snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH, "Start RTS group error: FirstID=%%d, LastID=%%d");
-
-    SC_InitTables();
 
     UT_CmdBuf.RtsGrpCmd.FirstRtsId = 0;
     UT_CmdBuf.RtsGrpCmd.LastRtsId  = 1;
@@ -593,8 +520,6 @@ void SC_StartRtsGrpCmd_Test_LastRtsIndex(void)
 
     snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH, "Start RTS group error: FirstID=%%d, LastID=%%d");
 
-    SC_InitTables();
-
     UT_CmdBuf.RtsGrpCmd.FirstRtsId = 1;
     UT_CmdBuf.RtsGrpCmd.LastRtsId  = SC_NUMBER_OF_RTS + 1;
 
@@ -623,8 +548,6 @@ void SC_StartRtsGrpCmd_Test_LastRtsIndexZero(void)
     int32 strCmpResult;
     char  ExpectedEventString[CFE_MISSION_EVS_MAX_MESSAGE_LENGTH];
     snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH, "Start RTS group error: FirstID=%%d, LastID=%%d");
-
-    SC_InitTables();
 
     UT_CmdBuf.RtsGrpCmd.FirstRtsId = 1;
     UT_CmdBuf.RtsGrpCmd.LastRtsId  = 0;
@@ -656,8 +579,6 @@ void SC_StartRtsGrpCmd_Test_FirstLastRtsIndex(void)
 
     snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH, "Start RTS group error: FirstID=%%d, LastID=%%d");
 
-    SC_InitTables();
-
     UT_CmdBuf.RtsGrpCmd.FirstRtsId = 2;
     UT_CmdBuf.RtsGrpCmd.LastRtsId  = 1;
 
@@ -684,22 +605,12 @@ void SC_StartRtsGrpCmd_Test_FirstLastRtsIndex(void)
 void SC_StartRtsGrpCmd_Test_DisabledFlag(void)
 {
     uint8                RtsIndex = 0;
-    uint32               RtsTable[SC_RTS_BUFF_SIZE32];
-    SC_RtpControlBlock_t RtsCtrlBlck;
     int32                strCmpResult;
     char                 ExpectedEventString[2][CFE_MISSION_EVS_MAX_MESSAGE_LENGTH];
     snprintf(ExpectedEventString[0], CFE_MISSION_EVS_MAX_MESSAGE_LENGTH,
              "Start RTS group error: rejected RTS ID %%03d, RTS Disabled");
     snprintf(ExpectedEventString[1], CFE_MISSION_EVS_MAX_MESSAGE_LENGTH,
              "Start RTS group: FirstID=%%d, LastID=%%d, Modified=%%d");
-
-    SC_InitTables();
-
-    memset(&RtsCtrlBlck, 0, sizeof(RtsCtrlBlck));
-    memset(&RtsTable, 0, sizeof(RtsTable));
-
-    SC_OperData.RtsTblAddr[RtsIndex] = &RtsTable[0];
-    SC_OperData.RtsCtrlBlckAddr      = &RtsCtrlBlck;
 
     SC_OperData.RtsInfoTblAddr[RtsIndex].DisabledFlag   = true;
     SC_OperData.RtsInfoTblAddr[RtsIndex].RtsStatus      = SC_EXECUTING;
@@ -752,22 +663,12 @@ void SC_StartRtsGrpCmd_Test_DisabledFlag(void)
 void SC_StartRtsGrpCmd_Test_RtsStatus(void)
 {
     uint8                RtsIndex = 0;
-    uint32               RtsTable[SC_RTS_BUFF_SIZE32];
-    SC_RtpControlBlock_t RtsCtrlBlck;
     int32                strCmpResult;
     char                 ExpectedEventString[2][CFE_MISSION_EVS_MAX_MESSAGE_LENGTH];
     snprintf(ExpectedEventString[0], CFE_MISSION_EVS_MAX_MESSAGE_LENGTH,
              "Start RTS group error: rejected RTS ID %%03d, RTS Not Loaded or In Use, Status: %%d");
     snprintf(ExpectedEventString[1], CFE_MISSION_EVS_MAX_MESSAGE_LENGTH,
              "Start RTS group: FirstID=%%d, LastID=%%d, Modified=%%d");
-
-    SC_InitTables();
-
-    memset(&RtsCtrlBlck, 0, sizeof(RtsCtrlBlck));
-    memset(&RtsTable, 0, sizeof(RtsTable));
-
-    SC_OperData.RtsTblAddr[RtsIndex] = &RtsTable[0];
-    SC_OperData.RtsCtrlBlckAddr      = &RtsCtrlBlck;
 
     SC_OperData.RtsInfoTblAddr[RtsIndex].RtsStatus      = SC_EXECUTING;
     SC_OperData.RtsInfoTblAddr[RtsIndex].UseCtr         = 0;
@@ -824,8 +725,6 @@ void SC_StopRtsCmd_Test_Nominal(void)
     char  ExpectedEventString[CFE_MISSION_EVS_MAX_MESSAGE_LENGTH];
     snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH, "RTS %%03d Aborted");
 
-    SC_InitTables();
-
     UT_CmdBuf.RtsCmd.RtsId = 1;
 
     /* Set message size so SC_VerifyCmdLength will return true, to satisfy first if-statement */
@@ -853,8 +752,6 @@ void SC_StopRtsCmd_Test_InvalidRts(void)
     int32 strCmpResult;
     char  ExpectedEventString[CFE_MISSION_EVS_MAX_MESSAGE_LENGTH];
     snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH, "Stop RTS %%03d rejected: Invalid RTS ID");
-
-    SC_InitTables();
 
     UT_CmdBuf.RtsCmd.RtsId = SC_NUMBER_OF_RTS * 2;
 
@@ -895,8 +792,6 @@ void SC_StopRtsGrpCmd_Test_Nominal(void)
     snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH,
              "Stop RTS group: FirstID=%%d, LastID=%%d, Modified=%%d");
 
-    SC_InitTables();
-
     UT_CmdBuf.RtsGrpCmd.FirstRtsId = 1;
     UT_CmdBuf.RtsGrpCmd.LastRtsId  = 1;
 
@@ -925,8 +820,6 @@ void SC_StopRtsGrpCmd_Test_Error(void)
     int32 strCmpResult;
     char  ExpectedEventString[CFE_MISSION_EVS_MAX_MESSAGE_LENGTH];
     snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH, "Stop RTS group error: FirstID=%%d, LastID=%%d");
-
-    SC_InitTables();
 
     UT_CmdBuf.RtsGrpCmd.FirstRtsId = SC_NUMBER_OF_RTS * 2;
     UT_CmdBuf.RtsGrpCmd.LastRtsId  = SC_NUMBER_OF_RTS * 2;
@@ -957,27 +850,16 @@ void SC_StopRtsGrpCmd_Test_NoVerifyLength(void)
     SC_StopRtsGrpCmd(&UT_CmdBuf.Buf);
 
     /* Verify results */
-
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
 }
 
 void SC_StopRtsGrpCmd_Test_NotExecuting(void)
 {
     uint8                RtsIndex = 0;
-    uint32               RtsTable[SC_RTS_BUFF_SIZE32];
-    SC_RtpControlBlock_t RtsCtrlBlck;
     int32                strCmpResult;
     char                 ExpectedEventString[CFE_MISSION_EVS_MAX_MESSAGE_LENGTH];
     snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH,
              "Stop RTS group: FirstID=%%d, LastID=%%d, Modified=%%d");
-
-    memset(&RtsTable, 0, sizeof(RtsTable));
-    memset(&RtsCtrlBlck, 0, sizeof(RtsCtrlBlck));
-
-    SC_InitTables();
-
-    SC_OperData.RtsTblAddr[RtsIndex] = &RtsTable[0];
-    SC_OperData.RtsCtrlBlckAddr      = &RtsCtrlBlck;
 
     SC_OperData.RtsInfoTblAddr[RtsIndex].RtsStatus = SC_EXECUTING;
 
@@ -1010,8 +892,6 @@ void SC_StopRtsGrpCmd_Test_FirstRtsIndex(void)
     char  ExpectedEventString[CFE_MISSION_EVS_MAX_MESSAGE_LENGTH];
     snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH, "Stop RTS group error: FirstID=%%d, LastID=%%d");
 
-    SC_InitTables();
-
     UT_CmdBuf.RtsGrpCmd.FirstRtsId = SC_NUMBER_OF_RTS + 1;
     UT_CmdBuf.RtsGrpCmd.LastRtsId  = 1;
 
@@ -1040,8 +920,6 @@ void SC_StopRtsGrpCmd_Test_FirstRtsIndexZero(void)
     int32 strCmpResult;
     char  ExpectedEventString[CFE_MISSION_EVS_MAX_MESSAGE_LENGTH];
     snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH, "Stop RTS group error: FirstID=%%d, LastID=%%d");
-
-    SC_InitTables();
 
     UT_CmdBuf.RtsGrpCmd.FirstRtsId = 0;
     UT_CmdBuf.RtsGrpCmd.LastRtsId  = 1;
@@ -1072,8 +950,6 @@ void SC_StopRtsGrpCmd_Test_LastRtsIndex(void)
     char  ExpectedEventString[CFE_MISSION_EVS_MAX_MESSAGE_LENGTH];
     snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH, "Stop RTS group error: FirstID=%%d, LastID=%%d");
 
-    SC_InitTables();
-
     UT_CmdBuf.RtsGrpCmd.FirstRtsId = 1;
     UT_CmdBuf.RtsGrpCmd.LastRtsId  = SC_NUMBER_OF_RTS + 1;
 
@@ -1103,8 +979,6 @@ void SC_StopRtsGrpCmd_Test_LastRtsIndexZero(void)
     char  ExpectedEventString[CFE_MISSION_EVS_MAX_MESSAGE_LENGTH];
     snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH, "Stop RTS group error: FirstID=%%d, LastID=%%d");
 
-    SC_InitTables();
-
     UT_CmdBuf.RtsGrpCmd.FirstRtsId = 1;
     UT_CmdBuf.RtsGrpCmd.LastRtsId  = 0;
 
@@ -1133,8 +1007,6 @@ void SC_StopRtsGrpCmd_Test_FirstLastRtsIndex(void)
     int32 strCmpResult;
     char  ExpectedEventString[CFE_MISSION_EVS_MAX_MESSAGE_LENGTH];
     snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH, "Stop RTS group error: FirstID=%%d, LastID=%%d");
-
-    SC_InitTables();
 
     UT_CmdBuf.RtsGrpCmd.FirstRtsId = 2;
     UT_CmdBuf.RtsGrpCmd.LastRtsId  = 1;
@@ -1166,8 +1038,6 @@ void SC_DisableRtsCmd_Test_Nominal(void)
     char  ExpectedEventString[CFE_MISSION_EVS_MAX_MESSAGE_LENGTH];
     snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH, "Disabled RTS %%03d");
 
-    SC_InitTables();
-
     UT_CmdBuf.RtsCmd.RtsId = 1;
 
     /* Set message size so SC_VerifyCmdLength will return true, to satisfy first if-statement */
@@ -1198,8 +1068,6 @@ void SC_DisableRtsCmd_Test_InvalidRtsID(void)
     char  ExpectedEventString[CFE_MISSION_EVS_MAX_MESSAGE_LENGTH];
     snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH, "Disable RTS %%03d Rejected: Invalid RTS ID");
 
-    SC_InitTables();
-
     UT_CmdBuf.RtsCmd.RtsId = SC_NUMBER_OF_RTS * 2;
 
     /* Set message size so SC_VerifyCmdLength will return true, to satisfy first if-statement */
@@ -1228,7 +1096,6 @@ void SC_DisableRtsCmd_Test_NoVerifyLength(void)
     SC_DisableRtsCmd(&UT_CmdBuf.Buf);
 
     /* Verify results */
-
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
 }
 
@@ -1239,8 +1106,6 @@ void SC_DisableRtsGrpCmd_Test_Nominal(void)
     char  ExpectedEventString[CFE_MISSION_EVS_MAX_MESSAGE_LENGTH];
     snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH,
              "Disable RTS group: FirstID=%%d, LastID=%%d, Modified=%%d");
-
-    SC_InitTables();
 
     UT_CmdBuf.RtsGrpCmd.FirstRtsId = 1;
     UT_CmdBuf.RtsGrpCmd.LastRtsId  = 1;
@@ -1274,8 +1139,6 @@ void SC_DisableRtsGrpCmd_Test_Error(void)
     snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH,
              "Disable RTS group error: FirstID=%%d, LastID=%%d");
 
-    SC_InitTables();
-
     UT_CmdBuf.RtsGrpCmd.FirstRtsId = SC_NUMBER_OF_RTS * 2;
     UT_CmdBuf.RtsGrpCmd.LastRtsId  = SC_NUMBER_OF_RTS * 2;
 
@@ -1305,7 +1168,6 @@ void SC_DisableRtsGrpCmd_Test_NoVerifyLength(void)
     SC_DisableRtsGrpCmd(&UT_CmdBuf.Buf);
 
     /* Verify results */
-
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
 }
 
@@ -1315,8 +1177,6 @@ void SC_DisableRtsGrpCmd_Test_FirstRtsIndex(void)
     char  ExpectedEventString[CFE_MISSION_EVS_MAX_MESSAGE_LENGTH];
     snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH,
              "Disable RTS group error: FirstID=%%d, LastID=%%d");
-
-    SC_InitTables();
 
     UT_CmdBuf.RtsGrpCmd.FirstRtsId = SC_NUMBER_OF_RTS + 1;
     UT_CmdBuf.RtsGrpCmd.LastRtsId  = 1;
@@ -1348,8 +1208,6 @@ void SC_DisableRtsGrpCmd_Test_FirstRtsIndexZero(void)
     snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH,
              "Disable RTS group error: FirstID=%%d, LastID=%%d");
 
-    SC_InitTables();
-
     UT_CmdBuf.RtsGrpCmd.FirstRtsId = 0;
     UT_CmdBuf.RtsGrpCmd.LastRtsId  = 1;
 
@@ -1379,8 +1237,6 @@ void SC_DisableRtsGrpCmd_Test_LastRtsIndex(void)
     char  ExpectedEventString[CFE_MISSION_EVS_MAX_MESSAGE_LENGTH];
     snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH,
              "Disable RTS group error: FirstID=%%d, LastID=%%d");
-
-    SC_InitTables();
 
     UT_CmdBuf.RtsGrpCmd.FirstRtsId = 1;
     UT_CmdBuf.RtsGrpCmd.LastRtsId  = SC_NUMBER_OF_RTS + 1;
@@ -1412,8 +1268,6 @@ void SC_DisableRtsGrpCmd_Test_LastRtsIndexZero(void)
     snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH,
              "Disable RTS group error: FirstID=%%d, LastID=%%d");
 
-    SC_InitTables();
-
     UT_CmdBuf.RtsGrpCmd.FirstRtsId = 1;
     UT_CmdBuf.RtsGrpCmd.LastRtsId  = 0;
 
@@ -1443,8 +1297,6 @@ void SC_DisableRtsGrpCmd_Test_FirstLastRtsIndex(void)
     char  ExpectedEventString[CFE_MISSION_EVS_MAX_MESSAGE_LENGTH];
     snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH,
              "Disable RTS group error: FirstID=%%d, LastID=%%d");
-
-    SC_InitTables();
 
     UT_CmdBuf.RtsGrpCmd.FirstRtsId = 2;
     UT_CmdBuf.RtsGrpCmd.LastRtsId  = 1;
@@ -1476,8 +1328,6 @@ void SC_DisableRtsGrpCmd_Test_DisabledFlag(void)
     char  ExpectedEventString[CFE_MISSION_EVS_MAX_MESSAGE_LENGTH];
     snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH,
              "Disable RTS group: FirstID=%%d, LastID=%%d, Modified=%%d");
-
-    SC_InitTables();
 
     SC_OperData.RtsInfoTblAddr[RtsIndex].DisabledFlag = true;
 
@@ -1513,8 +1363,6 @@ void SC_EnableRtsCmd_Test_Nominal(void)
     char  ExpectedEventString[CFE_MISSION_EVS_MAX_MESSAGE_LENGTH];
     snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH, "Enabled RTS %%03d");
 
-    SC_InitTables();
-
     UT_CmdBuf.RtsCmd.RtsId = 1;
 
     /* Set message size so SC_VerifyCmdLength will return true, to satisfy first if-statement */
@@ -1545,8 +1393,6 @@ void SC_EnableRtsCmd_Test_InvalidRtsID(void)
     char  ExpectedEventString[CFE_MISSION_EVS_MAX_MESSAGE_LENGTH];
     snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH, "Enable RTS %%03d Rejected: Invalid RTS ID");
 
-    SC_InitTables();
-
     UT_CmdBuf.RtsCmd.RtsId = SC_NUMBER_OF_RTS * 2;
 
     /* Set message size so SC_VerifyCmdLength will return true, to satisfy first if-statement */
@@ -1574,8 +1420,6 @@ void SC_EnableRtsCmd_Test_InvalidRtsIDZero(void)
     int32 strCmpResult;
     char  ExpectedEventString[CFE_MISSION_EVS_MAX_MESSAGE_LENGTH];
     snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH, "Enable RTS %%03d Rejected: Invalid RTS ID");
-
-    SC_InitTables();
 
     UT_CmdBuf.RtsCmd.RtsId = 0;
 
@@ -1605,7 +1449,6 @@ void SC_EnableRtsCmd_Test_NoVerifyLength(void)
     SC_EnableRtsCmd(&UT_CmdBuf.Buf);
 
     /* Verify results */
-
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
 }
 
@@ -1617,8 +1460,6 @@ void SC_EnableRtsGrpCmd_Test_Nominal(void)
 
     snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH,
              "Enable RTS group: FirstID=%%d, LastID=%%d, Modified=%%d");
-
-    SC_InitTables();
 
     UT_CmdBuf.RtsGrpCmd.FirstRtsId = 1;
     UT_CmdBuf.RtsGrpCmd.LastRtsId  = 1;
@@ -1652,8 +1493,6 @@ void SC_EnableRtsGrpCmd_Test_Error(void)
     snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH,
              "Enable RTS group error: FirstID=%%d, LastID=%%d");
 
-    SC_InitTables();
-
     UT_CmdBuf.RtsGrpCmd.FirstRtsId = SC_NUMBER_OF_RTS * 2;
     UT_CmdBuf.RtsGrpCmd.LastRtsId  = SC_NUMBER_OF_RTS * 2;
 
@@ -1683,7 +1522,6 @@ void SC_EnableRtsGrpCmd_Test_NoVerifyLength(void)
     SC_EnableRtsGrpCmd(&UT_CmdBuf.Buf);
 
     /* Verify results */
-
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
 }
 
@@ -1693,8 +1531,6 @@ void SC_EnableRtsGrpCmd_Test_FirstRtsIndex(void)
     char  ExpectedEventString[CFE_MISSION_EVS_MAX_MESSAGE_LENGTH];
     snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH,
              "Enable RTS group error: FirstID=%%d, LastID=%%d");
-
-    SC_InitTables();
 
     UT_CmdBuf.RtsGrpCmd.FirstRtsId = SC_NUMBER_OF_RTS + 1;
     UT_CmdBuf.RtsGrpCmd.LastRtsId  = 1;
@@ -1726,8 +1562,6 @@ void SC_EnableRtsGrpCmd_Test_FirstRtsIndexZero(void)
     snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH,
              "Enable RTS group error: FirstID=%%d, LastID=%%d");
 
-    SC_InitTables();
-
     UT_CmdBuf.RtsGrpCmd.FirstRtsId = 0;
     UT_CmdBuf.RtsGrpCmd.LastRtsId  = 1;
 
@@ -1757,8 +1591,6 @@ void SC_EnableRtsGrpCmd_Test_LastRtsIndex(void)
     char  ExpectedEventString[CFE_MISSION_EVS_MAX_MESSAGE_LENGTH];
     snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH,
              "Enable RTS group error: FirstID=%%d, LastID=%%d");
-
-    SC_InitTables();
 
     UT_CmdBuf.RtsGrpCmd.FirstRtsId = 1;
     UT_CmdBuf.RtsGrpCmd.LastRtsId  = SC_NUMBER_OF_RTS + 1;
@@ -1790,8 +1622,6 @@ void SC_EnableRtsGrpCmd_Test_LastRtsIndexZero(void)
     snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH,
              "Enable RTS group error: FirstID=%%d, LastID=%%d");
 
-    SC_InitTables();
-
     UT_CmdBuf.RtsGrpCmd.FirstRtsId = 1;
     UT_CmdBuf.RtsGrpCmd.LastRtsId  = 0;
 
@@ -1821,8 +1651,6 @@ void SC_EnableRtsGrpCmd_Test_FirstLastRtsIndex(void)
     char  ExpectedEventString[CFE_MISSION_EVS_MAX_MESSAGE_LENGTH];
     snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH,
              "Enable RTS group error: FirstID=%%d, LastID=%%d");
-
-    SC_InitTables();
 
     UT_CmdBuf.RtsGrpCmd.FirstRtsId = 2;
     UT_CmdBuf.RtsGrpCmd.LastRtsId  = 1;
@@ -1855,8 +1683,6 @@ void SC_EnableRtsGrpCmd_Test_DisabledFlag(void)
     snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH,
              "Enable RTS group: FirstID=%%d, LastID=%%d, Modified=%%d");
 
-    SC_InitTables();
-
     SC_OperData.RtsInfoTblAddr[RtsIndex].DisabledFlag = false;
     SC_OperData.RtsInfoTblAddr[1].DisabledFlag        = true;
     UT_CmdBuf.RtsGrpCmd.FirstRtsId                    = 1;
@@ -1887,15 +1713,6 @@ void SC_EnableRtsGrpCmd_Test_DisabledFlag(void)
 void SC_KillRts_Test(void)
 {
     uint8                RtsIndex = 0;
-    uint32               RtsTable[SC_RTS_BUFF_SIZE32];
-    SC_RtpControlBlock_t RtsCtrlBlck;
-
-    SC_InitTables();
-
-    memset(&RtsCtrlBlck, 0, sizeof(RtsCtrlBlck));
-
-    SC_OperData.RtsTblAddr[RtsIndex] = &RtsTable[0];
-    SC_OperData.RtsCtrlBlckAddr      = &RtsCtrlBlck;
 
     SC_OperData.RtsInfoTblAddr[RtsIndex].RtsStatus = SC_EXECUTING;
     SC_OperData.RtsCtrlBlckAddr->NumRtsActive      = 1;
@@ -1917,15 +1734,6 @@ void SC_KillRts_Test(void)
 void SC_KillRts_Test_NoActiveRts(void)
 {
     uint8                RtsIndex = 0;
-    uint32               RtsTable[SC_RTS_BUFF_SIZE32];
-    SC_RtpControlBlock_t RtsCtrlBlck;
-
-    SC_InitTables();
-
-    memset(&RtsCtrlBlck, 0, sizeof(RtsCtrlBlck));
-
-    SC_OperData.RtsTblAddr[RtsIndex] = &RtsTable[0];
-    SC_OperData.RtsCtrlBlckAddr      = &RtsCtrlBlck;
 
     SC_OperData.RtsInfoTblAddr[RtsIndex].RtsStatus = SC_EXECUTING;
     SC_OperData.RtsCtrlBlckAddr->NumRtsActive      = 0;
@@ -1975,7 +1783,6 @@ void SC_AutoStartRts_Test_Nominal(void)
     SC_AutoStartRts(RtsId);
 
     /* Verify results */
-
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
 }
 

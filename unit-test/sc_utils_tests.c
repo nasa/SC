@@ -111,8 +111,6 @@ void SC_VerifyCmdLength_Test_Nominal(void)
     CFE_MSG_FcnCode_t FcnCode   = SC_NOOP_CC;
     size_t            MsgSize   = sizeof(CmdPacket);
 
-    SC_InitTables();
-
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(SC_AppendAtsCmd_t), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &MsgSize, sizeof(MsgSize), false);
@@ -140,8 +138,6 @@ void SC_VerifyCmdLength_Test_LenError(void)
 
     snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH,
              "Invalid msg length: ID = 0x%%08lX, CC = %%d, Len = %%d, Expected = %%d");
-
-    SC_InitTables();
 
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(SC_AppendAtsCmd_t), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
@@ -178,8 +174,6 @@ void SC_VerifyCmdLength_Test_LenErrorNotMID(void)
 
     snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH,
              "Invalid msg length: ID = 0x%%08lX, CC = %%d, Len = %%d, Expected = %%d");
-
-    SC_InitTables();
 
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(SC_AppendAtsCmd_t), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);

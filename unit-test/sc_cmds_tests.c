@@ -62,21 +62,9 @@ int32 Ut_SC_UpdateNextTimeHook(void *UserObj, int32 StubRetcode, uint32 CallCoun
 void SC_ProcessAtpCmd_Test_SwitchCmd(void)
 {
     SC_AtsEntryHeader_t *Entry;
-    uint32               AtsTable[SC_ATS_BUFF_SIZE32];
-    SC_AtpControlBlock_t AtsCtrlBlck;
-    uint32               AtsCmdStatusTbl[SC_NUMBER_OF_ATS];
-    SC_AtsInfoTable_t    AtsInfoTbl;
     CFE_SB_MsgId_t       TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
     CFE_MSG_FcnCode_t    FcnCode   = SC_SWITCH_ATS_CC;
     bool                 ChecksumValid;
-
-    SC_InitTables();
-
-    SC_OperData.AtsTblAddr[0]          = &AtsTable[0];
-    SC_OperData.AtsCtrlBlckAddr        = &AtsCtrlBlck;
-    SC_OperData.AtsCmdStatusTblAddr[0] = &AtsCmdStatusTbl[0];
-    SC_OperData.AtsCmdStatusTblAddr[1] = &AtsCmdStatusTbl[1];
-    SC_OperData.AtsInfoTblAddr         = &AtsInfoTbl;
 
     Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[0][0];
     Entry->CmdNumber = 1;
@@ -122,21 +110,9 @@ void SC_ProcessAtpCmd_Test_SwitchCmd(void)
 void SC_ProcessAtpCmd_Test_NonSwitchCmd(void)
 {
     SC_AtsEntryHeader_t *Entry;
-    uint32               AtsTable[SC_ATS_BUFF_SIZE32];
-    SC_AtpControlBlock_t AtsCtrlBlck;
-    uint32               AtsCmdStatusTbl[SC_NUMBER_OF_ATS];
-    SC_AtsInfoTable_t    AtsInfoTbl;
     CFE_SB_MsgId_t       TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
     CFE_MSG_FcnCode_t    FcnCode   = SC_NOOP_CC;
     bool                 ChecksumValid;
-
-    SC_InitTables();
-
-    SC_OperData.AtsTblAddr[0]          = &AtsTable[0];
-    SC_OperData.AtsCtrlBlckAddr        = &AtsCtrlBlck;
-    SC_OperData.AtsCmdStatusTblAddr[0] = &AtsCmdStatusTbl[0];
-    SC_OperData.AtsCmdStatusTblAddr[1] = &AtsCmdStatusTbl[1];
-    SC_OperData.AtsInfoTblAddr         = &AtsInfoTbl;
 
     Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[0][0];
     Entry->CmdNumber = 1;
@@ -182,21 +158,9 @@ void SC_ProcessAtpCmd_Test_NonSwitchCmd(void)
 void SC_ProcessAtpCmd_Test_InlineSwitchError(void)
 {
     SC_AtsEntryHeader_t *Entry;
-    uint32               AtsTable[SC_ATS_BUFF_SIZE32];
-    SC_AtpControlBlock_t AtsCtrlBlck;
-    uint32               AtsCmdStatusTbl[SC_NUMBER_OF_ATS];
-    SC_AtsInfoTable_t    AtsInfoTbl;
     CFE_SB_MsgId_t       TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
     CFE_MSG_FcnCode_t    FcnCode   = SC_SWITCH_ATS_CC;
     bool                 ChecksumValid;
-
-    SC_InitTables();
-
-    SC_OperData.AtsTblAddr[0]          = &AtsTable[0];
-    SC_OperData.AtsCtrlBlckAddr        = &AtsCtrlBlck;
-    SC_OperData.AtsCmdStatusTblAddr[0] = &AtsCmdStatusTbl[0];
-    SC_OperData.AtsCmdStatusTblAddr[1] = &AtsCmdStatusTbl[1];
-    SC_OperData.AtsInfoTblAddr         = &AtsInfoTbl;
 
     Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[0][0];
     Entry->CmdNumber = 1;
@@ -244,10 +208,6 @@ void SC_ProcessAtpCmd_Test_InlineSwitchError(void)
 void SC_ProcessAtpCmd_Test_SBErrorAtsA(void)
 {
     SC_AtsEntryHeader_t *Entry;
-    uint32               AtsTable[SC_ATS_BUFF_SIZE32];
-    SC_AtpControlBlock_t AtsCtrlBlck;
-    uint32               AtsCmdStatusTbl[SC_NUMBER_OF_ATS];
-    SC_AtsInfoTable_t    AtsInfoTbl;
     CFE_SB_MsgId_t       TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
     CFE_MSG_FcnCode_t    FcnCode   = SC_NOOP_CC;
     bool                 ChecksumValid;
@@ -258,14 +218,6 @@ void SC_ProcessAtpCmd_Test_SBErrorAtsA(void)
              "ATS Command Distribution Failed, Cmd Number: %%d, SB returned: 0x%%08X");
 
     snprintf(ExpectedEventString[1], CFE_MISSION_EVS_MAX_MESSAGE_LENGTH, "ATS %%c Aborted");
-
-    SC_InitTables();
-
-    SC_OperData.AtsTblAddr[0]          = &AtsTable[0];
-    SC_OperData.AtsCtrlBlckAddr        = &AtsCtrlBlck;
-    SC_OperData.AtsCmdStatusTblAddr[0] = &AtsCmdStatusTbl[0];
-    SC_OperData.AtsCmdStatusTblAddr[1] = &AtsCmdStatusTbl[1];
-    SC_OperData.AtsInfoTblAddr         = &AtsInfoTbl;
 
     Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[0][0];
     Entry->CmdNumber = 1;
@@ -328,10 +280,6 @@ void SC_ProcessAtpCmd_Test_SBErrorAtsA(void)
 void SC_ProcessAtpCmd_Test_SBErrorAtsB(void)
 {
     SC_AtsEntryHeader_t *Entry;
-    uint32               AtsTable[SC_ATS_BUFF_SIZE32];
-    SC_AtpControlBlock_t AtsCtrlBlck;
-    uint32               AtsCmdStatusTbl[SC_NUMBER_OF_ATS];
-    SC_AtsInfoTable_t    AtsInfoTbl;
     CFE_SB_MsgId_t       TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
     CFE_MSG_FcnCode_t    FcnCode   = SC_NOOP_CC;
     bool                 ChecksumValid;
@@ -342,14 +290,6 @@ void SC_ProcessAtpCmd_Test_SBErrorAtsB(void)
              "ATS Command Distribution Failed, Cmd Number: %%d, SB returned: 0x%%08X");
 
     snprintf(ExpectedEventString[1], CFE_MISSION_EVS_MAX_MESSAGE_LENGTH, "ATS %%c Aborted");
-
-    SC_InitTables();
-
-    SC_OperData.AtsTblAddr[1]          = &AtsTable[0];
-    SC_OperData.AtsCtrlBlckAddr        = &AtsCtrlBlck;
-    SC_OperData.AtsCmdStatusTblAddr[0] = &AtsCmdStatusTbl[0];
-    SC_OperData.AtsCmdStatusTblAddr[1] = &AtsCmdStatusTbl[1];
-    SC_OperData.AtsInfoTblAddr         = &AtsInfoTbl;
 
     Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[1][0];
     Entry->CmdNumber = 1;
@@ -412,10 +352,6 @@ void SC_ProcessAtpCmd_Test_SBErrorAtsB(void)
 void SC_ProcessAtpCmd_Test_ChecksumFailedAtsA(void)
 {
     SC_AtsEntryHeader_t *Entry;
-    uint32               AtsTable[SC_ATS_BUFF_SIZE32];
-    SC_AtpControlBlock_t AtsCtrlBlck;
-    uint32               AtsCmdStatusTbl[SC_NUMBER_OF_ATS];
-    SC_AtsInfoTable_t    AtsInfoTbl;
     CFE_SB_MsgId_t       TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
     CFE_MSG_FcnCode_t    FcnCode   = SC_SWITCH_ATS_CC;
     bool                 ChecksumValid;
@@ -426,16 +362,6 @@ void SC_ProcessAtpCmd_Test_ChecksumFailedAtsA(void)
              "ATS Command Failed Checksum: Command #%%d Skipped");
 
     snprintf(ExpectedEventString[1], CFE_MISSION_EVS_MAX_MESSAGE_LENGTH, "ATS %%c Aborted");
-
-    memset(&AtsCmdStatusTbl, 0, sizeof(AtsCmdStatusTbl));
-
-    SC_InitTables();
-
-    SC_OperData.AtsTblAddr[0]          = &AtsTable[0];
-    SC_OperData.AtsCtrlBlckAddr        = &AtsCtrlBlck;
-    SC_OperData.AtsCmdStatusTblAddr[0] = &AtsCmdStatusTbl[0];
-    SC_OperData.AtsCmdStatusTblAddr[1] = &AtsCmdStatusTbl[1];
-    SC_OperData.AtsInfoTblAddr         = &AtsInfoTbl;
 
     Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[0][0];
     Entry->CmdNumber = 1;
@@ -498,10 +424,6 @@ void SC_ProcessAtpCmd_Test_ChecksumFailedAtsA(void)
 void SC_ProcessAtpCmd_Test_ChecksumFailedAtsB(void)
 {
     SC_AtsEntryHeader_t *Entry;
-    uint32               AtsTable[SC_ATS_BUFF_SIZE32];
-    SC_AtpControlBlock_t AtsCtrlBlck;
-    uint32               AtsCmdStatusTbl[SC_NUMBER_OF_ATS];
-    SC_AtsInfoTable_t    AtsInfoTbl;
     CFE_SB_MsgId_t       TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
     CFE_MSG_FcnCode_t    FcnCode   = SC_SWITCH_ATS_CC;
     bool                 ChecksumValid;
@@ -512,14 +434,6 @@ void SC_ProcessAtpCmd_Test_ChecksumFailedAtsB(void)
              "ATS Command Failed Checksum: Command #%%d Skipped");
 
     snprintf(ExpectedEventString[1], CFE_MISSION_EVS_MAX_MESSAGE_LENGTH, "ATS %%c Aborted");
-
-    SC_InitTables();
-
-    SC_OperData.AtsTblAddr[1]          = &AtsTable[0];
-    SC_OperData.AtsCtrlBlckAddr        = &AtsCtrlBlck;
-    SC_OperData.AtsCmdStatusTblAddr[0] = &AtsCmdStatusTbl[0];
-    SC_OperData.AtsCmdStatusTblAddr[1] = &AtsCmdStatusTbl[1];
-    SC_OperData.AtsInfoTblAddr         = &AtsInfoTbl;
 
     Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[1][0];
     Entry->CmdNumber = 1;
@@ -582,10 +496,6 @@ void SC_ProcessAtpCmd_Test_ChecksumFailedAtsB(void)
 void SC_ProcessAtpCmd_Test_ChecksumFailedAtsAContinue(void)
 {
     SC_AtsEntryHeader_t *Entry;
-    uint32               AtsTable[SC_ATS_BUFF_SIZE32];
-    SC_AtpControlBlock_t AtsCtrlBlck;
-    uint32               AtsCmdStatusTbl[SC_NUMBER_OF_ATS];
-    SC_AtsInfoTable_t    AtsInfoTbl;
     CFE_SB_MsgId_t       TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
     CFE_MSG_FcnCode_t    FcnCode   = SC_SWITCH_ATS_CC;
     bool                 ChecksumValid;
@@ -594,16 +504,6 @@ void SC_ProcessAtpCmd_Test_ChecksumFailedAtsAContinue(void)
 
     snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH,
              "ATS Command Failed Checksum: Command #%%d Skipped");
-
-    memset(&AtsCmdStatusTbl, 0, sizeof(AtsCmdStatusTbl));
-
-    SC_InitTables();
-
-    SC_OperData.AtsTblAddr[0]          = &AtsTable[0];
-    SC_OperData.AtsCtrlBlckAddr        = &AtsCtrlBlck;
-    SC_OperData.AtsCmdStatusTblAddr[0] = &AtsCmdStatusTbl[0];
-    SC_OperData.AtsCmdStatusTblAddr[1] = &AtsCmdStatusTbl[1];
-    SC_OperData.AtsInfoTblAddr         = &AtsInfoTbl;
 
     Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[0][0];
     Entry->CmdNumber = 1;
@@ -657,10 +557,6 @@ void SC_ProcessAtpCmd_Test_ChecksumFailedAtsAContinue(void)
 void SC_ProcessAtpCmd_Test_CmdNumberMismatchAtsA(void)
 {
     SC_AtsEntryHeader_t *Entry;
-    uint32               AtsTable[SC_ATS_BUFF_SIZE32];
-    SC_AtpControlBlock_t AtsCtrlBlck;
-    uint32               AtsCmdStatusTbl[SC_NUMBER_OF_ATS];
-    SC_AtsInfoTable_t    AtsInfoTbl;
     int32                strCmpResult;
     char                 ExpectedEventString[2][CFE_MISSION_EVS_MAX_MESSAGE_LENGTH];
 
@@ -668,14 +564,6 @@ void SC_ProcessAtpCmd_Test_CmdNumberMismatchAtsA(void)
              "ATS Command Number Mismatch: Command Skipped, expected: %%d received: %%d");
 
     snprintf(ExpectedEventString[1], CFE_MISSION_EVS_MAX_MESSAGE_LENGTH, "ATS %%c Aborted");
-
-    SC_InitTables();
-
-    SC_OperData.AtsTblAddr[0]          = &AtsTable[0];
-    SC_OperData.AtsCtrlBlckAddr        = &AtsCtrlBlck;
-    SC_OperData.AtsCmdStatusTblAddr[0] = &AtsCmdStatusTbl[0];
-    SC_OperData.AtsCmdStatusTblAddr[1] = &AtsCmdStatusTbl[1];
-    SC_OperData.AtsInfoTblAddr         = &AtsInfoTbl;
 
     Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[0][0];
     Entry->CmdNumber = 3;
@@ -725,10 +613,6 @@ void SC_ProcessAtpCmd_Test_CmdNumberMismatchAtsA(void)
 void SC_ProcessAtpCmd_Test_CmdNumberMismatchAtsB(void)
 {
     SC_AtsEntryHeader_t *Entry;
-    uint32               AtsTable[SC_ATS_BUFF_SIZE32];
-    SC_AtpControlBlock_t AtsCtrlBlck;
-    uint32               AtsCmdStatusTbl[SC_NUMBER_OF_ATS];
-    SC_AtsInfoTable_t    AtsInfoTbl;
     int32                strCmpResult;
     char                 ExpectedEventString[2][CFE_MISSION_EVS_MAX_MESSAGE_LENGTH];
 
@@ -736,14 +620,6 @@ void SC_ProcessAtpCmd_Test_CmdNumberMismatchAtsB(void)
              "ATS Command Number Mismatch: Command Skipped, expected: %%d received: %%d");
 
     snprintf(ExpectedEventString[1], CFE_MISSION_EVS_MAX_MESSAGE_LENGTH, "ATS %%c Aborted");
-
-    SC_InitTables();
-
-    SC_OperData.AtsTblAddr[1]          = &AtsTable[0];
-    SC_OperData.AtsCtrlBlckAddr        = &AtsCtrlBlck;
-    SC_OperData.AtsCmdStatusTblAddr[0] = &AtsCmdStatusTbl[0];
-    SC_OperData.AtsCmdStatusTblAddr[1] = &AtsCmdStatusTbl[1];
-    SC_OperData.AtsInfoTblAddr         = &AtsInfoTbl;
 
     Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[1][0];
     Entry->CmdNumber = 3;
@@ -793,25 +669,11 @@ void SC_ProcessAtpCmd_Test_CmdNumberMismatchAtsB(void)
 void SC_ProcessAtpCmd_Test_CmdNotLoaded(void)
 {
     SC_AtsEntryHeader_t *Entry;
-    uint32               AtsTable[SC_ATS_BUFF_SIZE32];
-    SC_AtpControlBlock_t AtsCtrlBlck;
-    uint32               AtsCmdStatusTbl[SC_NUMBER_OF_ATS];
-    SC_AtsInfoTable_t    AtsInfoTbl;
     int32                strCmpResult;
     char                 ExpectedEventString[CFE_MISSION_EVS_MAX_MESSAGE_LENGTH];
 
-    memset(AtsCmdStatusTbl, 0, sizeof(AtsCmdStatusTbl));
-
     snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH,
              "Invalid ATS Command Status: Command Skipped, Status: %%d");
-
-    SC_InitTables();
-
-    SC_OperData.AtsTblAddr[0]          = &AtsTable[0];
-    SC_OperData.AtsCtrlBlckAddr        = &AtsCtrlBlck;
-    SC_OperData.AtsCmdStatusTblAddr[0] = &AtsCmdStatusTbl[0];
-    SC_OperData.AtsCmdStatusTblAddr[1] = &AtsCmdStatusTbl[1];
-    SC_OperData.AtsInfoTblAddr         = &AtsInfoTbl;
 
     Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[0][0];
     Entry->CmdNumber = 1;
@@ -849,18 +711,6 @@ void SC_ProcessAtpCmd_Test_CmdNotLoaded(void)
 void SC_ProcessAtpCmd_Test_CompareAbsTime(void)
 {
     SC_AtsEntryHeader_t *Entry;
-    uint32               AtsTable[SC_ATS_BUFF_SIZE32];
-    SC_AtpControlBlock_t AtsCtrlBlck;
-    uint32               AtsCmdStatusTbl[SC_NUMBER_OF_ATS];
-    SC_AtsInfoTable_t    AtsInfoTbl;
-
-    SC_InitTables();
-
-    SC_OperData.AtsTblAddr[0]          = &AtsTable[0];
-    SC_OperData.AtsCtrlBlckAddr        = &AtsCtrlBlck;
-    SC_OperData.AtsCmdStatusTblAddr[0] = &AtsCmdStatusTbl[0];
-    SC_OperData.AtsCmdStatusTblAddr[1] = &AtsCmdStatusTbl[1];
-    SC_OperData.AtsInfoTblAddr         = &AtsInfoTbl;
 
     Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[0][0];
     Entry->CmdNumber = 1;
@@ -890,18 +740,6 @@ void SC_ProcessAtpCmd_Test_CompareAbsTime(void)
 void SC_ProcessAtpCmd_Test_NextProcNumber(void)
 {
     SC_AtsEntryHeader_t *Entry;
-    uint32               AtsTable[SC_ATS_BUFF_SIZE32];
-    SC_AtpControlBlock_t AtsCtrlBlck;
-    uint32               AtsCmdStatusTbl[SC_NUMBER_OF_ATS];
-    SC_AtsInfoTable_t    AtsInfoTbl;
-
-    SC_InitTables();
-
-    SC_OperData.AtsTblAddr[0]          = &AtsTable[0];
-    SC_OperData.AtsCtrlBlckAddr        = &AtsCtrlBlck;
-    SC_OperData.AtsCmdStatusTblAddr[0] = &AtsCmdStatusTbl[0];
-    SC_OperData.AtsCmdStatusTblAddr[1] = &AtsCmdStatusTbl[1];
-    SC_OperData.AtsInfoTblAddr         = &AtsInfoTbl;
 
     Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[0][0];
     Entry->CmdNumber = 1;
@@ -929,18 +767,6 @@ void SC_ProcessAtpCmd_Test_NextProcNumber(void)
 void SC_ProcessAtpCmd_Test_AtpState(void)
 {
     SC_AtsEntryHeader_t *Entry;
-    uint32               AtsTable[SC_ATS_BUFF_SIZE32];
-    SC_AtpControlBlock_t AtsCtrlBlck;
-    uint32               AtsCmdStatusTbl[SC_NUMBER_OF_ATS];
-    SC_AtsInfoTable_t    AtsInfoTbl;
-
-    SC_InitTables();
-
-    SC_OperData.AtsTblAddr[0]          = &AtsTable[0];
-    SC_OperData.AtsCtrlBlckAddr        = &AtsCtrlBlck;
-    SC_OperData.AtsCmdStatusTblAddr[0] = &AtsCmdStatusTbl[0];
-    SC_OperData.AtsCmdStatusTblAddr[1] = &AtsCmdStatusTbl[1];
-    SC_OperData.AtsInfoTblAddr         = &AtsInfoTbl;
 
     Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[0][0];
     Entry->CmdNumber = 1;
@@ -968,21 +794,9 @@ void SC_ProcessAtpCmd_Test_AtpState(void)
 void SC_ProcessAtpCmd_Test_CmdMid(void)
 {
     SC_AtsEntryHeader_t *Entry;
-    uint32               AtsTable[SC_ATS_BUFF_SIZE32];
-    SC_AtpControlBlock_t AtsCtrlBlck;
-    uint32               AtsCmdStatusTbl[SC_NUMBER_OF_ATS];
-    SC_AtsInfoTable_t    AtsInfoTbl;
     CFE_SB_MsgId_t       TestMsgId = CFE_SB_INVALID_MSG_ID;
     CFE_MSG_FcnCode_t    FcnCode   = SC_SWITCH_ATS_CC;
     bool                 ChecksumValid;
-
-    SC_InitTables();
-
-    SC_OperData.AtsTblAddr[0]          = &AtsTable[0];
-    SC_OperData.AtsCtrlBlckAddr        = &AtsCtrlBlck;
-    SC_OperData.AtsCmdStatusTblAddr[0] = &AtsCmdStatusTbl[0];
-    SC_OperData.AtsCmdStatusTblAddr[1] = &AtsCmdStatusTbl[1];
-    SC_OperData.AtsInfoTblAddr         = &AtsInfoTbl;
 
     Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[0][0];
     Entry->CmdNumber = 1;
@@ -1026,16 +840,7 @@ void SC_ProcessAtpCmd_Test_CmdMid(void)
 
 void SC_ProcessRtpCommand_Test_Nominal(void)
 {
-    uint32               RtsTable[SC_RTS_BUFF_SIZE32];
-    SC_RtpControlBlock_t RtsCtrlBlck;
     bool                 ChecksumValid;
-
-    SC_InitTables();
-
-    memset(&RtsCtrlBlck, 0, sizeof(RtsCtrlBlck));
-
-    SC_OperData.RtsTblAddr[0]   = &RtsTable[0];
-    SC_OperData.RtsCtrlBlckAddr = &RtsCtrlBlck;
 
     SC_AppData.NextCmdTime[SC_RTP]                                                   = 0;
     SC_AppData.CurrentTime                                                           = 1;
@@ -1063,21 +868,12 @@ void SC_ProcessRtpCommand_Test_Nominal(void)
 
 void SC_ProcessRtpCommand_Test_BadSoftwareBusReturn(void)
 {
-    uint32               RtsTable[SC_RTS_BUFF_SIZE32];
-    SC_RtpControlBlock_t RtsCtrlBlck;
     bool                 ChecksumValid;
     int32                strCmpResult;
     char                 ExpectedEventString[CFE_MISSION_EVS_MAX_MESSAGE_LENGTH];
 
     snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH,
              "RTS %%03d Command Distribution Failed: RTS Stopped. SB returned 0x%%08X");
-
-    SC_InitTables();
-
-    memset(&RtsCtrlBlck, 0, sizeof(RtsCtrlBlck));
-
-    SC_OperData.RtsTblAddr[0]   = &RtsTable[0];
-    SC_OperData.RtsCtrlBlckAddr = &RtsCtrlBlck;
 
     SC_AppData.NextCmdTime[SC_RTP]                                                   = 0;
     SC_AppData.CurrentTime                                                           = 1;
@@ -1117,20 +913,11 @@ void SC_ProcessRtpCommand_Test_BadSoftwareBusReturn(void)
 
 void SC_ProcessRtpCommand_Test_BadChecksum(void)
 {
-    uint32               RtsTable[SC_RTS_BUFF_SIZE32];
-    SC_RtpControlBlock_t RtsCtrlBlck;
     bool                 ChecksumValid;
     int32                strCmpResult;
     char                 ExpectedEventString[CFE_MISSION_EVS_MAX_MESSAGE_LENGTH];
 
     snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH, "RTS %%03d Command Failed Checksum: RTS Stopped");
-
-    SC_InitTables();
-
-    memset(&RtsCtrlBlck, 0, sizeof(RtsCtrlBlck));
-
-    SC_OperData.RtsTblAddr[0]   = &RtsTable[0];
-    SC_OperData.RtsCtrlBlckAddr = &RtsCtrlBlck;
 
     SC_AppData.NextCmdTime[SC_RTP]                                                   = 0;
     SC_AppData.CurrentTime                                                           = 1;
@@ -1167,16 +954,6 @@ void SC_ProcessRtpCommand_Test_BadChecksum(void)
 
 void SC_ProcessRtpCommand_Test_NextCmdTime(void)
 {
-    uint32               RtsTable[SC_RTS_BUFF_SIZE32];
-    SC_RtpControlBlock_t RtsCtrlBlck;
-
-    SC_InitTables();
-
-    memset(&RtsCtrlBlck, 0, sizeof(RtsCtrlBlck));
-
-    SC_OperData.RtsTblAddr[0]   = &RtsTable[0];
-    SC_OperData.RtsCtrlBlckAddr = &RtsCtrlBlck;
-
     SC_AppData.NextCmdTime[SC_RTP]                                                   = 1;
     SC_AppData.CurrentTime                                                           = 0;
     SC_AppData.NextProcNumber                                                        = SC_RTP;
@@ -1193,16 +970,6 @@ void SC_ProcessRtpCommand_Test_NextCmdTime(void)
 
 void SC_ProcessRtpCommand_Test_ProcNumber(void)
 {
-    uint32               RtsTable[SC_RTS_BUFF_SIZE32];
-    SC_RtpControlBlock_t RtsCtrlBlck;
-
-    SC_InitTables();
-
-    memset(&RtsCtrlBlck, 0, sizeof(RtsCtrlBlck));
-
-    SC_OperData.RtsTblAddr[0]   = &RtsTable[0];
-    SC_OperData.RtsCtrlBlckAddr = &RtsCtrlBlck;
-
     SC_AppData.NextCmdTime[SC_RTP]                                                   = 0;
     SC_AppData.CurrentTime                                                           = 1;
     SC_AppData.NextProcNumber                                                        = SC_NONE;
@@ -1219,16 +986,6 @@ void SC_ProcessRtpCommand_Test_ProcNumber(void)
 
 void SC_ProcessRtpCommand_Test_RtsNumberZero(void)
 {
-    uint32               RtsTable[SC_RTS_BUFF_SIZE32];
-    SC_RtpControlBlock_t RtsCtrlBlck;
-
-    SC_InitTables();
-
-    memset(&RtsCtrlBlck, 0, sizeof(RtsCtrlBlck));
-
-    SC_OperData.RtsTblAddr[0]   = &RtsTable[0];
-    SC_OperData.RtsCtrlBlckAddr = &RtsCtrlBlck;
-
     SC_AppData.NextCmdTime[SC_RTP]         = 0;
     SC_AppData.CurrentTime                 = 1;
     SC_AppData.NextProcNumber              = SC_RTP;
@@ -1244,16 +1001,6 @@ void SC_ProcessRtpCommand_Test_RtsNumberZero(void)
 
 void SC_ProcessRtpCommand_Test_RtsNumberHigh(void)
 {
-    uint32               RtsTable[SC_RTS_BUFF_SIZE32];
-    SC_RtpControlBlock_t RtsCtrlBlck;
-
-    SC_InitTables();
-
-    memset(&RtsCtrlBlck, 0, sizeof(RtsCtrlBlck));
-
-    SC_OperData.RtsTblAddr[0]   = &RtsTable[0];
-    SC_OperData.RtsCtrlBlckAddr = &RtsCtrlBlck;
-
     SC_AppData.NextCmdTime[SC_RTP]                                                   = 0;
     SC_AppData.CurrentTime                                                           = 1;
     SC_AppData.NextProcNumber                                                        = SC_RTP;
@@ -1270,16 +1017,6 @@ void SC_ProcessRtpCommand_Test_RtsNumberHigh(void)
 
 void SC_ProcessRtpCommand_Test_RtsStatus(void)
 {
-    uint32               RtsTable[SC_RTS_BUFF_SIZE32];
-    SC_RtpControlBlock_t RtsCtrlBlck;
-
-    SC_InitTables();
-
-    memset(&RtsCtrlBlck, 0, sizeof(RtsCtrlBlck));
-
-    SC_OperData.RtsTblAddr[0]   = &RtsTable[0];
-    SC_OperData.RtsCtrlBlckAddr = &RtsCtrlBlck;
-
     SC_AppData.NextCmdTime[SC_RTP]                                                   = 0;
     SC_AppData.CurrentTime                                                           = 1;
     SC_AppData.NextProcNumber                                                        = SC_RTP;
@@ -1297,29 +1034,7 @@ void SC_ProcessRtpCommand_Test_RtsStatus(void)
 void SC_SendHkPacket_Test(void)
 {
     uint8                i;
-    uint32               RtsTable[SC_RTS_BUFF_SIZE32];
-    uint32               AtsTable[SC_ATS_BUFF_SIZE32];
-    SC_AtpControlBlock_t AtsCtrlBlck;
-    uint32               AtsCmdStatusTbl[SC_NUMBER_OF_ATS];
-    SC_AtsInfoTable_t    AtsInfoTbl[SC_NUMBER_OF_ATS];
-    SC_RtpControlBlock_t RtsCtrlBlck;
     int32                LastRtsHkIndex = 0;
-
-    memset(&AtsCmdStatusTbl, 0, sizeof(AtsCmdStatusTbl));
-    memset(&AtsInfoTbl, 0, sizeof(AtsInfoTbl));
-
-    SC_OperData.AtsTblAddr[0]          = &AtsTable[0];
-    SC_OperData.AtsCtrlBlckAddr        = &AtsCtrlBlck;
-    SC_OperData.AtsCmdStatusTblAddr[0] = &AtsCmdStatusTbl[0];
-    SC_OperData.AtsCmdStatusTblAddr[1] = &AtsCmdStatusTbl[1];
-    SC_OperData.AtsInfoTblAddr         = &AtsInfoTbl[0];
-
-    memset(&RtsCtrlBlck, 0, sizeof(RtsCtrlBlck));
-
-    SC_OperData.RtsTblAddr[0]   = &RtsTable[0];
-    SC_OperData.RtsCtrlBlckAddr = &RtsCtrlBlck;
-
-    SC_InitTables();
 
     SC_OperData.HkPacket.CmdErrCtr                = 1;
     SC_OperData.HkPacket.CmdCtr                   = 2;
@@ -1463,23 +1178,6 @@ void SC_ProcessRequest_Test_HkMID(void)
      **/
 
     CFE_SB_MsgId_t       TestMsgId = CFE_SB_ValueToMsgId(SC_SEND_HK_MID);
-    uint32               RtsTable[SC_RTS_BUFF_SIZE32];
-    uint32               AtsTable[SC_ATS_BUFF_SIZE32];
-    SC_AtpControlBlock_t AtsCtrlBlck;
-    uint32               AtsCmdStatusTbl[SC_NUMBER_OF_ATS];
-    SC_AtsInfoTable_t    AtsInfoTbl[SC_NUMBER_OF_ATS];
-    SC_RtpControlBlock_t RtsCtrlBlck;
-
-    SC_OperData.AtsTblAddr[0]          = &AtsTable[0];
-    SC_OperData.AtsCtrlBlckAddr        = &AtsCtrlBlck;
-    SC_OperData.AtsCmdStatusTblAddr[0] = &AtsCmdStatusTbl[0];
-    SC_OperData.AtsCmdStatusTblAddr[1] = &AtsCmdStatusTbl[1];
-    SC_OperData.AtsInfoTblAddr         = &AtsInfoTbl[0];
-
-    SC_OperData.RtsTblAddr[0]   = &RtsTable[0];
-    SC_OperData.RtsCtrlBlckAddr = &RtsCtrlBlck;
-
-    SC_InitTables();
 
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
 
@@ -1500,23 +1198,6 @@ void SC_ProcessRequest_Test_HkMIDNoVerifyCmdLength(void)
      **/
 
     CFE_SB_MsgId_t       TestMsgId = CFE_SB_ValueToMsgId(SC_SEND_HK_MID);
-    uint32               RtsTable[SC_RTS_BUFF_SIZE32];
-    uint32               AtsTable[SC_ATS_BUFF_SIZE32];
-    SC_AtpControlBlock_t AtsCtrlBlck;
-    uint32               AtsCmdStatusTbl[SC_NUMBER_OF_ATS];
-    SC_AtsInfoTable_t    AtsInfoTbl[SC_NUMBER_OF_ATS];
-    SC_RtpControlBlock_t RtsCtrlBlck;
-
-    SC_OperData.AtsTblAddr[0]          = &AtsTable[0];
-    SC_OperData.AtsCtrlBlckAddr        = &AtsCtrlBlck;
-    SC_OperData.AtsCmdStatusTblAddr[0] = &AtsCmdStatusTbl[0];
-    SC_OperData.AtsCmdStatusTblAddr[1] = &AtsCmdStatusTbl[1];
-    SC_OperData.AtsInfoTblAddr         = &AtsInfoTbl[0];
-
-    SC_OperData.RtsTblAddr[0]   = &RtsTable[0];
-    SC_OperData.RtsCtrlBlckAddr = &RtsCtrlBlck;
-
-    SC_InitTables();
 
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
 
@@ -1535,25 +1216,8 @@ void SC_ProcessRequest_Test_HkMIDAutoStartRts(void)
      **/
 
     CFE_SB_MsgId_t       TestMsgId = CFE_SB_ValueToMsgId(SC_SEND_HK_MID);
-    uint32               RtsTable[SC_RTS_BUFF_SIZE32];
-    uint32               AtsTable[SC_ATS_BUFF_SIZE32];
-    SC_AtpControlBlock_t AtsCtrlBlck;
-    uint32               AtsCmdStatusTbl[SC_NUMBER_OF_ATS];
-    SC_AtsInfoTable_t    AtsInfoTbl[SC_NUMBER_OF_ATS];
-    SC_RtpControlBlock_t RtsCtrlBlck;
-
-    SC_OperData.AtsTblAddr[0]          = &AtsTable[0];
-    SC_OperData.AtsCtrlBlckAddr        = &AtsCtrlBlck;
-    SC_OperData.AtsCmdStatusTblAddr[0] = &AtsCmdStatusTbl[0];
-    SC_OperData.AtsCmdStatusTblAddr[1] = &AtsCmdStatusTbl[1];
-    SC_OperData.AtsInfoTblAddr         = &AtsInfoTbl[0];
-
-    SC_OperData.RtsTblAddr[0]   = &RtsTable[0];
-    SC_OperData.RtsCtrlBlckAddr = &RtsCtrlBlck;
 
     SC_AppData.AutoStartRTS = 1;
-
-    SC_InitTables();
 
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
 
@@ -1577,26 +1241,9 @@ void SC_ProcessRequest_Test_HkMIDAutoStartRtsLoaded(void)
      **/
 
     CFE_SB_MsgId_t       TestMsgId = CFE_SB_ValueToMsgId(SC_SEND_HK_MID);
-    uint32               RtsTable[SC_RTS_BUFF_SIZE32];
-    uint32               AtsTable[SC_ATS_BUFF_SIZE32];
-    SC_AtpControlBlock_t AtsCtrlBlck;
-    uint32               AtsCmdStatusTbl[SC_NUMBER_OF_ATS];
-    SC_AtsInfoTable_t    AtsInfoTbl[SC_NUMBER_OF_ATS];
-    SC_RtpControlBlock_t RtsCtrlBlck;
-
-    SC_OperData.AtsTblAddr[0]          = &AtsTable[0];
-    SC_OperData.AtsCtrlBlckAddr        = &AtsCtrlBlck;
-    SC_OperData.AtsCmdStatusTblAddr[0] = &AtsCmdStatusTbl[0];
-    SC_OperData.AtsCmdStatusTblAddr[1] = &AtsCmdStatusTbl[1];
-    SC_OperData.AtsInfoTblAddr         = &AtsInfoTbl[0];
-
-    SC_OperData.RtsTblAddr[0]   = &RtsTable[0];
-    SC_OperData.RtsCtrlBlckAddr = &RtsCtrlBlck;
 
     SC_AppData.AutoStartRTS                                           = 1;
     SC_OperData.RtsInfoTblAddr[SC_AppData.AutoStartRTS - 1].RtsStatus = SC_LOADED;
-
-    SC_InitTables();
 
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
 
@@ -1619,28 +1266,11 @@ void SC_ProcessRequest_Test_1HzWakeupNONE(void)
      **  Test case: SC_1HZ_WAKEUP_MID with SC_AppData.NextProcNumber == SC_NONE
      **/
     CFE_SB_MsgId_t       TestMsgId = CFE_SB_ValueToMsgId(SC_1HZ_WAKEUP_MID);
-    uint32               RtsTable[SC_RTS_BUFF_SIZE32];
-    uint32               AtsTable[SC_ATS_BUFF_SIZE32];
-    SC_AtpControlBlock_t AtsCtrlBlck;
-    uint32               AtsCmdStatusTbl[SC_NUMBER_OF_ATS];
-    SC_AtsInfoTable_t    AtsInfoTbl[SC_NUMBER_OF_ATS];
-    SC_RtpControlBlock_t RtsCtrlBlck;
-
-    SC_OperData.AtsTblAddr[0]          = &AtsTable[0];
-    SC_OperData.AtsCtrlBlckAddr        = &AtsCtrlBlck;
-    SC_OperData.AtsCmdStatusTblAddr[0] = &AtsCmdStatusTbl[0];
-    SC_OperData.AtsCmdStatusTblAddr[1] = &AtsCmdStatusTbl[1];
-    SC_OperData.AtsInfoTblAddr         = &AtsInfoTbl[0];
-
-    SC_OperData.RtsTblAddr[0]   = &RtsTable[0];
-    SC_OperData.RtsCtrlBlckAddr = &RtsCtrlBlck;
 
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
 
     UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
-
-    SC_InitTables();
 
     SC_OperData.AtsCtrlBlckAddr->SwitchPendFlag = true;
     SC_AppData.NextProcNumber                   = SC_NONE;
@@ -1663,28 +1293,11 @@ void SC_ProcessRequest_Test_1HzWakeupNoSwitchPending(void)
      **  Test case: SC_1HZ_WAKEUP_MID with SC_OperData.AtsCtrlBlckAddr->SwitchPendFlag == false
      **/
     CFE_SB_MsgId_t       TestMsgId = CFE_SB_ValueToMsgId(SC_1HZ_WAKEUP_MID);
-    uint32               RtsTable[SC_RTS_BUFF_SIZE32];
-    uint32               AtsTable[SC_ATS_BUFF_SIZE32];
-    SC_AtpControlBlock_t AtsCtrlBlck;
-    uint32               AtsCmdStatusTbl[SC_NUMBER_OF_ATS];
-    SC_AtsInfoTable_t    AtsInfoTbl[SC_NUMBER_OF_ATS];
-    SC_RtpControlBlock_t RtsCtrlBlck;
-
-    SC_OperData.AtsTblAddr[0]          = &AtsTable[0];
-    SC_OperData.AtsCtrlBlckAddr        = &AtsCtrlBlck;
-    SC_OperData.AtsCmdStatusTblAddr[0] = &AtsCmdStatusTbl[0];
-    SC_OperData.AtsCmdStatusTblAddr[1] = &AtsCmdStatusTbl[1];
-    SC_OperData.AtsInfoTblAddr         = &AtsInfoTbl[0];
-
-    SC_OperData.RtsTblAddr[0]   = &RtsTable[0];
-    SC_OperData.RtsCtrlBlckAddr = &RtsCtrlBlck;
 
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
 
     UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
-
-    SC_InitTables();
 
     SC_OperData.AtsCtrlBlckAddr->SwitchPendFlag = false;
     SC_AppData.NextProcNumber                   = SC_NONE;
@@ -1707,30 +1320,11 @@ void SC_ProcessRequest_Test_1HzWakeupAtpNotExecutionTime(void)
      **  Test case: SC_1HZ_WAKEUP_MID with a pending ATP command that should not execute yet
      **/
     CFE_SB_MsgId_t       TestMsgId = CFE_SB_ValueToMsgId(SC_1HZ_WAKEUP_MID);
-    uint32               RtsTable[SC_RTS_BUFF_SIZE32];
-    uint32               AtsTable[SC_ATS_BUFF_SIZE32];
-    SC_AtpControlBlock_t AtsCtrlBlck;
-    uint32               AtsCmdStatusTbl[SC_NUMBER_OF_ATS];
-    SC_AtsInfoTable_t    AtsInfoTbl[SC_NUMBER_OF_ATS];
-    SC_RtpControlBlock_t RtsCtrlBlck;
-
-    memset(&AtsCtrlBlck, 0, sizeof(AtsCtrlBlck));
-
-    SC_OperData.AtsTblAddr[0]          = &AtsTable[0];
-    SC_OperData.AtsCtrlBlckAddr        = &AtsCtrlBlck;
-    SC_OperData.AtsCmdStatusTblAddr[0] = &AtsCmdStatusTbl[0];
-    SC_OperData.AtsCmdStatusTblAddr[1] = &AtsCmdStatusTbl[1];
-    SC_OperData.AtsInfoTblAddr         = &AtsInfoTbl[0];
-
-    SC_OperData.RtsTblAddr[0]   = &RtsTable[0];
-    SC_OperData.RtsCtrlBlckAddr = &RtsCtrlBlck;
 
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
 
     UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
-
-    SC_InitTables();
 
     SC_OperData.AtsCtrlBlckAddr->SwitchPendFlag = true;
     SC_AppData.NextProcNumber                   = SC_ATP;
@@ -1752,24 +1346,7 @@ void SC_ProcessRequest_Test_1HzWakeupRtpExecutionTime(void)
      **  Test case: SC_1HZ_WAKEUP_MID with a pending RTP command that needs to execute immediately
      **/
     CFE_SB_MsgId_t       TestMsgId = CFE_SB_ValueToMsgId(SC_1HZ_WAKEUP_MID);
-    uint32               RtsTable[SC_RTS_BUFF_SIZE32];
-    uint32               AtsTable[SC_ATS_BUFF_SIZE32];
-    SC_AtpControlBlock_t AtsCtrlBlck;
-    uint32               AtsCmdStatusTbl[SC_NUMBER_OF_ATS];
-    SC_AtsInfoTable_t    AtsInfoTbl[SC_NUMBER_OF_ATS];
-    SC_RtpControlBlock_t RtsCtrlBlck;
-
-    memset(&AtsCtrlBlck, 0, sizeof(AtsCtrlBlck));
-    memset(&RtsCtrlBlck, 0, sizeof(RtsCtrlBlck));
-
-    SC_OperData.AtsTblAddr[0]          = &AtsTable[0];
-    SC_OperData.AtsCtrlBlckAddr        = &AtsCtrlBlck;
-    SC_OperData.AtsCmdStatusTblAddr[0] = &AtsCmdStatusTbl[0];
-    SC_OperData.AtsCmdStatusTblAddr[1] = &AtsCmdStatusTbl[1];
-    SC_OperData.AtsInfoTblAddr         = &AtsInfoTbl[0];
-
-    SC_OperData.RtsTblAddr[0]   = &RtsTable[0];
-    SC_OperData.RtsCtrlBlckAddr = &RtsCtrlBlck;
+    SC_AtsEntryHeader_t *Entry;
 
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
 
@@ -1781,11 +1358,6 @@ void SC_ProcessRequest_Test_1HzWakeupRtpExecutionTime(void)
     SC_CMDS_TEST_SC_UpdateNextTimeHook_RunCount = 0;
     UT_SetHookFunction(UT_KEY(SC_UpdateNextTime), Ut_SC_UpdateNextTimeHook, NULL);
 
-    SC_AtsEntryHeader_t *Entry;
-
-    SC_InitTables();
-
-    SC_OperData.AtsTblAddr[0] = &AtsTable[0];
     Entry                     = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[0][0];
     Entry->CmdNumber          = 1;
 
@@ -1817,24 +1389,6 @@ void SC_ProcessRequest_Test_1HzWakeupRtpExecutionTimeTooManyCmds(void)
      *commands are being sent at once
      **/
     CFE_SB_MsgId_t       TestMsgId = CFE_SB_ValueToMsgId(SC_1HZ_WAKEUP_MID);
-    uint32               RtsTable[SC_RTS_BUFF_SIZE32];
-    uint32               AtsTable[SC_ATS_BUFF_SIZE32];
-    SC_AtpControlBlock_t AtsCtrlBlck;
-    uint32               AtsCmdStatusTbl[SC_NUMBER_OF_ATS];
-    SC_AtsInfoTable_t    AtsInfoTbl[SC_NUMBER_OF_ATS];
-    SC_RtpControlBlock_t RtsCtrlBlck;
-
-    memset(&AtsCtrlBlck, 0, sizeof(AtsCtrlBlck));
-    memset(&RtsCtrlBlck, 0, sizeof(RtsCtrlBlck));
-
-    SC_OperData.AtsTblAddr[0]          = &AtsTable[0];
-    SC_OperData.AtsCtrlBlckAddr        = &AtsCtrlBlck;
-    SC_OperData.AtsCmdStatusTblAddr[0] = &AtsCmdStatusTbl[0];
-    SC_OperData.AtsCmdStatusTblAddr[1] = &AtsCmdStatusTbl[1];
-    SC_OperData.AtsInfoTblAddr         = &AtsInfoTbl[0];
-
-    SC_OperData.RtsTblAddr[0]   = &RtsTable[0];
-    SC_OperData.RtsCtrlBlckAddr = &RtsCtrlBlck;
 
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
 
@@ -1842,8 +1396,6 @@ void SC_ProcessRequest_Test_1HzWakeupRtpExecutionTimeTooManyCmds(void)
     UT_SetDataBuffer(UT_KEY(CFE_MSG_ValidateChecksum), &ChecksumValid, sizeof(ChecksumValid), false);
 
     UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
-
-    SC_InitTables();
 
     SC_AppData.NextProcNumber             = SC_RTP;
     SC_AppData.NextCmdTime[SC_RTP]        = 0;
@@ -2046,8 +1598,6 @@ void SC_ProcessCommand_Test_StartAts(void)
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
 
-    SC_InitTables();
-
     UT_CmdBuf.StartAtsCmd.AtsId = 1;
 
     /* Execute the function being tested */
@@ -2072,8 +1622,6 @@ void SC_ProcessCommand_Test_StopAts(void)
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
 
-    SC_InitTables();
-
     /* Execute the function being tested */
     SC_ProcessCommand(&UT_CmdBuf.Buf);
 
@@ -2095,8 +1643,6 @@ void SC_ProcessCommand_Test_StartRts(void)
 
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-
-    SC_InitTables();
 
     /* Execute the function being tested */
     SC_ProcessCommand(&UT_CmdBuf.Buf);
@@ -2120,8 +1666,6 @@ void SC_ProcessCommand_Test_StopRts(void)
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
 
-    SC_InitTables();
-
     /* Execute the function being tested */
     SC_ProcessCommand(&UT_CmdBuf.Buf);
 
@@ -2143,8 +1687,6 @@ void SC_ProcessCommand_Test_DisableRts(void)
 
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-
-    SC_InitTables();
 
     /* Execute the function being tested */
     SC_ProcessCommand(&UT_CmdBuf.Buf);
@@ -2168,8 +1710,6 @@ void SC_ProcessCommand_Test_EnableRts(void)
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
 
-    SC_InitTables();
-
     /* Execute the function being tested */
     SC_ProcessCommand(&UT_CmdBuf.Buf);
 
@@ -2191,8 +1731,6 @@ void SC_ProcessCommand_Test_SwitchAts(void)
 
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-
-    SC_InitTables();
 
     /* Execute the function being tested */
     SC_ProcessCommand(&UT_CmdBuf.Buf);
@@ -2216,8 +1754,6 @@ void SC_ProcessCommand_Test_JumpAts(void)
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
 
-    SC_InitTables();
-
     /* Execute the function being tested */
     SC_ProcessCommand(&UT_CmdBuf.Buf);
 
@@ -2239,8 +1775,6 @@ void SC_ProcessCommand_Test_ContinueAtsOnFailure(void)
 
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-
-    SC_InitTables();
 
     /* Execute the function being tested */
     SC_ProcessCommand(&UT_CmdBuf.Buf);
@@ -2264,8 +1798,6 @@ void SC_ProcessCommand_Test_AppendAts(void)
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
 
-    SC_InitTables();
-
     /* Execute the function being tested */
     SC_ProcessCommand(&UT_CmdBuf.Buf);
 
@@ -2283,16 +1815,11 @@ void SC_ProcessCommand_Test_TableManageAtsTableNominal(void)
      **/
 
     SC_AtsEntryHeader_t *Entry;
-    uint32               AtsTable[SC_ATS_BUFF_SIZE32];
     CFE_SB_MsgId_t       TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
     CFE_MSG_FcnCode_t    FcnCode   = SC_MANAGE_TABLE_CC;
 
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-
-    SC_InitTables();
-
-    SC_OperData.AtsTblAddr[0] = &AtsTable[0];
 
     Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[0][0];
     Entry->CmdNumber = 0;
@@ -2329,8 +1856,6 @@ void SC_ProcessCommand_Test_TableManageAtsTableGetAddressError(void)
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
 
-    SC_InitTables();
-
     UT_CmdBuf.NotifyCmd.Payload.Parameter = SC_TBL_ID_ATS_0;
 
     /* Set to generate error message SC_TABLE_MANAGE_ATS_ERR_EID */
@@ -2362,16 +1887,11 @@ void SC_ProcessCommand_Test_TableManageAtsTableID(void)
      **/
 
     SC_AtsEntryHeader_t *Entry;
-    uint32               AtsTable[SC_ATS_BUFF_SIZE32];
     CFE_SB_MsgId_t       TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
     CFE_MSG_FcnCode_t    FcnCode   = SC_MANAGE_TABLE_CC;
 
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-
-    SC_InitTables();
-
-    SC_OperData.AtsTblAddr[0] = &AtsTable[0];
 
     Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[0][0];
     Entry->CmdNumber = 0;
@@ -2422,16 +1942,11 @@ void SC_ProcessCommand_Test_TableManageAtsTableGetAddressNeverLoaded(void)
      **/
 
     SC_AtsEntryHeader_t *Entry;
-    uint32               AtsTable[SC_ATS_BUFF_SIZE32];
     CFE_SB_MsgId_t       TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
     CFE_MSG_FcnCode_t    FcnCode   = SC_MANAGE_TABLE_CC;
 
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-
-    SC_InitTables();
-
-    SC_OperData.AtsTblAddr[0] = &AtsTable[0];
 
     Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[0][0];
     Entry->CmdNumber = 0;
@@ -2457,16 +1972,11 @@ void SC_ProcessCommand_Test_TableManageAtsTableGetAddressSuccess(void)
      **/
 
     SC_AtsEntryHeader_t *Entry;
-    uint32               AtsTable[SC_ATS_BUFF_SIZE32];
     CFE_SB_MsgId_t       TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
     CFE_MSG_FcnCode_t    FcnCode   = SC_MANAGE_TABLE_CC;
 
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-
-    SC_InitTables();
-
-    SC_OperData.AtsTblAddr[0] = &AtsTable[0];
 
     Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[0][0];
     Entry->CmdNumber = 0;
@@ -2492,16 +2002,11 @@ void SC_ProcessCommand_Test_TableManageAppendTableNominal(void)
      **/
 
     SC_AtsEntryHeader_t *Entry;
-    uint32               AtsAppendTable[SC_APPEND_BUFF_SIZE32];
     CFE_SB_MsgId_t       TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
     CFE_MSG_FcnCode_t    FcnCode   = SC_MANAGE_TABLE_CC;
 
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-
-    SC_InitTables();
-
-    SC_OperData.AppendTblAddr = &AtsAppendTable[0];
 
     Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AppendTblAddr;
     Entry->CmdNumber = 0;
@@ -2538,8 +2043,6 @@ void SC_ProcessCommand_Test_TableManageAppendTableGetAddressError(void)
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
 
-    SC_InitTables();
-
     UT_CmdBuf.NotifyCmd.Payload.Parameter = SC_TBL_ID_APPEND;
 
     /* Set to generate error message SC_TABLE_MANAGE_APPEND_ERR_EID */
@@ -2571,16 +2074,11 @@ void SC_ProcessCommand_Test_TableManageAppendTableGetAddressNeverLoaded(void)
      **/
 
     SC_AtsEntryHeader_t *Entry;
-    uint32               AtsAppendTable[SC_APPEND_BUFF_SIZE32];
     CFE_SB_MsgId_t       TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
     CFE_MSG_FcnCode_t    FcnCode   = SC_MANAGE_TABLE_CC;
 
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-
-    SC_InitTables();
-
-    SC_OperData.AppendTblAddr = &AtsAppendTable[0];
 
     Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AppendTblAddr;
     Entry->CmdNumber = 0;
@@ -2606,16 +2104,11 @@ void SC_ProcessCommand_Test_TableManageAppendTableGetAddressSuccess(void)
      **/
 
     SC_AtsEntryHeader_t *Entry;
-    uint32               AtsAppendTable[SC_APPEND_BUFF_SIZE32];
     CFE_SB_MsgId_t       TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
     CFE_MSG_FcnCode_t    FcnCode   = SC_MANAGE_TABLE_CC;
 
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-
-    SC_InitTables();
-
-    SC_OperData.AppendTblAddr = &AtsAppendTable[0];
 
     Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AppendTblAddr;
     Entry->CmdNumber = 0;
@@ -2640,16 +2133,11 @@ void SC_ProcessCommand_Test_TableManageRtsTableNominal(void)
      **  combine the tests for each command with the tests for reaching the command from SC_ProcessCommand.
      **/
 
-    uint32            RtsTable[SC_RTS_BUFF_SIZE32];
     CFE_SB_MsgId_t    TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
     CFE_MSG_FcnCode_t FcnCode   = SC_MANAGE_TABLE_CC;
 
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-
-    SC_InitTables();
-
-    SC_OperData.RtsTblAddr[0] = &RtsTable[0];
 
     UT_CmdBuf.NotifyCmd.Payload.Parameter = SC_TBL_ID_RTS_0;
 
@@ -2683,8 +2171,6 @@ void SC_ProcessCommand_Test_TableManageRtsTableGetAddressError(void)
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
 
-    SC_InitTables();
-
     UT_CmdBuf.NotifyCmd.Payload.Parameter = SC_TBL_ID_RTS_0;
 
     /* Set to generate error message SC_TABLE_MANAGE_RTS_ERR_EID */
@@ -2715,16 +2201,11 @@ void SC_ProcessCommand_Test_TableManageRtsTableID(void)
      **  combine the tests for each command with the tests for reaching the command from SC_ProcessCommand.
      **/
 
-    uint32            RtsTable[SC_RTS_BUFF_SIZE32];
     CFE_SB_MsgId_t    TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
     CFE_MSG_FcnCode_t FcnCode   = SC_MANAGE_TABLE_CC;
 
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-
-    SC_InitTables();
-
-    SC_OperData.RtsTblAddr[0] = &RtsTable[0];
 
     /* test TableID >= SC_TBL_ID_RTS_0 */
     UT_CmdBuf.NotifyCmd.Payload.Parameter = 0;
@@ -2771,16 +2252,11 @@ void SC_ProcessCommand_Test_TableManageRtsTableGetAddressNeverLoaded(void)
      **  combine the tests for each command with the tests for reaching the command from SC_ProcessCommand.
      **/
 
-    uint32            RtsTable[SC_RTS_BUFF_SIZE32];
     CFE_SB_MsgId_t    TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
     CFE_MSG_FcnCode_t FcnCode   = SC_MANAGE_TABLE_CC;
 
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-
-    SC_InitTables();
-
-    SC_OperData.RtsTblAddr[0] = &RtsTable[0];
 
     UT_CmdBuf.NotifyCmd.Payload.Parameter = SC_TBL_ID_RTS_0;
 
@@ -2802,16 +2278,11 @@ void SC_ProcessCommand_Test_TableManageRtsTableGetAddressSuccess(void)
      **  combine the tests for each command with the tests for reaching the command from SC_ProcessCommand.
      **/
 
-    uint32            RtsTable[SC_RTS_BUFF_SIZE32];
     CFE_SB_MsgId_t    TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
     CFE_MSG_FcnCode_t FcnCode   = SC_MANAGE_TABLE_CC;
 
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-
-    SC_InitTables();
-
-    SC_OperData.RtsTblAddr[0] = &RtsTable[0];
 
     UT_CmdBuf.NotifyCmd.Payload.Parameter = SC_TBL_ID_RTS_0;
 
@@ -2839,8 +2310,6 @@ void SC_ProcessCommand_Test_TableManageRtsInfo(void)
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
 
-    SC_InitTables();
-
     UT_CmdBuf.NotifyCmd.Payload.Parameter = SC_TBL_ID_RTS_INFO;
 
     /* Execute the function being tested */
@@ -2864,8 +2333,6 @@ void SC_ProcessCommand_Test_TableManageRtpCtrl(void)
 
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-
-    SC_InitTables();
 
     UT_CmdBuf.NotifyCmd.Payload.Parameter = SC_TBL_ID_RTP_CTRL;
 
@@ -2891,8 +2358,6 @@ void SC_ProcessCommand_Test_TableManageAtsInfo(void)
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
 
-    SC_InitTables();
-
     UT_CmdBuf.NotifyCmd.Payload.Parameter = SC_TBL_ID_ATS_INFO;
 
     /* Execute the function being tested */
@@ -2917,8 +2382,6 @@ void SC_ProcessCommand_Test_TableManageAtpCtrl(void)
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
 
-    SC_InitTables();
-
     UT_CmdBuf.NotifyCmd.Payload.Parameter = SC_TBL_ID_ATP_CTRL;
 
     /* Execute the function being tested */
@@ -2942,8 +2405,6 @@ void SC_ProcessCommand_Test_TableManageAtsCmdStatus(void)
 
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-
-    SC_InitTables();
 
     UT_CmdBuf.NotifyCmd.Payload.Parameter = SC_TBL_ID_ATS_CMD_0;
 
@@ -2973,8 +2434,6 @@ void SC_ProcessCommand_Test_TableManageInvalidTableID(void)
 
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-
-    SC_InitTables();
 
     UT_CmdBuf.NotifyCmd.Payload.Parameter = 999;
 
@@ -3009,8 +2468,6 @@ void SC_ProcessCommand_Test_StartRtsGrp(void)
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
 
-    SC_InitTables();
-
     /* Execute the function being tested */
     SC_ProcessCommand(&UT_CmdBuf.Buf);
 
@@ -3032,8 +2489,6 @@ void SC_ProcessCommand_Test_StopRtsGrp(void)
 
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-
-    SC_InitTables();
 
     /* Execute the function being tested */
     SC_ProcessCommand(&UT_CmdBuf.Buf);
@@ -3057,8 +2512,6 @@ void SC_ProcessCommand_Test_DisableRtsGrp(void)
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
 
-    SC_InitTables();
-
     /* Execute the function being tested */
     SC_ProcessCommand(&UT_CmdBuf.Buf);
 
@@ -3080,8 +2533,6 @@ void SC_ProcessCommand_Test_EnableRtsGrp(void)
 
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-
-    SC_InitTables();
 
     /* Execute the function being tested */
     SC_ProcessCommand(&UT_CmdBuf.Buf);
@@ -3109,8 +2560,6 @@ void SC_ProcessCommand_Test_InvalidCmdError(void)
 
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-
-    SC_InitTables();
 
     /* Execute the function being tested */
     SC_ProcessCommand(&UT_CmdBuf.Buf);

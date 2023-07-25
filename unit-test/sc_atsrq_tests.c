@@ -40,14 +40,6 @@
 #include "utassert.h"
 #include "utstubs.h"
 
-/* sc_atsrq_tests globals */
-
-SC_AtsInfoTable_t SC_ATSRQ_TEST_GlobalAtsInfoTable[2];
-
-SC_AtpControlBlock_t SC_ATSRQ_TEST_GlobalAtsCtrlBlck;
-
-uint32 SC_ATSRQ_TEST_GlobalAtsCmdStatus[SC_NUMBER_OF_ATS];
-
 /*
  * Function Definitions
  */
@@ -85,11 +77,6 @@ void SC_StartAtsCmd_Test_NominalA(void)
 
     UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
 
-    SC_OperData.AtsInfoTblAddr  = &SC_ATSRQ_TEST_GlobalAtsInfoTable[0];
-    SC_OperData.AtsCtrlBlckAddr = &SC_ATSRQ_TEST_GlobalAtsCtrlBlck;
-
-    SC_InitTables();
-
     UT_CmdBuf.StartAtsCmd.AtsId                    = 1;
     SC_OperData.AtsInfoTblAddr[0].NumberOfCommands = 1;
     SC_OperData.AtsCtrlBlckAddr->AtpState          = SC_IDLE;
@@ -124,11 +111,6 @@ void SC_StartAtsCmd_Test_NominalB(void)
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
 
     UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
-
-    SC_OperData.AtsInfoTblAddr  = &SC_ATSRQ_TEST_GlobalAtsInfoTable[0];
-    SC_OperData.AtsCtrlBlckAddr = &SC_ATSRQ_TEST_GlobalAtsCtrlBlck;
-
-    SC_InitTables();
 
     UT_CmdBuf.StartAtsCmd.AtsId                    = 2;
     SC_OperData.AtsInfoTblAddr[1].NumberOfCommands = 1;
@@ -168,12 +150,6 @@ void SC_StartAtsCmd_Test_CouldNotStart(void)
     UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
     UT_SetDeferredRetcode(UT_KEY(SC_CompareAbsTime), 1, true);
 
-    SC_OperData.AtsInfoTblAddr         = &SC_ATSRQ_TEST_GlobalAtsInfoTable[0];
-    SC_OperData.AtsCtrlBlckAddr        = &SC_ATSRQ_TEST_GlobalAtsCtrlBlck;
-    SC_OperData.AtsCmdStatusTblAddr[0] = &SC_ATSRQ_TEST_GlobalAtsCmdStatus[0];
-
-    SC_InitTables();
-
     UT_CmdBuf.StartAtsCmd.AtsId                    = 1;
     SC_OperData.AtsInfoTblAddr[0].NumberOfCommands = 1;
     SC_OperData.AtsCtrlBlckAddr->AtpState          = SC_IDLE;
@@ -212,13 +188,9 @@ void SC_StartAtsCmd_Test_NoCommandsA(void)
 
     UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
 
-    SC_OperData.AtsInfoTblAddr  = &SC_ATSRQ_TEST_GlobalAtsInfoTable[0];
-    SC_OperData.AtsCtrlBlckAddr = &SC_ATSRQ_TEST_GlobalAtsCtrlBlck;
-
-    SC_InitTables();
-
     UT_CmdBuf.StartAtsCmd.AtsId                    = 1;
     SC_OperData.AtsInfoTblAddr[0].NumberOfCommands = 0;
+    SC_OperData.AtsCtrlBlckAddr->AtpState          = SC_IDLE;
 
     /* Execute the function being tested */
     SC_StartAtsCmd(&UT_CmdBuf.Buf);
@@ -251,13 +223,9 @@ void SC_StartAtsCmd_Test_NoCommandsB(void)
 
     UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
 
-    SC_OperData.AtsInfoTblAddr  = &SC_ATSRQ_TEST_GlobalAtsInfoTable[0];
-    SC_OperData.AtsCtrlBlckAddr = &SC_ATSRQ_TEST_GlobalAtsCtrlBlck;
-
-    SC_InitTables();
-
     UT_CmdBuf.StartAtsCmd.AtsId                    = 2;
     SC_OperData.AtsInfoTblAddr[1].NumberOfCommands = 0;
+    SC_OperData.AtsCtrlBlckAddr->AtpState          = SC_IDLE;
 
     /* Execute the function being tested */
     SC_StartAtsCmd(&UT_CmdBuf.Buf);
@@ -289,11 +257,6 @@ void SC_StartAtsCmd_Test_InUse(void)
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
 
     UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
-
-    SC_OperData.AtsInfoTblAddr  = &SC_ATSRQ_TEST_GlobalAtsInfoTable[0];
-    SC_OperData.AtsCtrlBlckAddr = &SC_ATSRQ_TEST_GlobalAtsCtrlBlck;
-
-    SC_InitTables();
 
     UT_CmdBuf.StartAtsCmd.AtsId           = 1;
     SC_OperData.AtsCtrlBlckAddr->AtpState = SC_EXECUTING;
@@ -329,11 +292,6 @@ void SC_StartAtsCmd_Test_InvalidAtsId(void)
 
     UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
 
-    SC_OperData.AtsInfoTblAddr  = &SC_ATSRQ_TEST_GlobalAtsInfoTable[0];
-    SC_OperData.AtsCtrlBlckAddr = &SC_ATSRQ_TEST_GlobalAtsCtrlBlck;
-
-    SC_InitTables();
-
     UT_CmdBuf.StartAtsCmd.AtsId           = 99;
     SC_OperData.AtsCtrlBlckAddr->AtpState = SC_EXECUTING;
 
@@ -368,11 +326,6 @@ void SC_StartAtsCmd_Test_InvalidAtsIdZero(void)
 
     UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
 
-    SC_OperData.AtsInfoTblAddr  = &SC_ATSRQ_TEST_GlobalAtsInfoTable[0];
-    SC_OperData.AtsCtrlBlckAddr = &SC_ATSRQ_TEST_GlobalAtsCtrlBlck;
-
-    SC_InitTables();
-
     UT_CmdBuf.StartAtsCmd.AtsId           = 0;
     SC_OperData.AtsCtrlBlckAddr->AtpState = SC_EXECUTING;
 
@@ -403,11 +356,6 @@ void SC_StartAtsCmd_Test_InvalidCmdLength(void)
 
     UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, false);
 
-    SC_OperData.AtsInfoTblAddr  = &SC_ATSRQ_TEST_GlobalAtsInfoTable[0];
-    SC_OperData.AtsCtrlBlckAddr = &SC_ATSRQ_TEST_GlobalAtsCtrlBlck;
-
-    SC_InitTables();
-
     /* Execute the function being tested */
     SC_StartAtsCmd(&UT_CmdBuf.Buf);
 
@@ -429,11 +377,6 @@ void SC_StopAtsCmd_Test_NominalA(void)
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
 
     UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
-
-    SC_OperData.AtsInfoTblAddr  = &SC_ATSRQ_TEST_GlobalAtsInfoTable[0];
-    SC_OperData.AtsCtrlBlckAddr = &SC_ATSRQ_TEST_GlobalAtsCtrlBlck;
-
-    SC_InitTables();
 
     SC_OperData.AtsCtrlBlckAddr->AtsNumber = SC_ATSA;
 
@@ -468,11 +411,6 @@ void SC_StopAtsCmd_Test_NominalB(void)
 
     UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
 
-    SC_OperData.AtsInfoTblAddr  = &SC_ATSRQ_TEST_GlobalAtsInfoTable[0];
-    SC_OperData.AtsCtrlBlckAddr = &SC_ATSRQ_TEST_GlobalAtsCtrlBlck;
-
-    SC_InitTables();
-
     SC_OperData.AtsCtrlBlckAddr->AtsNumber = SC_ATSB;
 
     /* Execute the function being tested */
@@ -506,11 +444,6 @@ void SC_StopAtsCmd_Test_NoRunningAts(void)
 
     UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
 
-    SC_OperData.AtsInfoTblAddr  = &SC_ATSRQ_TEST_GlobalAtsInfoTable[0];
-    SC_OperData.AtsCtrlBlckAddr = &SC_ATSRQ_TEST_GlobalAtsCtrlBlck;
-
-    SC_InitTables();
-
     SC_OperData.AtsCtrlBlckAddr->AtsNumber = 99;
 
     /* Execute the function being tested */
@@ -540,11 +473,6 @@ void SC_StopAtsCmd_Test_InvalidCmdLength(void)
 
     UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, false);
 
-    SC_OperData.AtsInfoTblAddr  = &SC_ATSRQ_TEST_GlobalAtsInfoTable[0];
-    SC_OperData.AtsCtrlBlckAddr = &SC_ATSRQ_TEST_GlobalAtsCtrlBlck;
-
-    SC_InitTables();
-
     SC_OperData.AtsCtrlBlckAddr->AtsNumber = 99;
 
     /* Execute the function being tested */
@@ -564,11 +492,6 @@ void SC_BeginAts_Test_Nominal(void)
     char   ExpectedEventString[CFE_MISSION_EVS_MAX_MESSAGE_LENGTH];
 
     snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH, "ATS started, skipped %%d commands");
-
-    SC_OperData.AtsInfoTblAddr  = &SC_ATSRQ_TEST_GlobalAtsInfoTable[0];
-    SC_OperData.AtsCtrlBlckAddr = &SC_ATSRQ_TEST_GlobalAtsCtrlBlck;
-
-    SC_InitTables();
 
     SC_OperData.AtsInfoTblAddr[0].NumberOfCommands = 1;
 
@@ -606,13 +529,7 @@ void SC_BeginAts_Test_AllCommandsSkipped(void)
 
     UT_SetDeferredRetcode(UT_KEY(SC_CompareAbsTime), 1, true);
 
-    SC_OperData.AtsInfoTblAddr          = &SC_ATSRQ_TEST_GlobalAtsInfoTable[0];
-    SC_OperData.AtsCtrlBlckAddr         = &SC_ATSRQ_TEST_GlobalAtsCtrlBlck;
-    SC_OperData.AtsCmdStatusTblAddr[0]  = &SC_ATSRQ_TEST_GlobalAtsCmdStatus[0];
     SC_AppData.AtsTimeIndexBuffer[0][0] = 1;
-
-    SC_InitTables();
-
     SC_OperData.AtsInfoTblAddr[0].NumberOfCommands = 1;
 
     /* Set to cause all commnds to be skipped, to generate error message SC_ATS_SKP_ALL_ERR_EID */
@@ -649,13 +566,7 @@ void SC_BeginAts_Test_InvalidAtsIndex(void)
 
     UT_SetDeferredRetcode(UT_KEY(SC_CompareAbsTime), 1, true);
 
-    SC_OperData.AtsInfoTblAddr          = &SC_ATSRQ_TEST_GlobalAtsInfoTable[0];
-    SC_OperData.AtsCtrlBlckAddr         = &SC_ATSRQ_TEST_GlobalAtsCtrlBlck;
-    SC_OperData.AtsCmdStatusTblAddr[0]  = &SC_ATSRQ_TEST_GlobalAtsCmdStatus[0];
     SC_AppData.AtsTimeIndexBuffer[0][0] = 1;
-
-    SC_InitTables();
-
     SC_OperData.AtsInfoTblAddr[0].NumberOfCommands = 1;
 
     /* Set to cause all commnds to be skipped, to generate error message SC_ATS_SKP_ALL_ERR_EID */
@@ -680,13 +591,6 @@ void SC_BeginAts_Test_InvalidAtsIndex(void)
 
 void SC_KillAts_Test(void)
 {
-    SC_InitTables();
-
-    memset(&SC_ATSRQ_TEST_GlobalAtsInfoTable, 0, sizeof(SC_ATSRQ_TEST_GlobalAtsInfoTable));
-
-    SC_OperData.AtsInfoTblAddr  = &SC_ATSRQ_TEST_GlobalAtsInfoTable[0];
-    SC_OperData.AtsCtrlBlckAddr = &SC_ATSRQ_TEST_GlobalAtsCtrlBlck;
-
     SC_OperData.AtsCtrlBlckAddr->AtsNumber = 1;
     SC_OperData.AtsCtrlBlckAddr->AtpState  = 99;
 
@@ -713,11 +617,6 @@ void SC_GroundSwitchCmd_Test_Nominal(void)
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
 
     UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
-
-    SC_InitTables();
-
-    SC_OperData.AtsInfoTblAddr  = &SC_ATSRQ_TEST_GlobalAtsInfoTable[0];
-    SC_OperData.AtsCtrlBlckAddr = &SC_ATSRQ_TEST_GlobalAtsCtrlBlck;
 
     SC_OperData.AtsCtrlBlckAddr->AtsNumber         = 1;
     SC_OperData.AtsCtrlBlckAddr->AtpState          = SC_EXECUTING;
@@ -756,11 +655,6 @@ void SC_GroundSwitchCmd_Test_DestinationAtsNotLoaded(void)
 
     UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
 
-    SC_InitTables();
-
-    SC_OperData.AtsInfoTblAddr  = &SC_ATSRQ_TEST_GlobalAtsInfoTable[0];
-    SC_OperData.AtsCtrlBlckAddr = &SC_ATSRQ_TEST_GlobalAtsCtrlBlck;
-
     SC_OperData.AtsCtrlBlckAddr->AtsNumber         = 1;
     SC_OperData.AtsCtrlBlckAddr->AtpState          = SC_EXECUTING;
     SC_OperData.AtsInfoTblAddr[1].NumberOfCommands = 0;
@@ -796,11 +690,6 @@ void SC_GroundSwitchCmd_Test_AtpIdle(void)
 
     UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
 
-    SC_InitTables();
-
-    SC_OperData.AtsInfoTblAddr  = &SC_ATSRQ_TEST_GlobalAtsInfoTable[0];
-    SC_OperData.AtsCtrlBlckAddr = &SC_ATSRQ_TEST_GlobalAtsCtrlBlck;
-
     SC_OperData.AtsCtrlBlckAddr->AtsNumber = 1;
     SC_OperData.AtsCtrlBlckAddr->AtpState  = 99;
 
@@ -831,11 +720,6 @@ void SC_GroundSwitchCmd_Test_InvalidCmdLength(void)
 
     UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, false);
 
-    SC_InitTables();
-
-    SC_OperData.AtsInfoTblAddr  = &SC_ATSRQ_TEST_GlobalAtsInfoTable[0];
-    SC_OperData.AtsCtrlBlckAddr = &SC_ATSRQ_TEST_GlobalAtsCtrlBlck;
-
     /* Execute the function being tested */
     SC_GroundSwitchCmd(&UT_CmdBuf.Buf);
 
@@ -852,11 +736,6 @@ void SC_ServiceSwitchPend_Test_NominalA(void)
     snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH, "ATS Switched from %%c to %%c");
 
     UT_SetDeferredRetcode(UT_KEY(SC_CompareAbsTime), 1, true);
-
-    SC_InitTables();
-
-    SC_OperData.AtsInfoTblAddr  = &SC_ATSRQ_TEST_GlobalAtsInfoTable[0];
-    SC_OperData.AtsCtrlBlckAddr = &SC_ATSRQ_TEST_GlobalAtsCtrlBlck;
 
     /* Set to satisfy first if-statement, while not affecting later calls to CFE_TIME_Compare */
     UT_SC_StartAtsRq_CompareHookRunCount = 0;
@@ -898,11 +777,6 @@ void SC_ServiceSwitchPend_Test_NominalB(void)
 
     UT_SetDeferredRetcode(UT_KEY(SC_CompareAbsTime), 1, true);
 
-    SC_InitTables();
-
-    SC_OperData.AtsInfoTblAddr  = &SC_ATSRQ_TEST_GlobalAtsInfoTable[0];
-    SC_OperData.AtsCtrlBlckAddr = &SC_ATSRQ_TEST_GlobalAtsCtrlBlck;
-
     /* Set to satisfy first if-statement, while not affecting later calls to CFE_TIME_Compare */
     UT_SC_StartAtsRq_CompareHookRunCount = 0;
     UT_SetHookFunction(UT_KEY(CFE_TIME_Compare), UT_SC_StartAtsRq_CompareHook3, NULL);
@@ -943,11 +817,6 @@ void SC_ServiceSwitchPend_Test_AtsEmpty(void)
 
     UT_SetDeferredRetcode(UT_KEY(SC_CompareAbsTime), 1, true);
 
-    SC_InitTables();
-
-    SC_OperData.AtsInfoTblAddr  = &SC_ATSRQ_TEST_GlobalAtsInfoTable[0];
-    SC_OperData.AtsCtrlBlckAddr = &SC_ATSRQ_TEST_GlobalAtsCtrlBlck;
-
     /* Set to satisfy first if-statement, while not affecting later calls to CFE_TIME_Compare */
     UT_SC_StartAtsRq_CompareHookRunCount = 0;
     UT_SetHookFunction(UT_KEY(CFE_TIME_Compare), UT_SC_StartAtsRq_CompareHook3, NULL);
@@ -984,11 +853,6 @@ void SC_ServiceSwitchPend_Test_AtpIdle(void)
 
     UT_SetDeferredRetcode(UT_KEY(SC_CompareAbsTime), 1, true);
 
-    SC_InitTables();
-
-    SC_OperData.AtsInfoTblAddr  = &SC_ATSRQ_TEST_GlobalAtsInfoTable[0];
-    SC_OperData.AtsCtrlBlckAddr = &SC_ATSRQ_TEST_GlobalAtsCtrlBlck;
-
     /* Set to satisfy first if-statement, while not affecting later calls to CFE_TIME_Compare */
     UT_SC_StartAtsRq_CompareHookRunCount = 0;
     UT_SetHookFunction(UT_KEY(CFE_TIME_Compare), UT_SC_StartAtsRq_CompareHook3, NULL);
@@ -1017,11 +881,6 @@ void SC_ServiceSwitchPend_Test_NoSwitch(void)
 {
     UT_SetDeferredRetcode(UT_KEY(SC_CompareAbsTime), 1, false);
 
-    SC_InitTables();
-
-    SC_OperData.AtsInfoTblAddr  = &SC_ATSRQ_TEST_GlobalAtsInfoTable[0];
-    SC_OperData.AtsCtrlBlckAddr = &SC_ATSRQ_TEST_GlobalAtsCtrlBlck;
-
     /* Set to satisfy first if-statement, while not affecting later calls to CFE_TIME_Compare */
     UT_SC_StartAtsRq_CompareHookRunCount = 0;
     UT_SetHookFunction(UT_KEY(CFE_TIME_Compare), UT_SC_StartAtsRq_CompareHook3, NULL);
@@ -1048,11 +907,6 @@ void SC_ServiceSwitchPend_Test_AtsNotStarted(void)
     UT_SetDeferredRetcode(UT_KEY(SC_CompareAbsTime), 1, true);
     UT_SetDeferredRetcode(UT_KEY(SC_CompareAbsTime), 1, true);
 
-    SC_InitTables();
-
-    SC_OperData.AtsInfoTblAddr  = &SC_ATSRQ_TEST_GlobalAtsInfoTable[0];
-    SC_OperData.AtsCtrlBlckAddr = &SC_ATSRQ_TEST_GlobalAtsCtrlBlck;
-
     /* Set to satisfy first if-statement, while not affecting later calls to CFE_TIME_Compare */
     UT_SC_StartAtsRq_CompareHookRunCount = 0;
     UT_SetHookFunction(UT_KEY(CFE_TIME_Compare), UT_SC_StartAtsRq_CompareHook3, NULL);
@@ -1061,8 +915,6 @@ void SC_ServiceSwitchPend_Test_AtsNotStarted(void)
     SC_OperData.AtsCtrlBlckAddr->AtpState          = SC_EXECUTING;
     SC_OperData.AtsInfoTblAddr[0].NumberOfCommands = 1;
     SC_OperData.AtsInfoTblAddr[1].NumberOfCommands = 1;
-    SC_OperData.AtsCmdStatusTblAddr[0]             = &SC_ATSRQ_TEST_GlobalAtsCmdStatus[0];
-    SC_OperData.AtsCmdStatusTblAddr[1]             = &SC_ATSRQ_TEST_GlobalAtsCmdStatus[1];
 
     /* Execute the function being tested */
     SC_ServiceSwitchPend();
@@ -1090,13 +942,6 @@ void SC_InlineSwitch_Test_NominalA(void)
     char  ExpectedEventString[CFE_MISSION_EVS_MAX_MESSAGE_LENGTH];
 
     snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH, "ATS Switched from %%c to %%c");
-
-    SC_InitTables();
-
-    SC_OperData.AtsInfoTblAddr         = &SC_ATSRQ_TEST_GlobalAtsInfoTable[0];
-    SC_OperData.AtsCtrlBlckAddr        = &SC_ATSRQ_TEST_GlobalAtsCtrlBlck;
-    SC_OperData.AtsCmdStatusTblAddr[0] = &SC_ATSRQ_TEST_GlobalAtsCmdStatus[0];
-    SC_OperData.AtsCmdStatusTblAddr[1] = &SC_ATSRQ_TEST_GlobalAtsCmdStatus[1];
 
     /* Set to satisfy first if-statement, while not affecting later calls to CFE_TIME_Compare */
     UT_SC_StartAtsRq_CompareHookRunCount = 0;
@@ -1140,13 +985,6 @@ void SC_InlineSwitch_Test_NominalB(void)
 
     snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH, "ATS Switched from %%c to %%c");
 
-    SC_InitTables();
-
-    SC_OperData.AtsInfoTblAddr         = &SC_ATSRQ_TEST_GlobalAtsInfoTable[0];
-    SC_OperData.AtsCtrlBlckAddr        = &SC_ATSRQ_TEST_GlobalAtsCtrlBlck;
-    SC_OperData.AtsCmdStatusTblAddr[0] = &SC_ATSRQ_TEST_GlobalAtsCmdStatus[0];
-    SC_OperData.AtsCmdStatusTblAddr[1] = &SC_ATSRQ_TEST_GlobalAtsCmdStatus[1];
-
     /* Set to satisfy first if-statement, while not affecting later calls to CFE_TIME_Compare */
     UT_SC_StartAtsRq_CompareHookRunCount = 0;
     UT_SetHookFunction(UT_KEY(CFE_TIME_Compare), UT_SC_StartAtsRq_CompareHook3, NULL);
@@ -1185,13 +1023,6 @@ void SC_InlineSwitch_Test_AllCommandsSkipped(void)
 {
     bool Result;
 
-    SC_InitTables();
-
-    SC_OperData.AtsInfoTblAddr         = &SC_ATSRQ_TEST_GlobalAtsInfoTable[0];
-    SC_OperData.AtsCtrlBlckAddr        = &SC_ATSRQ_TEST_GlobalAtsCtrlBlck;
-    SC_OperData.AtsCmdStatusTblAddr[0] = &SC_ATSRQ_TEST_GlobalAtsCmdStatus[0];
-    SC_OperData.AtsCmdStatusTblAddr[1] = &SC_ATSRQ_TEST_GlobalAtsCmdStatus[1];
-
     UT_SetDeferredRetcode(UT_KEY(SC_CompareAbsTime), 1, true);
 
     /* Set to cause all commnds to be skipped, to reach block starting with comment "all of the commands in the new ats
@@ -1222,13 +1053,6 @@ void SC_InlineSwitch_Test_DestinationAtsNotLoaded(void)
     char  ExpectedEventString[CFE_MISSION_EVS_MAX_MESSAGE_LENGTH];
 
     snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH, "Switch ATS Failure: Destination ATS Not Loaded");
-
-    SC_OperData.AtsInfoTblAddr         = &SC_ATSRQ_TEST_GlobalAtsInfoTable[0];
-    SC_OperData.AtsCtrlBlckAddr        = &SC_ATSRQ_TEST_GlobalAtsCtrlBlck;
-    SC_OperData.AtsCmdStatusTblAddr[0] = &SC_ATSRQ_TEST_GlobalAtsCmdStatus[0];
-    SC_OperData.AtsCmdStatusTblAddr[1] = &SC_ATSRQ_TEST_GlobalAtsCmdStatus[1];
-
-    SC_InitTables();
 
     SC_OperData.AtsCtrlBlckAddr->AtsNumber         = 1;
     SC_OperData.AtsInfoTblAddr[0].NumberOfCommands = 0;
@@ -1270,13 +1094,6 @@ void SC_JumpAtsCmd_Test_SkipOneCmd(void)
              "Next ATS command time in the ATP was set to %%s");
 
     snprintf(ExpectedEventString[1], CFE_MISSION_EVS_MAX_MESSAGE_LENGTH, "Jump Cmd: Skipped %%d ATS commands");
-
-    SC_OperData.AtsInfoTblAddr         = &SC_ATSRQ_TEST_GlobalAtsInfoTable[0];
-    SC_OperData.AtsCtrlBlckAddr        = &SC_ATSRQ_TEST_GlobalAtsCtrlBlck;
-    SC_OperData.AtsCmdStatusTblAddr[0] = &SC_ATSRQ_TEST_GlobalAtsCmdStatus[0];
-    SC_OperData.AtsCmdStatusTblAddr[1] = &SC_ATSRQ_TEST_GlobalAtsCmdStatus[1];
-
-    SC_InitTables();
 
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(SC_JumpAtsCmd_t), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
@@ -1343,13 +1160,6 @@ void SC_JumpAtsCmd_Test_AllCommandsSkipped(void)
     snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH,
              "Jump Cmd: All ATS commands were skipped, ATS stopped");
 
-    SC_OperData.AtsInfoTblAddr         = &SC_ATSRQ_TEST_GlobalAtsInfoTable[0];
-    SC_OperData.AtsCtrlBlckAddr        = &SC_ATSRQ_TEST_GlobalAtsCtrlBlck;
-    SC_OperData.AtsCmdStatusTblAddr[0] = &SC_ATSRQ_TEST_GlobalAtsCmdStatus[0];
-    SC_OperData.AtsCmdStatusTblAddr[1] = &SC_ATSRQ_TEST_GlobalAtsCmdStatus[1];
-
-    SC_InitTables();
-
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(SC_JumpAtsCmd_t), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
 
@@ -1391,13 +1201,6 @@ void SC_JumpAtsCmd_Test_NoRunningAts(void)
 
     snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH, "ATS Jump Failed: No active ATS");
 
-    SC_OperData.AtsInfoTblAddr         = &SC_ATSRQ_TEST_GlobalAtsInfoTable[0];
-    SC_OperData.AtsCtrlBlckAddr        = &SC_ATSRQ_TEST_GlobalAtsCtrlBlck;
-    SC_OperData.AtsCmdStatusTblAddr[0] = &SC_ATSRQ_TEST_GlobalAtsCmdStatus[0];
-    SC_OperData.AtsCmdStatusTblAddr[1] = &SC_ATSRQ_TEST_GlobalAtsCmdStatus[1];
-
-    SC_InitTables();
-
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(SC_JumpAtsCmd_t), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
 
@@ -1432,13 +1235,6 @@ void SC_JumpAtsCmd_Test_AtsNotLoaded(void)
 
     snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH,
              "Next ATS command time in the ATP was set to %%s");
-
-    SC_OperData.AtsInfoTblAddr         = &SC_ATSRQ_TEST_GlobalAtsInfoTable[0];
-    SC_OperData.AtsCtrlBlckAddr        = &SC_ATSRQ_TEST_GlobalAtsCtrlBlck;
-    SC_OperData.AtsCmdStatusTblAddr[0] = &SC_ATSRQ_TEST_GlobalAtsCmdStatus[0];
-    SC_OperData.AtsCmdStatusTblAddr[1] = &SC_ATSRQ_TEST_GlobalAtsCmdStatus[1];
-
-    SC_InitTables();
 
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(SC_JumpAtsCmd_t), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
@@ -1486,13 +1282,6 @@ void SC_JumpAtsCmd_Test_InvalidCmdLength(void)
     CFE_SB_MsgId_t    TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
     CFE_MSG_FcnCode_t FcnCode   = SC_JUMP_ATS_CC;
 
-    SC_OperData.AtsInfoTblAddr         = &SC_ATSRQ_TEST_GlobalAtsInfoTable[0];
-    SC_OperData.AtsCtrlBlckAddr        = &SC_ATSRQ_TEST_GlobalAtsCtrlBlck;
-    SC_OperData.AtsCmdStatusTblAddr[0] = &SC_ATSRQ_TEST_GlobalAtsCmdStatus[0];
-    SC_OperData.AtsCmdStatusTblAddr[1] = &SC_ATSRQ_TEST_GlobalAtsCmdStatus[1];
-
-    SC_InitTables();
-
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(SC_JumpAtsCmd_t), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
 
@@ -1516,13 +1305,6 @@ void ContinueAtsOnFailureCmd_Test_Nominal(void)
     char              ExpectedEventString[CFE_MISSION_EVS_MAX_MESSAGE_LENGTH];
 
     snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH, "Continue-ATS-On-Failure command, State: %%d");
-
-    SC_OperData.AtsInfoTblAddr         = &SC_ATSRQ_TEST_GlobalAtsInfoTable[0];
-    SC_OperData.AtsCtrlBlckAddr        = &SC_ATSRQ_TEST_GlobalAtsCtrlBlck;
-    SC_OperData.AtsCmdStatusTblAddr[0] = &SC_ATSRQ_TEST_GlobalAtsCmdStatus[0];
-    SC_OperData.AtsCmdStatusTblAddr[1] = &SC_ATSRQ_TEST_GlobalAtsCmdStatus[1];
-
-    SC_InitTables();
 
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(SC_SetContinueAtsOnFailureCmd_t), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
@@ -1558,13 +1340,6 @@ void ContinueAtsOnFailureCmd_Test_FalseState(void)
     char              ExpectedEventString[CFE_MISSION_EVS_MAX_MESSAGE_LENGTH];
 
     snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH, "Continue-ATS-On-Failure command, State: %%d");
-
-    SC_OperData.AtsInfoTblAddr         = &SC_ATSRQ_TEST_GlobalAtsInfoTable[0];
-    SC_OperData.AtsCtrlBlckAddr        = &SC_ATSRQ_TEST_GlobalAtsCtrlBlck;
-    SC_OperData.AtsCmdStatusTblAddr[0] = &SC_ATSRQ_TEST_GlobalAtsCmdStatus[0];
-    SC_OperData.AtsCmdStatusTblAddr[1] = &SC_ATSRQ_TEST_GlobalAtsCmdStatus[1];
-
-    SC_InitTables();
 
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(SC_SetContinueAtsOnFailureCmd_t), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
@@ -1602,13 +1377,6 @@ void ContinueAtsOnFailureCmd_Test_InvalidState(void)
     snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH,
              "Continue ATS On Failure command  failed, invalid state: %%d");
 
-    SC_OperData.AtsInfoTblAddr         = &SC_ATSRQ_TEST_GlobalAtsInfoTable[0];
-    SC_OperData.AtsCtrlBlckAddr        = &SC_ATSRQ_TEST_GlobalAtsCtrlBlck;
-    SC_OperData.AtsCmdStatusTblAddr[0] = &SC_ATSRQ_TEST_GlobalAtsCmdStatus[0];
-    SC_OperData.AtsCmdStatusTblAddr[1] = &SC_ATSRQ_TEST_GlobalAtsCmdStatus[1];
-
-    SC_InitTables();
-
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(SC_SetContinueAtsOnFailureCmd_t), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
 
@@ -1638,13 +1406,6 @@ void ContinueAtsOnFailureCmd_Test_InvalidCmdLength(void)
     CFE_SB_MsgId_t    TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
     CFE_MSG_FcnCode_t FcnCode   = SC_CONTINUE_ATS_ON_FAILURE_CC;
 
-    SC_OperData.AtsInfoTblAddr         = &SC_ATSRQ_TEST_GlobalAtsInfoTable[0];
-    SC_OperData.AtsCtrlBlckAddr        = &SC_ATSRQ_TEST_GlobalAtsCtrlBlck;
-    SC_OperData.AtsCmdStatusTblAddr[0] = &SC_ATSRQ_TEST_GlobalAtsCmdStatus[0];
-    SC_OperData.AtsCmdStatusTblAddr[1] = &SC_ATSRQ_TEST_GlobalAtsCmdStatus[1];
-
-    SC_InitTables();
-
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(SC_SetContinueAtsOnFailureCmd_t), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
 
@@ -1670,13 +1431,6 @@ void SC_AppendAtsCmd_Test_Nominal(void)
 
     snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH,
              "Append ATS %%c command: %%d ATS entries appended");
-
-    SC_OperData.AtsInfoTblAddr         = &SC_ATSRQ_TEST_GlobalAtsInfoTable[0];
-    SC_OperData.AtsCtrlBlckAddr        = &SC_ATSRQ_TEST_GlobalAtsCtrlBlck;
-    SC_OperData.AtsCmdStatusTblAddr[0] = &SC_ATSRQ_TEST_GlobalAtsCmdStatus[0];
-    SC_OperData.AtsCmdStatusTblAddr[1] = &SC_ATSRQ_TEST_GlobalAtsCmdStatus[1];
-
-    SC_InitTables();
 
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(SC_AppendAtsCmd_t), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
@@ -1718,13 +1472,6 @@ void SC_AppendAtsCmd_Test_InvalidAtsId(void)
 
     snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH, "Append ATS error: invalid ATS ID = %%d");
 
-    SC_OperData.AtsInfoTblAddr         = &SC_ATSRQ_TEST_GlobalAtsInfoTable[0];
-    SC_OperData.AtsCtrlBlckAddr        = &SC_ATSRQ_TEST_GlobalAtsCtrlBlck;
-    SC_OperData.AtsCmdStatusTblAddr[0] = &SC_ATSRQ_TEST_GlobalAtsCmdStatus[0];
-    SC_OperData.AtsCmdStatusTblAddr[1] = &SC_ATSRQ_TEST_GlobalAtsCmdStatus[1];
-
-    SC_InitTables();
-
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(SC_AppendAtsCmd_t), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
 
@@ -1758,13 +1505,6 @@ void SC_AppendAtsCmd_Test_InvalidAtsIdZero(void)
     char              ExpectedEventString[CFE_MISSION_EVS_MAX_MESSAGE_LENGTH];
 
     snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH, "Append ATS error: invalid ATS ID = %%d");
-
-    SC_OperData.AtsInfoTblAddr         = &SC_ATSRQ_TEST_GlobalAtsInfoTable[0];
-    SC_OperData.AtsCtrlBlckAddr        = &SC_ATSRQ_TEST_GlobalAtsCtrlBlck;
-    SC_OperData.AtsCmdStatusTblAddr[0] = &SC_ATSRQ_TEST_GlobalAtsCmdStatus[0];
-    SC_OperData.AtsCmdStatusTblAddr[1] = &SC_ATSRQ_TEST_GlobalAtsCmdStatus[1];
-
-    SC_InitTables();
 
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(SC_AppendAtsCmd_t), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
@@ -1801,13 +1541,6 @@ void SC_AppendAtsCmd_Test_AtsTableEmpty(void)
 
     snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH, "Append ATS %%c error: ATS table is empty");
 
-    SC_OperData.AtsInfoTblAddr         = &SC_ATSRQ_TEST_GlobalAtsInfoTable[0];
-    SC_OperData.AtsCtrlBlckAddr        = &SC_ATSRQ_TEST_GlobalAtsCtrlBlck;
-    SC_OperData.AtsCmdStatusTblAddr[0] = &SC_ATSRQ_TEST_GlobalAtsCmdStatus[0];
-    SC_OperData.AtsCmdStatusTblAddr[1] = &SC_ATSRQ_TEST_GlobalAtsCmdStatus[1];
-
-    SC_InitTables();
-
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(SC_AppendAtsCmd_t), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
 
@@ -1843,13 +1576,6 @@ void SC_AppendAtsCmd_Test_AppendTableEmpty(void)
     char              ExpectedEventString[CFE_MISSION_EVS_MAX_MESSAGE_LENGTH];
 
     snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH, "Append ATS %%c error: Append table is empty");
-
-    SC_OperData.AtsInfoTblAddr         = &SC_ATSRQ_TEST_GlobalAtsInfoTable[0];
-    SC_OperData.AtsCtrlBlckAddr        = &SC_ATSRQ_TEST_GlobalAtsCtrlBlck;
-    SC_OperData.AtsCmdStatusTblAddr[0] = &SC_ATSRQ_TEST_GlobalAtsCmdStatus[0];
-    SC_OperData.AtsCmdStatusTblAddr[1] = &SC_ATSRQ_TEST_GlobalAtsCmdStatus[1];
-
-    SC_InitTables();
 
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(SC_AppendAtsCmd_t), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
@@ -1888,13 +1614,6 @@ void SC_AppendAtsCmd_Test_NoRoomForAppendInAts(void)
     snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH,
              "Append ATS %%c error: ATS size = %%d, Append size = %%d, ATS buffer = %%d");
 
-    SC_OperData.AtsInfoTblAddr         = &SC_ATSRQ_TEST_GlobalAtsInfoTable[0];
-    SC_OperData.AtsCtrlBlckAddr        = &SC_ATSRQ_TEST_GlobalAtsCtrlBlck;
-    SC_OperData.AtsCmdStatusTblAddr[0] = &SC_ATSRQ_TEST_GlobalAtsCmdStatus[0];
-    SC_OperData.AtsCmdStatusTblAddr[1] = &SC_ATSRQ_TEST_GlobalAtsCmdStatus[1];
-
-    SC_InitTables();
-
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(SC_AppendAtsCmd_t), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
 
@@ -1927,13 +1646,6 @@ void SC_AppendAtsCmd_Test_InvalidCmdLength(void)
 {
     CFE_SB_MsgId_t    TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
     CFE_MSG_FcnCode_t FcnCode   = SC_APPEND_ATS_CC;
-
-    SC_OperData.AtsInfoTblAddr         = &SC_ATSRQ_TEST_GlobalAtsInfoTable[0];
-    SC_OperData.AtsCtrlBlckAddr        = &SC_ATSRQ_TEST_GlobalAtsCtrlBlck;
-    SC_OperData.AtsCmdStatusTblAddr[0] = &SC_ATSRQ_TEST_GlobalAtsCmdStatus[0];
-    SC_OperData.AtsCmdStatusTblAddr[1] = &SC_ATSRQ_TEST_GlobalAtsCmdStatus[1];
-
-    SC_InitTables();
 
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(SC_AppendAtsCmd_t), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
