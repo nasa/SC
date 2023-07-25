@@ -29,7 +29,6 @@
 #include "utstubs.h"
 
 /* sc_utils_tests globals */
-uint8 call_count_CFE_EVS_SendEvent;
 
 void SC_GetCurrentTime_Test(void)
 {
@@ -125,10 +124,8 @@ void SC_VerifyCmdLength_Test_Nominal(void)
     UtAssert_True(Result == true, "Result == true");
     UtAssert_True(SC_OperData.HkPacket.CmdErrCtr == 0, "SC_OperData.HkPacket.CmdErrCtr == 0");
 
-    call_count_CFE_EVS_SendEvent = UT_GetStubCount(UT_KEY(CFE_EVS_SendEvent));
 
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
-                  call_count_CFE_EVS_SendEvent);
 }
 
 void SC_VerifyCmdLength_Test_LenError(void)
@@ -165,10 +162,8 @@ void SC_VerifyCmdLength_Test_LenError(void)
 
     UtAssert_True(strCmpResult == 0, "Event string matched expected result, '%s'", context_CFE_EVS_SendEvent[0].Spec);
 
-    call_count_CFE_EVS_SendEvent = UT_GetStubCount(UT_KEY(CFE_EVS_SendEvent));
 
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
-                  call_count_CFE_EVS_SendEvent);
 }
 
 void SC_VerifyCmdLength_Test_LenErrorNotMID(void)
@@ -204,10 +199,8 @@ void SC_VerifyCmdLength_Test_LenErrorNotMID(void)
 
     UtAssert_True(strCmpResult == 0, "Event string matched expected result, '%s'", context_CFE_EVS_SendEvent[0].Spec);
 
-    call_count_CFE_EVS_SendEvent = UT_GetStubCount(UT_KEY(CFE_EVS_SendEvent));
 
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
-                  call_count_CFE_EVS_SendEvent);
 }
 
 void SC_ToggleAtsIndex_Test(void)

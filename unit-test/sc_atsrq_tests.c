@@ -41,7 +41,6 @@
 #include "utstubs.h"
 
 /* sc_atsrq_tests globals */
-uint8 call_count_CFE_EVS_SendEvent;
 
 SC_AtsInfoTable_t SC_ATSRQ_TEST_GlobalAtsInfoTable[2];
 
@@ -110,10 +109,8 @@ void SC_StartAtsCmd_Test_NominalA(void)
 
     UtAssert_True(strCmpResult == 0, "Event string matched expected result, '%s'", context_CFE_EVS_SendEvent[1].Spec);
 
-    call_count_CFE_EVS_SendEvent = UT_GetStubCount(UT_KEY(CFE_EVS_SendEvent));
 
-    UtAssert_True(call_count_CFE_EVS_SendEvent == 2, "CFE_EVS_SendEvent was called %u time(s), expected 2",
-                  call_count_CFE_EVS_SendEvent);
+    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 2);
 }
 
 void SC_StartAtsCmd_Test_NominalB(void)
@@ -152,10 +149,8 @@ void SC_StartAtsCmd_Test_NominalB(void)
 
     UtAssert_True(strCmpResult == 0, "Event string matched expected result, '%s'", context_CFE_EVS_SendEvent[1].Spec);
 
-    call_count_CFE_EVS_SendEvent = UT_GetStubCount(UT_KEY(CFE_EVS_SendEvent));
 
-    UtAssert_True(call_count_CFE_EVS_SendEvent == 2, "CFE_EVS_SendEvent was called %u time(s), expected 2",
-                  call_count_CFE_EVS_SendEvent);
+    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 2);
 }
 
 void SC_StartAtsCmd_Test_CouldNotStart(void)
@@ -199,10 +194,8 @@ void SC_StartAtsCmd_Test_CouldNotStart(void)
 
     UtAssert_True(strCmpResult == 0, "Event string matched expected result, '%s'", context_CFE_EVS_SendEvent[0].Spec);
 
-    call_count_CFE_EVS_SendEvent = UT_GetStubCount(UT_KEY(CFE_EVS_SendEvent));
 
-    UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
-                  call_count_CFE_EVS_SendEvent);
+    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
 }
 
 void SC_StartAtsCmd_Test_NoCommandsA(void)
@@ -240,10 +233,8 @@ void SC_StartAtsCmd_Test_NoCommandsA(void)
 
     UtAssert_True(strCmpResult == 0, "Event string matched expected result, '%s'", context_CFE_EVS_SendEvent[0].Spec);
 
-    call_count_CFE_EVS_SendEvent = UT_GetStubCount(UT_KEY(CFE_EVS_SendEvent));
 
-    UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
-                  call_count_CFE_EVS_SendEvent);
+    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
 }
 
 void SC_StartAtsCmd_Test_NoCommandsB(void)
@@ -281,10 +272,8 @@ void SC_StartAtsCmd_Test_NoCommandsB(void)
 
     UtAssert_True(strCmpResult == 0, "Event string matched expected result, '%s'", context_CFE_EVS_SendEvent[0].Spec);
 
-    call_count_CFE_EVS_SendEvent = UT_GetStubCount(UT_KEY(CFE_EVS_SendEvent));
 
-    UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
-                  call_count_CFE_EVS_SendEvent);
+    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
 }
 
 void SC_StartAtsCmd_Test_InUse(void)
@@ -322,10 +311,8 @@ void SC_StartAtsCmd_Test_InUse(void)
 
     UtAssert_True(strCmpResult == 0, "Event string matched expected result, '%s'", context_CFE_EVS_SendEvent[0].Spec);
 
-    call_count_CFE_EVS_SendEvent = UT_GetStubCount(UT_KEY(CFE_EVS_SendEvent));
 
-    UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
-                  call_count_CFE_EVS_SendEvent);
+    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
 }
 
 void SC_StartAtsCmd_Test_InvalidAtsId(void)
@@ -363,10 +350,8 @@ void SC_StartAtsCmd_Test_InvalidAtsId(void)
 
     UtAssert_True(strCmpResult == 0, "Event string matched expected result, '%s'", context_CFE_EVS_SendEvent[0].Spec);
 
-    call_count_CFE_EVS_SendEvent = UT_GetStubCount(UT_KEY(CFE_EVS_SendEvent));
 
-    UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
-                  call_count_CFE_EVS_SendEvent);
+    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
 }
 
 void SC_StartAtsCmd_Test_InvalidAtsIdZero(void)
@@ -404,10 +389,8 @@ void SC_StartAtsCmd_Test_InvalidAtsIdZero(void)
 
     UtAssert_True(strCmpResult == 0, "Event string matched expected result, '%s'", context_CFE_EVS_SendEvent[0].Spec);
 
-    call_count_CFE_EVS_SendEvent = UT_GetStubCount(UT_KEY(CFE_EVS_SendEvent));
 
-    UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
-                  call_count_CFE_EVS_SendEvent);
+    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
 }
 
 void SC_StartAtsCmd_Test_InvalidCmdLength(void)
@@ -429,10 +412,8 @@ void SC_StartAtsCmd_Test_InvalidCmdLength(void)
     SC_StartAtsCmd(&UT_CmdBuf.Buf);
 
     /* Verify results */
-    call_count_CFE_EVS_SendEvent = UT_GetStubCount(UT_KEY(CFE_EVS_SendEvent));
 
-    UtAssert_True(call_count_CFE_EVS_SendEvent == 0, "CFE_EVS_SendEvent was called %u time(s), expected 0",
-                  call_count_CFE_EVS_SendEvent);
+    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
 }
 
 void SC_StopAtsCmd_Test_NominalA(void)
@@ -469,10 +450,8 @@ void SC_StopAtsCmd_Test_NominalA(void)
 
     UtAssert_True(strCmpResult == 0, "Event string matched expected result, '%s'", context_CFE_EVS_SendEvent[0].Spec);
 
-    call_count_CFE_EVS_SendEvent = UT_GetStubCount(UT_KEY(CFE_EVS_SendEvent));
 
-    UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
-                  call_count_CFE_EVS_SendEvent);
+    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
 }
 
 void SC_StopAtsCmd_Test_NominalB(void)
@@ -509,10 +488,8 @@ void SC_StopAtsCmd_Test_NominalB(void)
 
     UtAssert_True(strCmpResult == 0, "Event string matched expected result, '%s'", context_CFE_EVS_SendEvent[0].Spec);
 
-    call_count_CFE_EVS_SendEvent = UT_GetStubCount(UT_KEY(CFE_EVS_SendEvent));
 
-    UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
-                  call_count_CFE_EVS_SendEvent);
+    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
 }
 
 void SC_StopAtsCmd_Test_NoRunningAts(void)
@@ -549,10 +526,8 @@ void SC_StopAtsCmd_Test_NoRunningAts(void)
 
     UtAssert_True(strCmpResult == 0, "Event string matched expected result, '%s'", context_CFE_EVS_SendEvent[0].Spec);
 
-    call_count_CFE_EVS_SendEvent = UT_GetStubCount(UT_KEY(CFE_EVS_SendEvent));
 
-    UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
-                  call_count_CFE_EVS_SendEvent);
+    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
 }
 
 void SC_StopAtsCmd_Test_InvalidCmdLength(void)
@@ -576,10 +551,8 @@ void SC_StopAtsCmd_Test_InvalidCmdLength(void)
     SC_StopAtsCmd(&UT_CmdBuf.Buf);
 
     /* Verify results */
-    call_count_CFE_EVS_SendEvent = UT_GetStubCount(UT_KEY(CFE_EVS_SendEvent));
 
-    UtAssert_True(call_count_CFE_EVS_SendEvent == 0, "CFE_EVS_SendEvent was called %u time(s), expected 0",
-                  call_count_CFE_EVS_SendEvent);
+    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
 }
 
 void SC_BeginAts_Test_Nominal(void)
@@ -617,10 +590,8 @@ void SC_BeginAts_Test_Nominal(void)
 
     UtAssert_True(strCmpResult == 0, "Event string matched expected result, '%s'", context_CFE_EVS_SendEvent[0].Spec);
 
-    call_count_CFE_EVS_SendEvent = UT_GetStubCount(UT_KEY(CFE_EVS_SendEvent));
 
-    UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
-                  call_count_CFE_EVS_SendEvent);
+    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
 }
 
 void SC_BeginAts_Test_AllCommandsSkipped(void)
@@ -662,10 +633,8 @@ void SC_BeginAts_Test_AllCommandsSkipped(void)
 
     UtAssert_True(strCmpResult == 0, "Event string matched expected result, '%s'", context_CFE_EVS_SendEvent[0].Spec);
 
-    call_count_CFE_EVS_SendEvent = UT_GetStubCount(UT_KEY(CFE_EVS_SendEvent));
 
-    UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
-                  call_count_CFE_EVS_SendEvent);
+    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
 }
 
 void SC_BeginAts_Test_InvalidAtsIndex(void)
@@ -705,10 +674,8 @@ void SC_BeginAts_Test_InvalidAtsIndex(void)
 
     UtAssert_True(strCmpResult == 0, "Event string matched expected result, '%s'", context_CFE_EVS_SendEvent[0].Spec);
 
-    call_count_CFE_EVS_SendEvent = UT_GetStubCount(UT_KEY(CFE_EVS_SendEvent));
 
-    UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
-                  call_count_CFE_EVS_SendEvent);
+    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
 }
 
 void SC_KillAts_Test(void)
@@ -731,10 +698,8 @@ void SC_KillAts_Test(void)
     UtAssert_True(SC_OperData.AtsCtrlBlckAddr->AtpState == SC_IDLE, "SC_OperData.AtsCtrlBlckAddr->AtpState == SC_IDLE");
     UtAssert_True(SC_AppData.NextCmdTime[SC_ATP] == SC_MAX_TIME, "SC_AppData.NextCmdTime[SC_ATP] == SC_MAX_TIME");
 
-    call_count_CFE_EVS_SendEvent = UT_GetStubCount(UT_KEY(CFE_EVS_SendEvent));
 
-    UtAssert_True(call_count_CFE_EVS_SendEvent == 0, "CFE_EVS_SendEvent was called %u time(s), expected 0",
-                  call_count_CFE_EVS_SendEvent);
+    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
 }
 
 void SC_GroundSwitchCmd_Test_Nominal(void)
@@ -775,10 +740,8 @@ void SC_GroundSwitchCmd_Test_Nominal(void)
 
     UtAssert_True(strCmpResult == 0, "Event string matched expected result, '%s'", context_CFE_EVS_SendEvent[0].Spec);
 
-    call_count_CFE_EVS_SendEvent = UT_GetStubCount(UT_KEY(CFE_EVS_SendEvent));
 
-    UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
-                  call_count_CFE_EVS_SendEvent);
+    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
 }
 
 void SC_GroundSwitchCmd_Test_DestinationAtsNotLoaded(void)
@@ -817,10 +780,8 @@ void SC_GroundSwitchCmd_Test_DestinationAtsNotLoaded(void)
 
     UtAssert_True(strCmpResult == 0, "Event string matched expected result, '%s'", context_CFE_EVS_SendEvent[0].Spec);
 
-    call_count_CFE_EVS_SendEvent = UT_GetStubCount(UT_KEY(CFE_EVS_SendEvent));
 
-    UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
-                  call_count_CFE_EVS_SendEvent);
+    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
 }
 
 void SC_GroundSwitchCmd_Test_AtpIdle(void)
@@ -858,10 +819,8 @@ void SC_GroundSwitchCmd_Test_AtpIdle(void)
 
     UtAssert_True(strCmpResult == 0, "Event string matched expected result, '%s'", context_CFE_EVS_SendEvent[0].Spec);
 
-    call_count_CFE_EVS_SendEvent = UT_GetStubCount(UT_KEY(CFE_EVS_SendEvent));
 
-    UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
-                  call_count_CFE_EVS_SendEvent);
+    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
 }
 
 void SC_GroundSwitchCmd_Test_InvalidCmdLength(void)
@@ -881,10 +840,8 @@ void SC_GroundSwitchCmd_Test_InvalidCmdLength(void)
     SC_GroundSwitchCmd(&UT_CmdBuf.Buf);
 
     /* Verify results */
-    call_count_CFE_EVS_SendEvent = UT_GetStubCount(UT_KEY(CFE_EVS_SendEvent));
 
-    UtAssert_True(call_count_CFE_EVS_SendEvent == 0, "CFE_EVS_SendEvent was called %u time(s), expected 0",
-                  call_count_CFE_EVS_SendEvent);
+    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
 }
 
 void SC_ServiceSwitchPend_Test_NominalA(void)
@@ -928,10 +885,8 @@ void SC_ServiceSwitchPend_Test_NominalA(void)
 
     UtAssert_True(strCmpResult == 0, "Event string matched expected result, '%s'", context_CFE_EVS_SendEvent[1].Spec);
 
-    call_count_CFE_EVS_SendEvent = UT_GetStubCount(UT_KEY(CFE_EVS_SendEvent));
 
-    UtAssert_True(call_count_CFE_EVS_SendEvent == 2, "CFE_EVS_SendEvent was called %u time(s), expected 2",
-                  call_count_CFE_EVS_SendEvent);
+    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 2);
 }
 
 void SC_ServiceSwitchPend_Test_NominalB(void)
@@ -975,10 +930,8 @@ void SC_ServiceSwitchPend_Test_NominalB(void)
 
     UtAssert_True(strCmpResult == 0, "Event string matched expected result, '%s'", context_CFE_EVS_SendEvent[1].Spec);
 
-    call_count_CFE_EVS_SendEvent = UT_GetStubCount(UT_KEY(CFE_EVS_SendEvent));
 
-    UtAssert_True(call_count_CFE_EVS_SendEvent == 2, "CFE_EVS_SendEvent was called %u time(s), expected 2",
-                  call_count_CFE_EVS_SendEvent);
+    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 2);
 }
 
 void SC_ServiceSwitchPend_Test_AtsEmpty(void)
@@ -1018,10 +971,8 @@ void SC_ServiceSwitchPend_Test_AtsEmpty(void)
 
     UtAssert_True(strCmpResult == 0, "Event string matched expected result, '%s'", context_CFE_EVS_SendEvent[0].Spec);
 
-    call_count_CFE_EVS_SendEvent = UT_GetStubCount(UT_KEY(CFE_EVS_SendEvent));
 
-    UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
-                  call_count_CFE_EVS_SendEvent);
+    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
 }
 
 void SC_ServiceSwitchPend_Test_AtpIdle(void)
@@ -1058,10 +1009,8 @@ void SC_ServiceSwitchPend_Test_AtpIdle(void)
 
     UtAssert_True(strCmpResult == 0, "Event string matched expected result, '%s'", context_CFE_EVS_SendEvent[0].Spec);
 
-    call_count_CFE_EVS_SendEvent = UT_GetStubCount(UT_KEY(CFE_EVS_SendEvent));
 
-    UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
-                  call_count_CFE_EVS_SendEvent);
+    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
 }
 
 void SC_ServiceSwitchPend_Test_NoSwitch(void)
@@ -1082,10 +1031,8 @@ void SC_ServiceSwitchPend_Test_NoSwitch(void)
 
     /* Verify results */
 
-    call_count_CFE_EVS_SendEvent = UT_GetStubCount(UT_KEY(CFE_EVS_SendEvent));
 
-    UtAssert_True(call_count_CFE_EVS_SendEvent == 0, "CFE_EVS_SendEvent was called %u time(s), expected 0",
-                  call_count_CFE_EVS_SendEvent);
+    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
 }
 
 void SC_ServiceSwitchPend_Test_AtsNotStarted(void)
@@ -1132,10 +1079,8 @@ void SC_ServiceSwitchPend_Test_AtsNotStarted(void)
 
     UtAssert_True(strCmpResult == 0, "Event string matched expected result, '%s'", context_CFE_EVS_SendEvent[0].Spec);
 
-    call_count_CFE_EVS_SendEvent = UT_GetStubCount(UT_KEY(CFE_EVS_SendEvent));
 
-    UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
-                  call_count_CFE_EVS_SendEvent);
+    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
 }
 
 void SC_InlineSwitch_Test_NominalA(void)
@@ -1183,10 +1128,8 @@ void SC_InlineSwitch_Test_NominalA(void)
     UtAssert_True(strCmpResult == 0, "Event string matched expected result, '%s'", context_CFE_EVS_SendEvent[1].Spec);
 
     /* Generates 1 event message we don't care about in this test */
-    call_count_CFE_EVS_SendEvent = UT_GetStubCount(UT_KEY(CFE_EVS_SendEvent));
 
-    UtAssert_True(call_count_CFE_EVS_SendEvent == 2, "CFE_EVS_SendEvent was called %u time(s), expected 2",
-                  call_count_CFE_EVS_SendEvent);
+    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 2);
 }
 
 void SC_InlineSwitch_Test_NominalB(void)
@@ -1234,10 +1177,8 @@ void SC_InlineSwitch_Test_NominalB(void)
     UtAssert_True(strCmpResult == 0, "Event string matched expected result, '%s'", context_CFE_EVS_SendEvent[1].Spec);
 
     /* Generates 1 event message we don't care about in this test */
-    call_count_CFE_EVS_SendEvent = UT_GetStubCount(UT_KEY(CFE_EVS_SendEvent));
 
-    UtAssert_True(call_count_CFE_EVS_SendEvent == 2, "CFE_EVS_SendEvent was called %u time(s), expected 2",
-                  call_count_CFE_EVS_SendEvent);
+    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 2);
 }
 
 void SC_InlineSwitch_Test_AllCommandsSkipped(void)
@@ -1270,10 +1211,8 @@ void SC_InlineSwitch_Test_AllCommandsSkipped(void)
     UtAssert_True(SC_OperData.AtsCtrlBlckAddr->SwitchPendFlag == false,
                   "SC_OperData.AtsCtrlBlckAddr->SwitchPendFlag == false");
 
-    call_count_CFE_EVS_SendEvent = UT_GetStubCount(UT_KEY(CFE_EVS_SendEvent));
 
-    UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
-                  call_count_CFE_EVS_SendEvent);
+    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
 }
 
 void SC_InlineSwitch_Test_DestinationAtsNotLoaded(void)
@@ -1315,10 +1254,8 @@ void SC_InlineSwitch_Test_DestinationAtsNotLoaded(void)
 
     UtAssert_True(strCmpResult == 0, "Event string matched expected result, '%s'", context_CFE_EVS_SendEvent[0].Spec);
 
-    call_count_CFE_EVS_SendEvent = UT_GetStubCount(UT_KEY(CFE_EVS_SendEvent));
 
-    UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
-                  call_count_CFE_EVS_SendEvent);
+    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
 }
 
 void SC_JumpAtsCmd_Test_SkipOneCmd(void)
@@ -1391,10 +1328,8 @@ void SC_JumpAtsCmd_Test_SkipOneCmd(void)
     UtAssert_True(strCmpResult == 0, "Event string matched expected result, '%s'", context_CFE_EVS_SendEvent[2].Spec);
 
     /* Generates 1 event message we don't care about in this test */
-    call_count_CFE_EVS_SendEvent = UT_GetStubCount(UT_KEY(CFE_EVS_SendEvent));
 
-    UtAssert_True(call_count_CFE_EVS_SendEvent == 3, "CFE_EVS_SendEvent was called %u time(s), expected 3",
-                  call_count_CFE_EVS_SendEvent);
+    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 3);
 }
 
 void SC_JumpAtsCmd_Test_AllCommandsSkipped(void)
@@ -1443,10 +1378,8 @@ void SC_JumpAtsCmd_Test_AllCommandsSkipped(void)
 
     UtAssert_True(strCmpResult == 0, "Event string matched expected result, '%s'", context_CFE_EVS_SendEvent[0].Spec);
 
-    call_count_CFE_EVS_SendEvent = UT_GetStubCount(UT_KEY(CFE_EVS_SendEvent));
 
-    UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
-                  call_count_CFE_EVS_SendEvent);
+    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
 }
 
 void SC_JumpAtsCmd_Test_NoRunningAts(void)
@@ -1485,10 +1418,8 @@ void SC_JumpAtsCmd_Test_NoRunningAts(void)
 
     UtAssert_True(strCmpResult == 0, "Event string matched expected result, '%s'", context_CFE_EVS_SendEvent[0].Spec);
 
-    call_count_CFE_EVS_SendEvent = UT_GetStubCount(UT_KEY(CFE_EVS_SendEvent));
 
-    UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
-                  call_count_CFE_EVS_SendEvent);
+    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
 }
 
 void SC_JumpAtsCmd_Test_AtsNotLoaded(void)
@@ -1546,10 +1477,8 @@ void SC_JumpAtsCmd_Test_AtsNotLoaded(void)
 
     UtAssert_True(strCmpResult == 0, "Event string matched expected result, '%s'", context_CFE_EVS_SendEvent[1].Spec);
 
-    call_count_CFE_EVS_SendEvent = UT_GetStubCount(UT_KEY(CFE_EVS_SendEvent));
 
-    UtAssert_True(call_count_CFE_EVS_SendEvent == 2, "CFE_EVS_SendEvent was called %u time(s), expected 2",
-                  call_count_CFE_EVS_SendEvent);
+    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 2);
 }
 
 void SC_JumpAtsCmd_Test_InvalidCmdLength(void)
@@ -1575,10 +1504,8 @@ void SC_JumpAtsCmd_Test_InvalidCmdLength(void)
     SC_JumpAtsCmd(&UT_CmdBuf.Buf);
 
     /* Verify results */
-    call_count_CFE_EVS_SendEvent = UT_GetStubCount(UT_KEY(CFE_EVS_SendEvent));
 
-    UtAssert_True(call_count_CFE_EVS_SendEvent == 0, "CFE_EVS_SendEvent was called %u time(s), expected 0",
-                  call_count_CFE_EVS_SendEvent);
+    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
 }
 
 void ContinueAtsOnFailureCmd_Test_Nominal(void)
@@ -1619,10 +1546,8 @@ void ContinueAtsOnFailureCmd_Test_Nominal(void)
 
     UtAssert_True(strCmpResult == 0, "Event string matched expected result, '%s'", context_CFE_EVS_SendEvent[0].Spec);
 
-    call_count_CFE_EVS_SendEvent = UT_GetStubCount(UT_KEY(CFE_EVS_SendEvent));
 
-    UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
-                  call_count_CFE_EVS_SendEvent);
+    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
 }
 
 void ContinueAtsOnFailureCmd_Test_FalseState(void)
@@ -1663,10 +1588,8 @@ void ContinueAtsOnFailureCmd_Test_FalseState(void)
 
     UtAssert_True(strCmpResult == 0, "Event string matched expected result, '%s'", context_CFE_EVS_SendEvent[0].Spec);
 
-    call_count_CFE_EVS_SendEvent = UT_GetStubCount(UT_KEY(CFE_EVS_SendEvent));
 
-    UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
-                  call_count_CFE_EVS_SendEvent);
+    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
 }
 
 void ContinueAtsOnFailureCmd_Test_InvalidState(void)
@@ -1706,10 +1629,8 @@ void ContinueAtsOnFailureCmd_Test_InvalidState(void)
 
     UtAssert_True(strCmpResult == 0, "Event string matched expected result, '%s'", context_CFE_EVS_SendEvent[0].Spec);
 
-    call_count_CFE_EVS_SendEvent = UT_GetStubCount(UT_KEY(CFE_EVS_SendEvent));
 
-    UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
-                  call_count_CFE_EVS_SendEvent);
+    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
 }
 
 void ContinueAtsOnFailureCmd_Test_InvalidCmdLength(void)
@@ -1733,10 +1654,8 @@ void ContinueAtsOnFailureCmd_Test_InvalidCmdLength(void)
     SC_ContinueAtsOnFailureCmd(&UT_CmdBuf.Buf);
 
     /* Verify results */
-    call_count_CFE_EVS_SendEvent = UT_GetStubCount(UT_KEY(CFE_EVS_SendEvent));
 
-    UtAssert_True(call_count_CFE_EVS_SendEvent == 0, "CFE_EVS_SendEvent was called %u time(s), expected 0",
-                  call_count_CFE_EVS_SendEvent);
+    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
 }
 
 void SC_AppendAtsCmd_Test_Nominal(void)
@@ -1786,10 +1705,8 @@ void SC_AppendAtsCmd_Test_Nominal(void)
 
     UtAssert_True(strCmpResult == 0, "Event string matched expected result, '%s'", context_CFE_EVS_SendEvent[0].Spec);
 
-    call_count_CFE_EVS_SendEvent = UT_GetStubCount(UT_KEY(CFE_EVS_SendEvent));
 
-    UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
-                  call_count_CFE_EVS_SendEvent);
+    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
 }
 
 void SC_AppendAtsCmd_Test_InvalidAtsId(void)
@@ -1829,10 +1746,8 @@ void SC_AppendAtsCmd_Test_InvalidAtsId(void)
 
     UtAssert_True(strCmpResult == 0, "Event string matched expected result, '%s'", context_CFE_EVS_SendEvent[0].Spec);
 
-    call_count_CFE_EVS_SendEvent = UT_GetStubCount(UT_KEY(CFE_EVS_SendEvent));
 
-    UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
-                  call_count_CFE_EVS_SendEvent);
+    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
 }
 
 void SC_AppendAtsCmd_Test_InvalidAtsIdZero(void)
@@ -1872,10 +1787,8 @@ void SC_AppendAtsCmd_Test_InvalidAtsIdZero(void)
 
     UtAssert_True(strCmpResult == 0, "Event string matched expected result, '%s'", context_CFE_EVS_SendEvent[0].Spec);
 
-    call_count_CFE_EVS_SendEvent = UT_GetStubCount(UT_KEY(CFE_EVS_SendEvent));
 
-    UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
-                  call_count_CFE_EVS_SendEvent);
+    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
 }
 
 void SC_AppendAtsCmd_Test_AtsTableEmpty(void)
@@ -1917,10 +1830,8 @@ void SC_AppendAtsCmd_Test_AtsTableEmpty(void)
 
     UtAssert_True(strCmpResult == 0, "Event string matched expected result, '%s'", context_CFE_EVS_SendEvent[0].Spec);
 
-    call_count_CFE_EVS_SendEvent = UT_GetStubCount(UT_KEY(CFE_EVS_SendEvent));
 
-    UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
-                  call_count_CFE_EVS_SendEvent);
+    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
 }
 
 void SC_AppendAtsCmd_Test_AppendTableEmpty(void)
@@ -1962,10 +1873,8 @@ void SC_AppendAtsCmd_Test_AppendTableEmpty(void)
 
     UtAssert_True(strCmpResult == 0, "Event string matched expected result, '%s'", context_CFE_EVS_SendEvent[0].Spec);
 
-    call_count_CFE_EVS_SendEvent = UT_GetStubCount(UT_KEY(CFE_EVS_SendEvent));
 
-    UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
-                  call_count_CFE_EVS_SendEvent);
+    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
 }
 
 void SC_AppendAtsCmd_Test_NoRoomForAppendInAts(void)
@@ -2010,10 +1919,8 @@ void SC_AppendAtsCmd_Test_NoRoomForAppendInAts(void)
 
     UtAssert_True(strCmpResult == 0, "Event string matched expected result, '%s'", context_CFE_EVS_SendEvent[0].Spec);
 
-    call_count_CFE_EVS_SendEvent = UT_GetStubCount(UT_KEY(CFE_EVS_SendEvent));
 
-    UtAssert_True(call_count_CFE_EVS_SendEvent == 1, "CFE_EVS_SendEvent was called %u time(s), expected 1",
-                  call_count_CFE_EVS_SendEvent);
+    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
 }
 
 void SC_AppendAtsCmd_Test_InvalidCmdLength(void)
@@ -2037,10 +1944,8 @@ void SC_AppendAtsCmd_Test_InvalidCmdLength(void)
     SC_AppendAtsCmd(&UT_CmdBuf.Buf);
 
     /* Verify results */
-    call_count_CFE_EVS_SendEvent = UT_GetStubCount(UT_KEY(CFE_EVS_SendEvent));
 
-    UtAssert_True(call_count_CFE_EVS_SendEvent == 0, "CFE_EVS_SendEvent was called %u time(s), expected 0",
-                  call_count_CFE_EVS_SendEvent);
+    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
 }
 
 void UtTest_Setup(void)
