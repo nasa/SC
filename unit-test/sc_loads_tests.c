@@ -264,14 +264,14 @@ void SC_LoadAts_Test_AtsBufferTooSmall(void)
 
     for (i = 0, j = 0; i < MaxBufEntries; i++, j += BufEntrySize)
     {
-        Entry                                        = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[AtsIndex][j];
-        Entry->CmdNumber                             = i + 1;
+        Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[AtsIndex][j];
+        Entry->CmdNumber = i + 1;
         UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &MsgSize1, sizeof(MsgSize1), false);
     }
 
     /* Next entry should not leave enough buffer space for an ATS command header */
-    Entry                                        = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[AtsIndex][j];
-    Entry->CmdNumber                             = i++ + 1;
+    Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[AtsIndex][j];
+    Entry->CmdNumber = i++ + 1;
 
     /* Use the remaining buffer space to calculate the final message size */
     MsgSize2 = (SC_ATS_BUFF_SIZE32 - SC_ATS_HDR_WORDS - j) * SC_BYTES_IN_WORD;
@@ -316,14 +316,14 @@ void SC_LoadAts_Test_AtsEntryOverflow(void)
 
     for (i = 0, j = 0; i < MaxBufEntries; i++, j += BufEntrySize)
     {
-        Entry                                        = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[AtsIndex][j];
-        Entry->CmdNumber                             = i + 1;
+        Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[AtsIndex][j];
+        Entry->CmdNumber = i + 1;
         UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &MsgSize1, sizeof(MsgSize1), false);
     }
 
     /* Next entry should not leave enough buffer space for an ATS command header */
-    Entry                                        = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[AtsIndex][j];
-    Entry->CmdNumber                             = i++ + 1;
+    Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[AtsIndex][j];
+    Entry->CmdNumber = i++ + 1;
 
     /* Use the remaining buffer space to calculate the final message size */
     MsgSize2 = (SC_ATS_BUFF_SIZE32 - SC_ATS_HDR_WORDS + 4 - j) * SC_BYTES_IN_WORD;
@@ -360,14 +360,14 @@ void SC_LoadAts_Test_LoadExactlyBufferLength(void)
 
     for (i = 0, j = 0; i < MaxBufEntries; i++, j += BufEntrySize)
     {
-        Entry                                        = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[AtsIndex][j];
-        Entry->CmdNumber                             = i + 1;
+        Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[AtsIndex][j];
+        Entry->CmdNumber = i + 1;
         UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &MsgSize1, sizeof(MsgSize1), false);
     }
 
     /* Next entry should not leave enough buffer space for an ATS command header */
-    Entry                                        = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[AtsIndex][j];
-    Entry->CmdNumber                             = i++ + 1;
+    Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[AtsIndex][j];
+    Entry->CmdNumber = i++ + 1;
 
     /* Use the remaining buffer space to calculate the final message size */
     MsgSize2 = ((SC_ATS_BUFF_SIZE32 - SC_ATS_HDR_NOPKT_WORDS - j) * SC_BYTES_IN_WORD);
@@ -536,8 +536,8 @@ void SC_ValidateAts_Test(void)
     SC_AtsEntryHeader_t *Entry;
     uint8                AtsIndex = 0;
 
-    Entry                            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[AtsIndex][0];
-    Entry->CmdNumber                 = 0;
+    Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[AtsIndex][0];
+    Entry->CmdNumber = 0;
 
     /* Execute the function being tested */
     UtAssert_INT32_EQ(SC_ValidateAts((uint16 *)(SC_OperData.AtsTblAddr[AtsIndex])), SC_ERROR);
@@ -552,8 +552,8 @@ void SC_ValidateAppend_Test(void)
     SC_AtsEntryHeader_t *Entry;
     uint8                AtsIndex = 0;
 
-    Entry                            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[AtsIndex][0];
-    Entry->CmdNumber                 = 0;
+    Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[AtsIndex][0];
+    Entry->CmdNumber = 0;
 
     /* Execute the function being tested */
     UtAssert_INT32_EQ(SC_ValidateAppend((SC_OperData.AtsTblAddr[AtsIndex])), SC_ERROR);
@@ -566,12 +566,12 @@ void SC_ValidateAppend_Test(void)
 void SC_ValidateRts_Test(void)
 {
     SC_RtsEntryHeader_t *Entry;
-    uint8                RtsIndex = 0;
+    uint8                RtsIndex  = 0;
     CFE_SB_MsgId_t       TestMsgId = CFE_SB_INVALID_MSG_ID;
     size_t               MsgSize   = SC_PACKET_MIN_SIZE;
 
-    Entry                            = (SC_RtsEntryHeader_t *)&SC_OperData.RtsTblAddr[RtsIndex][0];
-    Entry->TimeTag                   = 1;
+    Entry          = (SC_RtsEntryHeader_t *)&SC_OperData.RtsTblAddr[RtsIndex][0];
+    Entry->TimeTag = 1;
 
     /* The MsgId and MsgSize are here to satisfy TSF */
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
@@ -588,12 +588,12 @@ void SC_ValidateRts_Test(void)
 void SC_ValidateRts_Test_ParseRts(void)
 {
     SC_RtsEntryHeader_t *Entry;
-    uint8                RtsIndex = 0;
+    uint8                RtsIndex  = 0;
     CFE_SB_MsgId_t       TestMsgId = CFE_SB_INVALID_MSG_ID;
     size_t               MsgSize   = SC_PACKET_MIN_SIZE;
 
-    Entry                            = (SC_RtsEntryHeader_t *)&SC_OperData.RtsTblAddr[RtsIndex][0];
-    Entry->TimeTag                   = 0;
+    Entry          = (SC_RtsEntryHeader_t *)&SC_OperData.RtsTblAddr[RtsIndex][0];
+    Entry->TimeTag = 0;
 
     /* The MsgId and MsgSize are here to satisfy TSF */
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
@@ -632,12 +632,12 @@ void SC_LoadRts_Test_InvalidIndex(void)
 void SC_ParseRts_Test_EndOfFile(void)
 {
     SC_RtsEntryHeader_t *Entry;
-    uint8                RtsIndex = 0;
+    uint8                RtsIndex  = 0;
     CFE_SB_MsgId_t       TestMsgId = CFE_SB_INVALID_MSG_ID;
     size_t               MsgSize   = SC_PACKET_MIN_SIZE;
 
-    Entry                            = (SC_RtsEntryHeader_t *)&SC_OperData.RtsTblAddr[RtsIndex][0];
-    Entry->TimeTag                   = 0;
+    Entry          = (SC_RtsEntryHeader_t *)&SC_OperData.RtsTblAddr[RtsIndex][0];
+    Entry->TimeTag = 0;
 
     /* Set these to satisfy if-statement to reach line with comment "assumed end of file" */
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
@@ -653,12 +653,12 @@ void SC_ParseRts_Test_EndOfFile(void)
 void SC_ParseRts_Test_InvalidMsgId(void)
 {
     SC_RtsEntryHeader_t *Entry;
-    uint8                RtsIndex = 0;
+    uint8                RtsIndex  = 0;
     CFE_SB_MsgId_t       TestMsgId = CFE_SB_INVALID_MSG_ID;
     size_t               MsgSize   = SC_PACKET_MIN_SIZE;
 
-    Entry                            = (SC_RtsEntryHeader_t *)&SC_OperData.RtsTblAddr[RtsIndex][0];
-    Entry->TimeTag                   = 1;
+    Entry          = (SC_RtsEntryHeader_t *)&SC_OperData.RtsTblAddr[RtsIndex][0];
+    Entry->TimeTag = 1;
 
     /* Set to generate error message SC_RTS_INVLD_MID_ERR_EID */
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
@@ -675,12 +675,12 @@ void SC_ParseRts_Test_InvalidMsgId(void)
 void SC_ParseRts_Test_LengthErrorTooShort(void)
 {
     SC_RtsEntryHeader_t *Entry;
-    uint8                RtsIndex = 0;
+    uint8                RtsIndex  = 0;
     CFE_SB_MsgId_t       TestMsgId = SC_UT_MID_1;
     size_t               MsgSize   = 0;
 
-    Entry                            = (SC_RtsEntryHeader_t *)&SC_OperData.RtsTblAddr[RtsIndex][0];
-    Entry->TimeTag                   = 1;
+    Entry          = (SC_RtsEntryHeader_t *)&SC_OperData.RtsTblAddr[RtsIndex][0];
+    Entry->TimeTag = 1;
 
     /* Set to generate error message SC_RTS_INVLD_MID_ERR_EID */
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
@@ -698,12 +698,12 @@ void SC_ParseRts_Test_LengthErrorTooShort(void)
 void SC_ParseRts_Test_LengthErrorTooLong(void)
 {
     SC_RtsEntryHeader_t *Entry;
-    uint8                RtsIndex = 0;
+    uint8                RtsIndex  = 0;
     CFE_SB_MsgId_t       TestMsgId = SC_UT_MID_1;
     size_t               MsgSize   = SC_PACKET_MAX_SIZE + 1;
 
-    Entry                            = (SC_RtsEntryHeader_t *)&SC_OperData.RtsTblAddr[RtsIndex][0];
-    Entry->TimeTag                   = 1;
+    Entry          = (SC_RtsEntryHeader_t *)&SC_OperData.RtsTblAddr[RtsIndex][0];
+    Entry->TimeTag = 1;
 
     /* Set to generate error message SC_RTS_LEN_ERR_EID as a result of length being too long */
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
@@ -721,13 +721,13 @@ void SC_ParseRts_Test_LengthErrorTooLong(void)
 void SC_ParseRts_Test_CmdRunsOffEndOfBuffer(void)
 {
     SC_RtsEntryHeader_t *Entry;
-    uint8                RtsIndex = 0;
+    uint8                RtsIndex  = 0;
     CFE_SB_MsgId_t       TestMsgId = SC_UT_MID_1;
     size_t               MsgSize;
     int32                BufUnused = SC_RTS_BUFF_SIZE32 * SC_BYTES_IN_WORD;
 
-    Entry                            = (SC_RtsEntryHeader_t *)&SC_OperData.RtsTblAddr[RtsIndex][0];
-    Entry->TimeTag                   = 1;
+    Entry          = (SC_RtsEntryHeader_t *)&SC_OperData.RtsTblAddr[RtsIndex][0];
+    Entry->TimeTag = 1;
 
     while (BufUnused > 0)
     {
@@ -766,13 +766,13 @@ void SC_ParseRts_Test_CmdLengthEqualsBufferLength(void)
     /* Also tests the case where CmdLength is less than the buffer length */
 
     SC_RtsEntryHeader_t *Entry;
-    uint8                RtsIndex = 0;
+    uint8                RtsIndex  = 0;
     CFE_SB_MsgId_t       TestMsgId = SC_UT_MID_1;
     size_t               MsgSize;
     size_t               BufUnused = SC_RTS_BUFF_SIZE32 * SC_BYTES_IN_WORD;
 
-    Entry                            = (SC_RtsEntryHeader_t *)&SC_OperData.RtsTblAddr[RtsIndex][0];
-    Entry->TimeTag                   = 1;
+    Entry          = (SC_RtsEntryHeader_t *)&SC_OperData.RtsTblAddr[RtsIndex][0];
+    Entry->TimeTag = 1;
 
     /* Fill buffer with packets */
     while (BufUnused != 0)
@@ -808,7 +808,7 @@ void SC_ParseRts_Test_CmdLengthEqualsBufferLength(void)
 
 void SC_ParseRts_Test_CmdDoesNotFitBufferEmpty(void)
 {
-    uint8          RtsIndex = 0;
+    uint8          RtsIndex  = 0;
     CFE_SB_MsgId_t TestMsgId = SC_UT_MID_1;
     size_t         MsgSize;
     size_t         BufUnused = SC_RTS_BUFF_SIZE32 * SC_BYTES_IN_WORD;
@@ -845,7 +845,7 @@ void SC_ParseRts_Test_CmdDoesNotFitBufferEmpty(void)
 
 void SC_ParseRts_Test_CmdDoesNotFitBufferNotEmpty(void)
 {
-    uint8          RtsIndex = 0;
+    uint8          RtsIndex  = 0;
     CFE_SB_MsgId_t TestMsgId = SC_UT_MID_1;
     size_t         MsgSize;
     size_t         BufUnused = SC_RTS_BUFF_SIZE32 * SC_BYTES_IN_WORD;
@@ -892,8 +892,8 @@ void SC_UpdateAppend_Test_Nominal(void)
     uint8                EntryIndex = 0;
     size_t               MsgSize;
 
-    Entry                     = (SC_AtsEntryHeader_t *)&SC_OperData.AppendTblAddr[EntryIndex];
-    Entry->CmdNumber          = 1;
+    Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AppendTblAddr[EntryIndex];
+    Entry->CmdNumber = 1;
 
     /* Set to reach code block starting with comment "Compute buffer index for next Append ATS table entry" */
     MsgSize = 50;
@@ -952,8 +952,8 @@ void SC_UpdateAppend_Test_InvalidCmdLengthTooLow(void)
     uint8                EntryIndex = 0;
     size_t               MsgSize;
 
-    Entry                     = (SC_AtsEntryHeader_t *)&SC_OperData.AppendTblAddr[EntryIndex];
-    Entry->CmdNumber          = 1;
+    Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AppendTblAddr[EntryIndex];
+    Entry->CmdNumber = 1;
 
     /* Set to satisfy condition "(CommandBytes < SC_PACKET_MIN_SIZE)" */
     MsgSize = SC_PACKET_MIN_SIZE - 1;
@@ -978,8 +978,8 @@ void SC_UpdateAppend_Test_InvalidCmdLengthTooHigh(void)
     uint8                EntryIndex = 0;
     size_t               MsgSize;
 
-    Entry                     = (SC_AtsEntryHeader_t *)&SC_OperData.AppendTblAddr[EntryIndex];
-    Entry->CmdNumber          = 1;
+    Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AppendTblAddr[EntryIndex];
+    Entry->CmdNumber = 1;
 
     /* Set to satisfy condition "(CommandBytes > SC_PACKET_MAX_SIZE)" */
     MsgSize = SC_PACKET_MAX_SIZE * 2;
@@ -1045,8 +1045,8 @@ void SC_UpdateAppend_Test_CmdNumberZero(void)
     uint8                EntryIndex = 0;
     size_t               MsgSize;
 
-    Entry                     = (SC_AtsEntryHeader_t *)&SC_OperData.AppendTblAddr[EntryIndex];
-    Entry->CmdNumber          = 0;
+    Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AppendTblAddr[EntryIndex];
+    Entry->CmdNumber = 0;
 
     /* Cause condition to be met: "(Entry->CmdNumber == 0)" */
     MsgSize = 50;
@@ -1073,8 +1073,8 @@ void SC_UpdateAppend_Test_CmdNumberTooHigh(void)
     uint8                EntryIndex = 0;
     size_t               MsgSize;
 
-    Entry                     = (SC_AtsEntryHeader_t *)&SC_OperData.AppendTblAddr[EntryIndex];
-    Entry->CmdNumber          = SC_MAX_ATS_CMDS + 1;
+    Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AppendTblAddr[EntryIndex];
+    Entry->CmdNumber = SC_MAX_ATS_CMDS + 1;
 
     /* Cause condition to be met: "(Entry->CmdNumber > SC_MAX_ATS_CMDS)" */
     MsgSize = 50;
@@ -1340,8 +1340,8 @@ void SC_VerifyAtsTable_Test_EmptyTable(void)
     SC_AtsEntryHeader_t *Entry;
     uint8                AtsIndex = 0;
 
-    Entry                            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[AtsIndex][0];
-    Entry->CmdNumber                 = 0;
+    Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[AtsIndex][0];
+    Entry->CmdNumber = 0;
 
     /* Execute the function being tested */
     UtAssert_INT32_EQ(SC_VerifyAtsTable((SC_OperData.AtsTblAddr[AtsIndex]), SC_ATS_BUFF_SIZE), SC_ERROR);
@@ -1357,8 +1357,8 @@ void SC_VerifyAtsEntry_Test_Nominal(void)
     uint8                AtsIndex = 0;
     size_t               MsgSize;
 
-    Entry                            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[AtsIndex][0];
-    Entry->CmdNumber                 = 1;
+    Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[AtsIndex][0];
+    Entry->CmdNumber = 1;
 
     SC_OperData.AtsDupTestArray[0] = SC_DUP_TEST_UNUSED;
 
@@ -1392,8 +1392,8 @@ void SC_VerifyAtsEntry_Test_InvalidCmdNumber(void)
     SC_AtsEntryHeader_t *Entry;
     uint8                AtsIndex = 0;
 
-    Entry                            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[AtsIndex][0];
-    Entry->CmdNumber                 = 5000;
+    Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[AtsIndex][0];
+    Entry->CmdNumber = 5000;
 
     /* Execute the function being tested */
     UtAssert_INT32_EQ(SC_VerifyAtsEntry((SC_OperData.AtsTblAddr[AtsIndex]), AtsIndex, SC_ATS_BUFF_SIZE), SC_ERROR);
@@ -1408,8 +1408,8 @@ void SC_VerifyAtsEntry_Test_BufferFull(void)
     SC_AtsEntryHeader_t *Entry;
     uint8                AtsIndex = 0;
 
-    Entry                            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[AtsIndex][0];
-    Entry->CmdNumber                 = 1;
+    Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[AtsIndex][0];
+    Entry->CmdNumber = 1;
 
     /* Execute the function being tested */
     UtAssert_INT32_EQ(SC_VerifyAtsEntry((SC_OperData.AtsTblAddr[AtsIndex]), AtsIndex, 2), SC_ERROR);
@@ -1425,8 +1425,8 @@ void SC_VerifyAtsEntry_Test_InvalidCmdLengthTooLow(void)
     uint8                AtsIndex = 0;
     size_t               MsgSize;
 
-    Entry                            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[AtsIndex][0];
-    Entry->CmdNumber                 = 1;
+    Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[AtsIndex][0];
+    Entry->CmdNumber = 1;
 
     /* Set to generate error message SC_VERIFY_ATS_PKT_ERR_EID by satisfying condition "(CommandBytes <
      * SC_PACKET_MIN_SIZE)" */
@@ -1447,8 +1447,8 @@ void SC_VerifyAtsEntry_Test_InvalidCmdLengthTooHigh(void)
     uint8                AtsIndex = 0;
     size_t               MsgSize;
 
-    Entry                            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[AtsIndex][0];
-    Entry->CmdNumber                 = 1;
+    Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[AtsIndex][0];
+    Entry->CmdNumber = 1;
 
     /* Set to generate error message SC_VERIFY_ATS_PKT_ERR_EID by satisfying condition "(CommandBytes <
      * SC_PACKET_MIN_SIZE)" */
@@ -1469,8 +1469,8 @@ void SC_VerifyAtsEntry_Test_BufferOverflow(void)
     uint8                AtsIndex = 0;
     size_t               MsgSize;
 
-    Entry                            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[AtsIndex][0];
-    Entry->CmdNumber                 = 1;
+    Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[AtsIndex][0];
+    Entry->CmdNumber = 1;
 
     /* Set to generate error message SC_VERIFY_ATS_BUF_ERR_EID */
     MsgSize = SC_PACKET_MAX_SIZE;
@@ -1490,8 +1490,8 @@ void SC_VerifyAtsEntry_Test_DuplicateCmdNumber(void)
     uint8                AtsIndex = 0;
     size_t               MsgSize;
 
-    Entry                            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[AtsIndex][0];
-    Entry->CmdNumber                 = 1;
+    Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[AtsIndex][0];
+    Entry->CmdNumber = 1;
 
     /* Set to generate error message SC_VERIFY_ATS_DUP_ERR_EID */
     MsgSize = SC_PACKET_MAX_SIZE;

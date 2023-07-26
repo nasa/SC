@@ -41,14 +41,14 @@ CFE_ES_WriteToSysLog_context_t context_CFE_ES_WriteToSysLog;
 UT_CmdBuf_t UT_CmdBuf;
 
 /* Table buffers */
-uint32 AtsTblAddr[SC_NUMBER_OF_ATS][SC_ATS_BUFF_SIZE32];
-uint32 AppendTblAddr[SC_APPEND_BUFF_SIZE32];
-uint32 RtsTblAddr[SC_NUMBER_OF_RTS][SC_RTS_BUFF_SIZE32];
-SC_AtsInfoTable_t AtsInfoTblAddr[SC_NUMBER_OF_ATS];
-SC_RtsInfoEntry_t RtsInfoTblAddr[SC_NUMBER_OF_RTS];
+uint32               AtsTblAddr[SC_NUMBER_OF_ATS][SC_ATS_BUFF_SIZE32];
+uint32               AppendTblAddr[SC_APPEND_BUFF_SIZE32];
+uint32               RtsTblAddr[SC_NUMBER_OF_RTS][SC_RTS_BUFF_SIZE32];
+SC_AtsInfoTable_t    AtsInfoTblAddr[SC_NUMBER_OF_ATS];
+SC_RtsInfoEntry_t    RtsInfoTblAddr[SC_NUMBER_OF_RTS];
 SC_RtpControlBlock_t RtsCtrlBlckAddr;
 SC_AtpControlBlock_t AtsCtrlBlckAddr;
-uint32 AtsCmdStatusTblAddr[SC_NUMBER_OF_ATS][SC_MAX_ATS_CMDS];
+uint32               AtsCmdStatusTblAddr[SC_NUMBER_OF_ATS][SC_MAX_ATS_CMDS];
 
 /*
  * Function Definitions
@@ -91,16 +91,16 @@ void SC_Test_SetTableAddrs(void)
     /* Set table addresses */
     for (i = 0; i < SC_NUMBER_OF_ATS; i++)
     {
-        SC_OperData.AtsTblAddr[i] = AtsTblAddr[i];
+        SC_OperData.AtsTblAddr[i]          = AtsTblAddr[i];
         SC_OperData.AtsCmdStatusTblAddr[i] = AtsCmdStatusTblAddr[i];
     }
     for (i = 0; i < SC_NUMBER_OF_RTS; i++)
     {
         SC_OperData.RtsTblAddr[i] = RtsTblAddr[i];
     }
-    SC_OperData.AppendTblAddr = AppendTblAddr;
-    SC_OperData.AtsInfoTblAddr = AtsInfoTblAddr;
-    SC_OperData.RtsInfoTblAddr = RtsInfoTblAddr;
+    SC_OperData.AppendTblAddr   = AppendTblAddr;
+    SC_OperData.AtsInfoTblAddr  = AtsInfoTblAddr;
+    SC_OperData.RtsInfoTblAddr  = RtsInfoTblAddr;
     SC_OperData.RtsCtrlBlckAddr = &RtsCtrlBlckAddr;
     SC_OperData.AtsCtrlBlckAddr = &AtsCtrlBlckAddr;
 }

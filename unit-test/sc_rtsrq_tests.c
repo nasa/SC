@@ -293,7 +293,7 @@ void SC_StartRtsCmd_Test_NoVerifyLength(void)
 
 void SC_StartRtsGrpCmd_Test_Nominal(void)
 {
-    uint8                RtsIndex = 0;
+    uint8 RtsIndex = 0;
 
     SC_OperData.RtsInfoTblAddr[RtsIndex].RtsStatus = SC_LOADED;
     SC_OperData.RtsInfoTblAddr[RtsIndex].UseCtr    = 0;
@@ -444,7 +444,7 @@ void SC_StartRtsGrpCmd_Test_FirstLastRtsIndex(void)
 
 void SC_StartRtsGrpCmd_Test_DisabledFlag(void)
 {
-    uint8                RtsIndex = 0;
+    uint8 RtsIndex = 0;
 
     SC_OperData.RtsInfoTblAddr[RtsIndex].DisabledFlag   = true;
     SC_OperData.RtsInfoTblAddr[RtsIndex].RtsStatus      = SC_EXECUTING;
@@ -481,7 +481,7 @@ void SC_StartRtsGrpCmd_Test_DisabledFlag(void)
 
 void SC_StartRtsGrpCmd_Test_RtsStatus(void)
 {
-    uint8                RtsIndex = 0;
+    uint8 RtsIndex = 0;
 
     SC_OperData.RtsInfoTblAddr[RtsIndex].RtsStatus      = SC_EXECUTING;
     SC_OperData.RtsInfoTblAddr[RtsIndex].UseCtr         = 0;
@@ -607,7 +607,7 @@ void SC_StopRtsGrpCmd_Test_NoVerifyLength(void)
 
 void SC_StopRtsGrpCmd_Test_NotExecuting(void)
 {
-    uint8                RtsIndex = 0;
+    uint8 RtsIndex = 0;
 
     SC_OperData.RtsInfoTblAddr[RtsIndex].RtsStatus = SC_EXECUTING;
 
@@ -1156,7 +1156,7 @@ void SC_EnableRtsGrpCmd_Test_DisabledFlag(void)
 
 void SC_KillRts_Test(void)
 {
-    uint8                RtsIndex = 0;
+    uint8 RtsIndex = 0;
 
     SC_OperData.RtsInfoTblAddr[RtsIndex].RtsStatus = SC_EXECUTING;
     SC_OperData.RtsCtrlBlckAddr->NumRtsActive      = 1;
@@ -1176,7 +1176,7 @@ void SC_KillRts_Test(void)
 
 void SC_KillRts_Test_NoActiveRts(void)
 {
-    uint8                RtsIndex = 0;
+    uint8 RtsIndex = 0;
 
     SC_OperData.RtsInfoTblAddr[RtsIndex].RtsStatus = SC_EXECUTING;
     SC_OperData.RtsCtrlBlckAddr->NumRtsActive      = 0;

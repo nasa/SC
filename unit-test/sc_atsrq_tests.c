@@ -388,7 +388,7 @@ void SC_BeginAts_Test_AllCommandsSkipped(void)
 
     UT_SetDeferredRetcode(UT_KEY(SC_CompareAbsTime), 1, true);
 
-    SC_AppData.AtsTimeIndexBuffer[0][0] = 1;
+    SC_AppData.AtsTimeIndexBuffer[0][0]            = 1;
     SC_OperData.AtsInfoTblAddr[0].NumberOfCommands = 1;
 
     /* Set to cause all commnds to be skipped, to generate error message SC_ATS_SKP_ALL_ERR_EID */
@@ -412,7 +412,7 @@ void SC_BeginAts_Test_InvalidAtsIndex(void)
 
     UT_SetDeferredRetcode(UT_KEY(SC_CompareAbsTime), 1, true);
 
-    SC_AppData.AtsTimeIndexBuffer[0][0] = 1;
+    SC_AppData.AtsTimeIndexBuffer[0][0]            = 1;
     SC_OperData.AtsInfoTblAddr[0].NumberOfCommands = 1;
 
     /* Set to cause all commnds to be skipped, to generate error message SC_ATS_SKP_ALL_ERR_EID */
@@ -1019,7 +1019,7 @@ void ContinueAtsOnFailureCmd_Test_InvalidCmdLength(void)
 void SC_AppendAtsCmd_Test_Nominal(void)
 {
     SC_AtsEntryHeader_t *Entry;
-    uint8                AtsIndex = 0;
+    uint8                AtsIndex  = 0;
     CFE_SB_MsgId_t       TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
     CFE_MSG_FcnCode_t    FcnCode   = SC_APPEND_ATS_CC;
 
@@ -1028,8 +1028,8 @@ void SC_AppendAtsCmd_Test_Nominal(void)
 
     UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
 
-    Entry                            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[AtsIndex][0];
-    Entry->CmdNumber                 = 1;
+    Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[AtsIndex][0];
+    Entry->CmdNumber = 1;
 
     UT_CmdBuf.AppendAtsCmd.AtsId                          = 1;
     SC_OperData.AtsInfoTblAddr[AtsIndex].NumberOfCommands = 1;

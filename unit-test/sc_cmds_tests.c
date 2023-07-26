@@ -677,7 +677,7 @@ void SC_ProcessAtpCmd_Test_CmdMid(void)
 
 void SC_ProcessRtpCommand_Test_Nominal(void)
 {
-    bool                 ChecksumValid;
+    bool ChecksumValid;
 
     SC_AppData.NextCmdTime[SC_RTP]                                                   = 0;
     SC_AppData.CurrentTime                                                           = 1;
@@ -704,7 +704,7 @@ void SC_ProcessRtpCommand_Test_Nominal(void)
 
 void SC_ProcessRtpCommand_Test_BadSoftwareBusReturn(void)
 {
-    bool                 ChecksumValid;
+    bool ChecksumValid;
 
     SC_AppData.NextCmdTime[SC_RTP]                                                   = 0;
     SC_AppData.CurrentTime                                                           = 1;
@@ -737,7 +737,7 @@ void SC_ProcessRtpCommand_Test_BadSoftwareBusReturn(void)
 
 void SC_ProcessRtpCommand_Test_BadChecksum(void)
 {
-    bool                 ChecksumValid;
+    bool ChecksumValid;
 
     SC_AppData.NextCmdTime[SC_RTP]                                                   = 0;
     SC_AppData.CurrentTime                                                           = 1;
@@ -841,8 +841,8 @@ void SC_ProcessRtpCommand_Test_RtsStatus(void)
 
 void SC_SendHkPacket_Test(void)
 {
-    uint8                i;
-    int32                LastRtsHkIndex = 0;
+    uint8 i;
+    int32 LastRtsHkIndex = 0;
 
     SC_OperData.HkPacket.CmdErrCtr                = 1;
     SC_OperData.HkPacket.CmdCtr                   = 2;
@@ -973,7 +973,7 @@ void SC_ProcessRequest_Test_HkMID(void)
      **  Test case: SC_SEND_HK_MID
      **/
 
-    CFE_SB_MsgId_t       TestMsgId = CFE_SB_ValueToMsgId(SC_SEND_HK_MID);
+    CFE_SB_MsgId_t TestMsgId = CFE_SB_ValueToMsgId(SC_SEND_HK_MID);
 
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
 
@@ -992,7 +992,7 @@ void SC_ProcessRequest_Test_HkMIDNoVerifyCmdLength(void)
      **  Test case: SC_SEND_HK_MID
      **/
 
-    CFE_SB_MsgId_t       TestMsgId = CFE_SB_ValueToMsgId(SC_SEND_HK_MID);
+    CFE_SB_MsgId_t TestMsgId = CFE_SB_ValueToMsgId(SC_SEND_HK_MID);
 
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
 
@@ -1009,7 +1009,7 @@ void SC_ProcessRequest_Test_HkMIDAutoStartRts(void)
      **  Test case: SC_SEND_HK_MID
      **/
 
-    CFE_SB_MsgId_t       TestMsgId = CFE_SB_ValueToMsgId(SC_SEND_HK_MID);
+    CFE_SB_MsgId_t TestMsgId = CFE_SB_ValueToMsgId(SC_SEND_HK_MID);
 
     SC_AppData.AutoStartRTS = 1;
 
@@ -1033,7 +1033,7 @@ void SC_ProcessRequest_Test_HkMIDAutoStartRtsLoaded(void)
      **  Test case: SC_SEND_HK_MID
      **/
 
-    CFE_SB_MsgId_t       TestMsgId = CFE_SB_ValueToMsgId(SC_SEND_HK_MID);
+    CFE_SB_MsgId_t TestMsgId = CFE_SB_ValueToMsgId(SC_SEND_HK_MID);
 
     SC_AppData.AutoStartRTS                                           = 1;
     SC_OperData.RtsInfoTblAddr[SC_AppData.AutoStartRTS - 1].RtsStatus = SC_LOADED;
@@ -1057,7 +1057,7 @@ void SC_ProcessRequest_Test_1HzWakeupNONE(void)
     /**
      **  Test case: SC_1HZ_WAKEUP_MID with SC_AppData.NextProcNumber == SC_NONE
      **/
-    CFE_SB_MsgId_t       TestMsgId = CFE_SB_ValueToMsgId(SC_1HZ_WAKEUP_MID);
+    CFE_SB_MsgId_t TestMsgId = CFE_SB_ValueToMsgId(SC_1HZ_WAKEUP_MID);
 
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
@@ -1083,7 +1083,7 @@ void SC_ProcessRequest_Test_1HzWakeupNoSwitchPending(void)
     /**
      **  Test case: SC_1HZ_WAKEUP_MID with SC_OperData.AtsCtrlBlckAddr->SwitchPendFlag == false
      **/
-    CFE_SB_MsgId_t       TestMsgId = CFE_SB_ValueToMsgId(SC_1HZ_WAKEUP_MID);
+    CFE_SB_MsgId_t TestMsgId = CFE_SB_ValueToMsgId(SC_1HZ_WAKEUP_MID);
 
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
@@ -1109,7 +1109,7 @@ void SC_ProcessRequest_Test_1HzWakeupAtpNotExecutionTime(void)
     /**
      **  Test case: SC_1HZ_WAKEUP_MID with a pending ATP command that should not execute yet
      **/
-    CFE_SB_MsgId_t       TestMsgId = CFE_SB_ValueToMsgId(SC_1HZ_WAKEUP_MID);
+    CFE_SB_MsgId_t TestMsgId = CFE_SB_ValueToMsgId(SC_1HZ_WAKEUP_MID);
 
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
@@ -1147,8 +1147,8 @@ void SC_ProcessRequest_Test_1HzWakeupRtpExecutionTime(void)
     SC_CMDS_TEST_SC_UpdateNextTimeHook_RunCount = 0;
     UT_SetHookFunction(UT_KEY(SC_UpdateNextTime), Ut_SC_UpdateNextTimeHook, NULL);
 
-    Entry                     = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[0][0];
-    Entry->CmdNumber          = 1;
+    Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[0][0];
+    Entry->CmdNumber = 1;
 
     SC_AppData.NextProcNumber             = SC_RTP;
     SC_OperData.AtsCtrlBlckAddr->AtpState = SC_EXECUTING; /* Causes switch to ATP */
@@ -1176,7 +1176,7 @@ void SC_ProcessRequest_Test_1HzWakeupRtpExecutionTimeTooManyCmds(void)
      **  Test case: SC_1HZ_WAKEUP_MID with a pending RTP command that needs to execute immediately, but too many
      *commands are being sent at once
      **/
-    CFE_SB_MsgId_t       TestMsgId = CFE_SB_ValueToMsgId(SC_1HZ_WAKEUP_MID);
+    CFE_SB_MsgId_t TestMsgId = CFE_SB_ValueToMsgId(SC_1HZ_WAKEUP_MID);
 
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
 

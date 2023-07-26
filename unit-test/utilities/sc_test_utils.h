@@ -33,8 +33,8 @@
 #include "cfe_msgids.h"
 #include "cfe_tbl_msg.h"
 
-extern SC_AppData_t      SC_AppData;
-extern SC_OperData_t     SC_OperData;
+extern SC_AppData_t  SC_AppData;
+extern SC_OperData_t SC_OperData;
 
 /*
  * Global context structures
