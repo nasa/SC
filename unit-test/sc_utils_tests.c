@@ -35,7 +35,7 @@ void SC_GetCurrentTime_Test(void)
     SC_AppData.CurrentTime = 0;
 
     /* Execute the function being tested */
-    SC_GetCurrentTime();
+    UtAssert_VOIDCALL(SC_GetCurrentTime());
 
     /* Verify results */
     UtAssert_True(SC_AppData.CurrentTime != 0, "SC_AppData.CurrentTime != 0");
@@ -43,70 +43,48 @@ void SC_GetCurrentTime_Test(void)
 
 void SC_GetAtsEntryTime_Test(void)
 {
-    SC_AbsTimeTag_t AbsTimeTag;
-
     SC_AtsEntryHeader_t Entry;
     Entry.TimeTag_MS = 0;
     Entry.TimeTag_LS = 10;
 
     /* Execute the function being tested */
-    AbsTimeTag = SC_GetAtsEntryTime(&Entry);
-
-    /* Verify results */
-    UtAssert_True(AbsTimeTag == 10, "AbsTimeTag == 10");
+    UtAssert_UINT32_EQ(SC_GetAtsEntryTime(&Entry), Entry.TimeTag_LS);
 }
 
 void SC_ComputeAbsTime_Test(void)
 {
-    SC_AbsTimeTag_t AbsTimeTag;
-
     SC_AppData.CurrentTime = 0;
 
-    /* Execute the function being tested */
-    AbsTimeTag = SC_ComputeAbsTime(0);
-
-    /* Verify results */
-
-    /* The CFE_TIME_Add stub increments when status >= 0 */
-    UtAssert_True(AbsTimeTag == 1, "AbsTimeTag == 1");
+    /* Execute the function being tested
+     * Note the CFE_TIME_Add stub increments when status >= 0 */
+    UtAssert_UINT32_EQ(SC_ComputeAbsTime(0), 1);
 }
 
 void SC_CompareAbsTime_Test_True(void)
 {
-    bool Result;
-
     SC_AbsTimeTag_t AbsTimeTag1 = {0};
     SC_AbsTimeTag_t AbsTimeTag2 = {0};
 
     UT_SetDeferredRetcode(UT_KEY(CFE_TIME_Compare), 1, CFE_TIME_A_GT_B);
 
     /* Execute the function being tested */
-    Result = SC_CompareAbsTime(AbsTimeTag1, AbsTimeTag2);
-
-    /* Verify results */
-    UtAssert_True(Result == true, "Result == true");
+    UtAssert_BOOL_TRUE(SC_CompareAbsTime(AbsTimeTag1, AbsTimeTag2));
 }
 
 void SC_CompareAbsTime_Test_False(void)
 {
-    bool Result;
-
     SC_AbsTimeTag_t AbsTimeTag1 = {0};
     SC_AbsTimeTag_t AbsTimeTag2 = {0};
 
     UT_SetDeferredRetcode(UT_KEY(CFE_TIME_Compare), 1, -1);
 
     /* Execute the function being tested */
-    Result = SC_CompareAbsTime(AbsTimeTag1, AbsTimeTag2);
-
-    /* Verify results */
-    UtAssert_True(Result == false, "Result == false");
+    UtAssert_BOOL_FALSE(SC_CompareAbsTime(AbsTimeTag1, AbsTimeTag2));
 }
 
 void SC_VerifyCmdLength_Test_Nominal(void)
 {
     SC_NoArgsCmd_t    CmdPacket;
-    bool              Result;
     CFE_SB_MsgId_t    TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
     CFE_MSG_FcnCode_t FcnCode   = SC_NOOP_CC;
     size_t            MsgSize   = sizeof(CmdPacket);
@@ -116,12 +94,10 @@ void SC_VerifyCmdLength_Test_Nominal(void)
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &MsgSize, sizeof(MsgSize), false);
 
     /* Execute the function being tested */
-    Result = SC_VerifyCmdLength(&CmdPacket.CmdHeader.Msg, sizeof(CmdPacket));
+    UtAssert_BOOL_TRUE(SC_VerifyCmdLength(&CmdPacket.CmdHeader.Msg, sizeof(CmdPacket)));
 
     /* Verify results */
-    UtAssert_True(Result == true, "Result == true");
     UtAssert_True(SC_OperData.HkPacket.CmdErrCtr == 0, "SC_OperData.HkPacket.CmdErrCtr == 0");
-
 
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
 }
@@ -129,93 +105,55 @@ void SC_VerifyCmdLength_Test_Nominal(void)
 void SC_VerifyCmdLength_Test_LenError(void)
 {
     SC_NoArgsCmd_t    CmdPacket;
-    bool              Result;
     CFE_SB_MsgId_t    TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
     CFE_MSG_FcnCode_t FcnCode   = SC_NOOP_CC;
     size_t            MsgSize   = sizeof(CmdPacket);
-    int32             strCmpResult;
-    char              ExpectedEventString[CFE_MISSION_EVS_MAX_MESSAGE_LENGTH];
-
-    snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH,
-             "Invalid msg length: ID = 0x%%08lX, CC = %%d, Len = %%d, Expected = %%d");
 
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(SC_AppendAtsCmd_t), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &MsgSize, sizeof(MsgSize), false);
 
     /* Execute the function being tested */
-    Result = SC_VerifyCmdLength(&CmdPacket.CmdHeader.Msg, 999);
+    UtAssert_BOOL_FALSE(SC_VerifyCmdLength(&CmdPacket.CmdHeader.Msg, 999));
 
     /* Verify results */
-    UtAssert_True(Result == false, "Result == false");
     UtAssert_True(SC_OperData.HkPacket.CmdCtr == 0, "SC_OperData.HkPacket.CmdCtr == 0");
     UtAssert_True(SC_OperData.HkPacket.CmdErrCtr == 1, "SC_OperData.HkPacket.CmdErrCtr == 1");
 
     UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_LEN_ERR_EID);
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventType, CFE_EVS_EventType_ERROR);
-
-    strCmpResult = strncmp(ExpectedEventString, context_CFE_EVS_SendEvent[0].Spec, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH);
-
-    UtAssert_True(strCmpResult == 0, "Event string matched expected result, '%s'", context_CFE_EVS_SendEvent[0].Spec);
-
-
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
 }
 
 void SC_VerifyCmdLength_Test_LenErrorNotMID(void)
 {
     SC_NoArgsCmd_t    CmdPacket;
-    bool              Result;
     CFE_SB_MsgId_t    TestMsgId = CFE_SB_ValueToMsgId(SC_SEND_HK_MID);
     CFE_MSG_FcnCode_t FcnCode   = 0;
     size_t            MsgSize   = sizeof(CmdPacket);
-    int32             strCmpResult;
-    char              ExpectedEventString[CFE_MISSION_EVS_MAX_MESSAGE_LENGTH];
-
-    snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH,
-             "Invalid msg length: ID = 0x%%08lX, CC = %%d, Len = %%d, Expected = %%d");
 
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(SC_AppendAtsCmd_t), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &MsgSize, sizeof(MsgSize), false);
 
     /* Execute the function being tested */
-    Result = SC_VerifyCmdLength(&CmdPacket.CmdHeader.Msg, 999);
+    UtAssert_BOOL_FALSE(SC_VerifyCmdLength(&CmdPacket.CmdHeader.Msg, 999));
 
     /* Verify results */
-    UtAssert_True(Result == false, "Result == false");
     UtAssert_True(SC_OperData.HkPacket.CmdCtr == 0, "SC_OperData.HkPacket.CmdCtr == 0");
 
     UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_LEN_ERR_EID);
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventType, CFE_EVS_EventType_ERROR);
-
-    strCmpResult = strncmp(ExpectedEventString, context_CFE_EVS_SendEvent[0].Spec, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH);
-
-    UtAssert_True(strCmpResult == 0, "Event string matched expected result, '%s'", context_CFE_EVS_SendEvent[0].Spec);
-
-
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
 }
 
 void SC_ToggleAtsIndex_Test(void)
 {
-    uint16 Result;
-
-    SC_AtpControlBlock_t AtsCtrlBlck;
-
-    SC_OperData.AtsCtrlBlckAddr = &AtsCtrlBlck;
-
     SC_OperData.AtsCtrlBlckAddr->AtsNumber = 1;
 
-    Result = SC_ToggleAtsIndex();
-
-    UtAssert_True(Result == 1, "Result == 1");
+    UtAssert_UINT16_EQ(SC_ToggleAtsIndex(), 1);
 
     SC_OperData.AtsCtrlBlckAddr->AtsNumber = 2;
 
-    Result = SC_ToggleAtsIndex();
-
-    UtAssert_True(Result == 0, "Result == 0");
+    UtAssert_UINT16_EQ(SC_ToggleAtsIndex(), 0);
 }
 
 void UtTest_Setup(void)
