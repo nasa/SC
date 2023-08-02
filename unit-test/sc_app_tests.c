@@ -169,7 +169,7 @@ void SC_AppInit_Test_NominalPowerOnReset(void)
     Expected_SC_OperData.AtsCmdStatusHandle[0] = 0;
     Expected_SC_OperData.AtsCmdStatusHandle[1] = 0;
 
-    Expected_SC_OperData.HkPacket.ContinueAtsOnFailureFlag = 1;
+    Expected_SC_OperData.HkPacket.Payload.ContinueAtsOnFailureFlag = 1;
 
     UtAssert_MemCmp(&SC_OperData.CmdPipe, &Expected_SC_OperData.CmdPipe, sizeof(Expected_SC_OperData.CmdPipe), "2");
     UtAssert_MemCmp(&SC_OperData.AtsInfoHandle, &Expected_SC_OperData.AtsInfoHandle,
@@ -216,7 +216,7 @@ void SC_AppInit_Test_Nominal(void)
     Expected_SC_AppData.NextCmdTime[SC_RTP] = SC_MAX_TIME;
     Expected_SC_AppData.AutoStartRTS        = RTS_ID_AUTO_PROCESSOR;
 
-    Expected_SC_OperData.HkPacket.ContinueAtsOnFailureFlag = 1;
+    Expected_SC_OperData.HkPacket.Payload.ContinueAtsOnFailureFlag = 1;
 
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &MsgSize, sizeof(MsgSize), false);

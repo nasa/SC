@@ -905,8 +905,8 @@ void SC_UpdateAppend_Test_Nominal(void)
     UtAssert_VOIDCALL(SC_UpdateAppend());
 
     /* Verify results */
-    UtAssert_True(SC_OperData.HkPacket.AppendLoadCount == 1, "SC_OperData.HkPacket.AppendLoadCount == 1");
-    UtAssert_True(SC_OperData.HkPacket.AppendEntryCount == 1, "SC_OperData.HkPacket.AppendEntryCount == 1");
+    UtAssert_True(SC_OperData.HkPacket.Payload.AppendLoadCount == 1, "SC_OperData.HkPacket.Payload.AppendLoadCount == 1");
+    UtAssert_True(SC_OperData.HkPacket.Payload.AppendEntryCount == 1, "SC_OperData.HkPacket.Payload.AppendEntryCount == 1");
     UtAssert_True(SC_AppData.AppendWordCount == 15, "SC_AppData.AppendWordCount == 15");
 
     UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_UPDATE_APPEND_EID);
@@ -938,8 +938,8 @@ void SC_UpdateAppend_Test_CmdDoesNotFitBuffer(void)
     UtAssert_VOIDCALL(SC_UpdateAppend());
 
     /* Verify results */
-    UtAssert_True(SC_OperData.HkPacket.AppendLoadCount == 1, "SC_OperData.HkPacket.AppendLoadCount == 1");
-    UtAssert_True(SC_OperData.HkPacket.AppendEntryCount == 30, "SC_OperData.HkPacket.AppendEntryCount == 30");
+    UtAssert_True(SC_OperData.HkPacket.Payload.AppendLoadCount == 1, "SC_OperData.HkPacket.Payload.AppendLoadCount == 1");
+    UtAssert_True(SC_OperData.HkPacket.Payload.AppendEntryCount == 30, "SC_OperData.HkPacket.Payload.AppendEntryCount == 30");
     UtAssert_True(SC_AppData.AppendWordCount == 1980, "SC_AppData.AppendWordCount == 1980");
 
     UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_UPDATE_APPEND_EID);
@@ -964,8 +964,8 @@ void SC_UpdateAppend_Test_InvalidCmdLengthTooLow(void)
     UtAssert_VOIDCALL(SC_UpdateAppend());
 
     /* Verify results */
-    UtAssert_True(SC_OperData.HkPacket.AppendLoadCount == 1, "SC_OperData.HkPacket.AppendLoadCount == 1");
-    UtAssert_True(SC_OperData.HkPacket.AppendEntryCount == 0, "SC_OperData.HkPacket.AppendEntryCount == 0");
+    UtAssert_True(SC_OperData.HkPacket.Payload.AppendLoadCount == 1, "SC_OperData.HkPacket.Payload.AppendLoadCount == 1");
+    UtAssert_True(SC_OperData.HkPacket.Payload.AppendEntryCount == 0, "SC_OperData.HkPacket.Payload.AppendEntryCount == 0");
     UtAssert_True(SC_AppData.AppendWordCount == 0, "SC_AppData.AppendWordCount == 0");
 
     UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_UPDATE_APPEND_EID);
@@ -990,8 +990,8 @@ void SC_UpdateAppend_Test_InvalidCmdLengthTooHigh(void)
     UtAssert_VOIDCALL(SC_UpdateAppend());
 
     /* Verify results */
-    UtAssert_True(SC_OperData.HkPacket.AppendLoadCount == 1, "SC_OperData.HkPacket.AppendLoadCount == 1");
-    UtAssert_True(SC_OperData.HkPacket.AppendEntryCount == 0, "SC_OperData.HkPacket.AppendEntryCount == 0");
+    UtAssert_True(SC_OperData.HkPacket.Payload.AppendLoadCount == 1, "SC_OperData.HkPacket.Payload.AppendLoadCount == 1");
+    UtAssert_True(SC_OperData.HkPacket.Payload.AppendEntryCount == 0, "SC_OperData.HkPacket.Payload.AppendEntryCount == 0");
     UtAssert_True(SC_AppData.AppendWordCount == 0, "SC_AppData.AppendWordCount == 0");
 
     UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_UPDATE_APPEND_EID);
@@ -1029,8 +1029,8 @@ void SC_UpdateAppend_Test_EndOfBuffer(void)
     UtAssert_VOIDCALL(SC_UpdateAppend());
 
     /* Verify results */
-    UtAssert_True(SC_OperData.HkPacket.AppendLoadCount == 1, "SC_OperData.HkPacket.AppendLoadCount == 1");
-    UtAssert_True(SC_OperData.HkPacket.AppendEntryCount == 31, "SC_OperData.HkPacket.AppendEntryCount == 31");
+    UtAssert_True(SC_OperData.HkPacket.Payload.AppendLoadCount == 1, "SC_OperData.HkPacket.Payload.AppendLoadCount == 1");
+    UtAssert_True(SC_OperData.HkPacket.Payload.AppendEntryCount == 31, "SC_OperData.HkPacket.Payload.AppendEntryCount == 31");
     UtAssert_True(SC_AppData.AppendWordCount == 2000, "SC_AppData.AppendWordCount == 2000");
 
     UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_UPDATE_APPEND_EID);
@@ -1057,8 +1057,8 @@ void SC_UpdateAppend_Test_CmdNumberZero(void)
     UtAssert_VOIDCALL(SC_UpdateAppend());
 
     /* Verify results */
-    UtAssert_True(SC_OperData.HkPacket.AppendLoadCount == 1, "SC_OperData.HkPacket.AppendLoadCount == 1");
-    UtAssert_True(SC_OperData.HkPacket.AppendEntryCount == 0, "SC_OperData.HkPacket.AppendEntryCount == 0");
+    UtAssert_True(SC_OperData.HkPacket.Payload.AppendLoadCount == 1, "SC_OperData.HkPacket.Payload.AppendLoadCount == 1");
+    UtAssert_True(SC_OperData.HkPacket.Payload.AppendEntryCount == 0, "SC_OperData.HkPacket.Payload.AppendEntryCount == 0");
     UtAssert_True(SC_AppData.AppendWordCount == 0, "SC_AppData.AppendWordCount == 0");
 
     UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_UPDATE_APPEND_EID);
@@ -1085,8 +1085,8 @@ void SC_UpdateAppend_Test_CmdNumberTooHigh(void)
     UtAssert_VOIDCALL(SC_UpdateAppend());
 
     /* Verify results */
-    UtAssert_True(SC_OperData.HkPacket.AppendLoadCount == 1, "SC_OperData.HkPacket.AppendLoadCount == 1");
-    UtAssert_True(SC_OperData.HkPacket.AppendEntryCount == 0, "SC_OperData.HkPacket.AppendEntryCount == 0");
+    UtAssert_True(SC_OperData.HkPacket.Payload.AppendLoadCount == 1, "SC_OperData.HkPacket.Payload.AppendLoadCount == 1");
+    UtAssert_True(SC_OperData.HkPacket.Payload.AppendEntryCount == 0, "SC_OperData.HkPacket.Payload.AppendEntryCount == 0");
     UtAssert_True(SC_AppData.AppendWordCount == 0, "SC_AppData.AppendWordCount == 0");
 
     UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_UPDATE_APPEND_EID);
@@ -1106,7 +1106,7 @@ void SC_ProcessAppend_Test(void)
     Entry->CmdNumber = 1;
 
     SC_AppData.AppendWordCount            = 1;
-    SC_OperData.HkPacket.AppendEntryCount = 1;
+    SC_OperData.HkPacket.Payload.AppendEntryCount = 1;
 
     SC_AppData.AtsCmdIndexBuffer[0][0] = 0;
 
@@ -1151,7 +1151,7 @@ void SC_ProcessAppend_Test_CmdLoaded(void)
     Entry->CmdNumber = 1;
 
     SC_AppData.AppendWordCount            = 1;
-    SC_OperData.HkPacket.AppendEntryCount = 1;
+    SC_OperData.HkPacket.Payload.AppendEntryCount = 1;
 
     SC_AppData.AtsCmdIndexBuffer[0][0] = 0;
 
@@ -1193,7 +1193,7 @@ void SC_ProcessAppend_Test_NotExecuting(void)
     Entry->CmdNumber = 1;
 
     SC_AppData.AppendWordCount            = 1;
-    SC_OperData.HkPacket.AppendEntryCount = 1;
+    SC_OperData.HkPacket.Payload.AppendEntryCount = 1;
 
     SC_AppData.AtsCmdIndexBuffer[0][0] = 0;
 
@@ -1234,7 +1234,7 @@ void SC_ProcessAppend_Test_AtsNumber(void)
     Entry->CmdNumber = 1;
 
     SC_AppData.AppendWordCount            = 1;
-    SC_OperData.HkPacket.AppendEntryCount = 1;
+    SC_OperData.HkPacket.Payload.AppendEntryCount = 1;
 
     SC_AppData.AtsCmdIndexBuffer[0][0] = 0;
 

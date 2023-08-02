@@ -148,7 +148,7 @@ CFE_Status_t SC_AppInit(void)
     SC_OperData.NumCmdsSec = 0;
 
     /* Continue ATS execution if ATS command checksum fails */
-    SC_OperData.HkPacket.ContinueAtsOnFailureFlag = SC_CONT_ON_FAILURE_START;
+    SC_OperData.HkPacket.Payload.ContinueAtsOnFailureFlag = SC_CONT_ON_FAILURE_START;
 
     /* Make sure nothing is running */
     SC_AppData.NextProcNumber      = SC_NONE;

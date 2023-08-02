@@ -52,12 +52,10 @@
  */
 
 /**
- *  \brief Housekeeping Packet Structure
+ *  \brief Housekeeping Packet Payload Structure
  */
 typedef struct
 {
-    CFE_MSG_TelemetryHeader_t TlmHeader;
-
     uint8 AtsNumber;                /**< \brief Current ATS number: 1 = ATS A, 2 = ATS B */
     uint8 AtpState;                 /**< \brief Current ATP state: 2 = IDLE, 5 = EXECUTING */
     uint8 ContinueAtsOnFailureFlag; /**< \brief Continue ATS execution on failure flag */
@@ -102,6 +100,15 @@ typedef struct
      the LSB (bit zero) of uint16 array index zero represents RTS number 1, and bit one of uint16 array
      index zero represents RTS number 2, etc.  If an RTS is ENABLED, then the corresponding bit is zero.
      If an RTS is DISABLED, then the corresponding bit is one. */
+} SC_HkTlm_Payload_t;
+
+/**
+ *  \brief Housekeeping Packet Structure
+ */
+typedef struct
+{
+    CFE_MSG_TelemetryHeader_t TlmHeader;
+    SC_HkTlm_Payload_t        Payload;
 } SC_HkTlm_t;
 
 /**\}*/
@@ -110,6 +117,61 @@ typedef struct
  * \defgroup cfssccmdstructs CFS Stored Command Command Structures
  * \{
  */
+
+/**
+ *  \brief ATS Id Command Payload
+ */
+typedef struct
+{
+    uint16 AtsId;   /**< \brief The ID of the ATS to start, 1 = ATS_A, 2 = ATS_B */
+    uint16 Padding; /**< \brief Structure padding */
+} SC_StartAtsCmd_Payload_t;
+
+/**
+ *  \brief RTS Id Command Payload
+ */
+typedef struct
+{
+    uint16 RtsId;   /**< \brief The ID of the RTS to start, 1 through #SC_NUMBER_OF_RTS */
+    uint16 Padding; /**< \brief Structure padding */
+} SC_RtsCmd_Payload_t;
+
+/**
+ *  \brief Jump running ATS to a new time Command Payload
+ */
+typedef struct
+{
+    uint32 NewTime; /**< \brief the time to 'jump' to */
+} SC_JumpAtsCmd_Payload_t;
+
+/**
+ *  \brief Continue ATS on failure command Payload
+ */
+typedef struct
+{
+    uint16 ContinueState; /**< \brief true or false, to continue ATS after a failure  */
+    uint16 Padding;       /**< \brief Structure Padding */
+} SC_SetContinueAtsOnFailureCmd_Payload_t;
+
+/**
+ *  \brief Append to ATS Command Payload
+ */
+typedef struct
+{
+    uint16 AtsId;   /**< \brief The ID of the ATS to append to, 1 = ATS_A, 2 = ATS_B */
+    uint16 Padding; /**< \brief Structure Padding */
+} SC_AppendAtsCmd_Payload_t;
+
+#if (SC_ENABLE_GROUP_COMMANDS == true)
+/**
+ *  \brief RTS Group Command Payload
+ */
+typedef struct
+{
+    uint16 FirstRtsId; /**< \brief ID of the first RTS to act on, 1 through #SC_NUMBER_OF_RTS */
+    uint16 LastRtsId;  /**< \brief ID of the last RTS to act on, 1 through #SC_NUMBER_OF_RTS */
+} SC_RtsGrpCmd_Payload_t;
+#endif
 
 /**
  *  \brief No Arguments Command
@@ -129,10 +191,8 @@ typedef struct
  */
 typedef struct
 {
-    CFE_MSG_CommandHeader_t CmdHeader; /**< \brief Command Header */
-
-    uint16 AtsId;   /**< \brief The ID of the ATS to start, 1 = ATS_A, 2 = ATS_B */
-    uint16 Padding; /**< \brief Structure padding */
+    CFE_MSG_CommandHeader_t  CmdHeader; /**< \brief Command Header */
+    SC_StartAtsCmd_Payload_t Payload;
 } SC_StartAtsCmd_t;
 
 /**
@@ -143,9 +203,7 @@ typedef struct
 typedef struct
 {
     CFE_MSG_CommandHeader_t CmdHeader; /**< \brief Command Header */
-
-    uint16 RtsId;   /**< \brief The ID of the RTS to start, 1 through #SC_NUMBER_OF_RTS */
-    uint16 Padding; /**< \brief Structure padding */
+    SC_RtsCmd_Payload_t     Payload;
 } SC_RtsCmd_t;
 
 /**
@@ -156,8 +214,7 @@ typedef struct
 typedef struct
 {
     CFE_MSG_CommandHeader_t CmdHeader; /**< \brief Command Header */
-
-    uint32 NewTime; /**< \brief the time to 'jump' to */
+    SC_JumpAtsCmd_Payload_t Payload;
 } SC_JumpAtsCmd_t;
 
 /**
@@ -167,10 +224,8 @@ typedef struct
  */
 typedef struct
 {
-    CFE_MSG_CommandHeader_t CmdHeader; /**< \brief Command Header */
-
-    uint16 ContinueState; /**< \brief true or false, to continue ATS after a failure  */
-    uint16 Padding;       /**< \brief Structure Padding */
+    CFE_MSG_CommandHeader_t                 CmdHeader; /**< \brief Command Header */
+    SC_SetContinueAtsOnFailureCmd_Payload_t Payload;
 } SC_SetContinueAtsOnFailureCmd_t;
 
 /**
@@ -180,10 +235,8 @@ typedef struct
  */
 typedef struct
 {
-    CFE_MSG_CommandHeader_t CmdHeader; /**< \brief Command Header */
-
-    uint16 AtsId;   /**< \brief The ID of the ATS to append to, 1 = ATS_A, 2 = ATS_B */
-    uint16 Padding; /**< \brief Structure Padding */
+    CFE_MSG_CommandHeader_t   CmdHeader; /**< \brief Command Header */
+    SC_AppendAtsCmd_Payload_t Payload;
 } SC_AppendAtsCmd_t;
 
 #if (SC_ENABLE_GROUP_COMMANDS == true)
@@ -195,9 +248,7 @@ typedef struct
 typedef struct
 {
     CFE_MSG_CommandHeader_t CmdHeader; /**< \brief Command Header */
-
-    uint16 FirstRtsId; /**< \brief ID of the first RTS to act on, 1 through #SC_NUMBER_OF_RTS */
-    uint16 LastRtsId;  /**< \brief ID of the last RTS to act on, 1 through #SC_NUMBER_OF_RTS */
+    SC_RtsGrpCmd_Payload_t  Payload;
 } SC_RtsGrpCmd_t;
 #endif
 
