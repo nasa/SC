@@ -19,7 +19,7 @@ add_cfe_coverage_stubs("sc_internal"
 )
 
 # Link with the cfe core stubs and unit test assert libs
-target_link_libraries(coverage-sc_internal-stubs ut_core_api_stubs ut_assert)
+target_link_libraries(coverage-sc_internal-stubs coverage-gateway_msg-stubs ut_core_api_stubs ut_assert)
 
 # Include and expose unit test utilities, fsw/inc, and fsw/src includes
 target_include_directories(coverage-sc_internal-stubs PUBLIC utilities)
