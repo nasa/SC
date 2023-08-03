@@ -31,6 +31,7 @@
 
 #include "cfe.h"
 #include "cfe_tbl_msg.h"
+#include "cfe_msg_custom_api.h"
 #include "sc_app.h"
 #include "sc_cmds.h"
 #include "sc_atsrq.h"
@@ -101,6 +102,7 @@ void SC_ProcessAtpCmd(void)
                  ** Check the checksum on the command
                  **
                  */
+                CFE_MSG_SetGatewayCRC(&EntryPtr->Msg);
                 CFE_MSG_ValidateChecksum(&EntryPtr->Msg, &ChecksumValid);
                 if (ChecksumValid == true)
                 {
@@ -151,6 +153,7 @@ void SC_ProcessAtpCmd(void)
                     }
                     else
                     {
+                        CFE_MSG_SetMsgTime(&EntryPtr->Msg, CFE_TIME_GetTime());
                         Result = CFE_SB_TransmitMsg(&EntryPtr->Msg, true);
 
                         if (Result == CFE_SUCCESS)
@@ -329,13 +332,14 @@ void SC_ProcessRtpCommand(void)
          */
         EntryPtr = (SC_RtsEntry_t *)&SC_OperData.RtsTblAddr[RtsIndex][CmdOffset];
 
+        CFE_MSG_SetGatewayCRC(&EntryPtr->Msg);
         CFE_MSG_ValidateChecksum(&EntryPtr->Msg, &ChecksumValid);
         if (ChecksumValid == true)
         {
             /*
              ** Try Sending the command on the Software Bus
              */
-
+            CFE_MSG_SetMsgTime(&EntryPtr->Msg, CFE_TIME_GetTime());
             Result = CFE_SB_TransmitMsg(&EntryPtr->Msg, true);
 
             if (Result == CFE_SUCCESS)
