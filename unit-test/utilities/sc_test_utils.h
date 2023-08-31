@@ -33,9 +33,8 @@
 #include "cfe_msgids.h"
 #include "cfe_tbl_msg.h"
 
-extern SC_AppData_t      SC_AppData;
-extern SC_OperData_t     SC_OperData;
-extern SC_RtsInfoEntry_t RtsInfoTbl[SC_NUMBER_OF_RTS];
+extern SC_AppData_t  SC_AppData;
+extern SC_OperData_t SC_OperData;
 
 /*
  * Global context structures
@@ -80,6 +79,7 @@ extern UT_CmdBuf_t UT_CmdBuf;
  * Function Definitions
  */
 
+void SC_Test_SetTableAddrs(void);
 void SC_Test_Setup(void);
 void SC_Test_TearDown(void);
 
