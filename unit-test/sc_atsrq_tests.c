@@ -71,8 +71,6 @@ void SC_StartAtsCmd_Test_NominalA(void)
 
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
 
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
-
     UT_CmdBuf.StartAtsCmd.AtsId                    = 1;
     SC_OperData.AtsInfoTblAddr[0].NumberOfCommands = 1;
     SC_OperData.AtsCtrlBlckAddr->AtpState          = SC_IDLE;
@@ -94,8 +92,6 @@ void SC_StartAtsCmd_Test_NominalB(void)
     CFE_SB_MsgId_t TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
 
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
 
     UT_CmdBuf.StartAtsCmd.AtsId                    = 2;
     SC_OperData.AtsInfoTblAddr[1].NumberOfCommands = 1;
@@ -121,7 +117,6 @@ void SC_StartAtsCmd_Test_CouldNotStart(void)
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
 
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
     UT_SetDeferredRetcode(UT_KEY(SC_CompareAbsTime), 1, true);
 
     UT_CmdBuf.StartAtsCmd.AtsId                    = 1;
@@ -149,8 +144,6 @@ void SC_StartAtsCmd_Test_NoCommandsA(void)
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
 
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
-
     UT_CmdBuf.StartAtsCmd.AtsId                    = 1;
     SC_OperData.AtsInfoTblAddr[0].NumberOfCommands = 0;
     SC_OperData.AtsCtrlBlckAddr->AtpState          = SC_IDLE;
@@ -172,8 +165,6 @@ void SC_StartAtsCmd_Test_NoCommandsB(void)
 
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
 
     UT_CmdBuf.StartAtsCmd.AtsId                    = 2;
     SC_OperData.AtsInfoTblAddr[1].NumberOfCommands = 0;
@@ -197,8 +188,6 @@ void SC_StartAtsCmd_Test_InUse(void)
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
 
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
-
     UT_CmdBuf.StartAtsCmd.AtsId           = 1;
     SC_OperData.AtsCtrlBlckAddr->AtpState = SC_EXECUTING;
 
@@ -219,8 +208,6 @@ void SC_StartAtsCmd_Test_InvalidAtsId(void)
 
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
 
     UT_CmdBuf.StartAtsCmd.AtsId           = 99;
     SC_OperData.AtsCtrlBlckAddr->AtpState = SC_EXECUTING;
@@ -243,8 +230,6 @@ void SC_StartAtsCmd_Test_InvalidAtsIdZero(void)
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
 
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
-
     UT_CmdBuf.StartAtsCmd.AtsId           = 0;
     SC_OperData.AtsCtrlBlckAddr->AtpState = SC_EXECUTING;
 
@@ -258,23 +243,6 @@ void SC_StartAtsCmd_Test_InvalidAtsIdZero(void)
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
 }
 
-void SC_StartAtsCmd_Test_InvalidCmdLength(void)
-{
-    CFE_SB_MsgId_t    TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
-    CFE_MSG_FcnCode_t FcnCode   = SC_START_ATS_CC;
-
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, false);
-
-    /* Execute the function being tested */
-    UtAssert_VOIDCALL(SC_StartAtsCmd(&UT_CmdBuf.Buf));
-
-    /* Verify results */
-    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
-}
-
 void SC_StopAtsCmd_Test_NominalA(void)
 {
     CFE_SB_MsgId_t    TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
@@ -282,8 +250,6 @@ void SC_StopAtsCmd_Test_NominalA(void)
 
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
 
     SC_OperData.AtsCtrlBlckAddr->AtsNumber = SC_ATSA;
 
@@ -305,8 +271,6 @@ void SC_StopAtsCmd_Test_NominalB(void)
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
 
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
-
     SC_OperData.AtsCtrlBlckAddr->AtsNumber = SC_ATSB;
 
     /* Execute the function being tested */
@@ -327,8 +291,6 @@ void SC_StopAtsCmd_Test_NoRunningAts(void)
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
 
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
-
     SC_OperData.AtsCtrlBlckAddr->AtsNumber = 99;
 
     /* Execute the function being tested */
@@ -339,25 +301,6 @@ void SC_StopAtsCmd_Test_NoRunningAts(void)
 
     UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_STOPATS_NO_ATS_INF_EID);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
-}
-
-void SC_StopAtsCmd_Test_InvalidCmdLength(void)
-{
-    CFE_SB_MsgId_t    TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
-    CFE_MSG_FcnCode_t FcnCode   = SC_START_ATS_CC;
-
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, false);
-
-    SC_OperData.AtsCtrlBlckAddr->AtsNumber = 99;
-
-    /* Execute the function being tested */
-    UtAssert_VOIDCALL(SC_StopAtsCmd(&UT_CmdBuf.Buf));
-
-    /* Verify results */
-    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
 }
 
 void SC_BeginAts_Test_Nominal(void)
@@ -448,8 +391,6 @@ void SC_GroundSwitchCmd_Test_Nominal(void)
 
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
 
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
-
     SC_OperData.AtsCtrlBlckAddr->AtsNumber         = 1;
     SC_OperData.AtsCtrlBlckAddr->AtpState          = SC_EXECUTING;
     SC_OperData.AtsInfoTblAddr[1].NumberOfCommands = 1;
@@ -474,8 +415,6 @@ void SC_GroundSwitchCmd_Test_DestinationAtsNotLoaded(void)
 
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
 
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
-
     SC_OperData.AtsCtrlBlckAddr->AtsNumber         = 1;
     SC_OperData.AtsCtrlBlckAddr->AtpState          = SC_EXECUTING;
     SC_OperData.AtsInfoTblAddr[1].NumberOfCommands = 0;
@@ -498,8 +437,6 @@ void SC_GroundSwitchCmd_Test_AtpIdle(void)
 
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
 
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
-
     SC_OperData.AtsCtrlBlckAddr->AtsNumber = 1;
     SC_OperData.AtsCtrlBlckAddr->AtpState  = 99;
 
@@ -513,21 +450,6 @@ void SC_GroundSwitchCmd_Test_AtpIdle(void)
 
     UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_SWITCH_ATS_CMD_IDLE_ERR_EID);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
-}
-
-void SC_GroundSwitchCmd_Test_InvalidCmdLength(void)
-{
-    CFE_SB_MsgId_t TestMsgId = CFE_SB_ValueToMsgId(SC_1HZ_WAKEUP_MID);
-
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, false);
-
-    /* Execute the function being tested */
-    SC_GroundSwitchCmd(&UT_CmdBuf.Buf);
-
-    /* Verify results */
-    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
 }
 
 void SC_ServiceSwitchPend_Test_NominalA(void)
@@ -782,7 +704,6 @@ void SC_JumpAtsCmd_Test_SkipOneCmd(void)
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(SC_JumpAtsCmd_t), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
 
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
     UT_SetDeferredRetcode(UT_KEY(SC_CompareAbsTime), 1, true);
 
     /* Set to satisfy first if-statement, while not affecting later calls to CFE_TIME_Compare */
@@ -826,7 +747,6 @@ void SC_JumpAtsCmd_Test_AllCommandsSkipped(void)
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(SC_JumpAtsCmd_t), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
 
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
     UT_SetDeferredRetcode(UT_KEY(SC_CompareAbsTime), 1, true);
 
     /* Set to satisfy first if-statement, while not affecting later calls to CFE_TIME_Compare */
@@ -856,8 +776,6 @@ void SC_JumpAtsCmd_Test_NoRunningAts(void)
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(SC_JumpAtsCmd_t), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
 
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
-
     SC_OperData.AtsCtrlBlckAddr->AtpState = SC_IDLE;
 
     /* Execute the function being tested */
@@ -879,7 +797,6 @@ void SC_JumpAtsCmd_Test_AtsNotLoaded(void)
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(SC_JumpAtsCmd_t), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
 
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
     UT_SetDeferredRetcode(UT_KEY(SC_CompareAbsTime), 1, true);
 
     /* Set to satisfy first if-statement, while not affecting later calls to CFE_TIME_Compare */
@@ -910,25 +827,6 @@ void SC_JumpAtsCmd_Test_AtsNotLoaded(void)
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 2);
 }
 
-void SC_JumpAtsCmd_Test_InvalidCmdLength(void)
-{
-    CFE_SB_MsgId_t    TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
-    CFE_MSG_FcnCode_t FcnCode   = SC_JUMP_ATS_CC;
-
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(SC_JumpAtsCmd_t), false);
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, false);
-
-    SC_OperData.AtsCtrlBlckAddr->AtpState = SC_IDLE;
-
-    /* Execute the function being tested */
-    UtAssert_VOIDCALL(SC_JumpAtsCmd(&UT_CmdBuf.Buf));
-
-    /* Verify results */
-    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
-}
-
 void ContinueAtsOnFailureCmd_Test_Nominal(void)
 {
     CFE_SB_MsgId_t    TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
@@ -936,8 +834,6 @@ void ContinueAtsOnFailureCmd_Test_Nominal(void)
 
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(SC_SetContinueAtsOnFailureCmd_t), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
 
     UT_CmdBuf.SetContinueAtsOnFailureCmd.ContinueState = true;
 
@@ -961,8 +857,6 @@ void ContinueAtsOnFailureCmd_Test_FalseState(void)
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(SC_SetContinueAtsOnFailureCmd_t), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
 
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
-
     UT_CmdBuf.SetContinueAtsOnFailureCmd.ContinueState = false;
 
     /* Execute the function being tested */
@@ -985,8 +879,6 @@ void ContinueAtsOnFailureCmd_Test_InvalidState(void)
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(SC_SetContinueAtsOnFailureCmd_t), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
 
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
-
     UT_CmdBuf.SetContinueAtsOnFailureCmd.ContinueState = 99;
 
     /* Execute the function being tested */
@@ -999,23 +891,6 @@ void ContinueAtsOnFailureCmd_Test_InvalidState(void)
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
 }
 
-void ContinueAtsOnFailureCmd_Test_InvalidCmdLength(void)
-{
-    CFE_SB_MsgId_t    TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
-    CFE_MSG_FcnCode_t FcnCode   = SC_CONTINUE_ATS_ON_FAILURE_CC;
-
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(SC_SetContinueAtsOnFailureCmd_t), false);
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, false);
-
-    /* Execute the function being tested */
-    UtAssert_VOIDCALL(SC_ContinueAtsOnFailureCmd(&UT_CmdBuf.Buf));
-
-    /* Verify results */
-    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
-}
-
 void SC_AppendAtsCmd_Test_Nominal(void)
 {
     SC_AtsEntryHeader_t *Entry;
@@ -1025,8 +900,6 @@ void SC_AppendAtsCmd_Test_Nominal(void)
 
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(SC_AppendAtsCmd_t), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
 
     Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[AtsIndex][0];
     Entry->CmdNumber = 1;
@@ -1054,8 +927,6 @@ void SC_AppendAtsCmd_Test_InvalidAtsId(void)
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(SC_AppendAtsCmd_t), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
 
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
-
     UT_CmdBuf.AppendAtsCmd.AtsId          = 99;
     SC_OperData.HkPacket.AppendEntryCount = 1;
 
@@ -1076,8 +947,6 @@ void SC_AppendAtsCmd_Test_InvalidAtsIdZero(void)
 
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(SC_AppendAtsCmd_t), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
 
     UT_CmdBuf.AppendAtsCmd.AtsId          = 0;
     SC_OperData.HkPacket.AppendEntryCount = 1;
@@ -1100,8 +969,6 @@ void SC_AppendAtsCmd_Test_AtsTableEmpty(void)
 
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(SC_AppendAtsCmd_t), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
 
     UT_CmdBuf.AppendAtsCmd.AtsId                          = 1;
     SC_OperData.HkPacket.AppendEntryCount                 = 1;
@@ -1126,8 +993,6 @@ void SC_AppendAtsCmd_Test_AppendTableEmpty(void)
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(SC_AppendAtsCmd_t), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
 
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
-
     UT_CmdBuf.AppendAtsCmd.AtsId                          = 1;
     SC_OperData.HkPacket.AppendEntryCount                 = 0;
     SC_OperData.AtsInfoTblAddr[AtsIndex].NumberOfCommands = 1;
@@ -1151,8 +1016,6 @@ void SC_AppendAtsCmd_Test_NoRoomForAppendInAts(void)
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(SC_AppendAtsCmd_t), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
 
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
-
     UT_CmdBuf.AppendAtsCmd.AtsId                          = 1;
     SC_OperData.HkPacket.AppendEntryCount                 = 1;
     SC_OperData.AtsInfoTblAddr[AtsIndex].NumberOfCommands = 1;
@@ -1169,23 +1032,6 @@ void SC_AppendAtsCmd_Test_NoRoomForAppendInAts(void)
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
 }
 
-void SC_AppendAtsCmd_Test_InvalidCmdLength(void)
-{
-    CFE_SB_MsgId_t    TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
-    CFE_MSG_FcnCode_t FcnCode   = SC_APPEND_ATS_CC;
-
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(SC_AppendAtsCmd_t), false);
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, false);
-
-    /* Execute the function being tested */
-    SC_AppendAtsCmd(&UT_CmdBuf.Buf);
-
-    /* Verify results */
-    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
-}
-
 void UtTest_Setup(void)
 {
     UtTest_Add(SC_StartAtsCmd_Test_NominalA, SC_Test_Setup, SC_Test_TearDown, "SC_StartAtsCmd_Test_NominalA");
@@ -1197,13 +1043,9 @@ void UtTest_Setup(void)
     UtTest_Add(SC_StartAtsCmd_Test_InvalidAtsId, SC_Test_Setup, SC_Test_TearDown, "SC_StartAtsCmd_Test_InvalidAtsId");
     UtTest_Add(SC_StartAtsCmd_Test_InvalidAtsIdZero, SC_Test_Setup, SC_Test_TearDown,
                "SC_StartAtsCmd_Test_InvalidAtsIdZero");
-    UtTest_Add(SC_StartAtsCmd_Test_InvalidCmdLength, SC_Test_Setup, SC_Test_TearDown,
-               "SC_StartAtsCmd_Test_InvalidCmdLength");
     UtTest_Add(SC_StopAtsCmd_Test_NominalA, SC_Test_Setup, SC_Test_TearDown, "SC_StopAtsCmd_Test_NominalA");
     UtTest_Add(SC_StopAtsCmd_Test_NominalB, SC_Test_Setup, SC_Test_TearDown, "SC_StopAtsCmd_Test_NominalB");
     UtTest_Add(SC_StopAtsCmd_Test_NoRunningAts, SC_Test_Setup, SC_Test_TearDown, "SC_StopAtsCmd_Test_NoRunningAts");
-    UtTest_Add(SC_StopAtsCmd_Test_InvalidCmdLength, SC_Test_Setup, SC_Test_TearDown,
-               "SC_StopAtsCmd_Test_InvalidCmdLength");
     UtTest_Add(SC_BeginAts_Test_Nominal, SC_Test_Setup, SC_Test_TearDown, "SC_BeginAts_Test_Nominal");
     UtTest_Add(SC_BeginAts_Test_AllCommandsSkipped, SC_Test_Setup, SC_Test_TearDown,
                "SC_BeginAts_Test_AllCommandsSkipped");
@@ -1213,8 +1055,6 @@ void UtTest_Setup(void)
     UtTest_Add(SC_GroundSwitchCmd_Test_DestinationAtsNotLoaded, SC_Test_Setup, SC_Test_TearDown,
                "SC_GroundSwitchCmd_Test_DestinationAtsNotLoaded");
     UtTest_Add(SC_GroundSwitchCmd_Test_AtpIdle, SC_Test_Setup, SC_Test_TearDown, "SC_GroundSwitchCmd_Test_AtpIdle");
-    UtTest_Add(SC_GroundSwitchCmd_Test_InvalidCmdLength, SC_Test_Setup, SC_Test_TearDown,
-               "SC_GroundSwitchCmd_Test_InvalidCmdLength");
     UtTest_Add(SC_ServiceSwitchPend_Test_NominalA, SC_Test_Setup, SC_Test_TearDown,
                "SC_ServiceSwitchPend_Test_NominalA");
     UtTest_Add(SC_ServiceSwitchPend_Test_NominalB, SC_Test_Setup, SC_Test_TearDown,
@@ -1237,16 +1077,12 @@ void UtTest_Setup(void)
                "SC_JumpAtsCmd_Test_AllCommandsSkipped");
     UtTest_Add(SC_JumpAtsCmd_Test_NoRunningAts, SC_Test_Setup, SC_Test_TearDown, "SC_JumpAtsCmd_Test_NoRunningAts");
     UtTest_Add(SC_JumpAtsCmd_Test_AtsNotLoaded, SC_Test_Setup, SC_Test_TearDown, "SC_JumpAtsCmd_Test_AtsNotLoaded");
-    UtTest_Add(SC_JumpAtsCmd_Test_InvalidCmdLength, SC_Test_Setup, SC_Test_TearDown,
-               "SC_JumpAtsCmd_Test_InvalidCmdLength");
     UtTest_Add(ContinueAtsOnFailureCmd_Test_Nominal, SC_Test_Setup, SC_Test_TearDown,
                "ContinueAtsOnFailureCmd_Test_Nominal");
     UtTest_Add(ContinueAtsOnFailureCmd_Test_FalseState, SC_Test_Setup, SC_Test_TearDown,
                "ContinueAtsOnFailureCmd_Test_FalseState");
     UtTest_Add(ContinueAtsOnFailureCmd_Test_InvalidState, SC_Test_Setup, SC_Test_TearDown,
                "ContinueAtsOnFailureCmd_Test_InvalidState");
-    UtTest_Add(ContinueAtsOnFailureCmd_Test_InvalidCmdLength, SC_Test_Setup, SC_Test_TearDown,
-               "ContinueAtsOnFailureCmd_Test_InvalidCmdLength");
     UtTest_Add(SC_AppendAtsCmd_Test_Nominal, SC_Test_Setup, SC_Test_TearDown, "SC_AppendAtsCmd_Test_Nominal");
     UtTest_Add(SC_AppendAtsCmd_Test_InvalidAtsId, SC_Test_Setup, SC_Test_TearDown, "SC_AppendAtsCmd_Test_InvalidAtsId");
     UtTest_Add(SC_AppendAtsCmd_Test_InvalidAtsIdZero, SC_Test_Setup, SC_Test_TearDown,
@@ -1257,6 +1093,4 @@ void UtTest_Setup(void)
                "SC_AppendAtsCmd_Test_AppendTableEmpty");
     UtTest_Add(SC_AppendAtsCmd_Test_NoRoomForAppendInAts, SC_Test_Setup, SC_Test_TearDown,
                "SC_AppendAtsCmd_Test_NoRoomForAppendInAts");
-    UtTest_Add(SC_AppendAtsCmd_Test_InvalidCmdLength, SC_Test_Setup, SC_Test_TearDown,
-               "SC_AppendAtsCmd_Test_InvalidCmdLength");
 }
