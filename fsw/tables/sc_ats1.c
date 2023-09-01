@@ -101,19 +101,19 @@ SC_AtsTable1_t SC_Ats1 = {
     .ats.cmd1.CmdHeader  = CFE_MSG_CMD_HDR_INIT(SC_CMD_MID, SC_MEMBER_SIZE(cmd1), SC_NOOP_CC, SC_NOOP_CKSUM),
 
     /* 2 */
-    .ats.hdr2.CmdNumber  = 2,
-    .ats.hdr2.TimeTag_MS = SC_CMD2_TIME >> 16,
-    .ats.hdr2.TimeTag_LS = SC_CMD2_TIME & 0xFFFF,
-    .ats.cmd2.CmdHeader =
+    .ats.hdr2.CmdNumber     = 2,
+    .ats.hdr2.TimeTag_MS    = SC_CMD2_TIME >> 16,
+    .ats.hdr2.TimeTag_LS    = SC_CMD2_TIME & 0xFFFF,
+    .ats.cmd2.CmdHeader     =
         CFE_MSG_CMD_HDR_INIT(SC_CMD_MID, SC_MEMBER_SIZE(cmd2), SC_ENABLE_RTS_CC, SC_ENABLE_RTS1_CKSUM),
-    .ats.cmd2.RtsId = 1,
+    .ats.cmd2.Payload.RtsId = 1,
 
     /* 3 */
-    .ats.hdr3.CmdNumber  = 3,
-    .ats.hdr3.TimeTag_MS = SC_CMD3_TIME >> 16,
-    .ats.hdr3.TimeTag_LS = SC_CMD3_TIME & 0xFFFF,
-    .ats.cmd3.CmdHeader  = CFE_MSG_CMD_HDR_INIT(SC_CMD_MID, SC_MEMBER_SIZE(cmd3), SC_START_RTS_CC, SC_START_RTS1_CKSUM),
-    .ats.cmd3.RtsId      = 1,
+    .ats.hdr3.CmdNumber     = 3,
+    .ats.hdr3.TimeTag_MS    = SC_CMD3_TIME >> 16,
+    .ats.hdr3.TimeTag_LS    = SC_CMD3_TIME & 0xFFFF,
+    .ats.cmd3.CmdHeader     = CFE_MSG_CMD_HDR_INIT(SC_CMD_MID, SC_MEMBER_SIZE(cmd3), SC_START_RTS_CC, SC_START_RTS1_CKSUM),
+    .ats.cmd3.Payload.RtsId = 1,
 
     /* 4 */
     .ats.hdr4.CmdNumber  = 4,

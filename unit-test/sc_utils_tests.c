@@ -97,7 +97,7 @@ void SC_VerifyCmdLength_Test_Nominal(void)
     UtAssert_BOOL_TRUE(SC_VerifyCmdLength(&CmdPacket.CmdHeader.Msg, sizeof(CmdPacket)));
 
     /* Verify results */
-    UtAssert_True(SC_OperData.HkPacket.CmdErrCtr == 0, "SC_OperData.HkPacket.CmdErrCtr == 0");
+    UtAssert_True(SC_OperData.HkPacket.Payload.CmdErrCtr == 0, "SC_OperData.HkPacket.Payload.CmdErrCtr == 0");
 
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
 }
@@ -117,8 +117,8 @@ void SC_VerifyCmdLength_Test_LenError(void)
     UtAssert_BOOL_FALSE(SC_VerifyCmdLength(&CmdPacket.CmdHeader.Msg, 999));
 
     /* Verify results */
-    UtAssert_True(SC_OperData.HkPacket.CmdCtr == 0, "SC_OperData.HkPacket.CmdCtr == 0");
-    UtAssert_True(SC_OperData.HkPacket.CmdErrCtr == 1, "SC_OperData.HkPacket.CmdErrCtr == 1");
+    UtAssert_True(SC_OperData.HkPacket.Payload.CmdCtr == 0, "SC_OperData.HkPacket.Payload.CmdCtr == 0");
+    UtAssert_True(SC_OperData.HkPacket.Payload.CmdErrCtr == 1, "SC_OperData.HkPacket.Payload.CmdErrCtr == 1");
 
     UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_LEN_ERR_EID);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
@@ -139,7 +139,7 @@ void SC_VerifyCmdLength_Test_LenErrorNotMID(void)
     UtAssert_BOOL_FALSE(SC_VerifyCmdLength(&CmdPacket.CmdHeader.Msg, 999));
 
     /* Verify results */
-    UtAssert_True(SC_OperData.HkPacket.CmdCtr == 0, "SC_OperData.HkPacket.CmdCtr == 0");
+    UtAssert_True(SC_OperData.HkPacket.Payload.CmdCtr == 0, "SC_OperData.HkPacket.Payload.CmdCtr == 0");
 
     UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_LEN_ERR_EID);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);

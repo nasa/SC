@@ -580,14 +580,14 @@ void SC_UpdateAppend(void)
     }
 
     /* Results will also be reported in HK */
-    SC_OperData.HkPacket.AppendLoadCount++;
-    SC_OperData.HkPacket.AppendEntryCount = EntryCount;
-    SC_OperData.HkPacket.AppendByteCount  = EntryIndex * SC_BYTES_IN_ATS_APPEND_ENTRY;
+    SC_OperData.HkPacket.Payload.AppendLoadCount++;
+    SC_OperData.HkPacket.Payload.AppendEntryCount = EntryCount;
+    SC_OperData.HkPacket.Payload.AppendByteCount  = EntryIndex * SC_BYTES_IN_ATS_APPEND_ENTRY;
     SC_AppData.AppendWordCount            = EntryIndex;
 
     CFE_EVS_SendEvent(SC_UPDATE_APPEND_EID, CFE_EVS_EventType_INFORMATION,
                       "Update Append ATS Table: load count = %d, command count = %d, byte count = %d",
-                      SC_OperData.HkPacket.AppendLoadCount, (int)EntryCount, (int)EntryIndex * SC_BYTES_IN_WORD);
+                      SC_OperData.HkPacket.Payload.AppendLoadCount, (int)EntryCount, (int)EntryIndex * SC_BYTES_IN_WORD);
 }
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -623,7 +623,7 @@ void SC_ProcessAppend(uint16 AtsIndex)
     SC_OperData.AtsInfoTblAddr[AtsIndex].AtsSize += SC_AppData.AppendWordCount;
 
     /* add appended entries to ats process tables */
-    for (i = 0; i < SC_OperData.HkPacket.AppendEntryCount; i++)
+    for (i = 0; i < SC_OperData.HkPacket.Payload.AppendEntryCount; i++)
     {
         /* get pointer to next appended entry */
         EntryPtr = (SC_AtsEntry_t *)&SC_OperData.AtsTblAddr[AtsIndex][EntryIndex];

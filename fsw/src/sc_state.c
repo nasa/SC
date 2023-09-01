@@ -238,10 +238,10 @@ void SC_GetNextRtsCommand(void)
                              ** Having a command that runs off of the end of the buffer
                              ** is an error condition, so record it
                              */
-                            SC_OperData.HkPacket.RtsCmdErrCtr++;
+                            SC_OperData.HkPacket.Payload.RtsCmdErrCtr++;
                             SC_OperData.RtsInfoTblAddr[RtsIndex].CmdErrCtr++;
-                            SC_OperData.HkPacket.LastRtsErrSeq = SC_OperData.RtsCtrlBlckAddr->RtsNumber;
-                            SC_OperData.HkPacket.LastRtsErrCmd = CmdOffset;
+                            SC_OperData.HkPacket.Payload.LastRtsErrSeq = SC_OperData.RtsCtrlBlckAddr->RtsNumber;
+                            SC_OperData.HkPacket.Payload.LastRtsErrCmd = CmdOffset;
 
                             /*
                              ** Stop the RTS from executing
@@ -257,10 +257,10 @@ void SC_GetNextRtsCommand(void)
                     { /* the command length is too large */
 
                         /* update the error information */
-                        SC_OperData.HkPacket.RtsCmdErrCtr++;
+                        SC_OperData.HkPacket.Payload.RtsCmdErrCtr++;
                         SC_OperData.RtsInfoTblAddr[RtsIndex].CmdErrCtr++;
-                        SC_OperData.HkPacket.LastRtsErrSeq = SC_OperData.RtsCtrlBlckAddr->RtsNumber;
-                        SC_OperData.HkPacket.LastRtsErrCmd = CmdOffset;
+                        SC_OperData.HkPacket.Payload.LastRtsErrSeq = SC_OperData.RtsCtrlBlckAddr->RtsNumber;
+                        SC_OperData.HkPacket.Payload.LastRtsErrCmd = CmdOffset;
 
                         /* Stop the RTS from executing */
                         SC_KillRts(RtsIndex);

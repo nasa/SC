@@ -106,7 +106,7 @@
  *  \par Command Verification
  *       Successful execution of this command may be verified with
  *       the following telemetry:
- *       - #SC_HkTlm_t.CmdCtr will increment
+ *       - #SC_HkTlm_Payload_t.CmdCtr will increment
  *       - The #SC_NOOP_INF_EID informational event message will be
  *         generated when the command is received
  *
@@ -115,7 +115,7 @@
  *       - Command packet length not as expected
  *
  *  \par Evidence of failure may be found in the following telemetry:
- *       - #SC_HkTlm_t.CmdErrCtr will increment
+ *       - #SC_HkTlm_Payload_t.CmdErrCtr will increment
  *       - Error specific event message #SC_LEN_ERR_EID
  *
  *  \par Criticality
@@ -137,7 +137,7 @@
  *  \par Command Verification
  *       Successful execution of this command may be verified with
  *       the following telemetry:
- *       - #SC_HkTlm_t.CmdCtr will be cleared
+ *       - #SC_HkTlm_Payload_t.CmdCtr will be cleared
  *       - The #SC_STARTATS_CMD_INF_EID informational event message will be
  *         generated when the command is received
  *
@@ -146,7 +146,7 @@
  *       - Command packet length not as expected
  *
  *  \par Evidence of failure may be found in the following telemetry:
- *       - #SC_HkTlm_t.CmdErrCtr will increment
+ *       - #SC_HkTlm_Payload_t.CmdErrCtr will increment
  *       - Error specific event message #SC_LEN_ERR_EID
  *
  *  \par Criticality
@@ -168,7 +168,7 @@
  *  \par Command Verification
  *       Successful execution of this command may be verified with
  *       the following telemetry:
- *       - #SC_HkTlm_t.CmdCtr will increment
+ *       - #SC_HkTlm_Payload_t.CmdCtr will increment
  *
  *  \par Error Conditions
  *       This command may fail for the following reason(s):
@@ -179,7 +179,7 @@
  *       - All command were skipped
  *
  *  \par Evidence of failure may be found in the following telemetry:
- *       - #SC_HkTlm_t.CmdErrCtr will increment
+ *       - #SC_HkTlm_Payload_t.CmdErrCtr will increment
  *       - Error specific event message
  *
  *  \par Criticality
@@ -200,7 +200,7 @@
  *  \par Command Verification
  *       Successful execution of this command may be verified with
  *       the following telemetry:
- *       - #SC_HkTlm_t.CmdCtr will increment
+ *       - #SC_HkTlm_Payload_t.CmdCtr will increment
  *       - the #SC_STOPATS_CMD_INF_EID event message will be generated
  *
  **
@@ -209,7 +209,7 @@
  *       - Command packet length not as expected
  *
  *  \par Evidence of failure may be found in the following telemetry:
- *       - #SC_HkTlm_t.CmdErrCtr will increment
+ *       - #SC_HkTlm_Payload_t.CmdErrCtr will increment
  *
  *  \par Criticality
  *       None
@@ -230,7 +230,7 @@
  *  \par Command Verification
  *       Successful execution of this command may be verified with
  *       the following telemetry:
- *       - #SC_HkTlm_t.CmdCtr will increment
+ *       - #SC_HkTlm_Payload_t.CmdCtr will increment
  *       - The #SC_STARTRTS_CMD_DBG_EID will be sent
  *
  *  \par Error Conditions
@@ -243,8 +243,8 @@
  *       - Invalid RTS ID
  *
  *  \par Evidence of failure may be found in the following telemetry:
- *       - #SC_HkTlm_t.CmdErrCtr will increment
- *       - #SC_HkTlm_t.RtsActiveErrCtr will increment
+ *       - #SC_HkTlm_Payload_t.CmdErrCtr will increment
+ *       - #SC_HkTlm_Payload_t.RtsActiveErrCtr will increment
  *       - Error specific event message
  *
  *  \par Criticality
@@ -266,7 +266,7 @@
  *  \par Command Verification
  *       Successful execution of this command may be verified with
  *       the following telemetry:
- *       - #SC_HkTlm_t.CmdCtr will increment
+ *       - #SC_HkTlm_Payload_t.CmdCtr will increment
  *       - The #SC_STOPRTS_CMD_INF_EID will be sent
  *
  *  \par Error Conditions
@@ -275,7 +275,7 @@
  *       - RTS ID is invalid
  *
  *  \par Evidence of failure may be found in the following telemetry:
- *       - #SC_HkTlm_t.CmdErrCtr will increment
+ *       - #SC_HkTlm_Payload_t.CmdErrCtr will increment
  *       - Error specific event message
  *
  *  \par Criticality
@@ -297,7 +297,7 @@
  *  \par Command Verification
  *       Successful execution of this command may be verified with
  *       the following telemetry:
- *       - #SC_HkTlm_t.CmdCtr will increment
+ *       - #SC_HkTlm_Payload_t.CmdCtr will increment
  *       - The #SC_DISABLE_RTS_DEB_EID will be sent
  *
  *  \par Error Conditions
@@ -306,7 +306,7 @@
  *       - RTS ID is invalid
  *
  *  \par Evidence of failure may be found in the following telemetry:
- *       - #SC_HkTlm_t.CmdErrCtr will increment
+ *       - #SC_HkTlm_Payload_t.CmdErrCtr will increment
  *       - Error specific event message
  *
  *  \par Criticality
@@ -328,7 +328,7 @@
  *  \par Command Verification
  *       Successful execution of this command may be verified with
  *       the following telemetry:
- *       - #SC_HkTlm_t.CmdCtr will increment
+ *       - #SC_HkTlm_Payload_t.CmdCtr will increment
  *       - The #SC_ENABLE_RTS_DEB_EID will be sent
  *
  *  \par Error Conditions
@@ -337,7 +337,7 @@
  *       - RTS ID is invalid
  *
  *  \par Evidence of failure may be found in the following telemetry:
- *       - #SC_HkTlm_t.CmdErrCtr will increment
+ *       - #SC_HkTlm_Payload_t.CmdErrCtr will increment
  *       - Error specific event message
  *
  *  \par Criticality
@@ -359,7 +359,7 @@
  *  \par Command Verification
  *       Successful execution of this command may be verified with
  *       the following telemetry:
- *       - #SC_HkTlm_t.CmdCtr will increment
+ *       - #SC_HkTlm_Payload_t.CmdCtr will increment
  *       - The #SC_SWITCH_ATS_CMD_INF_EID will be sent
  *
  *  \par Error Conditions
@@ -369,7 +369,7 @@
  *       - There is no currently running ATS to switch from
  *
  *  \par Evidence of failure may be found in the following telemetry:
- *       - #SC_HkTlm_t.CmdErrCtr will increment
+ *       - #SC_HkTlm_Payload_t.CmdErrCtr will increment
  *       - Error specific event message
  *
  *  \par Criticality
@@ -389,7 +389,7 @@
  *  \par Command Verification
  *       Successful execution of this command may be verified with
  *       the following telemetry:
- *       - #SC_HkTlm_t.CmdCtr will increment
+ *       - #SC_HkTlm_Payload_t.CmdCtr will increment
  *       - The #SC_JUMP_ATS_INF_EID will be sent
  *
  *  \par Error Conditions
@@ -399,7 +399,7 @@
  *       - No ATS is active
  *
  *  \par Evidence of failure may be found in the following telemetry:
- *       - #SC_HkTlm_t.CmdErrCtr will increment
+ *       - #SC_HkTlm_Payload_t.CmdErrCtr will increment
  *       - Error specific event message
  *
  *  \par Criticality
@@ -421,7 +421,7 @@
  *  \par Command Verification
  *       Successful execution of this command may be verified with
  *       the following telemetry:
- *       - #SC_HkTlm_t.CmdCtr will increment
+ *       - #SC_HkTlm_Payload_t.CmdCtr will increment
  *       - The #SC_CONT_CMD_DEB_EID will be sent
  *
  *  \par Error Conditions
@@ -430,7 +430,7 @@
  *       - Invalid State specified
  *
  *  \par Evidence of failure may be found in the following telemetry:
- *       - #SC_HkTlm_t.CmdErrCtr will increment
+ *       - #SC_HkTlm_Payload_t.CmdErrCtr will increment
  *       - Error specific event message
  *
  *  \par Criticality
@@ -450,7 +450,7 @@
  *  \par Command Verification
  *       Successful execution of this command may be verified with
  *       the following telemetry:
- *       - #SC_HkTlm_t.CmdCtr will increment
+ *       - #SC_HkTlm_Payload_t.CmdCtr will increment
  *
  *  \par Error Conditions
  *       This command may fail for the following reason(s):
@@ -460,7 +460,7 @@
  *       - Append table contents too large to fit in ATS free space
  *
  *  \par Evidence of failure may be found in the following telemetry:
- *       - #SC_HkTlm_t.CmdErrCtr will increment
+ *       - #SC_HkTlm_Payload_t.CmdErrCtr will increment
  *       - Error specific event message
  *
  *  \par Criticality
@@ -522,7 +522,7 @@
  *  \par Command Verification
  *       Successful execution of this command may be verified with
  *       the following telemetry:
- *       - #SC_HkTlm_t.CmdCtr will increment
+ *       - #SC_HkTlm_Payload_t.CmdCtr will increment
  *       - #SC_STARTRTSGRP_CMD_INF_EID event will indicate the number of RTS
  *         in the group that were actually STARTED by the command.
  *
@@ -536,7 +536,7 @@
  *         whether any RTS in the group is actually STARTED by the command.
  *
  *  \par Evidence of failure may be found in the following telemetry:
- *       - #SC_HkTlm_t.CmdErrCtr will increment
+ *       - #SC_HkTlm_Payload_t.CmdErrCtr will increment
  *       - The #SC_LEN_ERR_EID event will indicate invalid command packet length.
  *       - The #SC_STARTRTSGRP_CMD_ERR_EID event will indicate invalid group definition.
  *
@@ -562,7 +562,7 @@
  *  \par Command Verification
  *       Successful execution of this command may be verified with
  *       the following telemetry:
- *       - #SC_HkTlm_t.CmdCtr will increment
+ *       - #SC_HkTlm_Payload_t.CmdCtr will increment
  *       - The #SC_STOPRTSGRP_CMD_INF_EID event will indicate the number of RTS
  *         in the group that were actually STOPPED by the command
  *
@@ -576,7 +576,7 @@
  *         whether any RTS in the group is actually STOPPED by the command.
  *
  *  \par Evidence of failure may be found in the following telemetry:
- *       - #SC_HkTlm_t.CmdErrCtr will increment
+ *       - #SC_HkTlm_Payload_t.CmdErrCtr will increment
  *       - The #SC_LEN_ERR_EID event will indicate invalid command packet length.
  *       - The #SC_STOPRTSGRP_CMD_ERR_EID event will indicate invalid group definition.
  *
@@ -600,7 +600,7 @@
  *  \par Command Verification
  *       Successful execution of this command may be verified with
  *       the following telemetry:
- *       - #SC_HkTlm_t.CmdCtr will increment
+ *       - #SC_HkTlm_Payload_t.CmdCtr will increment
  *       - The #SC_DISRTSGRP_CMD_INF_EID event will indicate the number of RTS
  *         in the group that were changed from ENABLED to DISABLED by the command
  *
@@ -614,7 +614,7 @@
  *         whether the group contained an RTS that was not already DISABLED.
  *
  *  \par Evidence of failure may be found in the following telemetry:
- *       - #SC_HkTlm_t.CmdErrCtr will increment
+ *       - #SC_HkTlm_Payload_t.CmdErrCtr will increment
  *       - The #SC_LEN_ERR_EID event will indicate invalid command packet length.
  *       - The #SC_DISRTSGRP_CMD_ERR_EID event will indicate invalid group definition.
  *
@@ -638,7 +638,7 @@
  *  \par Command Verification
  *       Successful execution of this command may be verified with
  *       the following telemetry:
- *       - #SC_HkTlm_t.CmdCtr will increment
+ *       - #SC_HkTlm_Payload_t.CmdCtr will increment
  *       - The #SC_ENARTSGRP_CMD_INF_EID event will indicate success and display the
  *         number of RTS that were changed from DISABLED to ENABLED by the command.
  *
@@ -652,7 +652,7 @@
  *         whether the group contained an RTS that was not already ENABLED.
  *
  *  \par Evidence of failure may be found in the following telemetry:
- *       - #SC_HkTlm_t.CmdErrCtr will increment
+ *       - #SC_HkTlm_Payload_t.CmdErrCtr will increment
  *       - The #SC_LEN_ERR_EID event will indicate invalid command packet length.
  *       - The #SC_ENARTSGRP_CMD_ERR_EID event will indicate invalid group definition.
  *

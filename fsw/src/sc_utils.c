@@ -169,7 +169,7 @@ bool SC_VerifyCmdLength(const CFE_MSG_Message_t *Msg, size_t ExpectedLength)
         Result = false;
         if (CFE_SB_MsgIdToValue(MessageID) == SC_CMD_MID)
         {
-            SC_OperData.HkPacket.CmdErrCtr++;
+            SC_OperData.HkPacket.Payload.CmdErrCtr++;
         }
     }
     return (Result);

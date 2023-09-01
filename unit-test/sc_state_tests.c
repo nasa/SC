@@ -346,15 +346,15 @@ void SC_GetNextRtsCommand_Test_RtsLengthError(void)
     UtAssert_VOIDCALL(SC_GetNextRtsCommand());
 
     /* Verify results */
-    UtAssert_True(SC_OperData.HkPacket.RtsCmdErrCtr == 1, "SC_OperData.HkPacket.RtsCmdErrCtr == 1");
+    UtAssert_True(SC_OperData.HkPacket.Payload.RtsCmdErrCtr == 1, "SC_OperData.HkPacket.Payload.RtsCmdErrCtr == 1");
     UtAssert_True(SC_OperData.RtsInfoTblAddr[0].CmdErrCtr == 1, "SC_OperData.RtsInfoTblAddr[0].CmdErrCtr == 1");
-    UtAssert_True(SC_OperData.HkPacket.LastRtsErrSeq == SC_OperData.RtsCtrlBlckAddr->RtsNumber,
-                  "SC_OperData.HkPacket.LastRtsErrSeq == SC_OperData.RtsCtrlBlckAddr->RtsNumber");
+    UtAssert_True(SC_OperData.HkPacket.Payload.LastRtsErrSeq == SC_OperData.RtsCtrlBlckAddr->RtsNumber,
+                  "SC_OperData.HkPacket.Payload.LastRtsErrSeq == SC_OperData.RtsCtrlBlckAddr->RtsNumber");
 
-    UtAssert_True(SC_OperData.HkPacket.LastRtsErrCmd ==
+    UtAssert_True(SC_OperData.HkPacket.Payload.LastRtsErrCmd ==
                       SC_OperData.RtsInfoTblAddr[0].NextCommandPtr +
                           ((SC_PACKET_MIN_SIZE + SC_RTS_HEADER_SIZE + 3) / SC_BYTES_IN_WORD),
-                  "SC_OperData.HkPacket.LastRtsErrCmd == SC_OperData.RtsInfoTblAddr[0].NextCommandPtr + "
+                  "SC_OperData.HkPacket.Payload.LastRtsErrCmd == SC_OperData.RtsInfoTblAddr[0].NextCommandPtr + "
                   "((SC_PACKET_MIN_SIZE + SC_RTS_HEADER_SIZE + 3) / SC_BYTES_IN_WORD)");
 
     UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_RTS_LNGTH_ERR_EID);
@@ -395,15 +395,15 @@ void SC_GetNextRtsCommand_Test_CommandLengthError(void)
     UtAssert_VOIDCALL(SC_GetNextRtsCommand());
 
     /* Verify results */
-    UtAssert_True(SC_OperData.HkPacket.RtsCmdErrCtr == 1, "SC_OperData.HkPacket.RtsCmdErrCtr == 1");
+    UtAssert_True(SC_OperData.HkPacket.Payload.RtsCmdErrCtr == 1, "SC_OperData.HkPacket.Payload.RtsCmdErrCtr == 1");
     UtAssert_True(SC_OperData.RtsInfoTblAddr[0].CmdErrCtr == 1, "SC_OperData.RtsInfoTblAddr[0].CmdErrCtr == 1");
-    UtAssert_True(SC_OperData.HkPacket.LastRtsErrSeq == SC_OperData.RtsCtrlBlckAddr->RtsNumber,
-                  "SC_OperData.HkPacket.LastRtsErrSeq == SC_OperData.RtsCtrlBlckAddr->RtsNumber");
+    UtAssert_True(SC_OperData.HkPacket.Payload.LastRtsErrSeq == SC_OperData.RtsCtrlBlckAddr->RtsNumber,
+                  "SC_OperData.HkPacket.Payload.LastRtsErrSeq == SC_OperData.RtsCtrlBlckAddr->RtsNumber");
 
-    UtAssert_True(SC_OperData.HkPacket.LastRtsErrCmd ==
+    UtAssert_True(SC_OperData.HkPacket.Payload.LastRtsErrCmd ==
                       SC_OperData.RtsInfoTblAddr[0].NextCommandPtr +
                           ((SC_PACKET_MIN_SIZE + SC_RTS_HEADER_SIZE + 3) / SC_BYTES_IN_WORD),
-                  "SC_OperData.HkPacket.LastRtsErrCmd == SC_OperData.RtsInfoTblAddr[0].NextCommandPtr + "
+                  "SC_OperData.HkPacket.Payload.LastRtsErrCmd == SC_OperData.RtsInfoTblAddr[0].NextCommandPtr + "
                   "((SC_PACKET_MIN_SIZE + SC_RTS_HEADER_SIZE + 3) / SC_BYTES_IN_WORD)");
 
     UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_RTS_CMD_LNGTH_ERR_EID);

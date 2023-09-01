@@ -71,7 +71,7 @@ void SC_StartAtsCmd_Test_NominalA(void)
 
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
 
-    UT_CmdBuf.StartAtsCmd.AtsId                    = 1;
+    UT_CmdBuf.StartAtsCmd.Payload.AtsId                    = 1;
     SC_OperData.AtsInfoTblAddr[0].NumberOfCommands = 1;
     SC_OperData.AtsCtrlBlckAddr->AtpState          = SC_IDLE;
 
@@ -81,7 +81,7 @@ void SC_StartAtsCmd_Test_NominalA(void)
     /* Verify results */
     UtAssert_True(SC_OperData.AtsCtrlBlckAddr->AtpState == SC_EXECUTING,
                   "SC_OperData.AtsCtrlBlckAddr->AtpState == SC_EXECUTING");
-    UtAssert_True(SC_OperData.HkPacket.CmdCtr == 1, "SC_OperData.HkPacket.CmdCtr == 1");
+    UtAssert_True(SC_OperData.HkPacket.Payload.CmdCtr == 1, "SC_OperData.HkPacket.Payload.CmdCtr == 1");
 
     UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[1].EventID, SC_STARTATS_CMD_INF_EID);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 2);
@@ -93,7 +93,7 @@ void SC_StartAtsCmd_Test_NominalB(void)
 
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
 
-    UT_CmdBuf.StartAtsCmd.AtsId                    = 2;
+    UT_CmdBuf.StartAtsCmd.Payload.AtsId            = 2;
     SC_OperData.AtsInfoTblAddr[1].NumberOfCommands = 1;
     SC_OperData.AtsCtrlBlckAddr->AtpState          = SC_IDLE;
 
@@ -103,7 +103,7 @@ void SC_StartAtsCmd_Test_NominalB(void)
     /* Verify results */
     UtAssert_True(SC_OperData.AtsCtrlBlckAddr->AtpState == SC_EXECUTING,
                   "SC_OperData.AtsCtrlBlckAddr->AtpState == SC_EXECUTING");
-    UtAssert_True(SC_OperData.HkPacket.CmdCtr == 1, "SC_OperData.HkPacket.CmdCtr == 1");
+    UtAssert_True(SC_OperData.HkPacket.Payload.CmdCtr == 1, "SC_OperData.HkPacket.Payload.CmdCtr == 1");
 
     UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[1].EventID, SC_STARTATS_CMD_INF_EID);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 2);
@@ -119,7 +119,7 @@ void SC_StartAtsCmd_Test_CouldNotStart(void)
 
     UT_SetDeferredRetcode(UT_KEY(SC_CompareAbsTime), 1, true);
 
-    UT_CmdBuf.StartAtsCmd.AtsId                    = 1;
+    UT_CmdBuf.StartAtsCmd.Payload.AtsId            = 1;
     SC_OperData.AtsInfoTblAddr[0].NumberOfCommands = 1;
     SC_OperData.AtsCtrlBlckAddr->AtpState          = SC_IDLE;
 
@@ -130,7 +130,7 @@ void SC_StartAtsCmd_Test_CouldNotStart(void)
     UtAssert_VOIDCALL(SC_StartAtsCmd(&UT_CmdBuf.Buf));
 
     /* Verify results */
-    UtAssert_True(SC_OperData.HkPacket.CmdErrCtr == 1, "SC_OperData.HkPacket.CmdErrCtr == 1");
+    UtAssert_True(SC_OperData.HkPacket.Payload.CmdErrCtr == 1, "SC_OperData.HkPacket.Payload.CmdErrCtr == 1");
 
     UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_ATS_SKP_ALL_ERR_EID);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
@@ -144,7 +144,7 @@ void SC_StartAtsCmd_Test_NoCommandsA(void)
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
 
-    UT_CmdBuf.StartAtsCmd.AtsId                    = 1;
+    UT_CmdBuf.StartAtsCmd.Payload.AtsId            = 1;
     SC_OperData.AtsInfoTblAddr[0].NumberOfCommands = 0;
     SC_OperData.AtsCtrlBlckAddr->AtpState          = SC_IDLE;
 
@@ -152,7 +152,7 @@ void SC_StartAtsCmd_Test_NoCommandsA(void)
     UtAssert_VOIDCALL(SC_StartAtsCmd(&UT_CmdBuf.Buf));
 
     /* Verify results */
-    UtAssert_True(SC_OperData.HkPacket.CmdErrCtr == 1, "SC_OperData.HkPacket.CmdErrCtr == 1");
+    UtAssert_True(SC_OperData.HkPacket.Payload.CmdErrCtr == 1, "SC_OperData.HkPacket.Payload.CmdErrCtr == 1");
 
     UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_STARTATS_CMD_NOT_LDED_ERR_EID);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
@@ -166,7 +166,7 @@ void SC_StartAtsCmd_Test_NoCommandsB(void)
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
 
-    UT_CmdBuf.StartAtsCmd.AtsId                    = 2;
+    UT_CmdBuf.StartAtsCmd.Payload.AtsId            = 2;
     SC_OperData.AtsInfoTblAddr[1].NumberOfCommands = 0;
     SC_OperData.AtsCtrlBlckAddr->AtpState          = SC_IDLE;
 
@@ -174,7 +174,7 @@ void SC_StartAtsCmd_Test_NoCommandsB(void)
     UtAssert_VOIDCALL(SC_StartAtsCmd(&UT_CmdBuf.Buf));
 
     /* Verify results */
-    UtAssert_True(SC_OperData.HkPacket.CmdErrCtr == 1, "SC_OperData.HkPacket.CmdErrCtr == 1");
+    UtAssert_True(SC_OperData.HkPacket.Payload.CmdErrCtr == 1, "SC_OperData.HkPacket.Payload.CmdErrCtr == 1");
 
     UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_STARTATS_CMD_NOT_LDED_ERR_EID);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
@@ -188,14 +188,14 @@ void SC_StartAtsCmd_Test_InUse(void)
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
 
-    UT_CmdBuf.StartAtsCmd.AtsId           = 1;
+    UT_CmdBuf.StartAtsCmd.Payload.AtsId   = 1;
     SC_OperData.AtsCtrlBlckAddr->AtpState = SC_EXECUTING;
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_StartAtsCmd(&UT_CmdBuf.Buf));
 
     /* Verify results */
-    UtAssert_True(SC_OperData.HkPacket.CmdErrCtr == 1, "SC_OperData.HkPacket.CmdErrCtr == 1");
+    UtAssert_True(SC_OperData.HkPacket.Payload.CmdErrCtr == 1, "SC_OperData.HkPacket.Payload.CmdErrCtr == 1");
 
     UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_STARTATS_CMD_NOT_IDLE_ERR_EID);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
@@ -209,14 +209,14 @@ void SC_StartAtsCmd_Test_InvalidAtsId(void)
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
 
-    UT_CmdBuf.StartAtsCmd.AtsId           = 99;
+    UT_CmdBuf.StartAtsCmd.Payload.AtsId   = 99;
     SC_OperData.AtsCtrlBlckAddr->AtpState = SC_EXECUTING;
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_StartAtsCmd(&UT_CmdBuf.Buf));
 
     /* Verify results */
-    UtAssert_True(SC_OperData.HkPacket.CmdErrCtr == 1, "SC_OperData.HkPacket.CmdErrCtr == 1");
+    UtAssert_True(SC_OperData.HkPacket.Payload.CmdErrCtr == 1, "SC_OperData.HkPacket.Payload.CmdErrCtr == 1");
 
     UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_STARTATS_CMD_INVLD_ID_ERR_EID);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
@@ -230,14 +230,14 @@ void SC_StartAtsCmd_Test_InvalidAtsIdZero(void)
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
 
-    UT_CmdBuf.StartAtsCmd.AtsId           = 0;
+    UT_CmdBuf.StartAtsCmd.Payload.AtsId   = 0;
     SC_OperData.AtsCtrlBlckAddr->AtpState = SC_EXECUTING;
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_StartAtsCmd(&UT_CmdBuf.Buf));
 
     /* Verify results */
-    UtAssert_True(SC_OperData.HkPacket.CmdErrCtr == 1, "SC_OperData.HkPacket.CmdErrCtr == 1");
+    UtAssert_True(SC_OperData.HkPacket.Payload.CmdErrCtr == 1, "SC_OperData.HkPacket.Payload.CmdErrCtr == 1");
 
     UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_STARTATS_CMD_INVLD_ID_ERR_EID);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
@@ -257,7 +257,7 @@ void SC_StopAtsCmd_Test_NominalA(void)
     UtAssert_VOIDCALL(SC_StopAtsCmd(&UT_CmdBuf.Buf));
 
     /* Verify results */
-    UtAssert_True(SC_OperData.HkPacket.CmdCtr == 1, "SC_OperData.HkPacket.CmdCtr == 1");
+    UtAssert_True(SC_OperData.HkPacket.Payload.CmdCtr == 1, "SC_OperData.HkPacket.Payload.CmdCtr == 1");
 
     UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_STOPATS_CMD_INF_EID);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
@@ -277,7 +277,7 @@ void SC_StopAtsCmd_Test_NominalB(void)
     UtAssert_VOIDCALL(SC_StopAtsCmd(&UT_CmdBuf.Buf));
 
     /* Verify results */
-    UtAssert_True(SC_OperData.HkPacket.CmdCtr == 1, "SC_OperData.HkPacket.CmdCtr == 1");
+    UtAssert_True(SC_OperData.HkPacket.Payload.CmdCtr == 1, "SC_OperData.HkPacket.Payload.CmdCtr == 1");
 
     UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_STOPATS_CMD_INF_EID);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
@@ -297,7 +297,7 @@ void SC_StopAtsCmd_Test_NoRunningAts(void)
     UtAssert_VOIDCALL(SC_StopAtsCmd(&UT_CmdBuf.Buf));
 
     /* Verify results */
-    UtAssert_True(SC_OperData.HkPacket.CmdCtr == 1, "SC_OperData.HkPacket.CmdCtr == 1");
+    UtAssert_True(SC_OperData.HkPacket.Payload.CmdCtr == 1, "SC_OperData.HkPacket.Payload.CmdCtr == 1");
 
     UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_STOPATS_NO_ATS_INF_EID);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
@@ -403,7 +403,7 @@ void SC_GroundSwitchCmd_Test_Nominal(void)
     /* Verify results */
     UtAssert_True(SC_OperData.AtsCtrlBlckAddr->SwitchPendFlag == true,
                   "SC_OperData.AtsCtrlBlckAddr->SwitchPendFlag == true");
-    UtAssert_True(SC_OperData.HkPacket.CmdCtr == 1, "SC_OperData.HkPacket.CmdCtr == 1");
+    UtAssert_True(SC_OperData.HkPacket.Payload.CmdCtr == 1, "SC_OperData.HkPacket.Payload.CmdCtr == 1");
 
     UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_SWITCH_ATS_CMD_INF_EID);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
@@ -425,7 +425,7 @@ void SC_GroundSwitchCmd_Test_DestinationAtsNotLoaded(void)
     /* Verify results */
     UtAssert_True(SC_OperData.AtsCtrlBlckAddr->SwitchPendFlag == false,
                   "SC_OperData.AtsCtrlBlckAddr->SwitchPendFlag == false");
-    UtAssert_True(SC_OperData.HkPacket.CmdErrCtr == 1, "SC_OperData.HkPacket.CmdErrCtr == 1");
+    UtAssert_True(SC_OperData.HkPacket.Payload.CmdErrCtr == 1, "SC_OperData.HkPacket.Payload.CmdErrCtr == 1");
 
     UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_SWITCH_ATS_CMD_NOT_LDED_ERR_EID);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
@@ -446,7 +446,7 @@ void SC_GroundSwitchCmd_Test_AtpIdle(void)
     /* Verify results */
     UtAssert_True(SC_OperData.AtsCtrlBlckAddr->SwitchPendFlag == false,
                   "SC_OperData.AtsCtrlBlckAddr->SwitchPendFlag == false");
-    UtAssert_True(SC_OperData.HkPacket.CmdErrCtr == 1, "SC_OperData.HkPacket.CmdErrCtr == 1");
+    UtAssert_True(SC_OperData.HkPacket.Payload.CmdErrCtr == 1, "SC_OperData.HkPacket.Payload.CmdErrCtr == 1");
 
     UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_SWITCH_ATS_CMD_IDLE_ERR_EID);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
@@ -616,7 +616,7 @@ void SC_InlineSwitch_Test_NominalA(void)
     UtAssert_True(SC_OperData.AtsCtrlBlckAddr->AtpState == SC_STARTING,
                   "SC_OperData.AtsCtrlBlckAddr->AtpState == SC_STARTING");
 
-    UtAssert_True(SC_OperData.HkPacket.CmdCtr == 1, "SC_OperData.HkPacket.CmdCtr == 1");
+    UtAssert_True(SC_OperData.HkPacket.Payload.CmdCtr == 1, "SC_OperData.HkPacket.Payload.CmdCtr == 1");
     UtAssert_True(SC_OperData.AtsCtrlBlckAddr->SwitchPendFlag == false,
                   "SC_OperData.AtsCtrlBlckAddr->SwitchPendFlag == false");
 
@@ -643,7 +643,7 @@ void SC_InlineSwitch_Test_NominalB(void)
     UtAssert_True(SC_OperData.AtsCtrlBlckAddr->AtpState == SC_STARTING,
                   "SC_OperData.AtsCtrlBlckAddr->AtpState == SC_STARTING");
 
-    UtAssert_True(SC_OperData.HkPacket.CmdCtr == 1, "SC_OperData.HkPacket.CmdCtr == 1");
+    UtAssert_True(SC_OperData.HkPacket.Payload.CmdCtr == 1, "SC_OperData.HkPacket.Payload.CmdCtr == 1");
     UtAssert_True(SC_OperData.AtsCtrlBlckAddr->SwitchPendFlag == false,
                   "SC_OperData.AtsCtrlBlckAddr->SwitchPendFlag == false");
 
@@ -667,7 +667,7 @@ void SC_InlineSwitch_Test_AllCommandsSkipped(void)
     UtAssert_BOOL_FALSE(SC_InlineSwitch());
 
     /* Verify results */
-    UtAssert_True(SC_OperData.HkPacket.CmdErrCtr == 1, "SC_OperData.HkPacket.CmdErrCtr == 1");
+    UtAssert_True(SC_OperData.HkPacket.Payload.CmdErrCtr == 1, "SC_OperData.HkPacket.Payload.CmdErrCtr == 1");
     UtAssert_True(SC_OperData.AtsCtrlBlckAddr->SwitchPendFlag == false,
                   "SC_OperData.AtsCtrlBlckAddr->SwitchPendFlag == false");
 
@@ -687,7 +687,7 @@ void SC_InlineSwitch_Test_DestinationAtsNotLoaded(void)
     UtAssert_BOOL_FALSE(SC_InlineSwitch());
 
     /* Verify results */
-    UtAssert_True(SC_OperData.HkPacket.CmdErrCtr == 1, "SC_OperData.HkPacket.CmdErrCtr == 1");
+    UtAssert_True(SC_OperData.HkPacket.Payload.CmdErrCtr == 1, "SC_OperData.HkPacket.Payload.CmdErrCtr == 1");
     UtAssert_True(SC_OperData.AtsCtrlBlckAddr->SwitchPendFlag == false,
                   "SC_OperData.AtsCtrlBlckAddr->SwitchPendFlag == false");
 
@@ -731,7 +731,7 @@ void SC_JumpAtsCmd_Test_SkipOneCmd(void)
                   "SC_OperData.AtsCtrlBlckAddr->CmdNumber == SC_AppData.AtsTimeIndexBuffer[AtsIndex][0]");
     UtAssert_True(SC_OperData.AtsCtrlBlckAddr->TimeIndexPtr == 1, "SC_OperData.AtsCtrlBlckAddr->TimeIndexPtr == 1");
     UtAssert_True(SC_AppData.NextCmdTime[0] == 0, "SC_AppData.NextCmdTime[0] == 0");
-    UtAssert_True(SC_OperData.HkPacket.CmdCtr == 1, "SC_OperData.HkPacket.CmdCtr == 1");
+    UtAssert_True(SC_OperData.HkPacket.Payload.CmdCtr == 1, "SC_OperData.HkPacket.Payload.CmdCtr == 1");
 
     UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[1].EventID, SC_JUMP_ATS_INF_EID);
     UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[2].EventID, SC_JUMP_ATS_SKIPPED_DBG_EID);
@@ -762,7 +762,7 @@ void SC_JumpAtsCmd_Test_AllCommandsSkipped(void)
     UtAssert_VOIDCALL(SC_JumpAtsCmd(&UT_CmdBuf.Buf));
 
     /* Verify results */
-    UtAssert_True(SC_OperData.HkPacket.CmdErrCtr == 1, "SC_OperData.HkPacket.CmdErrCtr == 1");
+    UtAssert_True(SC_OperData.HkPacket.Payload.CmdErrCtr == 1, "SC_OperData.HkPacket.Payload.CmdErrCtr == 1");
 
     UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_JUMPATS_CMD_STOPPED_ERR_EID);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
@@ -782,7 +782,7 @@ void SC_JumpAtsCmd_Test_NoRunningAts(void)
     UtAssert_VOIDCALL(SC_JumpAtsCmd(&UT_CmdBuf.Buf));
 
     /* Verify results */
-    UtAssert_True(SC_OperData.HkPacket.CmdErrCtr == 1, "SC_OperData.HkPacket.CmdErrCtr == 1");
+    UtAssert_True(SC_OperData.HkPacket.Payload.CmdErrCtr == 1, "SC_OperData.HkPacket.Payload.CmdErrCtr == 1");
 
     UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_JUMPATS_CMD_NOT_ACT_ERR_EID);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
@@ -821,7 +821,7 @@ void SC_JumpAtsCmd_Test_AtsNotLoaded(void)
                   "SC_OperData.AtsCtrlBlckAddr->CmdNumber == SC_AppData.AtsTimeIndexBuffer[AtsIndex][0]");
     UtAssert_True(SC_OperData.AtsCtrlBlckAddr->TimeIndexPtr == 1, "SC_OperData.AtsCtrlBlckAddr->TimeIndexPtr == 1");
     UtAssert_True(SC_AppData.NextCmdTime[0] == 0, "SC_AppData.NextCmdTime[0] == 0");
-    UtAssert_True(SC_OperData.HkPacket.CmdCtr == 1, "SC_OperData.HkPacket.CmdCtr == 1");
+    UtAssert_True(SC_OperData.HkPacket.Payload.CmdCtr == 1, "SC_OperData.HkPacket.Payload.CmdCtr == 1");
 
     UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[1].EventID, SC_JUMP_ATS_INF_EID);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 2);
@@ -835,15 +835,15 @@ void ContinueAtsOnFailureCmd_Test_Nominal(void)
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(SC_SetContinueAtsOnFailureCmd_t), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
 
-    UT_CmdBuf.SetContinueAtsOnFailureCmd.ContinueState = true;
+    UT_CmdBuf.SetContinueAtsOnFailureCmd.Payload.ContinueState = true;
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_ContinueAtsOnFailureCmd(&UT_CmdBuf.Buf));
 
     /* Verify results */
-    UtAssert_True(SC_OperData.HkPacket.ContinueAtsOnFailureFlag == true,
-                  "SC_OperData.HkPacket.ContinueAtsOnFailureFlag == true");
-    UtAssert_True(SC_OperData.HkPacket.CmdCtr == 1, "SC_OperData.HkPacket.CmdCtr == 1");
+    UtAssert_True(SC_OperData.HkPacket.Payload.ContinueAtsOnFailureFlag == true,
+                  "SC_OperData.HkPacket.Payload.ContinueAtsOnFailureFlag == true");
+    UtAssert_True(SC_OperData.HkPacket.Payload.CmdCtr == 1, "SC_OperData.HkPacket.Payload.CmdCtr == 1");
 
     UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_CONT_CMD_DEB_EID);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
@@ -857,15 +857,15 @@ void ContinueAtsOnFailureCmd_Test_FalseState(void)
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(SC_SetContinueAtsOnFailureCmd_t), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
 
-    UT_CmdBuf.SetContinueAtsOnFailureCmd.ContinueState = false;
+    UT_CmdBuf.SetContinueAtsOnFailureCmd.Payload.ContinueState = false;
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_ContinueAtsOnFailureCmd(&UT_CmdBuf.Buf));
 
     /* Verify results */
-    UtAssert_True(SC_OperData.HkPacket.ContinueAtsOnFailureFlag == false,
-                  "SC_OperData.HkPacket.ContinueAtsOnFailureFlag == false");
-    UtAssert_True(SC_OperData.HkPacket.CmdCtr == 1, "SC_OperData.HkPacket.CmdCtr == 1");
+    UtAssert_True(SC_OperData.HkPacket.Payload.ContinueAtsOnFailureFlag == false,
+                  "SC_OperData.HkPacket.Payload.ContinueAtsOnFailureFlag == false");
+    UtAssert_True(SC_OperData.HkPacket.Payload.CmdCtr == 1, "SC_OperData.HkPacket.Payload.CmdCtr == 1");
 
     UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_CONT_CMD_DEB_EID);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
@@ -879,13 +879,13 @@ void ContinueAtsOnFailureCmd_Test_InvalidState(void)
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(SC_SetContinueAtsOnFailureCmd_t), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
 
-    UT_CmdBuf.SetContinueAtsOnFailureCmd.ContinueState = 99;
+    UT_CmdBuf.SetContinueAtsOnFailureCmd.Payload.ContinueState = 99;
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_ContinueAtsOnFailureCmd(&UT_CmdBuf.Buf));
 
     /* Verify results */
-    UtAssert_True(SC_OperData.HkPacket.CmdErrCtr == 1, "SC_OperData.HkPacket.CmdErrCtr == 1");
+    UtAssert_True(SC_OperData.HkPacket.Payload.CmdErrCtr == 1, "SC_OperData.HkPacket.Payload.CmdErrCtr == 1");
 
     UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_CONT_CMD_ERR_EID);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
@@ -904,16 +904,16 @@ void SC_AppendAtsCmd_Test_Nominal(void)
     Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[AtsIndex][0];
     Entry->CmdNumber = 1;
 
-    UT_CmdBuf.AppendAtsCmd.AtsId                          = 1;
+    UT_CmdBuf.AppendAtsCmd.Payload.AtsId                          = 1;
     SC_OperData.AtsInfoTblAddr[AtsIndex].NumberOfCommands = 1;
-    SC_OperData.HkPacket.AppendEntryCount                 = 1;
+    SC_OperData.HkPacket.Payload.AppendEntryCount                 = 1;
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_AppendAtsCmd(&UT_CmdBuf.Buf));
 
     /* Verify results */
-    UtAssert_True(SC_OperData.HkPacket.AppendCmdArg == 1, "SC_OperData.HkPacket.AppendCmdArg == 1");
-    UtAssert_True(SC_OperData.HkPacket.CmdCtr == 1, "SC_OperData.HkPacket.CmdCtr == 1");
+    UtAssert_True(SC_OperData.HkPacket.Payload.AppendCmdArg == 1, "SC_OperData.HkPacket.Payload.AppendCmdArg == 1");
+    UtAssert_True(SC_OperData.HkPacket.Payload.CmdCtr == 1, "SC_OperData.HkPacket.Payload.CmdCtr == 1");
 
     UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_APPEND_CMD_INF_EID);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
@@ -927,14 +927,14 @@ void SC_AppendAtsCmd_Test_InvalidAtsId(void)
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(SC_AppendAtsCmd_t), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
 
-    UT_CmdBuf.AppendAtsCmd.AtsId          = 99;
-    SC_OperData.HkPacket.AppendEntryCount = 1;
+    UT_CmdBuf.AppendAtsCmd.Payload.AtsId          = 99;
+    SC_OperData.HkPacket.Payload.AppendEntryCount = 1;
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_AppendAtsCmd(&UT_CmdBuf.Buf));
 
     /* Verify results */
-    UtAssert_True(SC_OperData.HkPacket.CmdErrCtr == 1, "SC_OperData.HkPacket.CmdErrCtr == 1");
+    UtAssert_True(SC_OperData.HkPacket.Payload.CmdErrCtr == 1, "SC_OperData.HkPacket.Payload.CmdErrCtr == 1");
 
     UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_APPEND_CMD_ARG_ERR_EID);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
@@ -948,14 +948,14 @@ void SC_AppendAtsCmd_Test_InvalidAtsIdZero(void)
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(SC_AppendAtsCmd_t), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
 
-    UT_CmdBuf.AppendAtsCmd.AtsId          = 0;
-    SC_OperData.HkPacket.AppendEntryCount = 1;
+    UT_CmdBuf.AppendAtsCmd.Payload.AtsId          = 0;
+    SC_OperData.HkPacket.Payload.AppendEntryCount = 1;
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_AppendAtsCmd(&UT_CmdBuf.Buf));
 
     /* Verify results */
-    UtAssert_True(SC_OperData.HkPacket.CmdErrCtr == 1, "SC_OperData.HkPacket.CmdErrCtr == 1");
+    UtAssert_True(SC_OperData.HkPacket.Payload.CmdErrCtr == 1, "SC_OperData.HkPacket.Payload.CmdErrCtr == 1");
 
     UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_APPEND_CMD_ARG_ERR_EID);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
@@ -970,15 +970,15 @@ void SC_AppendAtsCmd_Test_AtsTableEmpty(void)
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(SC_AppendAtsCmd_t), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
 
-    UT_CmdBuf.AppendAtsCmd.AtsId                          = 1;
-    SC_OperData.HkPacket.AppendEntryCount                 = 1;
+    UT_CmdBuf.AppendAtsCmd.Payload.AtsId                          = 1;
+    SC_OperData.HkPacket.Payload.AppendEntryCount                 = 1;
     SC_OperData.AtsInfoTblAddr[AtsIndex].NumberOfCommands = 0;
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_AppendAtsCmd(&UT_CmdBuf.Buf));
 
     /* Verify results */
-    UtAssert_True(SC_OperData.HkPacket.CmdErrCtr == 1, "SC_OperData.HkPacket.CmdErrCtr == 1");
+    UtAssert_True(SC_OperData.HkPacket.Payload.CmdErrCtr == 1, "SC_OperData.HkPacket.Payload.CmdErrCtr == 1");
 
     UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_APPEND_CMD_TGT_ERR_EID);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
@@ -993,15 +993,15 @@ void SC_AppendAtsCmd_Test_AppendTableEmpty(void)
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(SC_AppendAtsCmd_t), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
 
-    UT_CmdBuf.AppendAtsCmd.AtsId                          = 1;
-    SC_OperData.HkPacket.AppendEntryCount                 = 0;
+    UT_CmdBuf.AppendAtsCmd.Payload.AtsId                          = 1;
+    SC_OperData.HkPacket.Payload.AppendEntryCount                 = 0;
     SC_OperData.AtsInfoTblAddr[AtsIndex].NumberOfCommands = 1;
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_AppendAtsCmd(&UT_CmdBuf.Buf));
 
     /* Verify results */
-    UtAssert_True(SC_OperData.HkPacket.CmdErrCtr == 1, "SC_OperData.HkPacket.CmdErrCtr == 1");
+    UtAssert_True(SC_OperData.HkPacket.Payload.CmdErrCtr == 1, "SC_OperData.HkPacket.Payload.CmdErrCtr == 1");
 
     UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_APPEND_CMD_SRC_ERR_EID);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
@@ -1016,8 +1016,8 @@ void SC_AppendAtsCmd_Test_NoRoomForAppendInAts(void)
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(SC_AppendAtsCmd_t), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
 
-    UT_CmdBuf.AppendAtsCmd.AtsId                          = 1;
-    SC_OperData.HkPacket.AppendEntryCount                 = 1;
+    UT_CmdBuf.AppendAtsCmd.Payload.AtsId                          = 1;
+    SC_OperData.HkPacket.Payload.AppendEntryCount                 = 1;
     SC_OperData.AtsInfoTblAddr[AtsIndex].NumberOfCommands = 1;
     SC_OperData.AtsInfoTblAddr[AtsIndex].AtsSize          = SC_ATS_BUFF_SIZE;
     SC_AppData.AppendWordCount                            = SC_ATS_BUFF_SIZE;
@@ -1026,7 +1026,7 @@ void SC_AppendAtsCmd_Test_NoRoomForAppendInAts(void)
     UtAssert_VOIDCALL(SC_AppendAtsCmd(&UT_CmdBuf.Buf));
 
     /* Verify results */
-    UtAssert_True(SC_OperData.HkPacket.CmdErrCtr == 1, "SC_OperData.HkPacket.CmdErrCtr == 1");
+    UtAssert_True(SC_OperData.HkPacket.Payload.CmdErrCtr == 1, "SC_OperData.HkPacket.Payload.CmdErrCtr == 1");
 
     UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_APPEND_CMD_FIT_ERR_EID);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
