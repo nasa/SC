@@ -31,6 +31,38 @@
  */
 
 /**
+ * \brief Whether to update headers on commands when sending on software bus
+ *
+ *  \par Description:
+ *
+ *       This controls whether to update the command header on the outgoing messages
+ *       produced by the SC app.
+ *
+ *        - If the messages in the ATS/RTS tables are expected to be completely
+ *          initialized, including the sequence number and any required checksum
+ *          field, then this should be configured as "false" such that these fields
+ *          will not be modified during message transmission.  The UpdateHeader
+ *          parameter to CFE_SB_TransmitMsg() will be passed as false, and the message
+ *          will be broadcast on the software bus verbatim.  This replicates historical
+ *          behavior of SC.
+ *
+ *        - If the messages in the ATS/RTS tables need a real-time header update as
+ *          part of the sending process, this should be configured as "true".  Any
+ *          checksum embedded within the ATS/RTS will be ignored.  The UpdateHeader
+ *          parameter to CFE_SB_TransmitMsg() will be passed as true, such that the
+ *          command will be sequenced and timestamped with current values.  A correct
+ *          checksum will be computed based on the updated header values, and the
+ *          resulting message is broadcast on the software bus.
+ *
+ * \sa
+ *      CFE_SB_TransmitMsg() - UpdateHeader parameter
+ *
+ *  \par Limits:
+ *       Must be true or false
+ */
+#define SC_PLATFORM_ENABLE_HEADER_UPDATE false
+
+/**
  * \brief  Max number of commands per second
  *
  *  \par Description:

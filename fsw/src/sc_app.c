@@ -150,6 +150,8 @@ CFE_Status_t SC_AppInit(void)
     /* Continue ATS execution if ATS command checksum fails */
     SC_OperData.HkPacket.Payload.ContinueAtsOnFailureFlag = SC_CONT_ON_FAILURE_START;
 
+    SC_AppData.EnableHeaderUpdate = SC_PLATFORM_ENABLE_HEADER_UPDATE;
+
     /* Make sure nothing is running */
     SC_AppData.NextProcNumber      = SC_NONE;
     SC_AppData.NextCmdTime[SC_ATP] = SC_MAX_TIME;
