@@ -40,44 +40,253 @@
 #include "utassert.h"
 #include "utstubs.h"
 
+#define UT_SC_NOMINAL_CMD_SIZE (SC_PACKET_MAX_SIZE / 2)
+
 /*
  * Function Definitions
  */
 
-uint8 SC_LOADS_TEST_GetTotalMsgLengthHook_RunCount;
-int32 SC_LOADS_TEST_CFE_MSG_GetSizeHook1(void *UserObj, int32 StubRetcode, uint32 CallCount,
-                                         const UT_StubContext_t *Context)
+void UT_SC_CmdTableSizeHandler(void *UserObj, UT_EntryKey_t FuncKey, const UT_StubContext_t *Context)
 {
-    SC_LOADS_TEST_GetTotalMsgLengthHook_RunCount += 1;
+    const CFE_MSG_Message_t *MsgPtr     = UT_Hook_GetArgValueByName(Context, "MsgPtr", const CFE_MSG_Message_t *);
+    CFE_MSG_Size_t *         Size       = UT_Hook_GetArgValueByName(Context, "Size", CFE_MSG_Size_t *);
+    uint32 *                 StoredSize = (uint32 *)(void *)MsgPtr;
 
-    if (SC_LOADS_TEST_GetTotalMsgLengthHook_RunCount == 1)
-        SC_OperData.AtsCmdStatusTblAddr[0][1] = SC_LOADED;
-
-    return CFE_SUCCESS;
+    *Size = *StoredSize;
 }
 
-CFE_TIME_Compare_t UT_SC_Insert_CompareHookAgreaterthanB(void *UserObj, int32 StubRetcode, uint32 CallCount,
-                                                         const UT_StubContext_t *Context)
+void UT_SC_CmdTableMidHandler(void *UserObj, UT_EntryKey_t FuncKey, const UT_StubContext_t *Context)
 {
-    return CFE_TIME_A_GT_B;
+    CFE_SB_MsgId_t *MsgId         = UT_Hook_GetArgValueByName(Context, "MsgId", CFE_SB_MsgId_t *);
+    CFE_SB_MsgId_t *TestCaseMsgId = UserObj;
+
+    *MsgId = *TestCaseMsgId;
+}
+
+void UT_SC_SetMsgId(CFE_SB_MsgId_t MsgId)
+{
+    static CFE_SB_MsgId_t TestCaseMsgId;
+
+    TestCaseMsgId = MsgId;
+
+    UT_SetHandlerFunction(UT_KEY(CFE_MSG_GetMsgId), UT_SC_CmdTableMidHandler, &TestCaseMsgId);
+}
+
+void UT_SC_Loads_Test_Setup(void)
+{
+    SC_Test_Setup();
+
+    UT_SetHandlerFunction(UT_KEY(CFE_MSG_GetSize), UT_SC_CmdTableSizeHandler, NULL);
+}
+
+void *UT_SC_GetAtsTable(uint8 AtsIndex)
+{
+    return SC_OperData.AtsTblAddr[AtsIndex];
+}
+
+void *UT_SC_GetRtsTable(uint8 RtsIndex)
+{
+    return SC_OperData.RtsTblAddr[RtsIndex];
+}
+
+void *UT_SC_GetAppendTable(void)
+{
+    return SC_OperData.AppendTblAddr;
+}
+
+void UT_SC_AdvanceTailPtr(void **TailPtr, size_t HdrSize, size_t MsgSize)
+{
+    uint32 *U32Ptr = (uint32 *)(*TailPtr);
+
+    /* Advance past the header, in words */
+    U32Ptr += HdrSize / sizeof(uint32);
+
+    /* Stash the size here */
+    if (MsgSize < sizeof(uint32))
+    {
+        UtAssert_Failed("Cannot store a message with size = %lu", (unsigned long)MsgSize);
+    }
+    else
+    {
+        *U32Ptr = MsgSize;
+    }
+
+    /* Advance past the command content, in words */
+    U32Ptr += (MsgSize + SC_ROUND_UP_BYTES) / sizeof(uint32);
+
+    *TailPtr = U32Ptr;
+}
+
+SC_AtsEntryHeader_t *UT_SC_AppendSingleAtsEntry(void **TailPtr, uint16 CmdNumber, size_t MsgSize)
+{
+    SC_AtsEntryHeader_t *Entry = (SC_AtsEntryHeader_t *)(*TailPtr);
+
+    UT_SC_AdvanceTailPtr(TailPtr, SC_ATS_HEADER_SIZE, MsgSize);
+
+    Entry->CmdNumber = CmdNumber;
+
+    return Entry;
+}
+
+SC_RtsEntryHeader_t *UT_SC_AppendSingleRtsEntry(void **TailPtr, SC_RelTimeTag_t TimeTag, size_t MsgSize)
+{
+    SC_RtsEntryHeader_t *Entry = (SC_RtsEntryHeader_t *)(*TailPtr);
+
+    UT_SC_AdvanceTailPtr(TailPtr, SC_RTS_HEADER_SIZE, MsgSize);
+
+    Entry->TimeTag = TimeTag;
+
+    return Entry;
+}
+
+SC_AtsEntryHeader_t *UT_SC_SetupSingleAtsEntry(uint8 AtsIndex, uint16 CmdNumber, size_t MsgSize)
+{
+    void *TailPtr;
+
+    TailPtr = UT_SC_GetAtsTable(AtsIndex);
+
+    return UT_SC_AppendSingleAtsEntry(&TailPtr, CmdNumber, MsgSize);
+}
+
+SC_RtsEntryHeader_t *UT_SC_SetupSingleRtsEntry(uint8 RtsIndex, CFE_SB_MsgId_t MsgId, SC_RelTimeTag_t TimeTag,
+                                               size_t MsgSize)
+{
+    void *TailPtr;
+
+    UT_SC_SetMsgId(MsgId);
+    TailPtr = UT_SC_GetRtsTable(RtsIndex);
+
+    return UT_SC_AppendSingleRtsEntry(&TailPtr, TimeTag, MsgSize);
+}
+
+uint32 UT_SC_GetEntryWordCount(size_t HdrSize, size_t MsgSize)
+{
+    return (MsgSize + HdrSize + SC_ROUND_UP_BYTES) / SC_BYTES_IN_WORD;
+}
+
+void *UT_SC_SetupFullTable(void **TailPtr, size_t HdrSize, size_t MsgSize, size_t MaxLimitWords,
+                           size_t TargetEndingWord, void (*EntryInit_Callback)(void *, size_t, size_t))
+{
+    uint8 *HeadPtr;
+    void * CurrPtr;
+    size_t BufEntryWords;
+    size_t LastUsableWord;
+    size_t Idx;
+    size_t WordsUsed;
+
+    HeadPtr = *TailPtr;
+    CurrPtr = NULL;
+
+    /* Causes CFE_MSG_GetSize to satisfy the conditions of if-statement below comment "if the length of the command is
+     * valid", but NOT the if-statement immediately after */
+    BufEntryWords  = UT_SC_GetEntryWordCount(HdrSize, MsgSize);
+    LastUsableWord = MaxLimitWords;
+
+    if (TargetEndingWord != 0 && TargetEndingWord < LastUsableWord)
+    {
+        LastUsableWord = TargetEndingWord;
+    }
+
+    if (LastUsableWord > BufEntryWords)
+    {
+        LastUsableWord -= BufEntryWords;
+    }
+    else
+    {
+        LastUsableWord = 0;
+    }
+
+    /* Fill the buffer up to the last "complete" entry */
+    for (Idx = 0; Idx < SC_MAX_ATS_CMDS; ++Idx)
+    {
+        WordsUsed = ((uint8 *)(*TailPtr) - HeadPtr) / sizeof(uint32);
+        if (WordsUsed > LastUsableWord)
+        {
+            break;
+        }
+
+        if ((WordsUsed + BufEntryWords) > LastUsableWord && TargetEndingWord != 0)
+        {
+            /* This will be the last entry.  Adjust the size to hit the target. */
+            BufEntryWords = TargetEndingWord - WordsUsed;
+            MsgSize       = (BufEntryWords * sizeof(uint32)) - HdrSize;
+        }
+
+        CurrPtr = *TailPtr;
+        UT_SC_AdvanceTailPtr(TailPtr, HdrSize, MsgSize);
+
+        EntryInit_Callback(CurrPtr, Idx, MsgSize);
+        // EntryInit(CurrPtr, SC_ATS_CMD_INDEX_TO_NUM(Idx), MsgSize);
+    }
+
+    /* Capture the last entry that was complete -
+     * test case may want to change it to exercise end-of-buffer handling */
+    return CurrPtr;
+}
+
+void UT_SC_AtsEntryInit(void *EntryPtr, size_t Idx, size_t MsgSize)
+{
+    SC_AtsEntryHeader_t *Entry = EntryPtr;
+
+    Entry->CmdNumber = SC_ATS_CMD_INDEX_TO_NUM(Idx);
+}
+
+SC_AtsEntryHeader_t *UT_SC_SetupAtsTable(uint8 AtsIndex, size_t MsgSize, size_t TargetEndingWord, void **TailPtrOut)
+{
+    void *               TailPtr;
+    SC_AtsEntryHeader_t *FinalEntry;
+
+    TailPtr    = UT_SC_GetAtsTable(AtsIndex);
+    FinalEntry = UT_SC_SetupFullTable(&TailPtr, SC_ATS_HEADER_SIZE, MsgSize, SC_ATS_BUFF_SIZE32, TargetEndingWord,
+                                      UT_SC_AtsEntryInit);
+
+    /* Capture a pointer to the _end_ of the filled data -
+     * the test case might need to write additional data here */
+    if (TailPtrOut != NULL)
+    {
+        *TailPtrOut = TailPtr;
+    }
+
+    /* Capture the last ATS entry that was complete -
+     * test case may want to change it to exercise end-of-buffer handling */
+    return FinalEntry;
+}
+
+void UT_SC_RtsEntryInit(void *EntryPtr, size_t Idx, size_t MsgSize)
+{
+    SC_RtsEntryHeader_t *Entry = EntryPtr;
+
+    Entry->TimeTag = 1;
+}
+
+SC_RtsEntryHeader_t *UT_SC_SetupRtsTable(uint8 RtsIndex, CFE_SB_MsgId_t MsgId, size_t MsgSize, size_t TargetEndingWord,
+                                         void **TailPtrOut)
+{
+    void *               TailPtr;
+    SC_RtsEntryHeader_t *FinalEntry;
+
+    UT_SC_SetMsgId(MsgId);
+    TailPtr    = UT_SC_GetRtsTable(RtsIndex);
+    FinalEntry = UT_SC_SetupFullTable(&TailPtr, SC_RTS_HEADER_SIZE, MsgSize, SC_RTS_BUFF_SIZE32, TargetEndingWord,
+                                      UT_SC_RtsEntryInit);
+
+    /* Capture a pointer to the _end_ of the filled data -
+     * the test case might need to write additional data here */
+    if (TailPtrOut != NULL)
+    {
+        *TailPtrOut = TailPtr;
+    }
+
+    /* Capture the last Rts entry that was complete -
+     * test case may want to change it to exercise end-of-buffer handling */
+    return FinalEntry;
 }
 
 void SC_LoadAts_Test_Nominal(void)
 {
-    CFE_SB_MsgId_t       TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
-    size_t               MsgSize   = sizeof(SC_NoopCmd_t);
-    SC_AtsEntryHeader_t *Entry;
-    uint8                AtsIndex = 0;
+    uint8 AtsIndex = 0;
 
-    Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[AtsIndex][0];
-    Entry->CmdNumber = 1;
-
-    SC_OperData.AtsCmdStatusTblAddr[AtsIndex][0] = SC_EMPTY;
-
-    /* Set to satisfy the conditions of if-statement below comment "if the length of the command is valid", along
-     * with the if-statement immediately after */
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &MsgSize, sizeof(MsgSize), false);
+    UT_SC_SetupSingleAtsEntry(AtsIndex, 1, sizeof(SC_NoopCmd_t));
 
     /* Execute the function being tested */
     SC_LoadAts(AtsIndex);
@@ -86,259 +295,116 @@ void SC_LoadAts_Test_Nominal(void)
     UtAssert_INT32_EQ(SC_AppData.AtsCmdIndexBuffer[AtsIndex][0], 0);
     UtAssert_UINT32_EQ(SC_OperData.AtsCmdStatusTblAddr[AtsIndex][0], SC_LOADED);
     UtAssert_UINT32_EQ(SC_OperData.AtsInfoTblAddr[AtsIndex].NumberOfCommands, 1);
-
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
 }
 
 void SC_LoadAts_Test_CmdRunOffEndOfBuffer(void)
 {
-    SC_AtsEntryHeader_t *Entry;
-    uint8                AtsIndex = 0;
-    size_t               MsgSize;
-    int                  BufEntrySize;
-    int                  MaxBufEntries;
-    int                  i;
-    int                  j;
+    uint8 AtsIndex = 0;
 
-    /* Causes CFE_MSG_GetSize to satisfy the conditions of if-statement below comment "if the length of the command is
-     * valid", but NOT the if-statement immediately after */
-    MsgSize       = SC_PACKET_MAX_SIZE;
-    BufEntrySize  = (MsgSize + SC_ROUND_UP_BYTES + SC_ATS_HEADER_SIZE) / SC_BYTES_IN_WORD;
-    MaxBufEntries = SC_ATS_BUFF_SIZE32 / BufEntrySize + 1;
-
-    for (i = 0, j = 0; i < MaxBufEntries; i++, j += BufEntrySize)
-    {
-        Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[AtsIndex][j];
-        Entry->CmdNumber = i + 1;
-
-        UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &MsgSize, sizeof(MsgSize), false);
-    }
+    /* Set up -- Modify the final entry so it would go off the end of the table */
+    UT_SC_SetupAtsTable(AtsIndex, UT_SC_NOMINAL_CMD_SIZE, SC_ATS_BUFF_SIZE32 + 1, NULL);
 
     /* Execute the function being tested */
     SC_LoadAts(AtsIndex);
 
-    /* Verify results */
-    UtAssert_True(SC_AppData.AtsCmdIndexBuffer[AtsIndex][0] == SC_ERROR,
-                  "SC_AppData.AtsCmdIndexBuffer[AtsIndex][0] == SC_ERROR");
-    UtAssert_True(SC_OperData.AtsCmdStatusTblAddr[AtsIndex][0] == SC_EMPTY,
-                  "SC_OperData.AtsCmdStatusTblAddr[AtsIndex][0] == SC_EMPTY");
-    UtAssert_True(SC_OperData.AtsInfoTblAddr[AtsIndex].NumberOfCommands == 0,
-                  "SC_OperData.AtsInfoTblAddr[AtsIndex].NumberOfCommands == 0");
-    UtAssert_True(SC_OperData.AtsInfoTblAddr[AtsIndex].AtsSize == 0,
-                  "SC_OperData.AtsInfoTblAddr[AtsIndex].AtsSize == 0");
-
+    UtAssert_INT32_EQ(SC_AppData.AtsCmdIndexBuffer[AtsIndex][0], SC_ERROR);
+    UtAssert_UINT32_EQ(SC_OperData.AtsCmdStatusTblAddr[AtsIndex][0], SC_EMPTY);
+    UtAssert_ZERO(SC_OperData.AtsInfoTblAddr[AtsIndex].NumberOfCommands);
+    UtAssert_ZERO(SC_OperData.AtsInfoTblAddr[AtsIndex].AtsSize);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
 }
 
 void SC_LoadAts_Test_CmdLengthInvalid(void)
 {
-    size_t               MsgSize;
-    SC_AtsEntryHeader_t *Entry;
-    uint8                AtsIndex = 0;
+    uint8 AtsIndex = 0;
 
-    Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[AtsIndex][0];
-    Entry->CmdNumber = 1;
-
-    /* Set to make the if-statement below comment "if the length of the command is valid" fail */
-    MsgSize = SC_PACKET_MAX_SIZE + 1;
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &MsgSize, sizeof(MsgSize), false);
+    UT_SC_SetupSingleAtsEntry(AtsIndex, 1, SC_PACKET_MAX_SIZE + 1);
 
     /* Execute the function being tested */
     SC_LoadAts(AtsIndex);
 
-    /* Verify results */
-    UtAssert_True(SC_AppData.AtsCmdIndexBuffer[AtsIndex][0] == SC_ERROR,
-                  "SC_AppData.AtsCmdIndexBuffer[AtsIndex][0] == SC_ERROR");
-    UtAssert_True(SC_OperData.AtsCmdStatusTblAddr[AtsIndex][0] == SC_EMPTY,
-                  "SC_OperData.AtsCmdStatusTblAddr[AtsIndex][0] == SC_EMPTY");
-    UtAssert_True(SC_OperData.AtsInfoTblAddr[AtsIndex].NumberOfCommands == 0,
-                  "SC_OperData.AtsInfoTblAddr[AtsIndex].NumberOfCommands == 0");
-    UtAssert_True(SC_OperData.AtsInfoTblAddr[AtsIndex].AtsSize == 0,
-                  "SC_OperData.AtsInfoTblAddr[AtsIndex].AtsSize == 0");
-
+    UtAssert_INT32_EQ(SC_AppData.AtsCmdIndexBuffer[AtsIndex][0], SC_ERROR);
+    UtAssert_UINT32_EQ(SC_OperData.AtsCmdStatusTblAddr[AtsIndex][0], SC_EMPTY);
+    UtAssert_ZERO(SC_OperData.AtsInfoTblAddr[AtsIndex].NumberOfCommands);
+    UtAssert_ZERO(SC_OperData.AtsInfoTblAddr[AtsIndex].AtsSize);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
 }
 
 void SC_LoadAts_Test_CmdLengthZero(void)
 {
-    size_t               MsgSize;
-    SC_AtsEntryHeader_t *Entry;
-    uint8                AtsIndex = 0;
+    uint8 AtsIndex = 0;
 
-    Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[AtsIndex][0];
-    Entry->CmdNumber = 1;
-
-    /* Set to make the if-statement below comment "if the length of the command is valid" fail */
-    MsgSize = 0;
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &MsgSize, sizeof(MsgSize), false);
+    UT_SC_SetupSingleAtsEntry(AtsIndex, 1, SC_PACKET_MIN_SIZE - 1);
 
     /* Execute the function being tested */
     SC_LoadAts(AtsIndex);
 
-    /* Verify results */
-    UtAssert_True(SC_AppData.AtsCmdIndexBuffer[AtsIndex][0] == SC_ERROR,
-                  "SC_AppData.AtsCmdIndexBuffer[AtsIndex][0] == SC_ERROR");
-    UtAssert_True(SC_OperData.AtsCmdStatusTblAddr[AtsIndex][0] == SC_EMPTY,
-                  "SC_OperData.AtsCmdStatusTblAddr[AtsIndex][0] == SC_EMPTY");
-    UtAssert_True(SC_OperData.AtsInfoTblAddr[AtsIndex].NumberOfCommands == 0,
-                  "SC_OperData.AtsInfoTblAddr[AtsIndex].NumberOfCommands == 0");
-    UtAssert_True(SC_OperData.AtsInfoTblAddr[AtsIndex].AtsSize == 0,
-                  "SC_OperData.AtsInfoTblAddr[AtsIndex].AtsSize == 0");
-
+    UtAssert_INT32_EQ(SC_AppData.AtsCmdIndexBuffer[AtsIndex][0], SC_ERROR);
+    UtAssert_UINT32_EQ(SC_OperData.AtsCmdStatusTblAddr[AtsIndex][0], SC_EMPTY);
+    UtAssert_ZERO(SC_OperData.AtsInfoTblAddr[AtsIndex].NumberOfCommands);
+    UtAssert_ZERO(SC_OperData.AtsInfoTblAddr[AtsIndex].AtsSize);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
 }
 
 void SC_LoadAts_Test_CmdNumberInvalid(void)
 {
-    size_t               MsgSize;
-    SC_AtsEntryHeader_t *Entry;
-    uint8                AtsIndex = 0;
+    uint8 AtsIndex = 0;
 
-    Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[AtsIndex][0];
-    Entry->CmdNumber = SC_MAX_ATS_CMDS * 2;
-
-    /* Set to make the if-statement below comment "if the length of the command is valid" fail */
-    MsgSize = SC_PACKET_MAX_SIZE + 1;
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &MsgSize, sizeof(MsgSize), false);
+    UT_SC_SetupSingleAtsEntry(AtsIndex, SC_MAX_ATS_CMDS * 2, UT_SC_NOMINAL_CMD_SIZE);
 
     /* Execute the function being tested */
     SC_LoadAts(AtsIndex);
 
-    /* Verify results */
-    UtAssert_True(SC_AppData.AtsCmdIndexBuffer[AtsIndex][0] == SC_ERROR,
-                  "SC_AppData.AtsCmdIndexBuffer[AtsIndex][0] == SC_ERROR");
-    UtAssert_True(SC_OperData.AtsCmdStatusTblAddr[AtsIndex][0] == SC_EMPTY,
-                  "SC_OperData.AtsCmdStatusTblAddr[AtsIndex][0] == SC_EMPTY");
-    UtAssert_True(SC_OperData.AtsInfoTblAddr[AtsIndex].NumberOfCommands == 0,
-                  "SC_OperData.AtsInfoTblAddr[AtsIndex].NumberOfCommands == 0");
-    UtAssert_True(SC_OperData.AtsInfoTblAddr[AtsIndex].AtsSize == 0,
-                  "SC_OperData.AtsInfoTblAddr[AtsIndex].AtsSize == 0");
-
-    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
-}
-
-void SC_LoadAts_Test_EndOfLoadReached(void)
-{
-    size_t               MsgSize;
-    SC_AtsEntryHeader_t *Entry;
-    uint8                AtsIndex = 0;
-
-    Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[AtsIndex][0];
-    Entry->CmdNumber = 0;
-
-    /* Set to make the if-statement below comment "if the length of the command is valid" fail */
-    MsgSize = SC_PACKET_MAX_SIZE + 1;
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &MsgSize, sizeof(MsgSize), false);
-
-    /* Execute the function being tested */
-    SC_LoadAts(AtsIndex);
-
-    /* Verify results */
-    UtAssert_True(SC_AppData.AtsCmdIndexBuffer[AtsIndex][0] == SC_ERROR,
-                  "SC_AppData.AtsCmdIndexBuffer[AtsIndex][0] == SC_ERROR");
-    UtAssert_True(SC_OperData.AtsCmdStatusTblAddr[AtsIndex][0] == SC_EMPTY,
-                  "SC_OperData.AtsCmdStatusTblAddr[AtsIndex][0] == SC_EMPTY");
-    UtAssert_True(SC_OperData.AtsInfoTblAddr[AtsIndex].NumberOfCommands == 0,
-                  "SC_OperData.AtsInfoTblAddr[AtsIndex].NumberOfCommands == 0");
-    UtAssert_True(SC_OperData.AtsInfoTblAddr[AtsIndex].AtsSize == 0,
-                  "SC_OperData.AtsInfoTblAddr[AtsIndex].AtsSize == 0");
-
+    UtAssert_INT32_EQ(SC_AppData.AtsCmdIndexBuffer[AtsIndex][0], SC_ERROR);
+    UtAssert_UINT32_EQ(SC_OperData.AtsCmdStatusTblAddr[AtsIndex][0], SC_EMPTY);
+    UtAssert_ZERO(SC_OperData.AtsInfoTblAddr[AtsIndex].NumberOfCommands);
+    UtAssert_ZERO(SC_OperData.AtsInfoTblAddr[AtsIndex].AtsSize);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
 }
 
 void SC_LoadAts_Test_AtsBufferTooSmall(void)
 {
-    SC_AtsEntryHeader_t *Entry;
+    SC_AtsEntryHeader_t *LastValidEntry;
+    void *               TailPtr;
+    SC_AtsEntryHeader_t *InvalidEntry;
     uint8                AtsIndex = 0;
-    size_t               MsgSize1;
-    size_t               MsgSize2;
-    int                  BufEntrySize;
-    int                  MaxBufEntries;
-    int                  i;
-    int                  j;
 
-    /* Set to reach block of code starting with comment "even the smallest command will not fit in the buffer" */
-    MsgSize1      = SC_PACKET_MAX_SIZE;
-    BufEntrySize  = ((MsgSize1 + SC_ROUND_UP_BYTES) / SC_BYTES_IN_WORD) + SC_ATS_HDR_NOPKT_WORDS;
-    MaxBufEntries = SC_ATS_BUFF_SIZE32 / BufEntrySize;
+    /* Set up -- Modify the final entry so it would go off the end of the table */
+    LastValidEntry =
+        UT_SC_SetupAtsTable(AtsIndex, UT_SC_NOMINAL_CMD_SIZE, SC_ATS_BUFF_SIZE32 - SC_ATS_HDR_NOPKT_WORDS, &TailPtr);
 
-    for (i = 0, j = 0; i < MaxBufEntries; i++, j += BufEntrySize)
-    {
-        Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[AtsIndex][j];
-        Entry->CmdNumber = i + 1;
-        UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &MsgSize1, sizeof(MsgSize1), false);
-    }
-
-    /* Next entry should not leave enough buffer space for an ATS command header */
-    Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[AtsIndex][j];
-    Entry->CmdNumber = i++ + 1;
-
-    /* Use the remaining buffer space to calculate the final message size */
-    MsgSize2 = (SC_ATS_BUFF_SIZE32 - SC_ATS_HDR_WORDS - j) * SC_BYTES_IN_WORD;
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &MsgSize2, sizeof(MsgSize2), false);
-
-    /* Set up final entry that will create error condition */
-    j += ((MsgSize2 + SC_ROUND_UP_BYTES) / SC_BYTES_IN_WORD) + SC_ATS_HDR_NOPKT_WORDS;
-    Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[AtsIndex][j];
-    Entry->CmdNumber = i + 1;
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &MsgSize1, sizeof(MsgSize1), false);
+    InvalidEntry = TailPtr;
+    /*
+     * Set up final (invalid) entry that will create error condition -
+     * This is an ATS header at the very end of the ATS buffer, where there is no room
+     * for a cmd message to follow it, but it has a nonzero command number
+     */
+    InvalidEntry->CmdNumber = LastValidEntry->CmdNumber + 1;
 
     /* Execute the function being tested */
     SC_LoadAts(AtsIndex);
 
     /* Verify results */
-    UtAssert_True(SC_AppData.AtsCmdIndexBuffer[AtsIndex][0] == SC_ERROR,
-                  "SC_AppData.AtsCmdIndexBuffer[AtsIndex][0] == SC_ERROR");
-    UtAssert_True(SC_OperData.AtsCmdStatusTblAddr[AtsIndex][0] == SC_EMPTY,
-                  "SC_OperData.AtsCmdStatusTblAddr[AtsIndex][0] == SC_EMPTY");
-    UtAssert_True(SC_OperData.AtsInfoTblAddr[AtsIndex].NumberOfCommands == 0,
-                  "SC_OperData.AtsInfoTblAddr[AtsIndex].NumberOfCommands == 0");
-    UtAssert_True(SC_OperData.AtsInfoTblAddr[AtsIndex].AtsSize == 0,
-                  "SC_OperData.AtsInfoTblAddr[AtsIndex].AtsSize == 0");
-
+    UtAssert_INT32_EQ(SC_AppData.AtsCmdIndexBuffer[AtsIndex][0], SC_ERROR);
+    UtAssert_UINT32_EQ(SC_OperData.AtsCmdStatusTblAddr[AtsIndex][0], SC_EMPTY);
+    UtAssert_ZERO(SC_OperData.AtsInfoTblAddr[AtsIndex].NumberOfCommands);
+    UtAssert_ZERO(SC_OperData.AtsInfoTblAddr[AtsIndex].AtsSize);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
 }
 
-void SC_LoadAts_Test_AtsEntryOverflow(void)
+void SC_LoadAts_Test_AtsEmpty(void)
 {
-    SC_AtsEntryHeader_t *Entry;
-    uint8                AtsIndex = 0;
-    size_t               MsgSize1;
-    size_t               MsgSize2;
-    int                  BufEntrySize;
-    int                  MaxBufEntries;
-    int                  i;
-    int                  j;
-
-    MsgSize1      = SC_PACKET_MAX_SIZE;
-    BufEntrySize  = ((MsgSize1 + SC_ROUND_UP_BYTES) / SC_BYTES_IN_WORD) + SC_ATS_HDR_NOPKT_WORDS;
-    MaxBufEntries = SC_ATS_BUFF_SIZE32 / BufEntrySize;
-
-    for (i = 0, j = 0; i < MaxBufEntries; i++, j += BufEntrySize)
-    {
-        Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[AtsIndex][j];
-        Entry->CmdNumber = i + 1;
-        UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &MsgSize1, sizeof(MsgSize1), false);
-    }
-
-    /* Next entry should not leave enough buffer space for an ATS command header */
-    Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[AtsIndex][j];
-    Entry->CmdNumber = i++ + 1;
-
-    /* Use the remaining buffer space to calculate the final message size */
-    MsgSize2 = (SC_ATS_BUFF_SIZE32 - SC_ATS_HDR_WORDS + 4 - j) * SC_BYTES_IN_WORD;
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &MsgSize2, sizeof(MsgSize2), false);
-
-    /* Set up final entry that will create condition */
-    j += ((MsgSize2 + SC_ROUND_UP_BYTES) / SC_BYTES_IN_WORD) + SC_ATS_HDR_WORDS;
-    Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[AtsIndex][j];
-    Entry->CmdNumber = i + 1;
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &MsgSize1, sizeof(MsgSize1), false);
+    uint8 AtsIndex = 0;
 
     /* Execute the function being tested */
     SC_LoadAts(AtsIndex);
 
     /* Verify results */
+    UtAssert_INT32_EQ(SC_AppData.AtsCmdIndexBuffer[AtsIndex][0], SC_ERROR);
+    UtAssert_UINT32_EQ(SC_OperData.AtsCmdStatusTblAddr[AtsIndex][0], SC_EMPTY);
+    UtAssert_ZERO(SC_OperData.AtsInfoTblAddr[AtsIndex].NumberOfCommands);
+    UtAssert_ZERO(SC_OperData.AtsInfoTblAddr[AtsIndex].AtsSize);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
 }
 
@@ -346,62 +412,30 @@ void SC_LoadAts_Test_LoadExactlyBufferLength(void)
 {
     SC_AtsEntryHeader_t *Entry;
     uint8                AtsIndex = 0;
-    size_t               MsgSize1;
-    size_t               MsgSize2;
-    int                  BufEntrySize;
-    int                  MaxBufEntries;
-    int                  i;
-    int                  j;
 
-    /* Set to reach block of code starting with comment "we encountered a load exactly as long as the buffer" */
-    MsgSize1      = SC_PACKET_MAX_SIZE;
-    BufEntrySize  = (MsgSize1 + SC_ROUND_UP_BYTES + SC_ATS_HEADER_SIZE) / SC_BYTES_IN_WORD;
-    MaxBufEntries = SC_ATS_BUFF_SIZE32 / BufEntrySize;
-
-    for (i = 0, j = 0; i < MaxBufEntries; i++, j += BufEntrySize)
-    {
-        Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[AtsIndex][j];
-        Entry->CmdNumber = i + 1;
-        UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &MsgSize1, sizeof(MsgSize1), false);
-    }
-
-    /* Next entry should not leave enough buffer space for an ATS command header */
-    Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[AtsIndex][j];
-    Entry->CmdNumber = i++ + 1;
-
-    /* Use the remaining buffer space to calculate the final message size */
-    MsgSize2 = ((SC_ATS_BUFF_SIZE32 - SC_ATS_HDR_NOPKT_WORDS - j) * SC_BYTES_IN_WORD);
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &MsgSize2, sizeof(MsgSize2), false);
+    /* Set up -- Modify the final entry so it exactly takes up the remainder of the buffer */
+    Entry = UT_SC_SetupAtsTable(AtsIndex, UT_SC_NOMINAL_CMD_SIZE, SC_ATS_BUFF_SIZE32, NULL);
 
     /* Execute the function being tested */
     SC_LoadAts(AtsIndex);
 
     /* Verify results */
+    UtAssert_INT32_EQ(SC_AppData.AtsCmdIndexBuffer[AtsIndex][0], 0);
+    UtAssert_UINT32_EQ(SC_OperData.AtsCmdStatusTblAddr[AtsIndex][0], SC_LOADED);
+    UtAssert_UINT32_EQ(SC_OperData.AtsInfoTblAddr[AtsIndex].NumberOfCommands, Entry->CmdNumber);
+    UtAssert_UINT32_EQ(SC_OperData.AtsInfoTblAddr[AtsIndex].AtsSize, SC_ATS_BUFF_SIZE32);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
 }
 
 void SC_LoadAts_Test_CmdNotEmpty(void)
 {
-    CFE_SB_MsgId_t       TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
-    size_t               MsgSize   = sizeof(SC_NoopCmd_t);
-    SC_AtsEntryHeader_t *Entry;
-    uint8                AtsIndex = 0;
-    uint8                EntryLoc;
+    void *TailPtr;
+    uint8 AtsIndex = 0;
 
-    Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[AtsIndex][0];
-    Entry->CmdNumber = 1;
-
-    EntryLoc         = ((MsgSize + SC_ROUND_UP_BYTES) / SC_BYTES_IN_WORD) + SC_ATS_HDR_NOPKT_WORDS;
-    Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[AtsIndex][EntryLoc];
-    Entry->CmdNumber = 2;
-
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &MsgSize, sizeof(MsgSize), false);
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &MsgSize, sizeof(MsgSize), false);
-
-    /* This hook will set CmdNumber 2 SC_OperData.AtsCmdStatusTblAddr[AtsIndex][1] from SC_EMPTY to SC_LOADED */
-    SC_LOADS_TEST_GetTotalMsgLengthHook_RunCount = 0;
-    UT_SetHookFunction(UT_KEY(CFE_MSG_GetSize), SC_LOADS_TEST_CFE_MSG_GetSizeHook1, NULL);
+    /* Set up a buffer that has a duplicate command number entry */
+    TailPtr = UT_SC_GetAtsTable(AtsIndex);
+    UT_SC_AppendSingleAtsEntry(&TailPtr, 1, UT_SC_NOMINAL_CMD_SIZE);
+    UT_SC_AppendSingleAtsEntry(&TailPtr, 1, UT_SC_NOMINAL_CMD_SIZE);
 
     /* Execute the function being tested */
     SC_LoadAts(AtsIndex);
@@ -417,12 +451,15 @@ void SC_LoadAts_Test_CmdNotEmpty(void)
 
 void SC_LoadAts_Test_InvalidIndex(void)
 {
+    uint8 AtsIndex = SC_NUMBER_OF_ATS;
+
     /* Pass in invalid index */
-    SC_LoadAts(SC_NUMBER_OF_ATS);
+    SC_LoadAts(AtsIndex);
 
     /* Verify results */
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_LOADATS_INV_INDEX_ERR_EID);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_LOADATS_INV_INDEX_ERR_EID);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventType, CFE_EVS_EventType_ERROR);
 }
 
 void SC_BuildTimeIndexTable_Test_InvalidIndex(void)
@@ -433,8 +470,9 @@ void SC_BuildTimeIndexTable_Test_InvalidIndex(void)
     SC_BuildTimeIndexTable(AtsIndex);
 
     /* Verify results */
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_BUILD_TIME_IDXTBL_ERR_EID);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_BUILD_TIME_IDXTBL_ERR_EID);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventType, CFE_EVS_EventType_ERROR);
 }
 
 void SC_Insert_Test(void)
@@ -449,12 +487,10 @@ void SC_Insert_Test(void)
     SC_Insert(AtsIndex, NewCmdIndex, ListLength);
 
     /* Verify results */
-    UtAssert_True(SC_AppData.AtsTimeIndexBuffer[AtsIndex][1] == SC_AppData.AtsTimeIndexBuffer[AtsIndex][0],
-                  "SC_AppData.AtsTimeIndexBuffer[AtsIndex][1] == SC_AppData.AtsTimeIndexBuffer[AtsIndex][0]");
-    UtAssert_True(SC_AppData.AtsTimeIndexBuffer[AtsIndex][1] == NewCmdIndex + 1,
-                  "SC_AppData.AtsTimeIndexBuffer[AtsIndex][1] == NewCmdIndex");
-
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
+
+    UtAssert_UINT16_EQ(SC_AppData.AtsTimeIndexBuffer[AtsIndex][1], SC_AppData.AtsTimeIndexBuffer[AtsIndex][0]);
+    UtAssert_UINT16_EQ(SC_AppData.AtsTimeIndexBuffer[AtsIndex][1], NewCmdIndex + 1);
 }
 
 void SC_Insert_Test_MiddleOfList(void)
@@ -473,12 +509,10 @@ void SC_Insert_Test_MiddleOfList(void)
     SC_Insert(AtsIndex, NewCmdIndex, ListLength);
 
     /* Verify results */
-    UtAssert_True(SC_AppData.AtsTimeIndexBuffer[AtsIndex][1] == SC_AppData.AtsTimeIndexBuffer[AtsIndex][0],
-                  "SC_AppData.AtsTimeIndexBuffer[AtsIndex][1] == SC_AppData.AtsTimeIndexBuffer[AtsIndex][0]");
-    UtAssert_True(SC_AppData.AtsTimeIndexBuffer[AtsIndex][1] == NewCmdIndex + 1,
-                  "SC_AppData.AtsTimeIndexBuffer[AtsIndex][1] == NewCmdIndex+1");
-
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
+
+    UtAssert_UINT16_EQ(SC_AppData.AtsTimeIndexBuffer[AtsIndex][1], SC_AppData.AtsTimeIndexBuffer[AtsIndex][0]);
+    UtAssert_UINT16_EQ(SC_AppData.AtsTimeIndexBuffer[AtsIndex][1], NewCmdIndex + 1);
 }
 
 void SC_Insert_Test_MiddleOfListCompareAbsTimeTrue(void)
@@ -497,12 +531,10 @@ void SC_Insert_Test_MiddleOfListCompareAbsTimeTrue(void)
     SC_Insert(AtsIndex, NewCmdIndex, ListLength);
 
     /* Verify results */
-    UtAssert_True(SC_AppData.AtsTimeIndexBuffer[AtsIndex][1] == SC_AppData.AtsTimeIndexBuffer[AtsIndex][0],
-                  "SC_AppData.AtsTimeIndexBuffer[AtsIndex][1] == SC_AppData.AtsTimeIndexBuffer[AtsIndex][0]");
-    UtAssert_True(SC_AppData.AtsTimeIndexBuffer[AtsIndex][1] == NewCmdIndex + 1,
-                  "SC_AppData.AtsTimeIndexBuffer[AtsIndex][1] == NewCmdIndex+1");
-
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
+
+    UtAssert_UINT16_EQ(SC_AppData.AtsTimeIndexBuffer[AtsIndex][1], SC_AppData.AtsTimeIndexBuffer[AtsIndex][0]);
+    UtAssert_UINT16_EQ(SC_AppData.AtsTimeIndexBuffer[AtsIndex][1], NewCmdIndex + 1);
 }
 
 void SC_Insert_Test_InvalidIndex(void)
@@ -515,8 +547,9 @@ void SC_Insert_Test_InvalidIndex(void)
     SC_Insert(AtsIndex, NewCmdIndex, ListLength);
 
     /* Verify results */
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_INSERTATS_INV_INDEX_ERR_EID);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_INSERTATS_INV_INDEX_ERR_EID);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventType, CFE_EVS_EventType_ERROR);
 }
 
 void SC_InitAtsTables_Test_InvalidIndex(void)
@@ -527,80 +560,60 @@ void SC_InitAtsTables_Test_InvalidIndex(void)
     SC_InitAtsTables(AtsIndex);
 
     /* Verify results */
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_INIT_ATSTBL_INV_INDEX_ERR_EID);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_INIT_ATSTBL_INV_INDEX_ERR_EID);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventType, CFE_EVS_EventType_ERROR);
 }
 
 void SC_ValidateAts_Test(void)
 {
-    SC_AtsEntryHeader_t *Entry;
-    uint8                AtsIndex = 0;
-
-    Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[AtsIndex][0];
-    Entry->CmdNumber = 0;
+    uint8 AtsIndex = 0;
 
     /* Execute the function being tested */
-    UtAssert_INT32_EQ(SC_ValidateAts((uint16 *)(SC_OperData.AtsTblAddr[AtsIndex])), SC_ERROR);
+    UtAssert_INT32_EQ(SC_ValidateAts(SC_OperData.AtsTblAddr[AtsIndex]), SC_ERROR);
 
     /* Verify results */
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_VERIFY_ATS_MPT_ERR_EID);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_VERIFY_ATS_MPT_ERR_EID);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventType, CFE_EVS_EventType_ERROR);
 }
 
 void SC_ValidateAppend_Test(void)
 {
-    SC_AtsEntryHeader_t *Entry;
-    uint8                AtsIndex = 0;
-
-    Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[AtsIndex][0];
-    Entry->CmdNumber = 0;
+    uint8 AtsIndex = 0;
 
     /* Execute the function being tested */
-    UtAssert_INT32_EQ(SC_ValidateAppend((SC_OperData.AtsTblAddr[AtsIndex])), SC_ERROR);
+    UtAssert_INT32_EQ(SC_ValidateAppend(SC_OperData.AtsTblAddr[AtsIndex]), SC_ERROR);
 
     /* Verify results */
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_VERIFY_ATS_MPT_ERR_EID);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_VERIFY_ATS_MPT_ERR_EID);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventType, CFE_EVS_EventType_ERROR);
 }
 
 void SC_ValidateRts_Test(void)
 {
-    SC_RtsEntryHeader_t *Entry;
-    uint8                RtsIndex  = 0;
-    CFE_SB_MsgId_t       TestMsgId = CFE_SB_INVALID_MSG_ID;
-    size_t               MsgSize   = SC_PACKET_MIN_SIZE;
+    uint8 RtsIndex = 0;
 
-    Entry          = (SC_RtsEntryHeader_t *)&SC_OperData.RtsTblAddr[RtsIndex][0];
-    Entry->TimeTag = 1;
-
-    /* The MsgId and MsgSize are here to satisfy TSF */
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &MsgSize, sizeof(MsgSize), false);
+    UT_SC_SetupSingleRtsEntry(RtsIndex, CFE_SB_INVALID_MSG_ID, 1, SC_PACKET_MIN_SIZE);
 
     /* Execute the function being tested */
-    UtAssert_INT32_EQ(SC_ValidateRts((uint16 *)(SC_OperData.RtsTblAddr[RtsIndex])), SC_ERROR);
+    UtAssert_INT32_EQ(SC_ValidateRts(SC_OperData.RtsTblAddr[RtsIndex]), SC_ERROR);
 
     /* Verify results */
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_RTS_INVLD_MID_ERR_EID);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_RTS_INVLD_MID_ERR_EID);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventType, CFE_EVS_EventType_ERROR);
 }
 
 void SC_ValidateRts_Test_ParseRts(void)
 {
-    SC_RtsEntryHeader_t *Entry;
-    uint8                RtsIndex  = 0;
-    CFE_SB_MsgId_t       TestMsgId = CFE_SB_INVALID_MSG_ID;
-    size_t               MsgSize   = SC_PACKET_MIN_SIZE;
+    uint8 RtsIndex = 0;
 
-    Entry          = (SC_RtsEntryHeader_t *)&SC_OperData.RtsTblAddr[RtsIndex][0];
-    Entry->TimeTag = 0;
-
-    /* The MsgId and MsgSize are here to satisfy TSF */
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &MsgSize, sizeof(MsgSize), false);
+    UT_SC_SetupSingleRtsEntry(RtsIndex, CFE_SB_INVALID_MSG_ID, 0, SC_PACKET_MIN_SIZE);
 
     /* Execute the function being tested */
-    UtAssert_INT32_EQ(SC_ValidateRts((uint16 *)(SC_OperData.RtsTblAddr[RtsIndex])), CFE_SUCCESS);
+    UtAssert_INT32_EQ(SC_ValidateRts(SC_OperData.RtsTblAddr[RtsIndex]), CFE_SUCCESS);
 
     /* Verify results */
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
@@ -608,10 +621,14 @@ void SC_ValidateRts_Test_ParseRts(void)
 
 void SC_LoadRts_Test_Nominal(void)
 {
-    uint8 AtsIndex = 0;
+    uint8 RtsIndex = 0;
+
+    UT_SC_SetMsgId(CFE_SB_INVALID_MSG_ID);
+    UT_SC_GetRtsTable(RtsIndex);
+
 
     /* Execute the function being tested */
-    UtAssert_VOIDCALL(SC_LoadRts(AtsIndex));
+    SC_LoadRts(RtsIndex);
 
     /* Verify results */
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
@@ -622,26 +639,19 @@ void SC_LoadRts_Test_InvalidIndex(void)
     uint8 RtsIndex = SC_NUMBER_OF_RTS;
 
     /* Execute the function being tested */
-    UtAssert_VOIDCALL(SC_LoadRts(RtsIndex));
+    SC_LoadRts(RtsIndex);
 
     /* Verify results */
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_LOADRTS_INV_INDEX_ERR_EID);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_LOADRTS_INV_INDEX_ERR_EID);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventType, CFE_EVS_EventType_ERROR);
 }
 
 void SC_ParseRts_Test_EndOfFile(void)
 {
-    SC_RtsEntryHeader_t *Entry;
-    uint8                RtsIndex  = 0;
-    CFE_SB_MsgId_t       TestMsgId = CFE_SB_INVALID_MSG_ID;
-    size_t               MsgSize   = SC_PACKET_MIN_SIZE;
+    uint8 RtsIndex = 0;
 
-    Entry          = (SC_RtsEntryHeader_t *)&SC_OperData.RtsTblAddr[RtsIndex][0];
-    Entry->TimeTag = 0;
-
-    /* Set these to satisfy if-statement to reach line with comment "assumed end of file" */
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &MsgSize, sizeof(MsgSize), false);
+    UT_SC_SetupSingleRtsEntry(RtsIndex, CFE_SB_INVALID_MSG_ID, 0, SC_PACKET_MIN_SIZE);
 
     /* Execute the function being tested */
     UtAssert_BOOL_TRUE(SC_ParseRts(SC_OperData.RtsTblAddr[RtsIndex]));
@@ -652,152 +662,70 @@ void SC_ParseRts_Test_EndOfFile(void)
 
 void SC_ParseRts_Test_InvalidMsgId(void)
 {
-    SC_RtsEntryHeader_t *Entry;
-    uint8                RtsIndex  = 0;
-    CFE_SB_MsgId_t       TestMsgId = CFE_SB_INVALID_MSG_ID;
-    size_t               MsgSize   = SC_PACKET_MIN_SIZE;
+    uint8 RtsIndex = 0;
 
-    Entry          = (SC_RtsEntryHeader_t *)&SC_OperData.RtsTblAddr[RtsIndex][0];
-    Entry->TimeTag = 1;
-
-    /* Set to generate error message SC_RTS_INVLD_MID_ERR_EID */
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &MsgSize, sizeof(MsgSize), false);
+    UT_SC_SetupSingleRtsEntry(RtsIndex, CFE_SB_INVALID_MSG_ID, 1, SC_PACKET_MIN_SIZE);
 
     /* Execute the function being tested */
     UtAssert_BOOL_FALSE(SC_ParseRts(SC_OperData.RtsTblAddr[RtsIndex]));
 
     /* Verify results */
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_RTS_INVLD_MID_ERR_EID);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_RTS_INVLD_MID_ERR_EID);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventType, CFE_EVS_EventType_ERROR);
 }
 
 void SC_ParseRts_Test_LengthErrorTooShort(void)
 {
-    SC_RtsEntryHeader_t *Entry;
-    uint8                RtsIndex  = 0;
-    CFE_SB_MsgId_t       TestMsgId = SC_UT_MID_1;
-    size_t               MsgSize   = 0;
+    uint8 RtsIndex = 0;
 
-    Entry          = (SC_RtsEntryHeader_t *)&SC_OperData.RtsTblAddr[RtsIndex][0];
-    Entry->TimeTag = 1;
-
-    /* Set to generate error message SC_RTS_INVLD_MID_ERR_EID */
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &MsgSize, sizeof(MsgSize), false);
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &MsgSize, sizeof(MsgSize), false);
+    UT_SC_SetupSingleRtsEntry(RtsIndex, SC_UT_MID_1, 1, SC_PACKET_MIN_SIZE - 1);
 
     /* Execute the function being tested */
     UtAssert_BOOL_FALSE(SC_ParseRts(SC_OperData.RtsTblAddr[RtsIndex]));
 
     /* Verify results */
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_RTS_LEN_ERR_EID);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_RTS_LEN_ERR_EID);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventType, CFE_EVS_EventType_ERROR);
 }
 
 void SC_ParseRts_Test_LengthErrorTooLong(void)
 {
-    SC_RtsEntryHeader_t *Entry;
-    uint8                RtsIndex  = 0;
-    CFE_SB_MsgId_t       TestMsgId = SC_UT_MID_1;
-    size_t               MsgSize   = SC_PACKET_MAX_SIZE + 1;
+    uint8 RtsIndex = 0;
 
-    Entry          = (SC_RtsEntryHeader_t *)&SC_OperData.RtsTblAddr[RtsIndex][0];
-    Entry->TimeTag = 1;
-
-    /* Set to generate error message SC_RTS_LEN_ERR_EID as a result of length being too long */
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &MsgSize, sizeof(MsgSize), false);
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &MsgSize, sizeof(MsgSize), false);
+    UT_SC_SetupSingleRtsEntry(RtsIndex, SC_UT_MID_1, 1, SC_PACKET_MAX_SIZE + 1);
 
     /* Execute the function being tested */
     UtAssert_BOOL_FALSE(SC_ParseRts(SC_OperData.RtsTblAddr[RtsIndex]));
 
     /* Verify results */
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_RTS_LEN_ERR_EID);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_RTS_LEN_ERR_EID);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventType, CFE_EVS_EventType_ERROR);
 }
 
 void SC_ParseRts_Test_CmdRunsOffEndOfBuffer(void)
 {
-    SC_RtsEntryHeader_t *Entry;
-    uint8                RtsIndex  = 0;
-    CFE_SB_MsgId_t       TestMsgId = SC_UT_MID_1;
-    size_t               MsgSize;
-    int32                BufUnused = SC_RTS_BUFF_SIZE32 * SC_BYTES_IN_WORD;
+    uint8 RtsIndex = 0;
 
-    Entry          = (SC_RtsEntryHeader_t *)&SC_OperData.RtsTblAddr[RtsIndex][0];
-    Entry->TimeTag = 1;
-
-    while (BufUnused > 0)
-    {
-
-        /* Need to avoid exact fit and not having enough room for a command */
-        if (BufUnused < SC_PACKET_MAX_SIZE + SC_RTS_HEADER_SIZE)
-        {
-            /* Use up more than what's left */
-            MsgSize = SC_PACKET_MAX_SIZE;
-        }
-        else if (BufUnused < SC_PACKET_MIN_SIZE + SC_PACKET_MAX_SIZE + (2 * SC_RTS_HEADER_SIZE))
-        {
-            /* Just set to min entry, use up next round */
-            MsgSize = SC_PACKET_MIN_SIZE;
-        }
-        else
-        {
-            MsgSize = SC_PACKET_MAX_SIZE;
-        }
-
-        UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-        UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &MsgSize, sizeof(MsgSize), true);
-        BufUnused -= MsgSize;
-    }
+    /* Set up -- Modify the final entry so it would go off the end of the table */
+    UT_SC_SetupRtsTable(RtsIndex, SC_UT_MID_1, UT_SC_NOMINAL_CMD_SIZE, SC_RTS_BUFF_SIZE32 + 1, NULL);
 
     /* Execute the function being tested */
     UtAssert_BOOL_FALSE(SC_ParseRts(SC_OperData.RtsTblAddr[RtsIndex]));
 
     /* Verify results */
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_RTS_LEN_BUFFER_ERR_EID);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_RTS_LEN_BUFFER_ERR_EID);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventType, CFE_EVS_EventType_ERROR);
 }
 
 void SC_ParseRts_Test_CmdLengthEqualsBufferLength(void)
 {
-    /* Also tests the case where CmdLength is less than the buffer length */
+    uint8 RtsIndex = 0;
 
-    SC_RtsEntryHeader_t *Entry;
-    uint8                RtsIndex  = 0;
-    CFE_SB_MsgId_t       TestMsgId = SC_UT_MID_1;
-    size_t               MsgSize;
-    size_t               BufUnused = SC_RTS_BUFF_SIZE32 * SC_BYTES_IN_WORD;
-
-    Entry          = (SC_RtsEntryHeader_t *)&SC_OperData.RtsTblAddr[RtsIndex][0];
-    Entry->TimeTag = 1;
-
-    /* Fill buffer with packets */
-    while (BufUnused != 0)
-    {
-
-        /* Need to consume data but leave room for a valid packet */
-        if (BufUnused <= SC_PACKET_MAX_SIZE + SC_RTS_HEADER_SIZE)
-        {
-            /* Just use up what's left */
-            MsgSize = BufUnused - SC_RTS_HEADER_SIZE;
-        }
-        else if (BufUnused < SC_PACKET_MIN_SIZE + SC_PACKET_MAX_SIZE + (2 * SC_RTS_HEADER_SIZE))
-        {
-            /* Just set to min entry, use up next round */
-            MsgSize = SC_PACKET_MIN_SIZE;
-        }
-        else
-        {
-            MsgSize = SC_PACKET_MAX_SIZE;
-        }
-
-        UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-        UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &MsgSize, sizeof(MsgSize), true);
-        BufUnused -= MsgSize + SC_RTS_HEADER_SIZE;
-    }
+    UT_SC_SetupRtsTable(RtsIndex, SC_UT_MID_1, UT_SC_NOMINAL_CMD_SIZE, SC_RTS_BUFF_SIZE32, NULL);
 
     /* Execute the function being tested */
     UtAssert_BOOL_TRUE(SC_ParseRts(SC_OperData.RtsTblAddr[RtsIndex]));
@@ -808,34 +736,9 @@ void SC_ParseRts_Test_CmdLengthEqualsBufferLength(void)
 
 void SC_ParseRts_Test_CmdDoesNotFitBufferEmpty(void)
 {
-    uint8          RtsIndex  = 0;
-    CFE_SB_MsgId_t TestMsgId = SC_UT_MID_1;
-    size_t         MsgSize;
-    size_t         BufUnused = SC_RTS_BUFF_SIZE32 * SC_BYTES_IN_WORD;
+    uint8 RtsIndex = 0;
 
-    /* Fill buffer with packets */
-    while (BufUnused > SC_PACKET_MIN_SIZE + SC_RTS_HEADER_SIZE)
-    {
-        /* Need to consume data but leave room for a valid packet */
-        if (BufUnused <= SC_PACKET_MAX_SIZE + SC_RTS_HEADER_SIZE)
-        {
-            /* Leave only room for another header */
-            MsgSize = BufUnused - (2 * SC_RTS_HEADER_SIZE);
-        }
-        else if (BufUnused < SC_PACKET_MIN_SIZE + SC_PACKET_MAX_SIZE + (2 * SC_RTS_HEADER_SIZE))
-        {
-            /* Just set to min entry, use up next round */
-            MsgSize = SC_PACKET_MIN_SIZE;
-        }
-        else
-        {
-            MsgSize = SC_PACKET_MAX_SIZE;
-        }
-
-        UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-        UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &MsgSize, sizeof(MsgSize), true);
-        BufUnused -= MsgSize + SC_RTS_HEADER_SIZE;
-    }
+    UT_SC_SetupRtsTable(RtsIndex, SC_UT_MID_1, UT_SC_NOMINAL_CMD_SIZE, SC_RTS_BUFF_SIZE32 - 1, NULL);
 
     /* Execute the function being tested */
     UtAssert_BOOL_TRUE(SC_ParseRts(SC_OperData.RtsTblAddr[RtsIndex]));
@@ -845,434 +748,305 @@ void SC_ParseRts_Test_CmdDoesNotFitBufferEmpty(void)
 
 void SC_ParseRts_Test_CmdDoesNotFitBufferNotEmpty(void)
 {
-    uint8          RtsIndex  = 0;
-    CFE_SB_MsgId_t TestMsgId = SC_UT_MID_1;
-    size_t         MsgSize;
-    size_t         BufUnused = SC_RTS_BUFF_SIZE32 * SC_BYTES_IN_WORD;
+    uint8 RtsIndex = 0;
+    void *TailPtr;
 
-    /* Filling the table so it is considered used wherever checked */
-    memset(SC_OperData.RtsTblAddr[RtsIndex], 0xff, SC_RTS_BUFF_SIZE32 * SC_BYTES_IN_WORD);
+    UT_SC_SetupRtsTable(RtsIndex, SC_UT_MID_1, UT_SC_NOMINAL_CMD_SIZE, SC_RTS_BUFF_SIZE32 - 1, &TailPtr);
 
-    /* Fill buffer with packets */
-    while (BufUnused > SC_PACKET_MIN_SIZE + SC_RTS_HEADER_SIZE)
-    {
-        /* Need to consume data but leave room for a valid packet */
-        if (BufUnused <= SC_PACKET_MAX_SIZE + SC_RTS_HEADER_SIZE)
-        {
-            /* Leave only room for another header */
-            MsgSize = BufUnused - (2 * SC_RTS_HEADER_SIZE);
-        }
-        else if (BufUnused < SC_PACKET_MIN_SIZE + SC_PACKET_MAX_SIZE + (2 * SC_RTS_HEADER_SIZE))
-        {
-            /* Just set to min entry, use up next round */
-            MsgSize = SC_PACKET_MIN_SIZE;
-        }
-        else
-        {
-            MsgSize = SC_PACKET_MAX_SIZE;
-        }
-
-        UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-        UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &MsgSize, sizeof(MsgSize), true);
-        BufUnused -= MsgSize + SC_RTS_HEADER_SIZE;
-    }
+    /* Add some nonzero data at the tail end */
+    *((uint32 *)TailPtr) = 0xFFFFFFFF;
 
     /* Execute the function being tested */
     UtAssert_BOOL_FALSE(SC_ParseRts(SC_OperData.RtsTblAddr[RtsIndex]));
 
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_RTS_LEN_TOO_LONG_ERR_EID);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_RTS_LEN_TOO_LONG_ERR_EID);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventType, CFE_EVS_EventType_ERROR);
 }
 
 void SC_UpdateAppend_Test_Nominal(void)
 {
-    /* Also tests the case where CmdLength is less than the buffer length */
+    void *TailPtr;
 
-    SC_AtsEntryHeader_t *Entry;
-    uint8                EntryIndex = 0;
-    size_t               MsgSize;
-
-    Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AppendTblAddr[EntryIndex];
-    Entry->CmdNumber = 1;
-
-    /* Set to reach code block starting with comment "Compute buffer index for next Append ATS table entry" */
-    MsgSize = 50;
-
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &MsgSize, sizeof(MsgSize), false);
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &MsgSize, sizeof(MsgSize), false);
+    TailPtr = UT_SC_GetAppendTable();
+    UT_SC_AppendSingleAtsEntry(&TailPtr, 1, UT_SC_NOMINAL_CMD_SIZE);
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_UpdateAppend());
 
     /* Verify results */
-    UtAssert_True(SC_OperData.HkPacket.Payload.AppendLoadCount == 1,
-                  "SC_OperData.HkPacket.Payload.AppendLoadCount == 1");
-    UtAssert_True(SC_OperData.HkPacket.Payload.AppendEntryCount == 1,
-                  "SC_OperData.HkPacket.Payload.AppendEntryCount == 1");
-    UtAssert_True(SC_AppData.AppendWordCount == 15, "SC_AppData.AppendWordCount == 15");
+    UtAssert_UINT32_EQ(SC_OperData.HkPacket.Payload.
+AppendLoadCount, 1);
+    UtAssert_UINT32_EQ(SC_OperData.HkPacket.Payload.
+AppendEntryCount, 1);
+    UtAssert_UINT32_EQ(SC_AppData.AppendWordCount, (SC_ATS_HEADER_SIZE + UT_SC_NOMINAL_CMD_SIZE) / SC_BYTES_IN_WORD);
 
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_UPDATE_APPEND_EID);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_UPDATE_APPEND_EID);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventType, CFE_EVS_EventType_INFORMATION);
 }
 
 void SC_UpdateAppend_Test_CmdDoesNotFitBuffer(void)
 {
-    SC_AtsEntryHeader_t *Entry;
-    uint8                EntryIndex = 0;
-    size_t               MsgSize;
-    int                  BufEntrySize;
-    int                  MaxBufEntries;
-    int                  j;
+    uint32 *FirstPtr;
+    uint32 *LastPtr;
+    void *  TailPtr;
+    uint32  ExpectedCount;
 
-    /* Set to reach code block starting with comment "Compute buffer index for next Append ATS table entry" */
-    MsgSize       = SC_PACKET_MAX_SIZE;
-    BufEntrySize  = (MsgSize + SC_ROUND_UP_BYTES) / SC_BYTES_IN_WORD + SC_ATS_HDR_NOPKT_WORDS;
-    MaxBufEntries = SC_APPEND_BUFF_SIZE32 / BufEntrySize;
-
-    for (EntryIndex = 0, j = 0; EntryIndex <= MaxBufEntries; EntryIndex++, j += BufEntrySize)
-    {
-        Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AppendTblAddr[j];
-        Entry->CmdNumber = EntryIndex + 1;
-        UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &MsgSize, sizeof(MsgSize), false);
-    }
+    TailPtr       = UT_SC_GetAppendTable();
+    FirstPtr      = TailPtr;
+    LastPtr       = UT_SC_SetupFullTable(&TailPtr, SC_ATS_HEADER_SIZE, UT_SC_NOMINAL_CMD_SIZE, SC_APPEND_BUFF_SIZE32,
+                                   SC_APPEND_BUFF_SIZE32 + 1, UT_SC_AtsEntryInit);
+    ExpectedCount = (SC_APPEND_BUFF_SIZE32 / UT_SC_GetEntryWordCount(SC_ATS_HEADER_SIZE, UT_SC_NOMINAL_CMD_SIZE)) - 1;
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_UpdateAppend());
 
     /* Verify results */
-    UtAssert_True(SC_OperData.HkPacket.Payload.AppendLoadCount == 1,
-                  "SC_OperData.HkPacket.Payload.AppendLoadCount == 1");
-    UtAssert_True(SC_OperData.HkPacket.Payload.AppendEntryCount == 30,
-                  "SC_OperData.HkPacket.Payload.AppendEntryCount == 30");
-    UtAssert_True(SC_AppData.AppendWordCount == 1980, "SC_AppData.AppendWordCount == 1980");
+    UtAssert_UINT32_EQ(SC_OperData.HkPacket.Payload.
+AppendLoadCount, 1);
+    UtAssert_UINT32_EQ(SC_OperData.HkPacket.Payload.
+AppendEntryCount, ExpectedCount);
+    UtAssert_UINT32_EQ(SC_AppData.AppendWordCount, LastPtr - FirstPtr);
 
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_UPDATE_APPEND_EID);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_UPDATE_APPEND_EID);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventType, CFE_EVS_EventType_INFORMATION);
 }
 
 void SC_UpdateAppend_Test_InvalidCmdLengthTooLow(void)
 {
-    SC_AtsEntryHeader_t *Entry;
-    uint8                EntryIndex = 0;
-    size_t               MsgSize;
+    void *TailPtr;
 
-    Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AppendTblAddr[EntryIndex];
-    Entry->CmdNumber = 1;
-
-    /* Set to satisfy condition "(CommandBytes < SC_PACKET_MIN_SIZE)" */
-    MsgSize = SC_PACKET_MIN_SIZE - 1;
-
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &MsgSize, sizeof(MsgSize), false);
+    TailPtr = UT_SC_GetAppendTable();
+    UT_SC_AppendSingleAtsEntry(&TailPtr, 1, SC_PACKET_MIN_SIZE - 1);
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_UpdateAppend());
 
     /* Verify results */
-    UtAssert_True(SC_OperData.HkPacket.Payload.AppendLoadCount == 1,
-                  "SC_OperData.HkPacket.Payload.AppendLoadCount == 1");
-    UtAssert_True(SC_OperData.HkPacket.Payload.AppendEntryCount == 0,
-                  "SC_OperData.HkPacket.Payload.AppendEntryCount == 0");
-    UtAssert_True(SC_AppData.AppendWordCount == 0, "SC_AppData.AppendWordCount == 0");
+    UtAssert_UINT32_EQ(SC_OperData.HkPacket.Payload.
+AppendLoadCount, 1);
+    UtAssert_ZERO(SC_OperData.HkPacket.Payload.
+AppendEntryCount);
+    UtAssert_ZERO(SC_AppData.AppendWordCount);
 
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_UPDATE_APPEND_EID);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_UPDATE_APPEND_EID);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventType, CFE_EVS_EventType_INFORMATION);
 }
 
 void SC_UpdateAppend_Test_InvalidCmdLengthTooHigh(void)
 {
-    SC_AtsEntryHeader_t *Entry;
-    uint8                EntryIndex = 0;
-    size_t               MsgSize;
+    void *TailPtr;
 
-    Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AppendTblAddr[EntryIndex];
-    Entry->CmdNumber = 1;
-
-    /* Set to satisfy condition "(CommandBytes > SC_PACKET_MAX_SIZE)" */
-    MsgSize = SC_PACKET_MAX_SIZE * 2;
-
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &MsgSize, sizeof(MsgSize), false);
+    TailPtr = UT_SC_GetAppendTable();
+    UT_SC_AppendSingleAtsEntry(&TailPtr, 1, SC_PACKET_MAX_SIZE + 1);
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_UpdateAppend());
 
     /* Verify results */
-    UtAssert_True(SC_OperData.HkPacket.Payload.AppendLoadCount == 1,
-                  "SC_OperData.HkPacket.Payload.AppendLoadCount == 1");
-    UtAssert_True(SC_OperData.HkPacket.Payload.AppendEntryCount == 0,
-                  "SC_OperData.HkPacket.Payload.AppendEntryCount == 0");
-    UtAssert_True(SC_AppData.AppendWordCount == 0, "SC_AppData.AppendWordCount == 0");
+    UtAssert_UINT32_EQ(SC_OperData.HkPacket.Payload.
+AppendLoadCount, 1);
+    UtAssert_ZERO(SC_OperData.HkPacket.Payload.
+AppendEntryCount);
+    UtAssert_ZERO(SC_AppData.AppendWordCount);
 
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_UPDATE_APPEND_EID);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_UPDATE_APPEND_EID);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventType, CFE_EVS_EventType_INFORMATION);
 }
 
 void SC_UpdateAppend_Test_EndOfBuffer(void)
 {
-    SC_AtsEntryHeader_t *Entry;
-    uint8                EntryIndex = 0;
-    size_t               MsgSize1;
-    size_t               MsgSize2;
-    int                  BufEntrySize;
-    int                  MaxBufEntries;
-    int                  j;
+    void * TailPtr;
+    uint32 ExpectedCount;
 
-    /* Cause condition to be met: "(EntryIndex >= SC_APPEND_BUFF_SIZE)" */
-    MsgSize1      = SC_PACKET_MAX_SIZE;
-    BufEntrySize  = (MsgSize1 + SC_ROUND_UP_BYTES) / SC_BYTES_IN_WORD + SC_ATS_HDR_NOPKT_WORDS;
-    MaxBufEntries = SC_APPEND_BUFF_SIZE32 / BufEntrySize;
-
-    for (EntryIndex = 0, j = 0; EntryIndex <= MaxBufEntries; EntryIndex++, j += BufEntrySize)
-    {
-        Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AppendTblAddr[j];
-        Entry->CmdNumber = EntryIndex + 1;
-        UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &MsgSize1, sizeof(MsgSize1), false);
-        if (EntryIndex == (MaxBufEntries - 1))
-        {
-            MsgSize2 = 72;
-            UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &MsgSize2, sizeof(MsgSize2), false);
-        }
-    }
+    TailPtr = UT_SC_GetAppendTable();
+    UT_SC_SetupFullTable(&TailPtr, SC_ATS_HEADER_SIZE, UT_SC_NOMINAL_CMD_SIZE, SC_APPEND_BUFF_SIZE32,
+                         SC_APPEND_BUFF_SIZE32, UT_SC_AtsEntryInit);
+    ExpectedCount = SC_APPEND_BUFF_SIZE32 / UT_SC_GetEntryWordCount(SC_ATS_HEADER_SIZE, UT_SC_NOMINAL_CMD_SIZE);
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_UpdateAppend());
 
     /* Verify results */
-    UtAssert_True(SC_OperData.HkPacket.Payload.AppendLoadCount == 1,
-                  "SC_OperData.HkPacket.Payload.AppendLoadCount == 1");
-    UtAssert_True(SC_OperData.HkPacket.Payload.AppendEntryCount == 31,
-                  "SC_OperData.HkPacket.Payload.AppendEntryCount == 31");
-    UtAssert_True(SC_AppData.AppendWordCount == 2000, "SC_AppData.AppendWordCount == 2000");
+    UtAssert_UINT32_EQ(SC_OperData.HkPacket.Payload.
+AppendLoadCount, 1);
+    UtAssert_UINT32_EQ(SC_OperData.HkPacket.Payload.
+AppendEntryCount, ExpectedCount);
+    UtAssert_UINT32_EQ(SC_AppData.AppendWordCount, SC_APPEND_BUFF_SIZE32);
 
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_UPDATE_APPEND_EID);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_UPDATE_APPEND_EID);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventType, CFE_EVS_EventType_INFORMATION);
 }
 
 void SC_UpdateAppend_Test_CmdNumberZero(void)
 {
-    /* Also tests the case where CmdLength is less than the buffer length */
+    void *TailPtr;
 
-    SC_AtsEntryHeader_t *Entry;
-    uint8                EntryIndex = 0;
-    size_t               MsgSize;
-
-    Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AppendTblAddr[EntryIndex];
-    Entry->CmdNumber = 0;
-
-    /* Cause condition to be met: "(Entry->CmdNumber == 0)" */
-    MsgSize = 50;
-
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &MsgSize, sizeof(MsgSize), false);
+    TailPtr = UT_SC_GetAppendTable();
+    UT_SC_AppendSingleAtsEntry(&TailPtr, 0, UT_SC_NOMINAL_CMD_SIZE);
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_UpdateAppend());
 
     /* Verify results */
-    UtAssert_True(SC_OperData.HkPacket.Payload.AppendLoadCount == 1,
-                  "SC_OperData.HkPacket.Payload.AppendLoadCount == 1");
-    UtAssert_True(SC_OperData.HkPacket.Payload.AppendEntryCount == 0,
-                  "SC_OperData.HkPacket.Payload.AppendEntryCount == 0");
-    UtAssert_True(SC_AppData.AppendWordCount == 0, "SC_AppData.AppendWordCount == 0");
+    UtAssert_UINT32_EQ(SC_OperData.HkPacket.Payload.
+AppendLoadCount, 1);
+    UtAssert_ZERO(SC_OperData.HkPacket.Payload.
+AppendEntryCount);
+    UtAssert_ZERO(SC_AppData.AppendWordCount);
 
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_UPDATE_APPEND_EID);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_UPDATE_APPEND_EID);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventType, CFE_EVS_EventType_INFORMATION);
 }
 
 void SC_UpdateAppend_Test_CmdNumberTooHigh(void)
 {
-    /* Also tests the case where CmdLength is less than the buffer length */
+    void *TailPtr;
 
-    SC_AtsEntryHeader_t *Entry;
-    uint8                EntryIndex = 0;
-    size_t               MsgSize;
-
-    Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AppendTblAddr[EntryIndex];
-    Entry->CmdNumber = SC_MAX_ATS_CMDS + 1;
-
-    /* Cause condition to be met: "(Entry->CmdNumber > SC_MAX_ATS_CMDS)" */
-    MsgSize = 50;
-
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &MsgSize, sizeof(MsgSize), false);
+    TailPtr = UT_SC_GetAppendTable();
+    UT_SC_AppendSingleAtsEntry(&TailPtr, SC_MAX_ATS_CMDS + 1, UT_SC_NOMINAL_CMD_SIZE);
 
     /* Execute the function being tested */
-    UtAssert_VOIDCALL(SC_UpdateAppend());
+    SC_UpdateAppend();
 
     /* Verify results */
-    UtAssert_True(SC_OperData.HkPacket.Payload.AppendLoadCount == 1,
-                  "SC_OperData.HkPacket.Payload.AppendLoadCount == 1");
-    UtAssert_True(SC_OperData.HkPacket.Payload.AppendEntryCount == 0,
-                  "SC_OperData.HkPacket.Payload.AppendEntryCount == 0");
-    UtAssert_True(SC_AppData.AppendWordCount == 0, "SC_AppData.AppendWordCount == 0");
+    UtAssert_UINT32_EQ(SC_OperData.HkPacket.Payload.
+AppendLoadCount, 1);
+    UtAssert_ZERO(SC_OperData.HkPacket.Payload.
+AppendEntryCount);
+    UtAssert_ZERO(SC_AppData.AppendWordCount);
 
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_UPDATE_APPEND_EID);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_UPDATE_APPEND_EID);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventType, CFE_EVS_EventType_INFORMATION);
 }
 
 void SC_ProcessAppend_Test(void)
 {
-    SC_AtsEntryHeader_t *Entry;
-    uint8                AtsIndex = 0;
-    size_t               MsgSize;
+    uint8 AtsIndex = 0;
+    void *TailPtr;
 
-    Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AppendTblAddr[AtsIndex];
-    Entry->CmdNumber = 1;
+    UT_SC_SetupSingleAtsEntry(AtsIndex, 1, UT_SC_NOMINAL_CMD_SIZE);
 
-    Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[AtsIndex][0];
-    Entry->CmdNumber = 1;
+    TailPtr = UT_SC_GetAppendTable();
+    UT_SC_AppendSingleAtsEntry(&TailPtr, 1, UT_SC_NOMINAL_CMD_SIZE);
 
-    SC_AppData.AppendWordCount                    = 1;
-    SC_OperData.HkPacket.Payload.AppendEntryCount = 1;
+    SC_AppData.AppendWordCount            = 1;
+    SC_OperData.HkPacket.Payload.
+AppendEntryCount = 1;
 
-    SC_AppData.AtsCmdIndexBuffer[0][0] = 0;
-
-    SC_OperData.AtsCmdStatusTblAddr[AtsIndex][0] = SC_EMPTY;
-    SC_OperData.AtsCtrlBlckAddr->AtpState        = SC_EXECUTING;
-    SC_OperData.AtsCtrlBlckAddr->AtsNumber       = 1;
-
-    MsgSize = SC_PACKET_MIN_SIZE;
-
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &MsgSize, sizeof(MsgSize), false);
+    SC_OperData.AtsCtrlBlckAddr->AtpState  = SC_EXECUTING;
+    SC_OperData.AtsCtrlBlckAddr->AtsNumber = 1;
 
     /* restart ATS */
     UT_SetDeferredRetcode(UT_KEY(SC_BeginAts), 1, true);
 
     /* Execute the function being tested */
-    UtAssert_VOIDCALL(SC_ProcessAppend(AtsIndex));
+    SC_ProcessAppend(AtsIndex);
 
     /* Verify results */
-    UtAssert_True(SC_OperData.AtsInfoTblAddr[AtsIndex].AtsSize == 1,
-                  "SC_OperData.AtsInfoTblAddr[AtsIndex].AtsSize == 1");
-    UtAssert_True(SC_OperData.AtsInfoTblAddr[AtsIndex].NumberOfCommands == 1,
-                  "SC_OperData.AtsInfoTblAddr[AtsIndex].NumberOfCommands == 1");
-    UtAssert_True(SC_AppData.AtsCmdIndexBuffer[AtsIndex][0] == 0, "SC_AppData.AtsCmdIndexBuffer[AtsIndex][0] == 0");
-    UtAssert_True(SC_OperData.AtsCmdStatusTblAddr[AtsIndex][0] == SC_LOADED,
-                  "SC_OperData.AtsCmdStatusTblAddr[AtsIndex][0] == SC_LOADED");
-    UtAssert_True(SC_OperData.AtsCtrlBlckAddr->AtpState == SC_EXECUTING,
-                  "SC_OperData.AtsCtrlBlckAddr->AtpState = SC_EXECUTING");
+    UtAssert_UINT32_EQ(SC_OperData.AtsInfoTblAddr[AtsIndex].AtsSize, 1);
+    UtAssert_UINT32_EQ(SC_OperData.AtsInfoTblAddr[AtsIndex].NumberOfCommands, 1);
+    UtAssert_ZERO(SC_AppData.AtsCmdIndexBuffer[AtsIndex][0]);
+    UtAssert_UINT32_EQ(SC_OperData.AtsCmdStatusTblAddr[AtsIndex][0], SC_LOADED);
+    UtAssert_UINT32_EQ(SC_OperData.AtsCtrlBlckAddr->AtpState, SC_EXECUTING);
 
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
 }
 
 void SC_ProcessAppend_Test_CmdLoaded(void)
 {
-    SC_AtsEntryHeader_t *Entry;
-    uint8                AtsIndex = 0;
-    size_t               MsgSize;
+    uint8 AtsIndex = 0;
+    void *TailPtr;
 
-    Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AppendTblAddr[AtsIndex];
-    Entry->CmdNumber = 1;
+    UT_SC_SetupSingleAtsEntry(AtsIndex, 1, UT_SC_NOMINAL_CMD_SIZE);
 
-    Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[AtsIndex][0];
-    Entry->CmdNumber = 1;
+    TailPtr = UT_SC_GetAppendTable();
+    UT_SC_AppendSingleAtsEntry(&TailPtr, 1, UT_SC_NOMINAL_CMD_SIZE);
 
-    SC_AppData.AppendWordCount                    = 1;
-    SC_OperData.HkPacket.Payload.AppendEntryCount = 1;
-
-    SC_AppData.AtsCmdIndexBuffer[0][0] = 0;
+    SC_AppData.AppendWordCount            = 1;
+    SC_OperData.HkPacket.Payload.
+AppendEntryCount = 1;
 
     SC_OperData.AtsCmdStatusTblAddr[AtsIndex][0] = SC_LOADED;
     SC_OperData.AtsCtrlBlckAddr->AtpState        = SC_EXECUTING;
     SC_OperData.AtsCtrlBlckAddr->AtsNumber       = 1;
 
-    MsgSize = SC_PACKET_MIN_SIZE;
-
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &MsgSize, sizeof(MsgSize), false);
-
     /* Execute the function being tested */
-    UtAssert_VOIDCALL(SC_ProcessAppend(AtsIndex));
+    SC_ProcessAppend(AtsIndex);
 
     /* Verify results */
-    UtAssert_True(SC_OperData.AtsInfoTblAddr[AtsIndex].AtsSize == 1,
-                  "SC_OperData.AtsInfoTblAddr[AtsIndex].AtsSize == 1");
-    UtAssert_True(SC_OperData.AtsInfoTblAddr[AtsIndex].NumberOfCommands == 0,
-                  "SC_OperData.AtsInfoTblAddr[AtsIndex].NumberOfCommands == 0");
-    UtAssert_True(SC_AppData.AtsCmdIndexBuffer[AtsIndex][0] == 0, "SC_AppData.AtsCmdIndexBuffer[AtsIndex][0] == 0");
-    UtAssert_True(SC_OperData.AtsCmdStatusTblAddr[AtsIndex][0] == SC_LOADED,
-                  "SC_OperData.AtsCmdStatusTblAddr[AtsIndex][0] == SC_LOADED");
-    UtAssert_True(SC_OperData.AtsCtrlBlckAddr->AtpState == SC_EXECUTING,
-                  "SC_OperData.AtsCtrlBlckAddr->AtpState = SC_EXECUTING");
+    UtAssert_UINT32_EQ(SC_OperData.AtsInfoTblAddr[AtsIndex].AtsSize, 1);
+    UtAssert_UINT32_EQ(SC_OperData.AtsInfoTblAddr[AtsIndex].NumberOfCommands, 0);
+    UtAssert_ZERO(SC_AppData.AtsCmdIndexBuffer[AtsIndex][0]);
+    UtAssert_UINT32_EQ(SC_OperData.AtsCmdStatusTblAddr[AtsIndex][0], SC_LOADED);
+    UtAssert_UINT32_EQ(SC_OperData.AtsCtrlBlckAddr->AtpState, SC_EXECUTING);
 
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
 }
 
 void SC_ProcessAppend_Test_NotExecuting(void)
 {
-    SC_AtsEntryHeader_t *Entry;
-    uint8                AtsIndex = 0;
-    size_t               MsgSize;
+    uint8 AtsIndex = 0;
+    void *TailPtr;
 
-    Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AppendTblAddr[AtsIndex];
-    Entry->CmdNumber = 1;
+    UT_SC_SetupSingleAtsEntry(AtsIndex, 1, UT_SC_NOMINAL_CMD_SIZE);
 
-    Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[AtsIndex][0];
-    Entry->CmdNumber = 1;
+    TailPtr = UT_SC_GetAppendTable();
+    UT_SC_AppendSingleAtsEntry(&TailPtr, 1, UT_SC_NOMINAL_CMD_SIZE);
 
-    SC_AppData.AppendWordCount                    = 1;
-    SC_OperData.HkPacket.Payload.AppendEntryCount = 1;
+    SC_AppData.AppendWordCount            = 1;
+    SC_OperData.HkPacket.Payload.
+AppendEntryCount = 1;
 
-    SC_AppData.AtsCmdIndexBuffer[0][0] = 0;
-
-    SC_OperData.AtsCmdStatusTblAddr[AtsIndex][0] = SC_EMPTY;
-    SC_OperData.AtsCtrlBlckAddr->AtpState        = SC_IDLE;
-    SC_OperData.AtsCtrlBlckAddr->AtsNumber       = 1;
-
-    MsgSize = SC_PACKET_MIN_SIZE;
-
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &MsgSize, sizeof(MsgSize), false);
+    SC_OperData.AtsCtrlBlckAddr->AtpState  = SC_IDLE;
+    SC_OperData.AtsCtrlBlckAddr->AtsNumber = 1;
 
     /* Execute the function being tested */
-    UtAssert_VOIDCALL(SC_ProcessAppend(AtsIndex));
+    SC_ProcessAppend(AtsIndex);
 
     /* Verify results */
-    UtAssert_True(SC_OperData.AtsInfoTblAddr[AtsIndex].AtsSize == 1,
-                  "SC_OperData.AtsInfoTblAddr[AtsIndex].AtsSize == 1");
-    UtAssert_True(SC_OperData.AtsInfoTblAddr[AtsIndex].NumberOfCommands == 1,
-                  "SC_OperData.AtsInfoTblAddr[AtsIndex].NumberOfCommands == 1");
-    UtAssert_True(SC_AppData.AtsCmdIndexBuffer[AtsIndex][0] == 0, "SC_AppData.AtsCmdIndexBuffer[AtsIndex][0] == 0");
-    UtAssert_True(SC_OperData.AtsCmdStatusTblAddr[AtsIndex][0] == SC_LOADED,
-                  "SC_OperData.AtsCmdStatusTblAddr[AtsIndex][0] == SC_LOADED");
-    UtAssert_True(SC_OperData.AtsCtrlBlckAddr->AtpState == SC_IDLE, "SC_OperData.AtsCtrlBlckAddr->AtpState = SC_IDLE");
+    UtAssert_UINT32_EQ(SC_OperData.AtsInfoTblAddr[AtsIndex].AtsSize, 1);
+    UtAssert_UINT32_EQ(SC_OperData.AtsInfoTblAddr[AtsIndex].NumberOfCommands, 1);
+    UtAssert_ZERO(SC_AppData.AtsCmdIndexBuffer[AtsIndex][0]);
+    UtAssert_UINT32_EQ(SC_OperData.AtsCmdStatusTblAddr[AtsIndex][0], SC_LOADED);
+    UtAssert_UINT32_EQ(SC_OperData.AtsCtrlBlckAddr->AtpState, SC_IDLE);
 
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
 }
 
 void SC_ProcessAppend_Test_AtsNumber(void)
 {
-    SC_AtsEntryHeader_t *Entry;
-    uint8                AtsIndex = 0;
-    size_t               MsgSize;
+    uint8 AtsIndex = 0;
+    void *TailPtr;
 
-    Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AppendTblAddr[AtsIndex];
-    Entry->CmdNumber = 1;
+    UT_SC_SetupSingleAtsEntry(AtsIndex, 1, UT_SC_NOMINAL_CMD_SIZE);
 
-    Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[AtsIndex][0];
-    Entry->CmdNumber = 1;
+    TailPtr = UT_SC_GetAppendTable();
+    UT_SC_AppendSingleAtsEntry(&TailPtr, 1, UT_SC_NOMINAL_CMD_SIZE);
 
-    SC_AppData.AppendWordCount                    = 1;
-    SC_OperData.HkPacket.Payload.AppendEntryCount = 1;
+    SC_AppData.AppendWordCount            = 1;
+    SC_OperData.HkPacket.Payload.
+AppendEntryCount = 1;
 
-    SC_AppData.AtsCmdIndexBuffer[0][0] = 0;
-
-    SC_OperData.AtsCmdStatusTblAddr[AtsIndex][0] = SC_EMPTY;
-    SC_OperData.AtsCtrlBlckAddr->AtpState        = SC_EXECUTING;
-    SC_OperData.AtsCtrlBlckAddr->AtsNumber       = 0;
-
-    MsgSize = SC_PACKET_MIN_SIZE;
-
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &MsgSize, sizeof(MsgSize), false);
+    SC_OperData.AtsCtrlBlckAddr->AtpState  = SC_EXECUTING;
+    SC_OperData.AtsCtrlBlckAddr->AtsNumber = 0;
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_ProcessAppend(AtsIndex));
 
     /* Verify results */
-    UtAssert_True(SC_OperData.AtsInfoTblAddr[AtsIndex].AtsSize == 1,
-                  "SC_OperData.AtsInfoTblAddr[AtsIndex].AtsSize == 1");
-    UtAssert_True(SC_OperData.AtsInfoTblAddr[AtsIndex].NumberOfCommands == 1,
-                  "SC_OperData.AtsInfoTblAddr[AtsIndex].NumberOfCommands == 1");
-    UtAssert_True(SC_AppData.AtsCmdIndexBuffer[AtsIndex][0] == 0, "SC_AppData.AtsCmdIndexBuffer[AtsIndex][0] == 0");
-    UtAssert_True(SC_OperData.AtsCmdStatusTblAddr[AtsIndex][0] == SC_LOADED,
-                  "SC_OperData.AtsCmdStatusTblAddr[AtsIndex][0] == SC_LOADED");
-    UtAssert_True(SC_OperData.AtsCtrlBlckAddr->AtpState == SC_EXECUTING,
-                  "SC_OperData.AtsCtrlBlckAddr->AtpState = SC_EXECUTING");
+    UtAssert_UINT32_EQ(SC_OperData.AtsInfoTblAddr[AtsIndex].AtsSize, 1);
+    UtAssert_UINT32_EQ(SC_OperData.AtsInfoTblAddr[AtsIndex].NumberOfCommands, 1);
+    UtAssert_ZERO(SC_AppData.AtsCmdIndexBuffer[AtsIndex][0]);
+    UtAssert_UINT32_EQ(SC_OperData.AtsCmdStatusTblAddr[AtsIndex][0], SC_LOADED);
+    UtAssert_UINT32_EQ(SC_OperData.AtsCtrlBlckAddr->AtpState, SC_EXECUTING);
 
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
 }
@@ -1285,117 +1059,90 @@ void SC_ProcessAppend_Test_InvalidIndex(void)
     UtAssert_VOIDCALL(SC_ProcessAppend(AtsIndex));
 
     /* Verify results */
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_PROCESS_APPEND_INV_INDEX_ERR_EID);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
+
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_PROCESS_APPEND_INV_INDEX_ERR_EID);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventType, CFE_EVS_EventType_ERROR);
 }
 
 void SC_VerifyAtsTable_Test_Nominal(void)
 {
-    SC_AtsEntryHeader_t *Entry1;
-    SC_AtsEntryHeader_t *Entry2;
-    uint8                AtsIndex = 0;
-    size_t               MsgSize;
+    uint8 AtsIndex = 0;
 
-    Entry1            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[AtsIndex][0];
-    Entry1->CmdNumber = 1;
-
-    Entry2            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[AtsIndex][128];
-    Entry2->CmdNumber = 0;
-
-    /* Set to call to SC_VerifyAtsEntry will return SC_PACKET_MAX_SIZE, which will cause execution of
-     * code block starting with comment "Result is size (in words) of this entry" */
-    MsgSize = SC_PACKET_MAX_SIZE;
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &MsgSize, sizeof(MsgSize), false);
+    UT_SC_SetupSingleAtsEntry(AtsIndex, 1, UT_SC_NOMINAL_CMD_SIZE);
 
     /* Execute the function being tested */
     UtAssert_INT32_EQ(SC_VerifyAtsTable((SC_OperData.AtsTblAddr[AtsIndex]), SC_ATS_BUFF_SIZE), CFE_SUCCESS);
 
     /* Verify results */
+    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_VERIFY_ATS_EID);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventType, CFE_EVS_EventType_INFORMATION);
 
     /* Test element 1.  Note: element 0 is modified in call to SC_VerifyAtsEntry and so it does not need to be verified
      * in this test */
-    UtAssert_True(SC_OperData.AtsDupTestArray[1] == SC_DUP_TEST_UNUSED,
-                  "SC_OperData.AtsDupTestArray[1] == SC_DUP_TEST_UNUSED");
+    UtAssert_INT32_EQ(SC_OperData.AtsDupTestArray[1], SC_DUP_TEST_UNUSED);
 
     /* Test middle element.  Note: element 0 is modified in call to SC_VerifyAtsEntry */
-    UtAssert_True(SC_OperData.AtsDupTestArray[SC_MAX_ATS_CMDS / 2] == SC_DUP_TEST_UNUSED,
-                  "SC_OperData.AtsDupTestArray[SC_MAX_ATS_CMDS / 2] == SC_DUP_TEST_UNUSED");
+    UtAssert_INT32_EQ(SC_OperData.AtsDupTestArray[SC_MAX_ATS_CMDS / 2], SC_DUP_TEST_UNUSED);
 
     /* Test last element */
-    UtAssert_True(SC_OperData.AtsDupTestArray[SC_MAX_ATS_CMDS - 1] == SC_DUP_TEST_UNUSED,
-                  "SC_OperData.AtsDupTestArray[SC_MAX_ATS_CMDS - 1] == SC_DUP_TEST_UNUSED");
-
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_VERIFY_ATS_EID);
-    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
+    UtAssert_INT32_EQ(SC_OperData.AtsDupTestArray[SC_MAX_ATS_CMDS - 1], SC_DUP_TEST_UNUSED);
 }
 
 void SC_VerifyAtsTable_Test_InvalidEntry(void)
 {
-    SC_AtsEntryHeader_t *Entry1;
-    SC_AtsEntryHeader_t *Entry2;
-    uint8                AtsIndex = 0;
+    uint8 AtsIndex = 0;
 
-    Entry1            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[AtsIndex][0];
-    Entry1->CmdNumber = 5000;
-
-    Entry2            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[AtsIndex][128];
-    Entry2->CmdNumber = 0;
+    UT_SC_SetupSingleAtsEntry(AtsIndex, SC_MAX_ATS_CMDS + 10, UT_SC_NOMINAL_CMD_SIZE);
 
     /* Execute the function being tested */
     UtAssert_INT32_EQ(SC_VerifyAtsTable((SC_OperData.AtsTblAddr[AtsIndex]), SC_ATS_BUFF_SIZE), SC_ERROR);
 
     /* Verify results */
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_VERIFY_ATS_NUM_ERR_EID);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_VERIFY_ATS_NUM_ERR_EID);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventType, CFE_EVS_EventType_ERROR);
 }
 
 void SC_VerifyAtsTable_Test_EmptyTable(void)
 {
-    SC_AtsEntryHeader_t *Entry;
-    uint8                AtsIndex = 0;
-
-    Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[AtsIndex][0];
-    Entry->CmdNumber = 0;
+    uint8 AtsIndex = 0;
 
     /* Execute the function being tested */
     UtAssert_INT32_EQ(SC_VerifyAtsTable((SC_OperData.AtsTblAddr[AtsIndex]), SC_ATS_BUFF_SIZE), SC_ERROR);
 
     /* Verify results */
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_VERIFY_ATS_MPT_ERR_EID);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_VERIFY_ATS_MPT_ERR_EID);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventType, CFE_EVS_EventType_ERROR);
 }
 
 void SC_VerifyAtsEntry_Test_Nominal(void)
 {
-    SC_AtsEntryHeader_t *Entry;
-    uint8                AtsIndex = 0;
-    size_t               MsgSize;
+    uint8 AtsIndex = 0;
 
-    Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[AtsIndex][0];
-    Entry->CmdNumber = 1;
+    UT_SC_SetupSingleAtsEntry(AtsIndex, 1, SC_PACKET_MAX_SIZE);
 
     SC_OperData.AtsDupTestArray[0] = SC_DUP_TEST_UNUSED;
 
-    /* Set to reach code block starting with comment "Compute length (in words) for this ATS table entry" */
-    MsgSize = SC_PACKET_MAX_SIZE;
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &MsgSize, sizeof(MsgSize), false);
-
     /* Execute the function being tested */
-    UtAssert_INT32_EQ(SC_VerifyAtsEntry((SC_OperData.AtsTblAddr[AtsIndex]), AtsIndex, SC_ATS_BUFF_SIZE),
+    UtAssert_INT32_EQ(SC_VerifyAtsEntry(SC_OperData.AtsTblAddr[AtsIndex], 0, SC_ATS_BUFF_SIZE),
                       SC_ATS_HDR_NOPKT_WORDS + ((SC_PACKET_MAX_SIZE + SC_ROUND_UP_BYTES) / SC_BYTES_IN_WORD));
 
     /* Verify results */
-    UtAssert_True(SC_OperData.AtsDupTestArray[0] == 0, "SC_OperData.AtsDupTestArray[0] == 0");
-
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
+    UtAssert_ZERO(SC_OperData.AtsDupTestArray[0]);
 }
 
 void SC_VerifyAtsEntry_Test_EndOfBuffer(void)
 {
-    uint16 AtsIndex = 10000;
+    uint8 AtsIndex = 0;
+
+    UT_SC_SetupSingleAtsEntry(AtsIndex, 1, UT_SC_NOMINAL_CMD_SIZE);
 
     /* Execute the function being tested */
-    UtAssert_INT32_EQ(SC_VerifyAtsEntry((SC_OperData.AtsTblAddr[0]), AtsIndex, SC_ATS_BUFF_SIZE), CFE_SUCCESS);
+    UtAssert_INT32_EQ(SC_VerifyAtsEntry((SC_OperData.AtsTblAddr[AtsIndex]), 10000, SC_ATS_BUFF_SIZE), CFE_SUCCESS);
 
     /* Verify results */
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
@@ -1403,204 +1150,176 @@ void SC_VerifyAtsEntry_Test_EndOfBuffer(void)
 
 void SC_VerifyAtsEntry_Test_InvalidCmdNumber(void)
 {
-    SC_AtsEntryHeader_t *Entry;
-    uint8                AtsIndex = 0;
+    uint8 AtsIndex = 0;
 
-    Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[AtsIndex][0];
-    Entry->CmdNumber = 5000;
+    UT_SC_SetupSingleAtsEntry(AtsIndex, SC_MAX_ATS_CMDS + 20, UT_SC_NOMINAL_CMD_SIZE);
 
     /* Execute the function being tested */
-    UtAssert_INT32_EQ(SC_VerifyAtsEntry((SC_OperData.AtsTblAddr[AtsIndex]), AtsIndex, SC_ATS_BUFF_SIZE), SC_ERROR);
+    UtAssert_INT32_EQ(SC_VerifyAtsEntry((SC_OperData.AtsTblAddr[AtsIndex]), 0, SC_ATS_BUFF_SIZE), SC_ERROR);
 
     /* Verify results */
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_VERIFY_ATS_NUM_ERR_EID);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_VERIFY_ATS_NUM_ERR_EID);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventType, CFE_EVS_EventType_ERROR);
 }
 
 void SC_VerifyAtsEntry_Test_BufferFull(void)
 {
-    SC_AtsEntryHeader_t *Entry;
-    uint8                AtsIndex = 0;
+    uint8 AtsIndex = 0;
 
-    Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[AtsIndex][0];
-    Entry->CmdNumber = 1;
+    UT_SC_SetupSingleAtsEntry(AtsIndex, 1, UT_SC_NOMINAL_CMD_SIZE);
 
     /* Execute the function being tested */
-    UtAssert_INT32_EQ(SC_VerifyAtsEntry((SC_OperData.AtsTblAddr[AtsIndex]), AtsIndex, 2), SC_ERROR);
+    UtAssert_INT32_EQ(SC_VerifyAtsEntry((SC_OperData.AtsTblAddr[AtsIndex]), 0, 2), SC_ERROR);
 
     /* Verify results */
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_VERIFY_ATS_END_ERR_EID);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_VERIFY_ATS_END_ERR_EID);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventType, CFE_EVS_EventType_ERROR);
 }
 
 void SC_VerifyAtsEntry_Test_InvalidCmdLengthTooLow(void)
 {
-    SC_AtsEntryHeader_t *Entry;
-    uint8                AtsIndex = 0;
-    size_t               MsgSize;
+    uint8 AtsIndex = 0;
 
-    Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[AtsIndex][0];
-    Entry->CmdNumber = 1;
-
-    /* Set to generate error message SC_VERIFY_ATS_PKT_ERR_EID by satisfying condition "(CommandBytes <
-     * SC_PACKET_MIN_SIZE)" */
-    MsgSize = SC_PACKET_MIN_SIZE - 1;
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &MsgSize, sizeof(MsgSize), false);
+    UT_SC_SetupSingleAtsEntry(AtsIndex, 1, SC_PACKET_MIN_SIZE - 1);
 
     /* Execute the function being tested */
-    UtAssert_INT32_EQ(SC_VerifyAtsEntry((SC_OperData.AtsTblAddr[AtsIndex]), AtsIndex, SC_ATS_BUFF_SIZE), SC_ERROR);
+    UtAssert_INT32_EQ(SC_VerifyAtsEntry((SC_OperData.AtsTblAddr[AtsIndex]), 0, SC_ATS_BUFF_SIZE), SC_ERROR);
 
     /* Verify results */
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_VERIFY_ATS_PKT_ERR_EID);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_VERIFY_ATS_PKT_ERR_EID);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventType, CFE_EVS_EventType_ERROR);
 }
 
 void SC_VerifyAtsEntry_Test_InvalidCmdLengthTooHigh(void)
 {
-    SC_AtsEntryHeader_t *Entry;
-    uint8                AtsIndex = 0;
-    size_t               MsgSize;
+    uint8 AtsIndex = 0;
 
-    Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[AtsIndex][0];
-    Entry->CmdNumber = 1;
-
-    /* Set to generate error message SC_VERIFY_ATS_PKT_ERR_EID by satisfying condition "(CommandBytes <
-     * SC_PACKET_MIN_SIZE)" */
-    MsgSize = SC_PACKET_MAX_SIZE * 2;
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &MsgSize, sizeof(MsgSize), false);
+    UT_SC_SetupSingleAtsEntry(AtsIndex, 1, SC_PACKET_MAX_SIZE * 2);
 
     /* Execute the function being tested */
-    UtAssert_INT32_EQ(SC_VerifyAtsEntry((SC_OperData.AtsTblAddr[AtsIndex]), AtsIndex, SC_ATS_BUFF_SIZE), SC_ERROR);
+    UtAssert_INT32_EQ(SC_VerifyAtsEntry((SC_OperData.AtsTblAddr[AtsIndex]), 0, SC_ATS_BUFF_SIZE), SC_ERROR);
 
     /* Verify results */
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_VERIFY_ATS_PKT_ERR_EID);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_VERIFY_ATS_PKT_ERR_EID);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventType, CFE_EVS_EventType_ERROR);
 }
 
 void SC_VerifyAtsEntry_Test_BufferOverflow(void)
 {
-    SC_AtsEntryHeader_t *Entry;
-    uint8                AtsIndex = 0;
-    size_t               MsgSize;
+    uint8 AtsIndex = 0;
 
-    Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[AtsIndex][0];
-    Entry->CmdNumber = 1;
-
-    /* Set to generate error message SC_VERIFY_ATS_BUF_ERR_EID */
-    MsgSize = SC_PACKET_MAX_SIZE;
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &MsgSize, sizeof(MsgSize), false);
+    UT_SC_SetupSingleAtsEntry(AtsIndex, 1, SC_PACKET_MAX_SIZE);
 
     /* Execute the function being tested */
-    UtAssert_INT32_EQ(SC_VerifyAtsEntry((SC_OperData.AtsTblAddr[AtsIndex]), AtsIndex, 20), SC_ERROR);
+    UtAssert_INT32_EQ(SC_VerifyAtsEntry((SC_OperData.AtsTblAddr[AtsIndex]), 0, 20), SC_ERROR);
 
     /* Verify results */
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_VERIFY_ATS_BUF_ERR_EID);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_VERIFY_ATS_BUF_ERR_EID);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventType, CFE_EVS_EventType_ERROR);
 }
 
 void SC_VerifyAtsEntry_Test_DuplicateCmdNumber(void)
 {
-    SC_AtsEntryHeader_t *Entry;
-    uint8                AtsIndex = 0;
-    size_t               MsgSize;
+    uint8 AtsIndex = 0;
 
-    Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[AtsIndex][0];
-    Entry->CmdNumber = 1;
+    UT_SC_SetupSingleAtsEntry(AtsIndex, 1, SC_PACKET_MAX_SIZE);
 
     /* Set to generate error message SC_VERIFY_ATS_DUP_ERR_EID */
-    MsgSize = SC_PACKET_MAX_SIZE;
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &MsgSize, sizeof(MsgSize), false);
-
     SC_OperData.AtsDupTestArray[0] = 99;
 
     /* Execute the function being tested */
     UtAssert_INT32_EQ(SC_VerifyAtsEntry((SC_OperData.AtsTblAddr[AtsIndex]), AtsIndex, SC_ATS_BUFF_SIZE), SC_ERROR);
 
     /* Verify results */
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_VERIFY_ATS_DUP_ERR_EID);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_VERIFY_ATS_DUP_ERR_EID);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventType, CFE_EVS_EventType_ERROR);
 }
 
 void UtTest_Setup(void)
 {
-    UtTest_Add(SC_LoadAts_Test_Nominal, SC_Test_Setup, SC_Test_TearDown, "SC_LoadAts_Test_Nominal");
-    UtTest_Add(SC_LoadAts_Test_CmdRunOffEndOfBuffer, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_LoadAts_Test_Nominal, UT_SC_Loads_Test_Setup, SC_Test_TearDown, "SC_LoadAts_Test_Nominal");
+    UtTest_Add(SC_LoadAts_Test_CmdRunOffEndOfBuffer, UT_SC_Loads_Test_Setup, SC_Test_TearDown,
                "SC_LoadAts_Test_CmdRunOffEndOfBuffer");
-    UtTest_Add(SC_LoadAts_Test_CmdLengthInvalid, SC_Test_Setup, SC_Test_TearDown, "SC_LoadAts_Test_CmdLengthInvalid");
-    UtTest_Add(SC_LoadAts_Test_CmdLengthZero, SC_Test_Setup, SC_Test_TearDown, "SC_LoadAts_Test_CmdLengthZero");
-    UtTest_Add(SC_LoadAts_Test_CmdNumberInvalid, SC_Test_Setup, SC_Test_TearDown, "SC_LoadAts_Test_CmdNumberInvalid");
-    UtTest_Add(SC_LoadAts_Test_EndOfLoadReached, SC_Test_Setup, SC_Test_TearDown, "SC_LoadAts_Test_EndOfLoadReached");
-    UtTest_Add(SC_LoadAts_Test_AtsBufferTooSmall, SC_Test_Setup, SC_Test_TearDown, "SC_LoadAts_Test_AtsBufferTooSmall");
-    UtTest_Add(SC_LoadAts_Test_AtsEntryOverflow, SC_Test_Setup, SC_Test_TearDown, "SC_LoadAts_Test_AtsEntryOverflow");
-    UtTest_Add(SC_LoadAts_Test_LoadExactlyBufferLength, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_LoadAts_Test_CmdLengthInvalid, UT_SC_Loads_Test_Setup, SC_Test_TearDown, "SC_LoadAts_Test_CmdLengthInvalid");
+    UtTest_Add(SC_LoadAts_Test_CmdLengthZero, UT_SC_Loads_Test_Setup, SC_Test_TearDown, "SC_LoadAts_Test_CmdLengthZero");
+    UtTest_Add(SC_LoadAts_Test_CmdNumberInvalid, UT_SC_Loads_Test_Setup, SC_Test_TearDown, "SC_LoadAts_Test_CmdNumberInvalid");
+    UtTest_Add(SC_LoadAts_Test_AtsBufferTooSmall, UT_SC_Loads_Test_Setup, SC_Test_TearDown, "SC_LoadAts_Test_AtsBufferTooSmall");
+    UtTest_Add(SC_LoadAts_Test_AtsEmpty, UT_SC_Loads_Test_Setup, SC_Test_TearDown, "SC_LoadAts_Test_AtsEmpty");
+    UtTest_Add(SC_LoadAts_Test_LoadExactlyBufferLength, UT_SC_Loads_Test_Setup, SC_Test_TearDown,
                "SC_LoadAts_Test_LoadExactlyBufferLength");
-    UtTest_Add(SC_LoadAts_Test_CmdNotEmpty, SC_Test_Setup, SC_Test_TearDown, "SC_LoadAts_Test_CmdNotEmpty");
-    UtTest_Add(SC_LoadAts_Test_InvalidIndex, SC_Test_Setup, SC_Test_TearDown, "SC_LoadAts_Test_InvalidIndex");
+    UtTest_Add(SC_LoadAts_Test_CmdNotEmpty, UT_SC_Loads_Test_Setup, SC_Test_TearDown, "SC_LoadAts_Test_CmdNotEmpty");
+    UtTest_Add(SC_LoadAts_Test_InvalidIndex, UT_SC_Loads_Test_Setup, SC_Test_TearDown, "SC_LoadAts_Test_InvalidIndex");
 
-    UtTest_Add(SC_BuildTimeIndexTable_Test_InvalidIndex, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_BuildTimeIndexTable_Test_InvalidIndex, UT_SC_Loads_Test_Setup, SC_Test_TearDown,
                "SC_BuildTimeIndexTable_Test_InvalidIndex");
-    UtTest_Add(SC_Insert_Test, SC_Test_Setup, SC_Test_TearDown, "SC_Insert_Test");
-    UtTest_Add(SC_Insert_Test_MiddleOfList, SC_Test_Setup, SC_Test_TearDown, "SC_Insert_Test_MiddleOfList");
-    UtTest_Add(SC_Insert_Test_MiddleOfListCompareAbsTimeTrue, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_Insert_Test, UT_SC_Loads_Test_Setup, SC_Test_TearDown, "SC_Insert_Test");
+    UtTest_Add(SC_Insert_Test_MiddleOfList, UT_SC_Loads_Test_Setup, SC_Test_TearDown, "SC_Insert_Test_MiddleOfList");
+    UtTest_Add(SC_Insert_Test_MiddleOfListCompareAbsTimeTrue, UT_SC_Loads_Test_Setup, SC_Test_TearDown,
                "SC_Insert_Test_MiddleOfListCompareAbsTimeTrue");
-    UtTest_Add(SC_Insert_Test_InvalidIndex, SC_Test_Setup, SC_Test_TearDown, "SC_Insert_Test_InvalidIndex");
-    UtTest_Add(SC_InitAtsTables_Test_InvalidIndex, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_Insert_Test_InvalidIndex, UT_SC_Loads_Test_Setup, SC_Test_TearDown, "SC_Insert_Test_InvalidIndex");
+    UtTest_Add(SC_InitAtsTables_Test_InvalidIndex, UT_SC_Loads_Test_Setup, SC_Test_TearDown,
                "SC_InitAtsTables_Test_InvalidIndex");
-    UtTest_Add(SC_ValidateAts_Test, SC_Test_Setup, SC_Test_TearDown, "SC_ValidateAts_Test");
-    UtTest_Add(SC_ValidateAppend_Test, SC_Test_Setup, SC_Test_TearDown, "SC_ValidateAppend_Test");
-    UtTest_Add(SC_ValidateRts_Test, SC_Test_Setup, SC_Test_TearDown, "SC_ValidateRts_Test");
-    UtTest_Add(SC_ValidateRts_Test_ParseRts, SC_Test_Setup, SC_Test_TearDown, "SC_ValidateRts_Test_ParseRts");
-    UtTest_Add(SC_LoadRts_Test_Nominal, SC_Test_Setup, SC_Test_TearDown, "SC_LoadRts_Test_Nominal");
-    UtTest_Add(SC_LoadRts_Test_InvalidIndex, SC_Test_Setup, SC_Test_TearDown, "SC_LoadRts_Test_InvalidIndex");
-    UtTest_Add(SC_ParseRts_Test_EndOfFile, SC_Test_Setup, SC_Test_TearDown, "SC_ParseRts_Test_EndOfFile");
-    UtTest_Add(SC_ParseRts_Test_InvalidMsgId, SC_Test_Setup, SC_Test_TearDown, "SC_ParseRts_Test_InvalidMsgId");
-    UtTest_Add(SC_ParseRts_Test_LengthErrorTooShort, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_ValidateAts_Test, UT_SC_Loads_Test_Setup, SC_Test_TearDown, "SC_ValidateAts_Test");
+    UtTest_Add(SC_ValidateAppend_Test, UT_SC_Loads_Test_Setup, SC_Test_TearDown, "SC_ValidateAppend_Test");
+    UtTest_Add(SC_ValidateRts_Test, UT_SC_Loads_Test_Setup, SC_Test_TearDown, "SC_ValidateRts_Test");
+    UtTest_Add(SC_ValidateRts_Test_ParseRts, UT_SC_Loads_Test_Setup, SC_Test_TearDown, "SC_ValidateRts_Test_ParseRts");
+    UtTest_Add(SC_LoadRts_Test_Nominal, UT_SC_Loads_Test_Setup, SC_Test_TearDown, "SC_LoadRts_Test_Nominal");
+    UtTest_Add(SC_LoadRts_Test_InvalidIndex, UT_SC_Loads_Test_Setup, SC_Test_TearDown, "SC_LoadRts_Test_InvalidIndex");
+    UtTest_Add(SC_ParseRts_Test_EndOfFile, UT_SC_Loads_Test_Setup, SC_Test_TearDown, "SC_ParseRts_Test_EndOfFile");
+    UtTest_Add(SC_ParseRts_Test_InvalidMsgId, UT_SC_Loads_Test_Setup, SC_Test_TearDown, "SC_ParseRts_Test_InvalidMsgId");
+    UtTest_Add(SC_ParseRts_Test_LengthErrorTooShort, UT_SC_Loads_Test_Setup, SC_Test_TearDown,
                "SC_ParseRts_Test_LengthErrorTooShort");
-    UtTest_Add(SC_ParseRts_Test_LengthErrorTooLong, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_ParseRts_Test_LengthErrorTooLong, UT_SC_Loads_Test_Setup, SC_Test_TearDown,
                "SC_ParseRts_Test_LengthErrorTooLong");
-    UtTest_Add(SC_ParseRts_Test_CmdRunsOffEndOfBuffer, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_ParseRts_Test_CmdRunsOffEndOfBuffer, UT_SC_Loads_Test_Setup, SC_Test_TearDown,
                "SC_ParseRts_Test_CmdRunsOffEndOfBuffer");
-    UtTest_Add(SC_ParseRts_Test_CmdLengthEqualsBufferLength, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_ParseRts_Test_CmdLengthEqualsBufferLength, UT_SC_Loads_Test_Setup, SC_Test_TearDown,
                "SC_ParseRts_Test_CmdLengthEqualsBufferLength");
-    UtTest_Add(SC_ParseRts_Test_CmdDoesNotFitBufferEmpty, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_ParseRts_Test_CmdDoesNotFitBufferEmpty, UT_SC_Loads_Test_Setup, SC_Test_TearDown,
                "SC_ParseRts_Test_CmdDoesNotFitBufferEmpty");
-    UtTest_Add(SC_ParseRts_Test_CmdDoesNotFitBufferNotEmpty, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_ParseRts_Test_CmdDoesNotFitBufferNotEmpty, UT_SC_Loads_Test_Setup, SC_Test_TearDown,
                "SC_ParseRts_Test_CmdDoesNotFitBufferNotEmpty");
-    UtTest_Add(SC_UpdateAppend_Test_Nominal, SC_Test_Setup, SC_Test_TearDown, "SC_UpdateAppend_Test_Nominal");
-    UtTest_Add(SC_UpdateAppend_Test_CmdDoesNotFitBuffer, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_UpdateAppend_Test_Nominal, UT_SC_Loads_Test_Setup, SC_Test_TearDown, "SC_UpdateAppend_Test_Nominal");
+    UtTest_Add(SC_UpdateAppend_Test_CmdDoesNotFitBuffer, UT_SC_Loads_Test_Setup, SC_Test_TearDown,
                "SC_UpdateAppend_Test_CmdDoesNotFitBuffer");
-    UtTest_Add(SC_UpdateAppend_Test_InvalidCmdLengthTooLow, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_UpdateAppend_Test_InvalidCmdLengthTooLow, UT_SC_Loads_Test_Setup, SC_Test_TearDown,
                "SC_UpdateAppend_Test_InvalidCmdLengthTooLow");
-    UtTest_Add(SC_UpdateAppend_Test_InvalidCmdLengthTooHigh, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_UpdateAppend_Test_InvalidCmdLengthTooHigh, UT_SC_Loads_Test_Setup, SC_Test_TearDown,
                "SC_UpdateAppend_Test_InvalidCmdLengthTooHigh");
-    UtTest_Add(SC_UpdateAppend_Test_EndOfBuffer, SC_Test_Setup, SC_Test_TearDown, "SC_UpdateAppend_Test_EndOfBuffer");
-    UtTest_Add(SC_UpdateAppend_Test_CmdNumberZero, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_UpdateAppend_Test_EndOfBuffer, UT_SC_Loads_Test_Setup, SC_Test_TearDown, "SC_UpdateAppend_Test_EndOfBuffer");
+    UtTest_Add(SC_UpdateAppend_Test_CmdNumberZero, UT_SC_Loads_Test_Setup, SC_Test_TearDown,
                "SC_UpdateAppend_Test_CmdNumberZero");
-    UtTest_Add(SC_UpdateAppend_Test_CmdNumberTooHigh, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_UpdateAppend_Test_CmdNumberTooHigh, UT_SC_Loads_Test_Setup, SC_Test_TearDown,
                "SC_UpdateAppend_Test_CmdNumberTooHigh");
-    UtTest_Add(SC_ProcessAppend_Test, SC_Test_Setup, SC_Test_TearDown, "SC_ProcessAppend_Test");
-    UtTest_Add(SC_ProcessAppend_Test_CmdLoaded, SC_Test_Setup, SC_Test_TearDown, "SC_ProcessAppend_Test_CmdLoaded");
-    UtTest_Add(SC_ProcessAppend_Test_NotExecuting, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_ProcessAppend_Test, UT_SC_Loads_Test_Setup, SC_Test_TearDown, "SC_ProcessAppend_Test");
+    UtTest_Add(SC_ProcessAppend_Test_CmdLoaded, UT_SC_Loads_Test_Setup, SC_Test_TearDown, "SC_ProcessAppend_Test_CmdLoaded");
+    UtTest_Add(SC_ProcessAppend_Test_NotExecuting, UT_SC_Loads_Test_Setup, SC_Test_TearDown,
                "SC_ProcessAppend_Test_NotExecuting");
-    UtTest_Add(SC_ProcessAppend_Test_AtsNumber, SC_Test_Setup, SC_Test_TearDown, "SC_ProcessAppend_Test_AtsNumber");
-    UtTest_Add(SC_ProcessAppend_Test_InvalidIndex, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_ProcessAppend_Test_AtsNumber, UT_SC_Loads_Test_Setup, SC_Test_TearDown, "SC_ProcessAppend_Test_AtsNumber");
+    UtTest_Add(SC_ProcessAppend_Test_InvalidIndex, UT_SC_Loads_Test_Setup, SC_Test_TearDown,
                "SC_ProcessAppend_Test_InvalidIndex");
-    UtTest_Add(SC_VerifyAtsTable_Test_Nominal, SC_Test_Setup, SC_Test_TearDown, "SC_VerifyAtsTable_Test_Nominal");
-    UtTest_Add(SC_VerifyAtsTable_Test_InvalidEntry, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_VerifyAtsTable_Test_Nominal, UT_SC_Loads_Test_Setup, SC_Test_TearDown, "SC_VerifyAtsTable_Test_Nominal");
+    UtTest_Add(SC_VerifyAtsTable_Test_InvalidEntry, UT_SC_Loads_Test_Setup, SC_Test_TearDown,
                "SC_VerifyAtsTable_Test_InvalidEntry");
-    UtTest_Add(SC_VerifyAtsTable_Test_EmptyTable, SC_Test_Setup, SC_Test_TearDown, "SC_VerifyAtsTable_Test_EmptyTable");
-    UtTest_Add(SC_VerifyAtsEntry_Test_Nominal, SC_Test_Setup, SC_Test_TearDown, "SC_VerifyAtsEntry_Test_Nominal");
-    UtTest_Add(SC_VerifyAtsEntry_Test_EndOfBuffer, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_VerifyAtsTable_Test_EmptyTable, UT_SC_Loads_Test_Setup, SC_Test_TearDown, "SC_VerifyAtsTable_Test_EmptyTable");
+    UtTest_Add(SC_VerifyAtsEntry_Test_Nominal, UT_SC_Loads_Test_Setup, SC_Test_TearDown, "SC_VerifyAtsEntry_Test_Nominal");
+    UtTest_Add(SC_VerifyAtsEntry_Test_EndOfBuffer, UT_SC_Loads_Test_Setup, SC_Test_TearDown,
                "SC_VerifyAtsEntry_Test_EndOfBuffer");
-    UtTest_Add(SC_VerifyAtsEntry_Test_InvalidCmdNumber, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_VerifyAtsEntry_Test_InvalidCmdNumber, UT_SC_Loads_Test_Setup, SC_Test_TearDown,
                "SC_VerifyAtsEntry_Test_InvalidCmdNumber");
-    UtTest_Add(SC_VerifyAtsEntry_Test_BufferFull, SC_Test_Setup, SC_Test_TearDown, "SC_VerifyAtsEntry_Test_BufferFull");
-    UtTest_Add(SC_VerifyAtsEntry_Test_InvalidCmdLengthTooLow, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_VerifyAtsEntry_Test_BufferFull, UT_SC_Loads_Test_Setup, SC_Test_TearDown, "SC_VerifyAtsEntry_Test_BufferFull");
+    UtTest_Add(SC_VerifyAtsEntry_Test_InvalidCmdLengthTooLow, UT_SC_Loads_Test_Setup, SC_Test_TearDown,
                "SC_VerifyAtsEntry_Test_InvalidCmdLengthTooLow");
-    UtTest_Add(SC_VerifyAtsEntry_Test_InvalidCmdLengthTooHigh, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_VerifyAtsEntry_Test_InvalidCmdLengthTooHigh, UT_SC_Loads_Test_Setup, SC_Test_TearDown,
                "SC_VerifyAtsEntry_Test_InvalidCmdLengthTooHigh");
-    UtTest_Add(SC_VerifyAtsEntry_Test_BufferOverflow, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_VerifyAtsEntry_Test_BufferOverflow, UT_SC_Loads_Test_Setup, SC_Test_TearDown,
                "SC_VerifyAtsEntry_Test_BufferOverflow");
-    UtTest_Add(SC_VerifyAtsEntry_Test_DuplicateCmdNumber, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_VerifyAtsEntry_Test_DuplicateCmdNumber, UT_SC_Loads_Test_Setup, SC_Test_TearDown,
                "SC_VerifyAtsEntry_Test_DuplicateCmdNumber");
 }
