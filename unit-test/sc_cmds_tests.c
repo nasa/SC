@@ -64,7 +64,6 @@ void SC_ProcessAtpCmd_Test_SwitchCmd(void)
     SC_AtsEntryHeader_t *Entry;
     CFE_SB_MsgId_t       TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
     CFE_MSG_FcnCode_t    FcnCode   = SC_SWITCH_ATS_CC;
-    bool                 ChecksumValid;
 
     Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[0][0];
     Entry->CmdNumber = 1;
@@ -78,13 +77,11 @@ void SC_ProcessAtpCmd_Test_SwitchCmd(void)
     SC_OperData.AtsCmdStatusTblAddr[0][0] = SC_LOADED;
     SC_AppData.AtsCmdIndexBuffer[0][0]    = 0;
 
+    SC_AppData.EnableHeaderUpdate = true;
+
     /* Set return value for CFE_TIME_Compare to make SC_CompareAbsTime return false, to satisfy first if-statement of
      * SC_ProcessAtpCmd, and for all other calls to CFE_TIME_Compare called from subfunctions reached by this test */
     UT_SetHookFunction(UT_KEY(CFE_TIME_Compare), Ut_CFE_TIME_CompareHookAlessthanB, NULL);
-
-    /* Set to return true in order to satisfy the if-statement from which the function is called */
-    ChecksumValid = true;
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_ValidateChecksum), &ChecksumValid, sizeof(ChecksumValid), false);
 
     /* Set these two functions to return these values in order to statisfy the if-statement from which they are both
      * called */
@@ -111,7 +108,6 @@ void SC_ProcessAtpCmd_Test_NonSwitchCmd(void)
     SC_AtsEntryHeader_t *Entry;
     CFE_SB_MsgId_t       TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
     CFE_MSG_FcnCode_t    FcnCode   = SC_NOOP_CC;
-    bool                 ChecksumValid;
 
     Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[0][0];
     Entry->CmdNumber = 1;
@@ -125,13 +121,11 @@ void SC_ProcessAtpCmd_Test_NonSwitchCmd(void)
     SC_OperData.AtsCmdStatusTblAddr[0][0] = SC_LOADED;
     SC_AppData.AtsCmdIndexBuffer[0][0]    = 0;
 
+    SC_AppData.EnableHeaderUpdate = true;
+
     /* Set return value for CFE_TIME_Compare to make SC_CompareAbsTime return false, to satisfy first if-statement of
      * SC_ProcessAtpCmd, and for all other calls to CFE_TIME_Compare called from subfunctions reached by this test */
     UT_SetHookFunction(UT_KEY(CFE_TIME_Compare), Ut_CFE_TIME_CompareHookAlessthanB, NULL);
-
-    /* Set to return true in order to satisfy the if-statement from which the function is called */
-    ChecksumValid = true;
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_ValidateChecksum), &ChecksumValid, sizeof(ChecksumValid), false);
 
     /* Set these two functions to return these values in order to statisfy the if-statement from which they are both
      * called */
@@ -158,7 +152,6 @@ void SC_ProcessAtpCmd_Test_InlineSwitchError(void)
     SC_AtsEntryHeader_t *Entry;
     CFE_SB_MsgId_t       TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
     CFE_MSG_FcnCode_t    FcnCode   = SC_SWITCH_ATS_CC;
-    bool                 ChecksumValid;
 
     Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[0][0];
     Entry->CmdNumber = 1;
@@ -177,8 +170,7 @@ void SC_ProcessAtpCmd_Test_InlineSwitchError(void)
     UT_SetHookFunction(UT_KEY(CFE_TIME_Compare), Ut_CFE_TIME_CompareHookAlessthanB, NULL);
 
     /* Set to return true in order to satisfy the if-statement from which the function is called */
-    ChecksumValid = true;
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_ValidateChecksum), &ChecksumValid, sizeof(ChecksumValid), false);
+    SC_AppData.EnableHeaderUpdate = true;
 
     /* Set these two functions to return these values in order to statisfy the if-statement from which they are both
      * called */
@@ -207,7 +199,6 @@ void SC_ProcessAtpCmd_Test_SBErrorAtsA(void)
     SC_AtsEntryHeader_t *Entry;
     CFE_SB_MsgId_t       TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
     CFE_MSG_FcnCode_t    FcnCode   = SC_NOOP_CC;
-    bool                 ChecksumValid;
 
     Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[0][0];
     Entry->CmdNumber = 1;
@@ -223,9 +214,7 @@ void SC_ProcessAtpCmd_Test_SBErrorAtsA(void)
     SC_OperData.AtsCmdStatusTblAddr[0][0] = SC_LOADED;
     SC_AppData.AtsCmdIndexBuffer[0][0]    = 0;
 
-    /* Set to return true in order to satisfy the if-statement from which the function is called */
-    ChecksumValid = true;
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_ValidateChecksum), &ChecksumValid, sizeof(ChecksumValid), false);
+    SC_AppData.EnableHeaderUpdate = true;
 
     /* Set these two functions to return these values in order to statisfy the if-statement from which they are both
      * called */
@@ -257,7 +246,6 @@ void SC_ProcessAtpCmd_Test_SBErrorAtsB(void)
     SC_AtsEntryHeader_t *Entry;
     CFE_SB_MsgId_t       TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
     CFE_MSG_FcnCode_t    FcnCode   = SC_NOOP_CC;
-    bool                 ChecksumValid;
 
     Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[1][0];
     Entry->CmdNumber = 1;
@@ -273,9 +261,7 @@ void SC_ProcessAtpCmd_Test_SBErrorAtsB(void)
     SC_OperData.AtsCmdStatusTblAddr[1][0] = SC_LOADED;
     SC_AppData.AtsCmdIndexBuffer[1][0]    = 0;
 
-    /* Set to return true in order to satisfy the if-statement from which the function is called */
-    ChecksumValid = true;
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_ValidateChecksum), &ChecksumValid, sizeof(ChecksumValid), false);
+    SC_AppData.EnableHeaderUpdate = true;
 
     /* Set these two functions to return these values in order to statisfy the if-statement from which they are both
      * called */
@@ -324,6 +310,8 @@ void SC_ProcessAtpCmd_Test_ChecksumFailedAtsA(void)
     SC_AppData.AtsCmdIndexBuffer[0][0]    = 0;
 
     SC_OperData.HkPacket.Payload.ContinueAtsOnFailureFlag = false;
+
+    SC_AppData.EnableHeaderUpdate = false;
 
     /* Set to return false in order to generate error message SC_ATS_CHKSUM_ERR_EID */
     ChecksumValid = false;
@@ -375,6 +363,8 @@ void SC_ProcessAtpCmd_Test_ChecksumFailedAtsB(void)
 
     SC_OperData.HkPacket.Payload.ContinueAtsOnFailureFlag = false;
 
+    SC_AppData.EnableHeaderUpdate = false;
+
     /* Set to return false in order to generate error message SC_ATS_CHKSUM_ERR_EID */
     ChecksumValid = false;
     UT_SetDataBuffer(UT_KEY(CFE_MSG_ValidateChecksum), &ChecksumValid, sizeof(ChecksumValid), false);
@@ -424,6 +414,8 @@ void SC_ProcessAtpCmd_Test_ChecksumFailedAtsAContinue(void)
     SC_AppData.AtsCmdIndexBuffer[0][0]    = 0;
 
     SC_OperData.HkPacket.Payload.ContinueAtsOnFailureFlag = true;
+
+    SC_AppData.EnableHeaderUpdate = false;
 
     /* Set to return false in order to generate error message SC_ATS_CHKSUM_ERR_EID */
     ChecksumValid = false;
@@ -634,7 +626,6 @@ void SC_ProcessAtpCmd_Test_CmdMid(void)
     SC_AtsEntryHeader_t *Entry;
     CFE_SB_MsgId_t       TestMsgId = CFE_SB_INVALID_MSG_ID;
     CFE_MSG_FcnCode_t    FcnCode   = SC_SWITCH_ATS_CC;
-    bool                 ChecksumValid;
 
     Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[0][0];
     Entry->CmdNumber = 1;
@@ -648,13 +639,11 @@ void SC_ProcessAtpCmd_Test_CmdMid(void)
     SC_OperData.AtsCmdStatusTblAddr[0][0] = SC_LOADED;
     SC_AppData.AtsCmdIndexBuffer[0][0]    = 0;
 
+    SC_AppData.EnableHeaderUpdate = true;
+
     /* Set return value for CFE_TIME_Compare to make SC_CompareAbsTime return false, to satisfy first if-statement of
      * SC_ProcessAtpCmd, and for all other calls to CFE_TIME_Compare called from subfunctions reached by this test */
     UT_SetHookFunction(UT_KEY(CFE_TIME_Compare), Ut_CFE_TIME_CompareHookAlessthanB, NULL);
-
-    /* Set to return true in order to satisfy the if-statement from which the function is called */
-    ChecksumValid = true;
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_ValidateChecksum), &ChecksumValid, sizeof(ChecksumValid), false);
 
     /* Set these two functions to return these values in order to statisfy the if-statement from which they are both
      * called */
@@ -677,17 +666,13 @@ void SC_ProcessAtpCmd_Test_CmdMid(void)
 
 void SC_ProcessRtpCommand_Test_Nominal(void)
 {
-    bool ChecksumValid;
-
     SC_AppData.NextCmdTime[SC_RTP]                                                   = 0;
     SC_AppData.CurrentTime                                                           = 1;
     SC_AppData.NextProcNumber                                                        = SC_RTP;
     SC_OperData.RtsCtrlBlckAddr->RtsNumber                                           = 1;
     SC_OperData.RtsInfoTblAddr[SC_OperData.RtsCtrlBlckAddr->RtsNumber - 1].RtsStatus = SC_EXECUTING;
 
-    /* Set to return true in order to satisfy the if-statement from which the function is called */
-    ChecksumValid = true;
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_ValidateChecksum), &ChecksumValid, sizeof(ChecksumValid), false);
+    SC_AppData.EnableHeaderUpdate = true;
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_ProcessRtpCommand());
@@ -704,20 +689,16 @@ void SC_ProcessRtpCommand_Test_Nominal(void)
 
 void SC_ProcessRtpCommand_Test_BadSoftwareBusReturn(void)
 {
-    bool ChecksumValid;
-
     SC_AppData.NextCmdTime[SC_RTP]                                                   = 0;
     SC_AppData.CurrentTime                                                           = 1;
     SC_AppData.NextProcNumber                                                        = SC_RTP;
     SC_OperData.RtsCtrlBlckAddr->RtsNumber                                           = 1;
     SC_OperData.RtsInfoTblAddr[SC_OperData.RtsCtrlBlckAddr->RtsNumber - 1].RtsStatus = SC_EXECUTING;
 
-    /* Set to return true in order to satisfy the if-statement from which the function is called */
-    ChecksumValid = true;
+    SC_AppData.EnableHeaderUpdate = true;
 
     /* Set to return -1 in order to generate error message SC_RTS_DIST_ERR_EID */
     UT_SetDeferredRetcode(UT_KEY(CFE_SB_TransmitMsg), 1, -1);
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_ValidateChecksum), &ChecksumValid, sizeof(ChecksumValid), false);
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_ProcessRtpCommand());
@@ -744,6 +725,8 @@ void SC_ProcessRtpCommand_Test_BadChecksum(void)
     SC_AppData.NextProcNumber                                                        = SC_RTP;
     SC_OperData.RtsCtrlBlckAddr->RtsNumber                                           = 1;
     SC_OperData.RtsInfoTblAddr[SC_OperData.RtsCtrlBlckAddr->RtsNumber - 1].RtsStatus = SC_EXECUTING;
+
+    SC_AppData.EnableHeaderUpdate = false;
 
     /* Set to return false in order to generate error message SC_RTS_CHKSUM_ERR_EID */
     ChecksumValid = false;
@@ -1170,18 +1153,15 @@ void SC_ProcessRequest_Test_1HzWakeupRtpExecutionTime(void)
 
 void SC_ProcessRequest_Test_1HzWakeupRtpExecutionTimeTooManyCmds(void)
 {
-    bool ChecksumValid;
-
     /**
      **  Test case: SC_1HZ_WAKEUP_MID with a pending RTP command that needs to execute immediately, but too many
      *commands are being sent at once
      **/
     CFE_SB_MsgId_t TestMsgId = CFE_SB_ValueToMsgId(SC_1HZ_WAKEUP_MID);
 
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
+    SC_AppData.EnableHeaderUpdate = true;
 
-    ChecksumValid = true;
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_ValidateChecksum), &ChecksumValid, sizeof(ChecksumValid), false);
+    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
 
     UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
 

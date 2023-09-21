@@ -63,9 +63,9 @@ void SC_ProcessAtpCmd(void)
     CFE_Status_t      Result;
     bool              AbortATS = false;
     SC_AtsEntry_t *   EntryPtr;
-    CFE_SB_MsgId_t    MessageID     = CFE_SB_INVALID_MSG_ID;
-    CFE_MSG_FcnCode_t CommandCode   = 0;
-    bool              ChecksumValid = 0;
+    CFE_SB_MsgId_t    MessageID   = CFE_SB_INVALID_MSG_ID;
+    CFE_MSG_FcnCode_t CommandCode = 0;
+    bool              ChecksumValid;
 
     /*
      ** The following conditions must be met before the ATS command will be
@@ -98,11 +98,17 @@ void SC_ProcessAtpCmd(void)
             if (EntryPtr->Header.CmdNumber == (SC_ATS_CMD_INDEX_TO_NUM(CmdIndex)))
             {
                 /*
-                 ** Check the checksum on the command
-                 **
+                 * Check the checksum on the command
+                 * If this feature is disabled, just skip and assume valid
+                 * Note that the checksum will be re-computed when the message is sent.
                  */
-                CFE_MSG_ValidateChecksum(&EntryPtr->Msg, &ChecksumValid);
-                if (ChecksumValid == true)
+                ChecksumValid = SC_AppData.EnableHeaderUpdate;
+                if (!SC_AppData.EnableHeaderUpdate)
+                {
+                    /* If header update is NOT enabled, confirm this table entry has a valid checksum already */
+                    CFE_MSG_ValidateChecksum(&EntryPtr->Msg, &ChecksumValid);
+                }
+                if (ChecksumValid)
                 {
                     /*
                      ** Count the command for the rate limiter
@@ -151,7 +157,7 @@ void SC_ProcessAtpCmd(void)
                     }
                     else
                     {
-                        Result = CFE_SB_TransmitMsg(&EntryPtr->Msg, true);
+                        Result = CFE_SB_TransmitMsg(&EntryPtr->Msg, SC_AppData.EnableHeaderUpdate);
 
                         if (Result == CFE_SUCCESS)
                         {
@@ -294,7 +300,7 @@ void SC_ProcessRtpCommand(void)
     uint16         RtsIndex;  /* the RTS index for the cmd */
     uint16         CmdOffset; /* the location of the cmd    */
     CFE_Status_t   Result;
-    bool           ChecksumValid = false;
+    bool           ChecksumValid;
 
     /*
      ** The following conditions must be met before a RTS command is executed:
@@ -329,14 +335,19 @@ void SC_ProcessRtpCommand(void)
          */
         EntryPtr = (SC_RtsEntry_t *)&SC_OperData.RtsTblAddr[RtsIndex][CmdOffset];
 
-        CFE_MSG_ValidateChecksum(&EntryPtr->Msg, &ChecksumValid);
-        if (ChecksumValid == true)
+        ChecksumValid = SC_AppData.EnableHeaderUpdate;
+        if (!SC_AppData.EnableHeaderUpdate)
+        {
+            /* If header update is NOT enabled, confirm this table entry has a valid checksum already */
+            CFE_MSG_ValidateChecksum(&EntryPtr->Msg, &ChecksumValid);
+        }
+        if (ChecksumValid)
         {
             /*
              ** Try Sending the command on the Software Bus
              */
 
-            Result = CFE_SB_TransmitMsg(&EntryPtr->Msg, true);
+            Result = CFE_SB_TransmitMsg(&EntryPtr->Msg, SC_AppData.EnableHeaderUpdate);
 
             if (Result == CFE_SUCCESS)
             {
