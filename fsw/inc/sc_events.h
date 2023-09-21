@@ -1084,7 +1084,6 @@
  */
 #define SC_TABLE_MANAGE_APPEND_ERR_EID 114
 
-#if (SC_ENABLE_GROUP_COMMANDS == true)
 /**
  * \brief SC Start RTS Group Command Event ID
  *
@@ -1184,7 +1183,6 @@
  *  - Last RTS ID must be greater than or equal to First RTS ID
  */
 #define SC_ENARTSGRP_CMD_ERR_EID 122
-#endif
 
 /**
  * \brief SC Jump Command Entry Event ID

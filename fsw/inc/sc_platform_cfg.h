@@ -343,23 +343,6 @@
 #define SC_TIME_TO_USE SC_USE_CFE_TIME
 
 /**
- * \brief Define inclusion state for RTS group commands
- *
- *  \par Description:
- *       This parameter specifies the inclusion state for the
- *       following RTS group commands: Start RTS group, Stop
- *       RTS group, Enable RTS group and Disable RTS group.
- *       RTS group commands affect a range of consecutive RTS
- *       numbers.  When set to true, this definition results
- *       in the inclusion of the group command handlers into
- *       the SC source code.
- *
- *  \par Limits:
- *       Must be defined as true or false
- */
-#define SC_ENABLE_GROUP_COMMANDS true
-
-/**
  * \brief Mission specific version number for SC application
  *
  *  \par Description:

@@ -64,10 +64,8 @@ typedef union
     SC_JumpAtsCmd_t                 JumpAtsCmd;
     SC_SetContinueAtsOnFailureCmd_t SetContinueAtsOnFailureCmd;
     SC_AppendAtsCmd_t               AppendAtsCmd;
-#if (SC_ENABLE_GROUP_COMMANDS == true)
-    SC_RtsGrpCmd_t RtsGrpCmd;
-#endif
-    CFE_TBL_NotifyCmd_t NotifyCmd; /* SC subscribes to the table notify command */
+    SC_RtsGrpCmd_t                  RtsGrpCmd;
+    CFE_TBL_NotifyCmd_t             NotifyCmd; /* SC subscribes to the table notify command */
 } UT_CmdBuf_t;
 
 extern UT_CmdBuf_t UT_CmdBuf;

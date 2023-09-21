@@ -717,8 +717,6 @@ void SC_ProcessCommand(const CFE_SB_Buffer_t *BufPtr)
             }
             break;
 
-#if (SC_ENABLE_GROUP_COMMANDS == true)
-
         case SC_START_RTS_GRP_CC:
             if (SC_VerifyCmdLength(&BufPtr->Msg, sizeof(SC_RtsGrpCmd_t)))
             {
@@ -746,7 +744,6 @@ void SC_ProcessCommand(const CFE_SB_Buffer_t *BufPtr)
                  SC_EnableRtsGrpCmd(BufPtr);
             }
             break;
-#endif
 
         default:
             CFE_EVS_SendEvent(SC_INVLD_CMD_ERR_EID, CFE_EVS_EventType_ERROR,

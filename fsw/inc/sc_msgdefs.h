@@ -505,7 +505,6 @@
  */
 #define SC_MANAGE_TABLE_CC 12
 
-#if (SC_ENABLE_GROUP_COMMANDS == true)
 /**
  * \brief START a group of RTS
  *
@@ -662,8 +661,6 @@
  *  \sa #SC_DISABLE_RTS_GRP_CC
  */
 #define SC_ENABLE_RTS_GRP_CC 16
-
-#endif
 
 /**\}*/
 
