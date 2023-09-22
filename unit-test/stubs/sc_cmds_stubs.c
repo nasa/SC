@@ -17,75 +17,141 @@
  * limitations under the License.
  ************************************************************************/
 
-/*
- * Includes
+/**
+ * @file
+ *
+ * Auto-Generated stub implementations for functions defined in sc_cmds header
  */
 
 #include "sc_cmds.h"
+#include "utgenstub.h"
 
-/* UT includes */
-#include "uttest.h"
-#include "utassert.h"
-#include "utstubs.h"
-
-void SC_TableManageCmd(const CFE_SB_Buffer_t *CmdPacket)
-{
-    UT_Stub_RegisterContext(UT_KEY(SC_TableManageCmd), CmdPacket);
-    UT_DEFAULT_IMPL(SC_TableManageCmd);
-}
-
-void SC_ManageRtsTable(int32 ArrayIndex)
-{
-    UT_Stub_RegisterContextGenericArg(UT_KEY(SC_ManageRtsTable), ArrayIndex);
-    UT_DEFAULT_IMPL(SC_ManageRtsTable);
-}
-
+/*
+ * ----------------------------------------------------
+ * Generated stub function for SC_ManageAtsTable()
+ * ----------------------------------------------------
+ */
 void SC_ManageAtsTable(int32 ArrayIndex)
 {
-    UT_Stub_RegisterContextGenericArg(UT_KEY(SC_ManageAtsTable), ArrayIndex);
-    UT_DEFAULT_IMPL(SC_ManageAtsTable);
+    UT_GenStub_AddParam(SC_ManageAtsTable, int32, ArrayIndex);
+
+    UT_GenStub_Execute(SC_ManageAtsTable, Basic, NULL);
 }
 
-void SC_ManageAppendTable(void)
+/*
+ * ----------------------------------------------------
+ * Generated stub function for SC_ManageRtsTable()
+ * ----------------------------------------------------
+ */
+void SC_ManageRtsTable(int32 ArrayIndex)
 {
-    UT_DEFAULT_IMPL(SC_ManageAppendTable);
+    UT_GenStub_AddParam(SC_ManageRtsTable, int32, ArrayIndex);
+
+    UT_GenStub_Execute(SC_ManageRtsTable, Basic, NULL);
 }
 
-void SC_ProcessRequest(const CFE_SB_Buffer_t *CmdPacket)
+/*
+ * ----------------------------------------------------
+ * Generated stub function for SC_ManageTable()
+ * ----------------------------------------------------
+ */
+void SC_ManageTable(SC_TableType type, int32 ArrayIndex)
 {
-    UT_Stub_RegisterContext(UT_KEY(SC_ProcessRequest), CmdPacket);
-    UT_DEFAULT_IMPL(SC_ProcessRequest);
+    UT_GenStub_AddParam(SC_ManageTable, SC_TableType, type);
+    UT_GenStub_AddParam(SC_ManageTable, int32, ArrayIndex);
+
+    UT_GenStub_Execute(SC_ManageTable, Basic, NULL);
 }
 
-void SC_ProcessCommand(const CFE_SB_Buffer_t *CmdPacket)
+/*
+ * ----------------------------------------------------
+ * Generated stub function for SC_NoOpCmd()
+ * ----------------------------------------------------
+ */
+void SC_NoOpCmd(const CFE_SB_Buffer_t *BufPtr)
 {
-    UT_Stub_RegisterContext(UT_KEY(SC_ProcessCommand), CmdPacket);
-    UT_DEFAULT_IMPL(SC_ProcessCommand);
+    UT_GenStub_AddParam(SC_NoOpCmd, const CFE_SB_Buffer_t *, BufPtr);
+
+    UT_GenStub_Execute(SC_NoOpCmd, Basic, NULL);
 }
 
-void SC_NoOpCmd(const CFE_SB_Buffer_t *CmdPacket)
-{
-    UT_Stub_RegisterContext(UT_KEY(SC_NoOpCmd), CmdPacket);
-    UT_DEFAULT_IMPL(SC_NoOpCmd);
-}
-
-void SC_ResetCountersCmd(const CFE_SB_Buffer_t *CmdPacket)
-{
-    UT_Stub_RegisterContext(UT_KEY(SC_ResetCountersCmd), CmdPacket);
-    UT_DEFAULT_IMPL(SC_ResetCountersCmd);
-}
-
-void SC_SendHkPacket(void)
-{
-    UT_DEFAULT_IMPL(SC_SendHkPacket);
-}
-
+/*
+ * ----------------------------------------------------
+ * Generated stub function for SC_ProcessAtpCmd()
+ * ----------------------------------------------------
+ */
 void SC_ProcessAtpCmd(void)
 {
-    UT_DEFAULT_IMPL(SC_ProcessAtpCmd);
+
+    UT_GenStub_Execute(SC_ProcessAtpCmd, Basic, NULL);
 }
 
+/*
+ * ----------------------------------------------------
+ * Generated stub function for SC_ProcessCommand()
+ * ----------------------------------------------------
+ */
+void SC_ProcessCommand(const CFE_SB_Buffer_t *BufPtr)
+{
+    UT_GenStub_AddParam(SC_ProcessCommand, const CFE_SB_Buffer_t *, BufPtr);
+
+    UT_GenStub_Execute(SC_ProcessCommand, Basic, NULL);
+}
+
+/*
+ * ----------------------------------------------------
+ * Generated stub function for SC_ProcessRequest()
+ * ----------------------------------------------------
+ */
+void SC_ProcessRequest(const CFE_SB_Buffer_t *BufPtr)
+{
+    UT_GenStub_AddParam(SC_ProcessRequest, const CFE_SB_Buffer_t *, BufPtr);
+
+    UT_GenStub_Execute(SC_ProcessRequest, Basic, NULL);
+}
+
+/*
+ * ----------------------------------------------------
+ * Generated stub function for SC_ProcessRtpCommand()
+ * ----------------------------------------------------
+ */
 void SC_ProcessRtpCommand(void)
 {
-    UT_DEFAULT_IMPL(SC_ProcessRtpCommand);
+
+    UT_GenStub_Execute(SC_ProcessRtpCommand, Basic, NULL);
+}
+
+/*
+ * ----------------------------------------------------
+ * Generated stub function for SC_ResetCountersCmd()
+ * ----------------------------------------------------
+ */
+void SC_ResetCountersCmd(const CFE_SB_Buffer_t *BufPtr)
+{
+    UT_GenStub_AddParam(SC_ResetCountersCmd, const CFE_SB_Buffer_t *, BufPtr);
+
+    UT_GenStub_Execute(SC_ResetCountersCmd, Basic, NULL);
+}
+
+/*
+ * ----------------------------------------------------
+ * Generated stub function for SC_SendHkPacket()
+ * ----------------------------------------------------
+ */
+void SC_SendHkPacket(void)
+{
+
+    UT_GenStub_Execute(SC_SendHkPacket, Basic, NULL);
+}
+
+/*
+ * ----------------------------------------------------
+ * Generated stub function for SC_TableManageCmd()
+ * ----------------------------------------------------
+ */
+void SC_TableManageCmd(const CFE_SB_Buffer_t *BufPtr)
+{
+    UT_GenStub_AddParam(SC_TableManageCmd, const CFE_SB_Buffer_t *, BufPtr);
+
+    UT_GenStub_Execute(SC_TableManageCmd, Basic, NULL);
 }

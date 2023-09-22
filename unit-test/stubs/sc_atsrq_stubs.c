@@ -17,71 +17,136 @@
  * limitations under the License.
  ************************************************************************/
 
-/*
- * Includes
+/**
+ * @file
+ *
+ * Auto-Generated stub implementations for functions defined in sc_atsrq header
  */
 
 #include "sc_atsrq.h"
+#include "utgenstub.h"
 
-/* UT includes */
-#include "uttest.h"
-#include "utassert.h"
-#include "utstubs.h"
-
-bool SC_BeginAts(uint16 AtsId, uint16 TimeOffset)
+/*
+ * ----------------------------------------------------
+ * Generated stub function for SC_AppendAtsCmd()
+ * ----------------------------------------------------
+ */
+void SC_AppendAtsCmd(const CFE_SB_Buffer_t *BufPtr)
 {
-    UT_Stub_RegisterContextGenericArg(UT_KEY(SC_BeginAts), AtsId);
-    UT_Stub_RegisterContextGenericArg(UT_KEY(SC_BeginAts), TimeOffset);
-    return UT_DEFAULT_IMPL(SC_BeginAts);
+    UT_GenStub_AddParam(SC_AppendAtsCmd, const CFE_SB_Buffer_t *, BufPtr);
+
+    UT_GenStub_Execute(SC_AppendAtsCmd, Basic, NULL);
 }
 
-void SC_StartAtsCmd(const CFE_SB_Buffer_t *CmdPacket)
+/*
+ * ----------------------------------------------------
+ * Generated stub function for SC_BeginAts()
+ * ----------------------------------------------------
+ */
+bool SC_BeginAts(uint16 AtsIndex, uint16 TimeOffset)
 {
-    UT_Stub_RegisterContext(UT_KEY(SC_StartAtsCmd), CmdPacket);
-    UT_DEFAULT_IMPL(SC_StartAtsCmd);
+    UT_GenStub_SetupReturnBuffer(SC_BeginAts, bool);
+
+    UT_GenStub_AddParam(SC_BeginAts, uint16, AtsIndex);
+    UT_GenStub_AddParam(SC_BeginAts, uint16, TimeOffset);
+
+    UT_GenStub_Execute(SC_BeginAts, Basic, NULL);
+
+    return UT_GenStub_GetReturnValue(SC_BeginAts, bool);
 }
 
-void SC_StopAtsCmd(const CFE_SB_Buffer_t *CmdPacket)
+/*
+ * ----------------------------------------------------
+ * Generated stub function for SC_ContinueAtsOnFailureCmd()
+ * ----------------------------------------------------
+ */
+void SC_ContinueAtsOnFailureCmd(const CFE_SB_Buffer_t *BufPtr)
 {
-    UT_Stub_RegisterContext(UT_KEY(SC_StopAtsCmd), CmdPacket);
-    UT_DEFAULT_IMPL(SC_StopAtsCmd);
+    UT_GenStub_AddParam(SC_ContinueAtsOnFailureCmd, const CFE_SB_Buffer_t *, BufPtr);
+
+    UT_GenStub_Execute(SC_ContinueAtsOnFailureCmd, Basic, NULL);
 }
 
-void SC_KillAts(void)
+/*
+ * ----------------------------------------------------
+ * Generated stub function for SC_GroundSwitchCmd()
+ * ----------------------------------------------------
+ */
+void SC_GroundSwitchCmd(const CFE_SB_Buffer_t *BufPtr)
 {
-    UT_DEFAULT_IMPL(SC_KillAts);
+    UT_GenStub_AddParam(SC_GroundSwitchCmd, const CFE_SB_Buffer_t *, BufPtr);
+
+    UT_GenStub_Execute(SC_GroundSwitchCmd, Basic, NULL);
 }
 
-void SC_GroundSwitchCmd(const CFE_SB_Buffer_t *CmdPacket)
-{
-    UT_Stub_RegisterContext(UT_KEY(SC_GroundSwitchCmd), CmdPacket);
-    UT_DEFAULT_IMPL(SC_GroundSwitchCmd);
-}
-
+/*
+ * ----------------------------------------------------
+ * Generated stub function for SC_InlineSwitch()
+ * ----------------------------------------------------
+ */
 bool SC_InlineSwitch(void)
 {
-    return UT_DEFAULT_IMPL(SC_InlineSwitch);
+    UT_GenStub_SetupReturnBuffer(SC_InlineSwitch, bool);
+
+    UT_GenStub_Execute(SC_InlineSwitch, Basic, NULL);
+
+    return UT_GenStub_GetReturnValue(SC_InlineSwitch, bool);
 }
 
+/*
+ * ----------------------------------------------------
+ * Generated stub function for SC_JumpAtsCmd()
+ * ----------------------------------------------------
+ */
+void SC_JumpAtsCmd(const CFE_SB_Buffer_t *BufPtr)
+{
+    UT_GenStub_AddParam(SC_JumpAtsCmd, const CFE_SB_Buffer_t *, BufPtr);
+
+    UT_GenStub_Execute(SC_JumpAtsCmd, Basic, NULL);
+}
+
+/*
+ * ----------------------------------------------------
+ * Generated stub function for SC_KillAts()
+ * ----------------------------------------------------
+ */
+void SC_KillAts(void)
+{
+
+    UT_GenStub_Execute(SC_KillAts, Basic, NULL);
+}
+
+/*
+ * ----------------------------------------------------
+ * Generated stub function for SC_ServiceSwitchPend()
+ * ----------------------------------------------------
+ */
 void SC_ServiceSwitchPend(void)
 {
-    UT_DEFAULT_IMPL(SC_ServiceSwitchPend);
+
+    UT_GenStub_Execute(SC_ServiceSwitchPend, Basic, NULL);
 }
 
-void SC_JumpAtsCmd(const CFE_SB_Buffer_t *CmdPacket)
+/*
+ * ----------------------------------------------------
+ * Generated stub function for SC_StartAtsCmd()
+ * ----------------------------------------------------
+ */
+void SC_StartAtsCmd(const CFE_SB_Buffer_t *BufPtr)
 {
-    UT_Stub_RegisterContext(UT_KEY(SC_JumpAtsCmd), CmdPacket);
-    UT_DEFAULT_IMPL(SC_JumpAtsCmd);
+    UT_GenStub_AddParam(SC_StartAtsCmd, const CFE_SB_Buffer_t *, BufPtr);
+
+    UT_GenStub_Execute(SC_StartAtsCmd, Basic, NULL);
 }
 
-void SC_ContinueAtsOnFailureCmd(const CFE_SB_Buffer_t *CmdPacket)
+/*
+ * ----------------------------------------------------
+ * Generated stub function for SC_StopAtsCmd()
+ * ----------------------------------------------------
+ */
+void SC_StopAtsCmd(const CFE_SB_Buffer_t *BufPtr)
 {
-    UT_Stub_RegisterContext(UT_KEY(SC_ContinueAtsOnFailureCmd), CmdPacket);
-    UT_DEFAULT_IMPL(SC_ContinueAtsOnFailureCmd);
-}
+    UT_GenStub_AddParam(SC_StopAtsCmd, const CFE_SB_Buffer_t *, BufPtr);
 
-void SC_AppendAtsCmd(const CFE_SB_Buffer_t *CmdPacket)
-{
-    UT_Stub_RegisterContext(UT_KEY(SC_AppendAtsCmd), CmdPacket);
-    UT_DEFAULT_IMPL(SC_AppendAtsCmd);
+    UT_GenStub_Execute(SC_StopAtsCmd, Basic, NULL);
 }

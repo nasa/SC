@@ -17,33 +17,55 @@
  * limitations under the License.
  ************************************************************************/
 
-/*
- * Includes
+/**
+ * @file
+ *
+ * Auto-Generated stub implementations for functions defined in sc_state header
  */
 
 #include "sc_state.h"
+#include "utgenstub.h"
 
-/* UT includes */
-#include "uttest.h"
-#include "utassert.h"
-#include "utstubs.h"
-
-void SC_GetNextRtsTime(void)
-{
-    UT_DEFAULT_IMPL(SC_GetNextRtsTime);
-}
-
-void SC_UpdateNextTime(void)
-{
-    UT_DEFAULT_IMPL(SC_UpdateNextTime);
-}
-
-void SC_GetNextRtsCommand(void)
-{
-    UT_DEFAULT_IMPL(SC_GetNextRtsCommand);
-}
-
+/*
+ * ----------------------------------------------------
+ * Generated stub function for SC_GetNextAtsCommand()
+ * ----------------------------------------------------
+ */
 void SC_GetNextAtsCommand(void)
 {
-    UT_DEFAULT_IMPL(SC_GetNextAtsCommand);
+
+    UT_GenStub_Execute(SC_GetNextAtsCommand, Basic, NULL);
+}
+
+/*
+ * ----------------------------------------------------
+ * Generated stub function for SC_GetNextRtsCommand()
+ * ----------------------------------------------------
+ */
+void SC_GetNextRtsCommand(void)
+{
+
+    UT_GenStub_Execute(SC_GetNextRtsCommand, Basic, NULL);
+}
+
+/*
+ * ----------------------------------------------------
+ * Generated stub function for SC_GetNextRtsTime()
+ * ----------------------------------------------------
+ */
+void SC_GetNextRtsTime(void)
+{
+
+    UT_GenStub_Execute(SC_GetNextRtsTime, Basic, NULL);
+}
+
+/*
+ * ----------------------------------------------------
+ * Generated stub function for SC_UpdateNextTime()
+ * ----------------------------------------------------
+ */
+void SC_UpdateNextTime(void)
+{
+
+    UT_GenStub_Execute(SC_UpdateNextTime, Basic, NULL);
 }
