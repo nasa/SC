@@ -8,6 +8,7 @@ set(APP_SRC_FILES
   fsw/src/sc_state.c
   fsw/src/sc_loads.c
   fsw/src/sc_cmds.c
+  fsw/src/sc_dispatch.c
 )
 
 # Create the app module

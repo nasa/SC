@@ -174,7 +174,7 @@ void SC_LoadDefaultTables(void);
  *  \par Assumptions, External Events, and Notes:
  *        None
  *
- *  \sa #SC_TableManageCmd
+ *  \sa #SC_ManageTableCmd
  */
 void SC_RegisterManageCmds(void);
 

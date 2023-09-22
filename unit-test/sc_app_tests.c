@@ -66,7 +66,7 @@ void UT_Setup_InitTables(void)
 void SC_AppMain_Test_Nominal(void)
 {
     CFE_SB_MsgId_t TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
-    size_t         MsgSize   = sizeof(SC_NoArgsCmd_t);
+    size_t         MsgSize   = sizeof(SC_NoopCmd_t);
 
     /* Called in a subfunction.  Set here to prevent segmentation fault. */
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);

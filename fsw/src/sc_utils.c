@@ -142,39 +142,6 @@ bool SC_CompareAbsTime(SC_AbsTimeTag_t AbsTime1, SC_AbsTimeTag_t AbsTime2)
     return Status;
 }
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-/*                                                                 */
-/* SC Verify the length of the command                             */
-/*                                                                 */
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-bool SC_VerifyCmdLength(const CFE_MSG_Message_t *Msg, size_t ExpectedLength)
-{
-    CFE_SB_MsgId_t    MessageID    = CFE_SB_INVALID_MSG_ID;
-    CFE_MSG_FcnCode_t CommandCode  = 0;
-    bool              Result       = true;
-    size_t            ActualLength = 0;
-
-    CFE_MSG_GetSize(Msg, &ActualLength);
-
-    /* Verify the command packet length */
-    if (ExpectedLength != ActualLength)
-    {
-        CFE_MSG_GetMsgId(Msg, &MessageID);
-        CFE_MSG_GetFcnCode(Msg, &CommandCode);
-
-        CFE_EVS_SendEvent(SC_LEN_ERR_EID, CFE_EVS_EventType_ERROR,
-                          "Invalid msg length: ID = 0x%08lX, CC = %d, Len = %d, Expected = %d",
-                          (unsigned long)CFE_SB_MsgIdToValue(MessageID), CommandCode, (int)ActualLength,
-                          (int)ExpectedLength);
-        Result = false;
-        if (CFE_SB_MsgIdToValue(MessageID) == SC_CMD_MID)
-        {
-            SC_OperData.HkPacket.Payload.CmdErrCtr++;
-        }
-    }
-    return (Result);
-}
-
 uint16 SC_ToggleAtsIndex(void)
 {
     uint16 CurrAtsIndex = SC_ATS_NUM_TO_INDEX(SC_OperData.AtsCtrlBlckAddr->AtsNumber);

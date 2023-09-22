@@ -58,11 +58,11 @@
 typedef struct
 {
     SC_RtsEntryHeader_t hdr1;
-    SC_NoArgsCmd_t      cmd1;
+    SC_NoopCmd_t        cmd1;
     SC_RtsEntryHeader_t hdr2;
-    SC_RtsCmd_t         cmd2;
+    SC_EnableRtsCmd_t   cmd2;
     SC_RtsEntryHeader_t hdr3;
-    SC_RtsCmd_t         cmd3;
+    SC_StartRtsCmd_t    cmd3;
 } SC_RtsStruct001_t;
 
 /* Define the union to size the table correctly */
@@ -82,14 +82,14 @@ SC_RtsTable001_t SC_Rts001 = {
     .rts.cmd1.CmdHeader = CFE_MSG_CMD_HDR_INIT(SC_CMD_MID, SC_MEMBER_SIZE(cmd1), SC_NOOP_CC, SC_NOOP_CKSUM),
 
     /* 2 */
-    .rts.hdr2.TimeTag       = 5,
-    .rts.cmd2.CmdHeader     =
+    .rts.hdr2.TimeTag = 5,
+    .rts.cmd2.CmdHeader =
         CFE_MSG_CMD_HDR_INIT(SC_CMD_MID, SC_MEMBER_SIZE(cmd2), SC_ENABLE_RTS_CC, SC_ENABLE_RTS2_CKSUM),
     .rts.cmd2.Payload.RtsId = 2,
 
     /* 3 */
-    .rts.hdr3.TimeTag       = 5,
-    .rts.cmd3.CmdHeader     = CFE_MSG_CMD_HDR_INIT(SC_CMD_MID, SC_MEMBER_SIZE(cmd3), SC_START_RTS_CC, SC_START_RTS2_CKSUM),
+    .rts.hdr3.TimeTag   = 5,
+    .rts.cmd3.CmdHeader = CFE_MSG_CMD_HDR_INIT(SC_CMD_MID, SC_MEMBER_SIZE(cmd3), SC_START_RTS_CC, SC_START_RTS2_CKSUM),
     .rts.cmd3.Payload.RtsId = 2};
 
 /* Macro for table structure */

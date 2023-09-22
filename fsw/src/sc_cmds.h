@@ -25,7 +25,8 @@
 #ifndef SC_CMDS_H
 #define SC_CMDS_H
 
-#include "cfe.h"
+#include "common_types.h"
+#include "sc_msg.h"
 
 typedef enum
 {
@@ -47,11 +48,11 @@ typedef enum
  *  \par Assumptions, External Events, and Notes:
  *       None
  *
- *  \param[in] BufPtr Pointer to Software Bus buffer
+ *  \param[in] Cmd Pointer to Software Bus buffer
  *
  *  \sa #SC_MANAGE_TABLE_CC
  */
-void SC_TableManageCmd(const CFE_SB_Buffer_t *BufPtr);
+void SC_ManageTableCmd(const SC_ManageTableCmd_t *Cmd);
 
 /**
  * \brief Manage pending update to an RTS table
@@ -68,7 +69,7 @@ void SC_TableManageCmd(const CFE_SB_Buffer_t *BufPtr);
  *
  *  \param [in]         ArrayIndex     index into array of RTS tables
  *
- *  \sa #SC_TableManageCmd
+ *  \sa #SC_ManageTableCmd
  */
 void SC_ManageRtsTable(int32 ArrayIndex);
 
@@ -87,7 +88,7 @@ void SC_ManageRtsTable(int32 ArrayIndex);
  *
  *  \param [in]         ArrayIndex     index into array of ATS tables
  *
- *  \sa #SC_TableManageCmd
+ *  \sa #SC_ManageTableCmd
  */
 void SC_ManageAtsTable(int32 ArrayIndex);
 
@@ -104,38 +105,9 @@ void SC_ManageAtsTable(int32 ArrayIndex);
  *  \par Assumptions, External Events, and Notes:
  *        None
  *
- *  \sa #SC_TableManageCmd
+ *  \sa #SC_ManageTableCmd
  */
 void SC_ManageTable(SC_TableType type, int32 ArrayIndex);
-
-/**
- * \brief Routes commands to be processed
- *
- *  \par Description
- *           This routine determines the source of a request to
- *           the Stored Command processor and routes it to one of the lower
- *           level request processing routines
- *
- *  \par Assumptions, External Events, and Notes:
- *        None
- *
- *  \param[in] BufPtr Pointer to Software Bus buffer
- */
-void SC_ProcessRequest(const CFE_SB_Buffer_t *BufPtr);
-
-/**
- * \brief Processes commands
- *
- *  \par Description
- *       Process commands. Commands can be from external sources or from SC
- *       itself.
- *
- *  \par Assumptions, External Events, and Notes:
- *        None
- *
- *  \param[in] BufPtr Pointer to Software Bus buffer
- */
-void SC_ProcessCommand(const CFE_SB_Buffer_t *BufPtr);
 
 /**
  * \brief Sends out an Event message
@@ -146,11 +118,11 @@ void SC_ProcessCommand(const CFE_SB_Buffer_t *BufPtr);
  *  \par Assumptions, External Events, and Notes:
  *        None
  *
- *  \param[in] BufPtr Pointer to Software Bus buffer
+ *  \param[in] Cmd Pointer to Software Bus buffer
  *
  *  \sa #SC_NOOP_CC
  */
-void SC_NoOpCmd(const CFE_SB_Buffer_t *BufPtr);
+void SC_NoopCmd(const SC_NoopCmd_t *Cmd);
 
 /**
  * \brief Reset Counters Command
@@ -161,11 +133,11 @@ void SC_NoOpCmd(const CFE_SB_Buffer_t *BufPtr);
  *  \par Assumptions, External Events, and Notes:
  *        None
  *
- *  \param[in] BufPtr Pointer to Software Bus buffer
+ *  \param[in] Cmd Pointer to Software Bus buffer
  *
  *  \sa #SC_RESET_COUNTERS_CC
  */
-void SC_ResetCountersCmd(const CFE_SB_Buffer_t *BufPtr);
+void SC_ResetCountersCmd(const SC_ResetCountersCmd_t *Cmd);
 
 /**
  * \brief Send Hk Packet to the ground
@@ -179,6 +151,9 @@ void SC_ResetCountersCmd(const CFE_SB_Buffer_t *BufPtr);
  *        None
  */
 void SC_SendHkPacket(void);
+
+void SC_SendHkCmd(const SC_SendHkCmd_t *Cmd);
+void SC_OneHzWakeupCmd(const SC_OneHzWakeupCmd_t *Cmd);
 
 /**
  * \brief Process an ATS Command

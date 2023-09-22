@@ -233,7 +233,8 @@ void SC_ProcessAtpCmd_Test_SBErrorAtsA(void)
     UtAssert_True(SC_OperData.NumCmdsSec == 1, "SC_OperData.NumCmdsSec == 1");
     UtAssert_True(SC_OperData.AtsCmdStatusTblAddr[0][0] == SC_FAILED_DISTRIB,
                   "SC_OperData.AtsCmdStatusTblAddr[0][0] == SC_FAILED_DISTRIB");
-    UtAssert_True(SC_OperData.HkPacket.Payload.LastAtsErrSeq == SC_ATSA, "SC_OperData.HkPacket.Payload.LastAtsErrSeq == SC_ATSA");
+    UtAssert_True(SC_OperData.HkPacket.Payload.LastAtsErrSeq == SC_ATSA,
+                  "SC_OperData.HkPacket.Payload.LastAtsErrSeq == SC_ATSA");
     UtAssert_True(SC_OperData.HkPacket.Payload.LastAtsErrCmd == 1, "SC_OperData.HkPacket.Payload.LastAtsErrCmd == 1");
 
     UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_ATS_DIST_ERR_EID);
@@ -280,7 +281,8 @@ void SC_ProcessAtpCmd_Test_SBErrorAtsB(void)
     UtAssert_True(SC_OperData.NumCmdsSec == 1, "SC_OperData.NumCmdsSec == 1");
     UtAssert_True(SC_OperData.AtsCmdStatusTblAddr[1][0] == SC_FAILED_DISTRIB,
                   "SC_OperData.AtsCmdStatusTblAddr[0][0] == SC_FAILED_DISTRIB");
-    UtAssert_True(SC_OperData.HkPacket.Payload.LastAtsErrSeq == SC_ATSB, "SC_OperData.HkPacket.Payload.LastAtsErrSeq == SC_ATSB");
+    UtAssert_True(SC_OperData.HkPacket.Payload.LastAtsErrSeq == SC_ATSB,
+                  "SC_OperData.HkPacket.Payload.LastAtsErrSeq == SC_ATSB");
     UtAssert_True(SC_OperData.HkPacket.Payload.LastAtsErrCmd == 1, "SC_OperData.HkPacket.Payload.LastAtsErrCmd == 1");
 
     UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_ATS_DIST_ERR_EID);
@@ -330,7 +332,8 @@ void SC_ProcessAtpCmd_Test_ChecksumFailedAtsA(void)
     /* Verify results */
     UtAssert_True(SC_OperData.HkPacket.Payload.AtsCmdCtr == 0, "SC_OperData.HkPacket.Payload.AtsCmdCtr == 0");
     UtAssert_True(SC_OperData.HkPacket.Payload.AtsCmdErrCtr == 1, "SC_OperData.HkPacket.Payload.AtsCmdErrCtr == 1");
-    UtAssert_True(SC_OperData.HkPacket.Payload.LastAtsErrSeq == SC_ATSA, "SC_OperData.HkPacket.Payload.LastAtsErrSeq == SC_ATSA");
+    UtAssert_True(SC_OperData.HkPacket.Payload.LastAtsErrSeq == SC_ATSA,
+                  "SC_OperData.HkPacket.Payload.LastAtsErrSeq == SC_ATSA");
     UtAssert_True(SC_OperData.HkPacket.Payload.LastAtsErrCmd == 1, "SC_OperData.HkPacket.Payload.LastAtsErrCmd == 1");
     UtAssert_True(SC_OperData.AtsCmdStatusTblAddr[0][0] == SC_FAILED_CHECKSUM,
                   "SC_OperData.AtsCmdStatusTblAddr[1][0] == SC_FAILED_CHECKSUM");
@@ -382,7 +385,8 @@ void SC_ProcessAtpCmd_Test_ChecksumFailedAtsB(void)
     /* Verify results */
     UtAssert_True(SC_OperData.HkPacket.Payload.AtsCmdCtr == 0, "SC_OperData.HkPacket.Payload.AtsCmdCtr == 0");
     UtAssert_True(SC_OperData.HkPacket.Payload.AtsCmdErrCtr == 1, "SC_OperData.HkPacket.Payload.AtsCmdErrCtr == 1");
-    UtAssert_True(SC_OperData.HkPacket.Payload.LastAtsErrSeq == SC_ATSB, "SC_OperData.HkPacket.Payload.LastAtsErrSeq == SC_ATSB");
+    UtAssert_True(SC_OperData.HkPacket.Payload.LastAtsErrSeq == SC_ATSB,
+                  "SC_OperData.HkPacket.Payload.LastAtsErrSeq == SC_ATSB");
     UtAssert_True(SC_OperData.HkPacket.Payload.LastAtsErrCmd == 1, "SC_OperData.HkPacket.Payload.LastAtsErrCmd == 1");
     UtAssert_True(SC_OperData.AtsCmdStatusTblAddr[1][0] == SC_FAILED_CHECKSUM,
                   "SC_OperData.AtsCmdStatusTblAddr[1][0] == SC_FAILED_CHECKSUM");
@@ -434,7 +438,8 @@ void SC_ProcessAtpCmd_Test_ChecksumFailedAtsAContinue(void)
     /* Verify results */
     UtAssert_True(SC_OperData.HkPacket.Payload.AtsCmdCtr == 0, "SC_OperData.HkPacket.Payload.AtsCmdCtr == 0");
     UtAssert_True(SC_OperData.HkPacket.Payload.AtsCmdErrCtr == 1, "SC_OperData.HkPacket.Payload.AtsCmdErrCtr == 1");
-    UtAssert_True(SC_OperData.HkPacket.Payload.LastAtsErrSeq == SC_ATSA, "SC_OperData.HkPacket.Payload.LastAtsErrSeq == SC_ATSA");
+    UtAssert_True(SC_OperData.HkPacket.Payload.LastAtsErrSeq == SC_ATSA,
+                  "SC_OperData.HkPacket.Payload.LastAtsErrSeq == SC_ATSA");
     UtAssert_True(SC_OperData.HkPacket.Payload.LastAtsErrCmd == 1, "SC_OperData.HkPacket.Payload.LastAtsErrCmd == 1");
     UtAssert_True(SC_OperData.AtsCmdStatusTblAddr[0][0] == SC_FAILED_CHECKSUM,
                   "SC_OperData.AtsCmdStatusTblAddr[1][0] == SC_FAILED_CHECKSUM");
@@ -467,7 +472,8 @@ void SC_ProcessAtpCmd_Test_CmdNumberMismatchAtsA(void)
     /* Verify results */
     UtAssert_True(SC_OperData.HkPacket.Payload.AtsCmdCtr == 0, "SC_OperData.HkPacket.Payload.AtsCmdCtr == 0");
     UtAssert_True(SC_OperData.HkPacket.Payload.AtsCmdErrCtr == 1, "SC_OperData.HkPacket.Payload.AtsCmdErrCtr == 1");
-    UtAssert_True(SC_OperData.HkPacket.Payload.LastAtsErrSeq == SC_ATSA, "SC_OperData.HkPacket.Payload.LastAtsErrSeq == SC_ATSA");
+    UtAssert_True(SC_OperData.HkPacket.Payload.LastAtsErrSeq == SC_ATSA,
+                  "SC_OperData.HkPacket.Payload.LastAtsErrSeq == SC_ATSA");
     UtAssert_True(SC_OperData.HkPacket.Payload.LastAtsErrCmd == 1, "SC_OperData.HkPacket.Payload.LastAtsErrCmd == 1");
     UtAssert_True(SC_OperData.AtsCmdStatusTblAddr[0][0] == SC_SKIPPED,
                   "SC_OperData.AtsCmdStatusTblAddr[0][0] == SC_SKIPPED");
@@ -501,7 +507,8 @@ void SC_ProcessAtpCmd_Test_CmdNumberMismatchAtsB(void)
     /* Verify results */
     UtAssert_True(SC_OperData.HkPacket.Payload.AtsCmdCtr == 0, "SC_OperData.HkPacket.Payload.AtsCmdCtr == 0");
     UtAssert_True(SC_OperData.HkPacket.Payload.AtsCmdErrCtr == 1, "SC_OperData.HkPacket.Payload.AtsCmdErrCtr == 1");
-    UtAssert_True(SC_OperData.HkPacket.Payload.LastAtsErrSeq == SC_ATSB, "SC_OperData.HkPacket.Payload.LastAtsErrSeq == SC_ATSB");
+    UtAssert_True(SC_OperData.HkPacket.Payload.LastAtsErrSeq == SC_ATSB,
+                  "SC_OperData.HkPacket.Payload.LastAtsErrSeq == SC_ATSB");
     UtAssert_True(SC_OperData.HkPacket.Payload.LastAtsErrCmd == 1, "SC_OperData.HkPacket.Payload.LastAtsErrCmd == 1");
     UtAssert_True(SC_OperData.AtsCmdStatusTblAddr[1][0] == SC_SKIPPED,
                   "SC_OperData.AtsCmdStatusTblAddr[1][0] == SC_SKIPPED");
@@ -534,7 +541,8 @@ void SC_ProcessAtpCmd_Test_CmdNotLoaded(void)
     /* Verify results */
     UtAssert_True(SC_OperData.HkPacket.Payload.AtsCmdCtr == 0, "SC_OperData.HkPacket.Payload.AtsCmdCtr == 0");
     UtAssert_True(SC_OperData.HkPacket.Payload.AtsCmdErrCtr == 1, "SC_OperData.HkPacket.Payload.AtsCmdErrCtr == 1");
-    UtAssert_True(SC_OperData.HkPacket.Payload.LastAtsErrSeq == SC_ATSA, "SC_OperData.HkPacket.Payload.LastAtsErrSeq == SC_ATSA");
+    UtAssert_True(SC_OperData.HkPacket.Payload.LastAtsErrSeq == SC_ATSA,
+                  "SC_OperData.HkPacket.Payload.LastAtsErrSeq == SC_ATSA");
     UtAssert_True(SC_OperData.HkPacket.Payload.LastAtsErrCmd == 1, "SC_OperData.HkPacket.Payload.LastAtsErrCmd == 1");
 
     UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_ATS_SKP_ERR_EID);
@@ -841,18 +849,18 @@ void SC_SendHkPacket_Test(void)
     SC_OperData.HkPacket.Payload.LastRtsErrCmd            = 12;
     SC_OperData.HkPacket.Payload.AppendCmdArg             = 13;
     SC_OperData.HkPacket.Payload.AppendEntryCount         = 14;
-    SC_AppData.AppendWordCount                    = 15;
+    SC_AppData.AppendWordCount                            = 15;
     SC_OperData.HkPacket.Payload.AppendLoadCount          = 16;
-    SC_OperData.AtsInfoTblAddr[0].AtsSize         = 0;
-    SC_OperData.AtsInfoTblAddr[1].AtsSize         = 0;
-    SC_OperData.AtsCtrlBlckAddr->AtsNumber        = 17;
-    SC_OperData.AtsCtrlBlckAddr->AtpState         = 18;
-    SC_OperData.AtsCtrlBlckAddr->CmdNumber        = 19;
-    SC_OperData.AtsCtrlBlckAddr->SwitchPendFlag   = 0;
-    SC_AppData.NextCmdTime[0]                     = 0;
-    SC_AppData.NextCmdTime[1]                     = 0;
-    SC_OperData.RtsCtrlBlckAddr->NumRtsActive     = 20;
-    SC_OperData.RtsCtrlBlckAddr->RtsNumber        = 21;
+    SC_OperData.AtsInfoTblAddr[0].AtsSize                 = 0;
+    SC_OperData.AtsInfoTblAddr[1].AtsSize                 = 0;
+    SC_OperData.AtsCtrlBlckAddr->AtsNumber                = 17;
+    SC_OperData.AtsCtrlBlckAddr->AtpState                 = 18;
+    SC_OperData.AtsCtrlBlckAddr->CmdNumber                = 19;
+    SC_OperData.AtsCtrlBlckAddr->SwitchPendFlag           = 0;
+    SC_AppData.NextCmdTime[0]                             = 0;
+    SC_AppData.NextCmdTime[1]                             = 0;
+    SC_OperData.RtsCtrlBlckAddr->NumRtsActive             = 20;
+    SC_OperData.RtsCtrlBlckAddr->RtsNumber                = 21;
     SC_OperData.HkPacket.Payload.ContinueAtsOnFailureFlag = 1;
 
     for (i = 0; i < SC_NUMBER_OF_RTS - 1; i++)
@@ -864,8 +872,9 @@ void SC_SendHkPacket_Test(void)
     SC_OperData.RtsInfoTblAddr[SC_NUMBER_OF_RTS - 1].DisabledFlag = 0;
     SC_OperData.RtsInfoTblAddr[SC_NUMBER_OF_RTS - 1].RtsStatus    = 0;
 
-    LastRtsHkIndex =
-        sizeof(SC_OperData.HkPacket.Payload.RtsExecutingStatus) / sizeof(SC_OperData.HkPacket.Payload.RtsExecutingStatus[0]) - 1;
+    LastRtsHkIndex = sizeof(SC_OperData.HkPacket.Payload.RtsExecutingStatus) /
+                         sizeof(SC_OperData.HkPacket.Payload.RtsExecutingStatus[0]) -
+                     1;
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_SendHkPacket());
@@ -873,7 +882,8 @@ void SC_SendHkPacket_Test(void)
     /* Verify results */
     UtAssert_True(SC_OperData.HkPacket.Payload.CmdErrCtr == 1, "SC_OperData.HkPacket.Payload.CmdErrCtr == 1");
     UtAssert_True(SC_OperData.HkPacket.Payload.CmdCtr == 2, "SC_OperData.HkPacket.Payload.CmdCtr == 2");
-    UtAssert_True(SC_OperData.HkPacket.Payload.RtsActiveErrCtr == 3, "SC_OperData.HkPacket.Payload.RtsActiveErrCtr == 3");
+    UtAssert_True(SC_OperData.HkPacket.Payload.RtsActiveErrCtr == 3,
+                  "SC_OperData.HkPacket.Payload.RtsActiveErrCtr == 3");
     UtAssert_True(SC_OperData.HkPacket.Payload.RtsActiveCtr == 4, "SC_OperData.HkPacket.Payload.RtsActiveCtr == 4");
     UtAssert_True(SC_OperData.HkPacket.Payload.AtsCmdCtr == 5, "SCSC_OperData.HkPacket.Payload.AtsCmdCtr == 5");
     UtAssert_True(SC_OperData.HkPacket.Payload.AtsCmdErrCtr == 6, "SC_OperData.HkPacket.Payload.AtsCmdErrCtr == 6");
@@ -884,8 +894,10 @@ void SC_SendHkPacket_Test(void)
     UtAssert_True(SC_OperData.HkPacket.Payload.LastRtsErrSeq == 11, "SC_OperData.HkPacket.Payload.LastRtsErrSeq == 11");
     UtAssert_True(SC_OperData.HkPacket.Payload.LastRtsErrCmd == 12, "SC_OperData.HkPacket.Payload.LastRtsErrCmd == 12");
     UtAssert_True(SC_OperData.HkPacket.Payload.AppendCmdArg == 13, "SC_OperData.HkPacket.Payload.AppendCmdArg == 13");
-    UtAssert_True(SC_OperData.HkPacket.Payload.AppendEntryCount == 14, "SC_OperData.HkPacket.Payload.AppendEntryCount == 14");
-    UtAssert_True(SC_OperData.HkPacket.Payload.AppendLoadCount == 16, "SC_OperData.HkPacket.Payload.AppendLoadCount == 16");
+    UtAssert_True(SC_OperData.HkPacket.Payload.AppendEntryCount == 14,
+                  "SC_OperData.HkPacket.Payload.AppendEntryCount == 14");
+    UtAssert_True(SC_OperData.HkPacket.Payload.AppendLoadCount == 16,
+                  "SC_OperData.HkPacket.Payload.AppendLoadCount == 16");
     UtAssert_True(SC_OperData.HkPacket.Payload.AtpFreeBytes[0] ==
                       (SC_ATS_BUFF_SIZE32 * SC_BYTES_IN_WORD) -
                           (SC_OperData.AtsInfoTblAddr[0].AtsSize * SC_BYTES_IN_WORD),
@@ -924,63 +936,10 @@ void SC_SendHkPacket_Test(void)
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
 }
 
-void SC_ProcessRequest_Test_CmdMID(void)
-{
-    /**
-     **  Test case: SC_CMD_MID
-     **/
-
-    CFE_SB_MsgId_t    TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
-    CFE_MSG_FcnCode_t FcnCode   = SC_NOOP_CC;
-
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
-
-    /* Execute the function being tested */
-    UtAssert_VOIDCALL(SC_ProcessRequest(&UT_CmdBuf.Buf));
-
-    /* Verify results */
-    UtAssert_True(SC_OperData.HkPacket.Payload.CmdCtr == 1, "SC_OperData.HkPacket.Payload.CmdCtr == 1");
-    UtAssert_True(SC_OperData.HkPacket.Payload.CmdErrCtr == 0, "SC_OperData.HkPacket.Payload.CmdErrCtr == 0");
-
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_NOOP_INF_EID);
-    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
-}
-
 void SC_ProcessRequest_Test_HkMID(void)
 {
-    /**
-     **  Test case: SC_SEND_HK_MID
-     **/
-
-    CFE_SB_MsgId_t TestMsgId = CFE_SB_ValueToMsgId(SC_SEND_HK_MID);
-
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
-
     /* Execute the function being tested */
-    UtAssert_VOIDCALL(SC_ProcessRequest(&UT_CmdBuf.Buf));
-
-    /* Verify results */
-    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
-}
-
-void SC_ProcessRequest_Test_HkMIDNoVerifyCmdLength(void)
-{
-    /**
-     **  Test case: SC_SEND_HK_MID
-     **/
-
-    CFE_SB_MsgId_t TestMsgId = CFE_SB_ValueToMsgId(SC_SEND_HK_MID);
-
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-
-    /* Execute the function being tested */
-    UtAssert_VOIDCALL(SC_ProcessRequest(&UT_CmdBuf.Buf));
+    UtAssert_VOIDCALL(SC_SendHkCmd(&UT_CmdBuf.SendHkCmd));
 
     /* Verify results */
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
@@ -988,23 +947,13 @@ void SC_ProcessRequest_Test_HkMIDNoVerifyCmdLength(void)
 
 void SC_ProcessRequest_Test_HkMIDAutoStartRts(void)
 {
-    /**
-     **  Test case: SC_SEND_HK_MID
-     **/
-
-    CFE_SB_MsgId_t TestMsgId = CFE_SB_ValueToMsgId(SC_SEND_HK_MID);
-
     SC_AppData.AutoStartRTS = 1;
 
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
-
     /* Execute the function being tested */
-    UtAssert_VOIDCALL(SC_ProcessRequest(&UT_CmdBuf.Buf));
+    UtAssert_VOIDCALL(SC_SendHkCmd(&UT_CmdBuf.SendHkCmd));
 
     /* Verify results */
-    UtAssert_True(SC_AppData.AutoStartRTS == 0, "SC_AppData.AutoStartRTS == 0");
+    UtAssert_UINT32_EQ(SC_AppData.AutoStartRTS, 0);
     UtAssert_BOOL_FALSE(SC_OperData.RtsInfoTblAddr[SC_AppData.AutoStartRTS].DisabledFlag);
 
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
@@ -1012,117 +961,69 @@ void SC_ProcessRequest_Test_HkMIDAutoStartRts(void)
 
 void SC_ProcessRequest_Test_HkMIDAutoStartRtsLoaded(void)
 {
-    /**
-     **  Test case: SC_SEND_HK_MID
-     **/
-
-    CFE_SB_MsgId_t TestMsgId = CFE_SB_ValueToMsgId(SC_SEND_HK_MID);
-
     SC_AppData.AutoStartRTS                                           = 1;
     SC_OperData.RtsInfoTblAddr[SC_AppData.AutoStartRTS - 1].RtsStatus = SC_LOADED;
 
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
-
     /* Execute the function being tested */
-    UtAssert_VOIDCALL(SC_ProcessRequest(&UT_CmdBuf.Buf));
+    UtAssert_VOIDCALL(SC_SendHkCmd(&UT_CmdBuf.SendHkCmd));
 
     /* Verify results */
-    UtAssert_True(SC_AppData.AutoStartRTS == 0, "SC_AppData.AutoStartRTS == 0");
+    UtAssert_UINT32_EQ(SC_AppData.AutoStartRTS, 0);
     UtAssert_BOOL_FALSE(SC_OperData.RtsInfoTblAddr[SC_AppData.AutoStartRTS].DisabledFlag);
 
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
 }
 
-void SC_ProcessRequest_Test_1HzWakeupNONE(void)
+void SC_ProcessRequest_Test_OneHzWakeupNONE(void)
 {
-    /**
-     **  Test case: SC_1HZ_WAKEUP_MID with SC_AppData.NextProcNumber == SC_NONE
-     **/
-    CFE_SB_MsgId_t TestMsgId = CFE_SB_ValueToMsgId(SC_1HZ_WAKEUP_MID);
-
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
-
     SC_OperData.AtsCtrlBlckAddr->SwitchPendFlag = true;
     SC_AppData.NextProcNumber                   = SC_NONE;
     SC_AppData.NextCmdTime[SC_ATP]              = 0;
     SC_AppData.CurrentTime                      = 0;
 
     /* Execute the function being tested */
-    UtAssert_VOIDCALL(SC_ProcessRequest(&UT_CmdBuf.Buf));
+    UtAssert_VOIDCALL(SC_OneHzWakeupCmd(&UT_CmdBuf.OneHzWakeupCmd));
 
     /* Verify results */
-    UtAssert_True(SC_OperData.NumCmdsSec == 0, "SC_OperData.NumCmdsSec == 0");
+    UtAssert_UINT32_EQ(SC_OperData.NumCmdsSec, 0);
 
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
 }
 
-void SC_ProcessRequest_Test_1HzWakeupNoSwitchPending(void)
+void SC_ProcessRequest_Test_OneHzWakeupNoSwitchPending(void)
 {
-    /**
-     **  Test case: SC_1HZ_WAKEUP_MID with SC_OperData.AtsCtrlBlckAddr->SwitchPendFlag == false
-     **/
-    CFE_SB_MsgId_t TestMsgId = CFE_SB_ValueToMsgId(SC_1HZ_WAKEUP_MID);
-
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
-
     SC_OperData.AtsCtrlBlckAddr->SwitchPendFlag = false;
     SC_AppData.NextProcNumber                   = SC_NONE;
     SC_AppData.NextCmdTime[SC_ATP]              = 0;
     SC_AppData.CurrentTime                      = 0;
 
     /* Execute the function being tested */
-    UtAssert_VOIDCALL(SC_ProcessRequest(&UT_CmdBuf.Buf));
+    UtAssert_VOIDCALL(SC_OneHzWakeupCmd(&UT_CmdBuf.OneHzWakeupCmd));
 
     /* Verify results */
-    UtAssert_True(SC_OperData.NumCmdsSec == 0, "SC_OperData.NumCmdsSec == 0");
+    UtAssert_UINT32_EQ(SC_OperData.NumCmdsSec, 0);
 
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
 }
 
-void SC_ProcessRequest_Test_1HzWakeupAtpNotExecutionTime(void)
+void SC_ProcessRequest_Test_OneHzWakeupAtpNotExecutionTime(void)
 {
-    /**
-     **  Test case: SC_1HZ_WAKEUP_MID with a pending ATP command that should not execute yet
-     **/
-    CFE_SB_MsgId_t TestMsgId = CFE_SB_ValueToMsgId(SC_1HZ_WAKEUP_MID);
-
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
-
     SC_OperData.AtsCtrlBlckAddr->SwitchPendFlag = true;
     SC_AppData.NextProcNumber                   = SC_ATP;
     SC_AppData.NextCmdTime[SC_ATP]              = 1000;
 
     /* Execute the function being tested */
-    UtAssert_VOIDCALL(SC_ProcessRequest(&UT_CmdBuf.Buf));
+    UtAssert_VOIDCALL(SC_OneHzWakeupCmd(&UT_CmdBuf.OneHzWakeupCmd));
 
     /* Verify results */
-    UtAssert_True(SC_OperData.NumCmdsSec == 0, "SC_OperData.NumCmdsSec == 0");
+    UtAssert_UINT32_EQ(SC_OperData.NumCmdsSec, 0);
 
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
 }
 
-void SC_ProcessRequest_Test_1HzWakeupRtpExecutionTime(void)
+void SC_ProcessRequest_Test_OneHzWakeupRtpExecutionTime(void)
 {
-    /**
-     **  Test case: SC_1HZ_WAKEUP_MID with a pending RTP command that needs to execute immediately
-     **/
-    CFE_SB_MsgId_t       TestMsgId = CFE_SB_ValueToMsgId(SC_1HZ_WAKEUP_MID);
     SC_AtsEntryHeader_t *Entry;
-
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
 
     /* required to exit processing loop after 2 iterations */
     /* second iteration tests "IsThereAnotherCommandToExecute" */
@@ -1145,25 +1046,15 @@ void SC_ProcessRequest_Test_1HzWakeupRtpExecutionTime(void)
     SC_AppData.AtsCmdIndexBuffer[0][0]    = 0;
 
     /* Execute the function being tested */
-    UtAssert_VOIDCALL(SC_ProcessRequest(&UT_CmdBuf.Buf));
+    UtAssert_VOIDCALL(SC_OneHzWakeupCmd(&UT_CmdBuf.OneHzWakeupCmd));
 
     /* Verify results */
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
 }
 
-void SC_ProcessRequest_Test_1HzWakeupRtpExecutionTimeTooManyCmds(void)
+void SC_ProcessRequest_Test_OneHzWakeupRtpExecutionTimeTooManyCmds(void)
 {
-    /**
-     **  Test case: SC_1HZ_WAKEUP_MID with a pending RTP command that needs to execute immediately, but too many
-     *commands are being sent at once
-     **/
-    CFE_SB_MsgId_t TestMsgId = CFE_SB_ValueToMsgId(SC_1HZ_WAKEUP_MID);
-
     SC_AppData.EnableHeaderUpdate = true;
-
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
 
     SC_AppData.NextProcNumber             = SC_RTP;
     SC_AppData.NextCmdTime[SC_RTP]        = 0;
@@ -1172,55 +1063,18 @@ void SC_ProcessRequest_Test_1HzWakeupRtpExecutionTimeTooManyCmds(void)
     SC_OperData.AtsCtrlBlckAddr->AtpState = SC_EXECUTING;
 
     /* Execute the function being tested */
-    UtAssert_VOIDCALL(SC_ProcessRequest(&UT_CmdBuf.Buf));
+    UtAssert_VOIDCALL(SC_OneHzWakeupCmd(&UT_CmdBuf.OneHzWakeupCmd));
 
     /* Verify results */
-    UtAssert_True(SC_OperData.NumCmdsSec == 0, "SC_OperData.NumCmdsSec == 0");
+    UtAssert_UINT32_EQ(SC_OperData.NumCmdsSec, 0);
 
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
 }
 
-void SC_ProcessRequest_Test_MIDError(void)
-{
-    /**
-     **  Test case: SC_MID_ERR_EID
-     **/
-
-    CFE_SB_MsgId_t TestMsgId = SC_UT_MID_1;
-
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-
-    /* Execute the function being tested */
-    UtAssert_VOIDCALL(SC_ProcessRequest(&UT_CmdBuf.Buf));
-
-    /* Verify results */
-    UtAssert_True(SC_OperData.HkPacket.Payload.CmdCtr == 0, "CmdCtr == 0");
-    UtAssert_True(SC_OperData.HkPacket.Payload.CmdErrCtr == 1, "CmdErrCtr == 1");
-
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_MID_ERR_EID);
-    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
-}
-
 void SC_ProcessCommand_Test_NoOp(void)
 {
-    /**
-     **  Note: This test does not follow the standard test guideline to only test what's directly in the
-     *function-under-test.
-     **  Since the code for reaching each branch in SC_ProcessCommand is so trivial and non-verifiable, it was decided
-     *to
-     **  combine the tests for each command with the tests for reaching the command from SC_ProcessCommand.
-     **/
-
-    CFE_SB_MsgId_t    TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
-    CFE_MSG_FcnCode_t FcnCode   = SC_NOOP_CC;
-
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
-
     /* Execute the function being tested */
-    UtAssert_VOIDCALL(SC_ProcessCommand(&UT_CmdBuf.Buf));
+    UtAssert_VOIDCALL(SC_NoopCmd(&UT_CmdBuf.NoopCmd));
 
     /* Verify results */
     UtAssert_True(SC_OperData.HkPacket.Payload.CmdCtr == 1, "SC_OperData.HkPacket.Payload.CmdCtr == 1");
@@ -1230,52 +1084,10 @@ void SC_ProcessCommand_Test_NoOp(void)
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
 }
 
-void SC_ProcessCommand_Test_NoOpNoVerifyCmdLength(void)
-{
-    /**
-     **  Note: This test does not follow the standard test guideline to only test what's directly in the
-     *function-under-test.
-     **  Since the code for reaching each branch in SC_ProcessCommand is so trivial and non-verifiable, it was decided
-     *to
-     **  combine the tests for each command with the tests for reaching the command from SC_ProcessCommand.
-     **/
-
-    CFE_SB_MsgId_t    TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
-    CFE_MSG_FcnCode_t FcnCode   = SC_NOOP_CC;
-
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-
-    /* Execute the function being tested */
-    UtAssert_VOIDCALL(SC_ProcessCommand(&UT_CmdBuf.Buf));
-
-    /* Verify results */
-    UtAssert_True(SC_OperData.HkPacket.Payload.CmdCtr == 0, "SC_OperData.HkPacket.Payload.CmdCtr == 0");
-    UtAssert_True(SC_OperData.HkPacket.Payload.CmdErrCtr == 0, "SC_OperData.HkPacket.Payload.CmdErrCtr == 0");
-
-    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
-}
-
 void SC_ProcessCommand_Test_ResetCounters(void)
 {
-    /**
-     **  Note: This test does not follow the standard test guideline to only test what's directly in the
-     *function-under-test.
-     **  Since the code for reaching each branch in SC_ProcessCommand is so trivial and non-verifiable, it was decided
-     *to
-     **  combine the tests for each command with the tests for reaching the command from SC_ProcessCommand.
-     **/
-
-    CFE_SB_MsgId_t    TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
-    CFE_MSG_FcnCode_t FcnCode   = SC_RESET_COUNTERS_CC;
-
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
-
     /* Execute the function being tested */
-    UtAssert_VOIDCALL(SC_ProcessCommand(&UT_CmdBuf.Buf));
+    UtAssert_VOIDCALL(SC_ResetCountersCmd(&UT_CmdBuf.ResetCountersCmd));
 
     /* Verify results */
     UtAssert_True(SC_OperData.HkPacket.Payload.CmdCtr == 0, "CmdCtr == 0");
@@ -1291,317 +1103,115 @@ void SC_ProcessCommand_Test_ResetCounters(void)
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
 }
 
-void SC_ProcessCommand_Test_ResetCountersNoVerifyCmdLength(void)
-{
-    /**
-     **  Note: This test does not follow the standard test guideline to only test what's directly in the
-     *function-under-test.
-     **  Since the code for reaching each branch in SC_ProcessCommand is so trivial and non-verifiable, it was decided
-     *to
-     **  combine the tests for each command with the tests for reaching the command from SC_ProcessCommand.
-     **/
-
-    CFE_SB_MsgId_t    TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
-    CFE_MSG_FcnCode_t FcnCode   = SC_RESET_COUNTERS_CC;
-
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-
-    /* Execute the function being tested */
-    UtAssert_VOIDCALL(SC_ProcessCommand(&UT_CmdBuf.Buf));
-
-    /* Verify results */
-    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
-}
-
 void SC_ProcessCommand_Test_StartAts(void)
 {
-    /**
-     **  Note: This test does not follow the standard test guideline to only test what's directly in the
-     *function-under-test.
-     **  Since the code for reaching each branch in SC_ProcessCommand is so trivial and non-verifiable, it was decided
-     *to
-     **  combine the tests for each command with the tests for reaching the command from SC_ProcessCommand.
-     **/
-
-    CFE_SB_MsgId_t    TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
-    CFE_MSG_FcnCode_t FcnCode   = SC_START_ATS_CC;
-
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-    UT_SetDefaultReturnValue(UT_KEY(SC_VerifyCmdLength), true);
-
     UT_CmdBuf.StartAtsCmd.Payload.AtsId = 1;
 
     /* Execute the function being tested */
-    UtAssert_VOIDCALL(SC_ProcessCommand(&UT_CmdBuf.Buf));
+    UtAssert_VOIDCALL(SC_StartAtsCmd(&UT_CmdBuf.StartAtsCmd));
 
     /* This function is already verified to work correctly in another file, so no verifications here. */
 }
 
 void SC_ProcessCommand_Test_StopAts(void)
 {
-    /**
-     **  Note: This test does not follow the standard test guideline to only test what's directly in the
-     *function-under-test.
-     **  Since the code for reaching each branch in SC_ProcessCommand is so trivial and non-verifiable, it was decided
-     *to
-     **  combine the tests for each command with the tests for reaching the command from SC_ProcessCommand.
-     **/
-
-    CFE_SB_MsgId_t    TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
-    CFE_MSG_FcnCode_t FcnCode   = SC_STOP_ATS_CC;
-
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-    UT_SetDefaultReturnValue(UT_KEY(SC_VerifyCmdLength), true);
-
     /* Execute the function being tested */
-    UtAssert_VOIDCALL(SC_ProcessCommand(&UT_CmdBuf.Buf));
+    UtAssert_VOIDCALL(SC_StopAtsCmd(&UT_CmdBuf.StopAtsCmd));
 
     /* This function is already verified to work correctly in another file, so no verifications here. */
 }
 
 void SC_ProcessCommand_Test_StartRts(void)
 {
-    /**
-     **  Note: This test does not follow the standard test guideline to only test what's directly in the
-     *function-under-test.
-     **  Since the code for reaching each branch in SC_ProcessCommand is so trivial and non-verifiable, it was decided
-     *to
-     **  combine the tests for each command with the tests for reaching the command from SC_ProcessCommand.
-     **/
-
-    CFE_SB_MsgId_t    TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
-    CFE_MSG_FcnCode_t FcnCode   = SC_START_RTS_CC;
-
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-    UT_SetDefaultReturnValue(UT_KEY(SC_VerifyCmdLength), true);
-
     /* Execute the function being tested */
-    UtAssert_VOIDCALL(SC_ProcessCommand(&UT_CmdBuf.Buf));
+    UtAssert_VOIDCALL(SC_StartRtsCmd(&UT_CmdBuf.StartRtsCmd));
 
     /* This function is already verified to work correctly in another file, so no verifications here. */
 }
 
 void SC_ProcessCommand_Test_StopRts(void)
 {
-    /**
-     **  Note: This test does not follow the standard test guideline to only test what's directly in the
-     *function-under-test.
-     **  Since the code for reaching each branch in SC_ProcessCommand is so trivial and non-verifiable, it was decided
-     *to
-     **  combine the tests for each command with the tests for reaching the command from SC_ProcessCommand.
-     **/
-
-    CFE_SB_MsgId_t    TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
-    CFE_MSG_FcnCode_t FcnCode   = SC_STOP_RTS_CC;
-
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-    UT_SetDefaultReturnValue(UT_KEY(SC_VerifyCmdLength), true);
-
     /* Execute the function being tested */
-    UtAssert_VOIDCALL(SC_ProcessCommand(&UT_CmdBuf.Buf));
+    UtAssert_VOIDCALL(SC_StopRtsCmd(&UT_CmdBuf.StopRtsCmd));
 
     /* This function is already verified to work correctly in another file, so no verifications here. */
 }
 
 void SC_ProcessCommand_Test_DisableRts(void)
 {
-    /**
-     **  Note: This test does not follow the standard test guideline to only test what's directly in the
-     *function-under-test.
-     **  Since the code for reaching each branch in SC_ProcessCommand is so trivial and non-verifiable, it was decided
-     *to
-     **  combine the tests for each command with the tests for reaching the command from SC_ProcessCommand.
-     **/
-
-    CFE_SB_MsgId_t    TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
-    CFE_MSG_FcnCode_t FcnCode   = SC_DISABLE_RTS_CC;
-
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-    UT_SetDefaultReturnValue(UT_KEY(SC_VerifyCmdLength), true);
-
     /* Execute the function being tested */
-    UtAssert_VOIDCALL(SC_ProcessCommand(&UT_CmdBuf.Buf));
+    UtAssert_VOIDCALL(SC_DisableRtsCmd(&UT_CmdBuf.DisableRtsCmd));
 
     /* This function is already verified to work correctly in another file, so no verifications here. */
 }
 
 void SC_ProcessCommand_Test_EnableRts(void)
 {
-    /**
-     **  Note: This test does not follow the standard test guideline to only test what's directly in the
-     *function-under-test.
-     **  Since the code for reaching each branch in SC_ProcessCommand is so trivial and non-verifiable, it was decided
-     *to
-     **  combine the tests for each command with the tests for reaching the command from SC_ProcessCommand.
-     **/
-
-    CFE_SB_MsgId_t    TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
-    CFE_MSG_FcnCode_t FcnCode   = SC_ENABLE_RTS_CC;
-
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-    UT_SetDefaultReturnValue(UT_KEY(SC_VerifyCmdLength), true);
-
     /* Execute the function being tested */
-    UtAssert_VOIDCALL(SC_ProcessCommand(&UT_CmdBuf.Buf));
+    UtAssert_VOIDCALL(SC_EnableRtsCmd(&UT_CmdBuf.EnableRtsCmd));
 
     /* This function is already verified to work correctly in another file, so no verifications here. */
 }
 
 void SC_ProcessCommand_Test_SwitchAts(void)
 {
-    /**
-     **  Note: This test does not follow the standard test guideline to only test what's directly in the
-     *function-under-test.
-     **  Since the code for reaching each branch in SC_ProcessCommand is so trivial and non-verifiable, it was decided
-     *to
-     **  combine the tests for each command with the tests for reaching the command from SC_ProcessCommand.
-     **/
-
-    CFE_SB_MsgId_t    TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
-    CFE_MSG_FcnCode_t FcnCode   = SC_SWITCH_ATS_CC;
-
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-    UT_SetDefaultReturnValue(UT_KEY(SC_VerifyCmdLength), true);
-
     /* Execute the function being tested */
-    UtAssert_VOIDCALL(SC_ProcessCommand(&UT_CmdBuf.Buf));
+    UtAssert_VOIDCALL(SC_SwitchAtsCmd(&UT_CmdBuf.SwitchAtsCmd));
 
     /* This function is already verified to work correctly in another file, so no verifications here. */
 }
 
 void SC_ProcessCommand_Test_JumpAts(void)
 {
-    /**
-     **  Note: This test does not follow the standard test guideline to only test what's directly in the
-     *function-under-test.
-     **  Since the code for reaching each branch in SC_ProcessCommand is so trivial and non-verifiable, it was decided
-     *to
-     **  combine the tests for each command with the tests for reaching the command from SC_ProcessCommand.
-     **/
-
-    CFE_SB_MsgId_t    TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
-    CFE_MSG_FcnCode_t FcnCode   = SC_JUMP_ATS_CC;
-
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-    UT_SetDefaultReturnValue(UT_KEY(SC_VerifyCmdLength), true);
-
     /* Execute the function being tested */
-    UtAssert_VOIDCALL(SC_ProcessCommand(&UT_CmdBuf.Buf));
+    UtAssert_VOIDCALL(SC_JumpAtsCmd(&UT_CmdBuf.JumpAtsCmd));
 
     /* This function is already verified to work correctly in another file, so no verifications here. */
 }
 
 void SC_ProcessCommand_Test_ContinueAtsOnFailure(void)
 {
-    /**
-     **  Note: This test does not follow the standard test guideline to only test what's directly in the
-     *function-under-test.
-     **  Since the code for reaching each branch in SC_ProcessCommand is so trivial and non-verifiable, it was decided
-     *to
-     **  combine the tests for each command with the tests for reaching the command from SC_ProcessCommand.
-     **/
-
-    CFE_SB_MsgId_t    TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
-    CFE_MSG_FcnCode_t FcnCode   = SC_CONTINUE_ATS_ON_FAILURE_CC;
-
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-    UT_SetDefaultReturnValue(UT_KEY(SC_VerifyCmdLength), true);
-
     /* Execute the function being tested */
-    UtAssert_VOIDCALL(SC_ProcessCommand(&UT_CmdBuf.Buf));
+    UtAssert_VOIDCALL(SC_ContinueAtsOnFailureCmd(&UT_CmdBuf.ContinueAtsOnFailureCmd));
 
     /* This function is already verified to work correctly in another file, so no verifications here. */
 }
 
 void SC_ProcessCommand_Test_AppendAts(void)
 {
-    /**
-     **  Note: This test does not follow the standard test guideline to only test what's directly in the
-     *function-under-test.
-     **  Since the code for reaching each branch in SC_ProcessCommand is so trivial and non-verifiable, it was decided
-     *to
-     **  combine the tests for each command with the tests for reaching the command from SC_ProcessCommand.
-     **/
-
-    CFE_SB_MsgId_t    TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
-    CFE_MSG_FcnCode_t FcnCode   = SC_APPEND_ATS_CC;
-
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-    UT_SetDefaultReturnValue(UT_KEY(SC_VerifyCmdLength), true);
-
     /* Execute the function being tested */
-    UtAssert_VOIDCALL(SC_ProcessCommand(&UT_CmdBuf.Buf));
+    UtAssert_VOIDCALL(SC_AppendAtsCmd(&UT_CmdBuf.AppendAtsCmd));
 
     /* This function is already verified to work correctly in another file, so no verifications here. */
 }
 
 void SC_ProcessCommand_Test_TableManageAtsTableNominal(void)
 {
-    /**
-     **  Note: This test does not follow the standard test guideline to only test what's directly in the
-     *function-under-test.
-     **  Since the code for reaching each branch in SC_ProcessCommand is so trivial and non-verifiable, it was decided
-     *to
-     **  combine the tests for each command with the tests for reaching the command from SC_ProcessCommand.
-     **/
-
     SC_AtsEntryHeader_t *Entry;
-    CFE_SB_MsgId_t       TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
-    CFE_MSG_FcnCode_t    FcnCode   = SC_MANAGE_TABLE_CC;
-
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
 
     Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[0][0];
     Entry->CmdNumber = 0;
 
-    UT_CmdBuf.NotifyCmd.Payload.Parameter = SC_TBL_ID_ATS_0;
+    UT_CmdBuf.ManageTableCmd.Payload.Parameter = SC_TBL_ID_ATS_0;
 
     /* Set to reach "SC_LoadAts(ArrayIndex)" */
     UT_SetDeferredRetcode(UT_KEY(CFE_TBL_GetAddress), 1, CFE_TBL_INFO_UPDATED);
 
     /* Execute the function being tested */
-    UtAssert_VOIDCALL(SC_ProcessCommand(&UT_CmdBuf.Buf));
+    UtAssert_VOIDCALL(SC_ManageTableCmd(&UT_CmdBuf.ManageTableCmd));
 
     /* This function is already verified to work correctly in another file, so no verifications here. */
 }
 
 void SC_ProcessCommand_Test_TableManageAtsTableGetAddressError(void)
 {
-    /**
-     **  Note: This test does not follow the standard test guideline to only test what's directly in the
-     *function-under-test.
-     **  Since the code for reaching each branch in SC_ProcessCommand is so trivial and non-verifiable, it was decided
-     *to
-     **  combine the tests for each command with the tests for reaching the command from SC_ProcessCommand.
-     **/
-
-    CFE_SB_MsgId_t    TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
-    CFE_MSG_FcnCode_t FcnCode   = SC_MANAGE_TABLE_CC;
-
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-    UT_SetDefaultReturnValue(UT_KEY(SC_VerifyCmdLength), true);
-
-    UT_CmdBuf.NotifyCmd.Payload.Parameter = SC_TBL_ID_ATS_0;
+    UT_CmdBuf.ManageTableCmd.Payload.Parameter = SC_TBL_ID_ATS_0;
 
     /* Set to generate error message SC_TABLE_MANAGE_ATS_ERR_EID */
     UT_SetDeferredRetcode(UT_KEY(CFE_TBL_GetAddress), 1, -1);
 
     /* Execute the function being tested */
-    UtAssert_VOIDCALL(SC_ProcessCommand(&UT_CmdBuf.Buf));
+    UtAssert_VOIDCALL(SC_ManageTableCmd(&UT_CmdBuf.ManageTableCmd));
 
     /* Verify results */
     UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_TABLE_MANAGE_ATS_ERR_EID);
@@ -1610,33 +1220,19 @@ void SC_ProcessCommand_Test_TableManageAtsTableGetAddressError(void)
 
 void SC_ProcessCommand_Test_TableManageAtsTableID(void)
 {
-    /**
-     **  Note: This test does not follow the standard test guideline to only test what's directly in the
-     *function-under-test.
-     **  Since the code for reaching each branch in SC_ProcessCommand is so trivial and non-verifiable, it was decided
-     *to
-     **  combine the tests for each command with the tests for reaching the command from SC_ProcessCommand.
-     **/
-
     SC_AtsEntryHeader_t *Entry;
-    CFE_SB_MsgId_t       TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
-    CFE_MSG_FcnCode_t    FcnCode   = SC_MANAGE_TABLE_CC;
-
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
 
     Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[0][0];
     Entry->CmdNumber = 0;
 
     /* test TableID >= SC_TBL_ID_ATS_0 */
-    UT_CmdBuf.NotifyCmd.Payload.Parameter = 0;
+    UT_CmdBuf.ManageTableCmd.Payload.Parameter = 0;
 
     /* Set to reach "SC_LoadAts(ArrayIndex)" */
     UT_SetDeferredRetcode(UT_KEY(CFE_TBL_GetAddress), 1, CFE_TBL_INFO_UPDATED);
 
     /* Execute the function being tested */
-    UtAssert_VOIDCALL(SC_ProcessCommand(&UT_CmdBuf.Buf));
+    UtAssert_VOIDCALL(SC_ManageTableCmd(&UT_CmdBuf.ManageTableCmd));
 
     /* This function is already verified to work correctly in another file, so no verifications here. */
 }
@@ -1655,31 +1251,17 @@ void SC_ProcessCommand_Test_TableManageAtsTable_InvalidIndex(void)
 
 void SC_ProcessCommand_Test_TableManageAtsTableGetAddressNeverLoaded(void)
 {
-    /**
-     **  Note: This test does not follow the standard test guideline to only test what's directly in the
-     *function-under-test.
-     **  Since the code for reaching each branch in SC_ProcessCommand is so trivial and non-verifiable, it was decided
-     *to
-     **  combine the tests for each command with the tests for reaching the command from SC_ProcessCommand.
-     **/
-
     SC_AtsEntryHeader_t *Entry;
-    CFE_SB_MsgId_t       TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
-    CFE_MSG_FcnCode_t    FcnCode   = SC_MANAGE_TABLE_CC;
-
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
 
     Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[0][0];
     Entry->CmdNumber = 0;
 
-    UT_CmdBuf.NotifyCmd.Payload.Parameter = SC_TBL_ID_ATS_0;
+    UT_CmdBuf.ManageTableCmd.Payload.Parameter = SC_TBL_ID_ATS_0;
 
     UT_SetDeferredRetcode(UT_KEY(CFE_TBL_GetAddress), 1, CFE_TBL_ERR_NEVER_LOADED);
 
     /* Execute the function being tested */
-    UtAssert_VOIDCALL(SC_ProcessCommand(&UT_CmdBuf.Buf));
+    UtAssert_VOIDCALL(SC_ManageTableCmd(&UT_CmdBuf.ManageTableCmd));
 
     /* This function is already verified to work correctly in another file, so no verifications here. */
 }
@@ -1695,22 +1277,16 @@ void SC_ProcessCommand_Test_TableManageAtsTableGetAddressSuccess(void)
      **/
 
     SC_AtsEntryHeader_t *Entry;
-    CFE_SB_MsgId_t       TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
-    CFE_MSG_FcnCode_t    FcnCode   = SC_MANAGE_TABLE_CC;
-
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
 
     Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[0][0];
     Entry->CmdNumber = 0;
 
-    UT_CmdBuf.NotifyCmd.Payload.Parameter = SC_TBL_ID_ATS_0;
+    UT_CmdBuf.ManageTableCmd.Payload.Parameter = SC_TBL_ID_ATS_0;
 
     UT_SetDeferredRetcode(UT_KEY(CFE_TBL_GetAddress), 1, CFE_SUCCESS);
 
     /* Execute the function being tested */
-    UtAssert_VOIDCALL(SC_ProcessCommand(&UT_CmdBuf.Buf));
+    UtAssert_VOIDCALL(SC_ManageTableCmd(&UT_CmdBuf.ManageTableCmd));
 
     /* This function is already verified to work correctly in another file, so no verifications here. */
 }
@@ -1726,51 +1302,30 @@ void SC_ProcessCommand_Test_TableManageAppendTableNominal(void)
      **/
 
     SC_AtsEntryHeader_t *Entry;
-    CFE_SB_MsgId_t       TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
-    CFE_MSG_FcnCode_t    FcnCode   = SC_MANAGE_TABLE_CC;
-
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
 
     Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AppendTblAddr;
     Entry->CmdNumber = 0;
 
-    UT_CmdBuf.NotifyCmd.Payload.Parameter = SC_TBL_ID_APPEND;
+    UT_CmdBuf.ManageTableCmd.Payload.Parameter = SC_TBL_ID_APPEND;
 
     /* Set to reach "SC_UpdateAppend()" */
     UT_SetDeferredRetcode(UT_KEY(CFE_TBL_GetAddress), 1, CFE_TBL_INFO_UPDATED);
 
     /* Execute the function being tested */
-    UtAssert_VOIDCALL(SC_ProcessCommand(&UT_CmdBuf.Buf));
+    UtAssert_VOIDCALL(SC_ManageTableCmd(&UT_CmdBuf.ManageTableCmd));
 
     /* This function is already verified to work correctly in another file, so no verifications here. */
 }
 
 void SC_ProcessCommand_Test_TableManageAppendTableGetAddressError(void)
 {
-    /**
-     **  Note: This test does not follow the standard test guideline to only test what's directly in the
-     *function-under-test.
-     **  Since the code for reaching each branch in SC_ProcessCommand is so trivial and non-verifiable, it was decided
-     *to
-     **  combine the tests for each command with the tests for reaching the command from SC_ProcessCommand.
-     **/
-
-    CFE_SB_MsgId_t    TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
-    CFE_MSG_FcnCode_t FcnCode   = SC_MANAGE_TABLE_CC;
-
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-    UT_SetDefaultReturnValue(UT_KEY(SC_VerifyCmdLength), true);
-
-    UT_CmdBuf.NotifyCmd.Payload.Parameter = SC_TBL_ID_APPEND;
+    UT_CmdBuf.ManageTableCmd.Payload.Parameter = SC_TBL_ID_APPEND;
 
     /* Set to generate error message SC_TABLE_MANAGE_APPEND_ERR_EID */
     UT_SetDeferredRetcode(UT_KEY(CFE_TBL_GetAddress), 1, -1);
 
     /* Execute the function being tested */
-    UtAssert_VOIDCALL(SC_ProcessCommand(&UT_CmdBuf.Buf));
+    UtAssert_VOIDCALL(SC_ManageTableCmd(&UT_CmdBuf.ManageTableCmd));
 
     /* Verify results */
     UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_TABLE_MANAGE_APPEND_ERR_EID);
@@ -1788,22 +1343,16 @@ void SC_ProcessCommand_Test_TableManageAppendTableGetAddressNeverLoaded(void)
      **/
 
     SC_AtsEntryHeader_t *Entry;
-    CFE_SB_MsgId_t       TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
-    CFE_MSG_FcnCode_t    FcnCode   = SC_MANAGE_TABLE_CC;
-
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
 
     Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AppendTblAddr;
     Entry->CmdNumber = 0;
 
-    UT_CmdBuf.NotifyCmd.Payload.Parameter = SC_TBL_ID_APPEND;
+    UT_CmdBuf.ManageTableCmd.Payload.Parameter = SC_TBL_ID_APPEND;
 
     UT_SetDeferredRetcode(UT_KEY(CFE_TBL_GetAddress), 1, CFE_TBL_ERR_NEVER_LOADED);
 
     /* Execute the function being tested */
-    UtAssert_VOIDCALL(SC_ProcessCommand(&UT_CmdBuf.Buf));
+    UtAssert_VOIDCALL(SC_ManageTableCmd(&UT_CmdBuf.ManageTableCmd));
 
     /* This function is already verified to work correctly in another file, so no verifications here. */
 }
@@ -1819,78 +1368,42 @@ void SC_ProcessCommand_Test_TableManageAppendTableGetAddressSuccess(void)
      **/
 
     SC_AtsEntryHeader_t *Entry;
-    CFE_SB_MsgId_t       TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
-    CFE_MSG_FcnCode_t    FcnCode   = SC_MANAGE_TABLE_CC;
-
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
 
     Entry            = (SC_AtsEntryHeader_t *)&SC_OperData.AppendTblAddr;
     Entry->CmdNumber = 0;
 
-    UT_CmdBuf.NotifyCmd.Payload.Parameter = SC_TBL_ID_APPEND;
+    UT_CmdBuf.ManageTableCmd.Payload.Parameter = SC_TBL_ID_APPEND;
 
     UT_SetDeferredRetcode(UT_KEY(CFE_TBL_GetAddress), 1, CFE_SUCCESS);
 
     /* Execute the function being tested */
-    UtAssert_VOIDCALL(SC_ProcessCommand(&UT_CmdBuf.Buf));
+    UtAssert_VOIDCALL(SC_ManageTableCmd(&UT_CmdBuf.ManageTableCmd));
 
     /* This function is already verified to work correctly in another file, so no verifications here. */
 }
 
 void SC_ProcessCommand_Test_TableManageRtsTableNominal(void)
 {
-    /**
-     **  Note: This test does not follow the standard test guideline to only test what's directly in the
-     *function-under-test.
-     **  Since the code for reaching each branch in SC_ProcessCommand is so trivial and non-verifiable, it was decided
-     *to
-     **  combine the tests for each command with the tests for reaching the command from SC_ProcessCommand.
-     **/
-
-    CFE_SB_MsgId_t    TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
-    CFE_MSG_FcnCode_t FcnCode   = SC_MANAGE_TABLE_CC;
-
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
-
-    UT_CmdBuf.NotifyCmd.Payload.Parameter = SC_TBL_ID_RTS_0;
+    UT_CmdBuf.ManageTableCmd.Payload.Parameter = SC_TBL_ID_RTS_0;
 
     /* Set to reach "SC_LoadRts(ArrayIndex)" */
     UT_SetDeferredRetcode(UT_KEY(CFE_TBL_GetAddress), 1, CFE_TBL_INFO_UPDATED);
 
     /* Execute the function being tested */
-    UtAssert_VOIDCALL(SC_ProcessCommand(&UT_CmdBuf.Buf));
+    UtAssert_VOIDCALL(SC_ManageTableCmd(&UT_CmdBuf.ManageTableCmd));
 
     /* This function is already verified to work correctly in another file, so no verifications here. */
 }
 
 void SC_ProcessCommand_Test_TableManageRtsTableGetAddressError(void)
 {
-    /**
-     **  Note: This test does not follow the standard test guideline to only test what's directly in the
-     *function-under-test.
-     **  Since the code for reaching each branch in SC_ProcessCommand is so trivial and non-verifiable, it was decided
-     *to
-     **  combine the tests for each command with the tests for reaching the command from SC_ProcessCommand.
-     **/
-
-    CFE_SB_MsgId_t    TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
-    CFE_MSG_FcnCode_t FcnCode   = SC_MANAGE_TABLE_CC;
-
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-    UT_SetDefaultReturnValue(UT_KEY(SC_VerifyCmdLength), true);
-
-    UT_CmdBuf.NotifyCmd.Payload.Parameter = SC_TBL_ID_RTS_0;
+    UT_CmdBuf.ManageTableCmd.Payload.Parameter = SC_TBL_ID_RTS_0;
 
     /* Set to generate error message SC_TABLE_MANAGE_RTS_ERR_EID */
     UT_SetDeferredRetcode(UT_KEY(CFE_TBL_GetAddress), 1, -1);
 
     /* Execute the function being tested */
-    UtAssert_VOIDCALL(SC_ProcessCommand(&UT_CmdBuf.Buf));
+    UtAssert_VOIDCALL(SC_ManageTableCmd(&UT_CmdBuf.ManageTableCmd));
 
     /* Verify results */
     UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_TABLE_MANAGE_RTS_ERR_EID);
@@ -1899,29 +1412,14 @@ void SC_ProcessCommand_Test_TableManageRtsTableGetAddressError(void)
 
 void SC_ProcessCommand_Test_TableManageRtsTableID(void)
 {
-    /**
-     **  Note: This test does not follow the standard test guideline to only test what's directly in the
-     *function-under-test.
-     **  Since the code for reaching each branch in SC_ProcessCommand is so trivial and non-verifiable, it was decided
-     *to
-     **  combine the tests for each command with the tests for reaching the command from SC_ProcessCommand.
-     **/
-
-    CFE_SB_MsgId_t    TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
-    CFE_MSG_FcnCode_t FcnCode   = SC_MANAGE_TABLE_CC;
-
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
-
     /* test TableID >= SC_TBL_ID_RTS_0 */
-    UT_CmdBuf.NotifyCmd.Payload.Parameter = 0;
+    UT_CmdBuf.ManageTableCmd.Payload.Parameter = 0;
 
     /* Set to reach "SC_LoadRts(ArrayIndex)" */
     UT_SetDeferredRetcode(UT_KEY(CFE_TBL_GetAddress), 1, CFE_TBL_INFO_UPDATED);
 
     /* Execute the function being tested */
-    UtAssert_VOIDCALL(SC_ProcessCommand(&UT_CmdBuf.Buf));
+    UtAssert_VOIDCALL(SC_ManageTableCmd(&UT_CmdBuf.ManageTableCmd));
 
     /* This function is already verified to work correctly in another file, so no verifications here. */
 }
@@ -1940,204 +1438,84 @@ void SC_ProcessCommand_Test_TableManageRtsTable_InvalidIndex(void)
 
 void SC_ProcessCommand_Test_TableManageRtsTableGetAddressNeverLoaded(void)
 {
-    /**
-     **  Note: This test does not follow the standard test guideline to only test what's directly in the
-     *function-under-test.
-     **  Since the code for reaching each branch in SC_ProcessCommand is so trivial and non-verifiable, it was decided
-     *to
-     **  combine the tests for each command with the tests for reaching the command from SC_ProcessCommand.
-     **/
-
-    CFE_SB_MsgId_t    TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
-    CFE_MSG_FcnCode_t FcnCode   = SC_MANAGE_TABLE_CC;
-
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
-
-    UT_CmdBuf.NotifyCmd.Payload.Parameter = SC_TBL_ID_RTS_0;
+    UT_CmdBuf.ManageTableCmd.Payload.Parameter = SC_TBL_ID_RTS_0;
 
     UT_SetDeferredRetcode(UT_KEY(CFE_TBL_GetAddress), 1, CFE_TBL_ERR_NEVER_LOADED);
 
     /* Execute the function being tested */
-    UtAssert_VOIDCALL(SC_ProcessCommand(&UT_CmdBuf.Buf));
+    UtAssert_VOIDCALL(SC_ManageTableCmd(&UT_CmdBuf.ManageTableCmd));
 
     /* This function is already verified to work correctly in another file, so no verifications here. */
 }
 
 void SC_ProcessCommand_Test_TableManageRtsTableGetAddressSuccess(void)
 {
-    /**
-     **  Note: This test does not follow the standard test guideline to only test what's directly in the
-     *function-under-test.
-     **  Since the code for reaching each branch in SC_ProcessCommand is so trivial and non-verifiable, it was decided
-     *to
-     **  combine the tests for each command with the tests for reaching the command from SC_ProcessCommand.
-     **/
-
-    CFE_SB_MsgId_t    TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
-    CFE_MSG_FcnCode_t FcnCode   = SC_MANAGE_TABLE_CC;
-
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
-
-    UT_CmdBuf.NotifyCmd.Payload.Parameter = SC_TBL_ID_RTS_0;
+    UT_CmdBuf.ManageTableCmd.Payload.Parameter = SC_TBL_ID_RTS_0;
 
     UT_SetDeferredRetcode(UT_KEY(CFE_TBL_GetAddress), 1, CFE_SUCCESS);
 
     /* Execute the function being tested */
-    UtAssert_VOIDCALL(SC_ProcessCommand(&UT_CmdBuf.Buf));
+    UtAssert_VOIDCALL(SC_ManageTableCmd(&UT_CmdBuf.ManageTableCmd));
 
     /* This function is already verified to work correctly in another file, so no verifications here. */
 }
 
 void SC_ProcessCommand_Test_TableManageRtsInfo(void)
 {
-    /**
-     **  Note: This test does not follow the standard test guideline to only test what's directly in the
-     *function-under-test.
-     **  Since the code for reaching each branch in SC_ProcessCommand is so trivial and non-verifiable, it was decided
-     *to
-     **  combine the tests for each command with the tests for reaching the command from SC_ProcessCommand.
-     **/
-
-    CFE_SB_MsgId_t    TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
-    CFE_MSG_FcnCode_t FcnCode   = SC_MANAGE_TABLE_CC;
-
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
-
-    UT_CmdBuf.NotifyCmd.Payload.Parameter = SC_TBL_ID_RTS_INFO;
+    UT_CmdBuf.ManageTableCmd.Payload.Parameter = SC_TBL_ID_RTS_INFO;
 
     /* Execute the function being tested */
-    UtAssert_VOIDCALL(SC_ProcessCommand(&UT_CmdBuf.Buf));
+    UtAssert_VOIDCALL(SC_ManageTableCmd(&UT_CmdBuf.ManageTableCmd));
 
     /* This function is already verified to work correctly in another file, so no verifications here. */
 }
 
 void SC_ProcessCommand_Test_TableManageRtpCtrl(void)
 {
-    /**
-     **  Note: This test does not follow the standard test guideline to only test what's directly in the
-     *function-under-test.
-     **  Since the code for reaching each branch in SC_ProcessCommand is so trivial and non-verifiable, it was decided
-     *to
-     **  combine the tests for each command with the tests for reaching the command from SC_ProcessCommand.
-     **/
-
-    CFE_SB_MsgId_t    TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
-    CFE_MSG_FcnCode_t FcnCode   = SC_MANAGE_TABLE_CC;
-
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
-
-    UT_CmdBuf.NotifyCmd.Payload.Parameter = SC_TBL_ID_RTP_CTRL;
+    UT_CmdBuf.ManageTableCmd.Payload.Parameter = SC_TBL_ID_RTP_CTRL;
 
     /* Execute the function being tested */
-    UtAssert_VOIDCALL(SC_ProcessCommand(&UT_CmdBuf.Buf));
+    UtAssert_VOIDCALL(SC_ManageTableCmd(&UT_CmdBuf.ManageTableCmd));
 
     /* This function is already verified to work correctly in another file, so no verifications here. */
 }
 
 void SC_ProcessCommand_Test_TableManageAtsInfo(void)
 {
-    /**
-     **  Note: This test does not follow the standard test guideline to only test what's directly in the
-     *function-under-test.
-     **  Since the code for reaching each branch in SC_ProcessCommand is so trivial and non-verifiable, it was decided
-     *to
-     **  combine the tests for each command with the tests for reaching the command from SC_ProcessCommand.
-     **/
-
-    CFE_SB_MsgId_t    TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
-    CFE_MSG_FcnCode_t FcnCode   = SC_MANAGE_TABLE_CC;
-
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
-
-    UT_CmdBuf.NotifyCmd.Payload.Parameter = SC_TBL_ID_ATS_INFO;
+    UT_CmdBuf.ManageTableCmd.Payload.Parameter = SC_TBL_ID_ATS_INFO;
 
     /* Execute the function being tested */
-    UtAssert_VOIDCALL(SC_ProcessCommand(&UT_CmdBuf.Buf));
+    UtAssert_VOIDCALL(SC_ManageTableCmd(&UT_CmdBuf.ManageTableCmd));
 
     /* This function is already verified to work correctly in another file, so no verifications here. */
 }
 
 void SC_ProcessCommand_Test_TableManageAtpCtrl(void)
 {
-    /**
-     **  Note: This test does not follow the standard test guideline to only test what's directly in the
-     *function-under-test.
-     **  Since the code for reaching each branch in SC_ProcessCommand is so trivial and non-verifiable, it was decided
-     *to
-     **  combine the tests for each command with the tests for reaching the command from SC_ProcessCommand.
-     **/
-
-    CFE_SB_MsgId_t    TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
-    CFE_MSG_FcnCode_t FcnCode   = SC_MANAGE_TABLE_CC;
-
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
-
-    UT_CmdBuf.NotifyCmd.Payload.Parameter = SC_TBL_ID_ATP_CTRL;
+    UT_CmdBuf.ManageTableCmd.Payload.Parameter = SC_TBL_ID_ATP_CTRL;
 
     /* Execute the function being tested */
-    UtAssert_VOIDCALL(SC_ProcessCommand(&UT_CmdBuf.Buf));
+    UtAssert_VOIDCALL(SC_ManageTableCmd(&UT_CmdBuf.ManageTableCmd));
 
     /* This function is already verified to work correctly in another file, so no verifications here. */
 }
 
 void SC_ProcessCommand_Test_TableManageAtsCmdStatus(void)
 {
-    /**
-     **  Note: This test does not follow the standard test guideline to only test what's directly in the
-     *function-under-test.
-     **  Since the code for reaching each branch in SC_ProcessCommand is so trivial and non-verifiable, it was decided
-     *to
-     **  combine the tests for each command with the tests for reaching the command from SC_ProcessCommand.
-     **/
-
-    CFE_SB_MsgId_t    TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
-    CFE_MSG_FcnCode_t FcnCode   = SC_MANAGE_TABLE_CC;
-
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, true);
-
-    UT_CmdBuf.NotifyCmd.Payload.Parameter = SC_TBL_ID_ATS_CMD_0;
+    UT_CmdBuf.ManageTableCmd.Payload.Parameter = SC_TBL_ID_ATS_CMD_0;
 
     /* Execute the function being tested */
-    UtAssert_VOIDCALL(SC_ProcessCommand(&UT_CmdBuf.Buf));
+    UtAssert_VOIDCALL(SC_ManageTableCmd(&UT_CmdBuf.ManageTableCmd));
 
     /* This function is already verified to work correctly in another file, so no verifications here. */
 }
 
 void SC_ProcessCommand_Test_TableManageInvalidTableID(void)
 {
-    /**
-     **  Note: This test does not follow the standard test guideline to only test what's directly in the
-     *function-under-test.
-     **  Since the code for reaching each branch in SC_ProcessCommand is so trivial and non-verifiable, it was decided
-     *to
-     **  combine the tests for each command with the tests for reaching the command from SC_ProcessCommand.
-     **/
-
-    CFE_SB_MsgId_t    TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
-    CFE_MSG_FcnCode_t FcnCode   = SC_MANAGE_TABLE_CC;
-
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-    UT_SetDefaultReturnValue(UT_KEY(SC_VerifyCmdLength), true);
-
-    UT_CmdBuf.NotifyCmd.Payload.Parameter = 999;
+    UT_CmdBuf.ManageTableCmd.Payload.Parameter = 999;
 
     /* Execute the function being tested */
-    UtAssert_VOIDCALL(SC_ProcessCommand(&UT_CmdBuf.Buf));
+    UtAssert_VOIDCALL(SC_ManageTableCmd(&UT_CmdBuf.ManageTableCmd));
 
     /* Verify results */
     UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_TABLE_MANAGE_ID_ERR_EID);
@@ -2146,406 +1524,34 @@ void SC_ProcessCommand_Test_TableManageInvalidTableID(void)
 
 void SC_ProcessCommand_Test_StartRtsGrp(void)
 {
-    /**
-     **  Note: This test does not follow the standard test guideline to only test what's directly in the
-     *function-under-test.
-     **  Since the code for reaching each branch in SC_ProcessCommand is so trivial and non-verifiable, it was decided
-     *to
-     **  combine the tests for each command with the tests for reaching the command from SC_ProcessCommand.
-     **/
-
-    CFE_SB_MsgId_t    TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
-    CFE_MSG_FcnCode_t FcnCode   = SC_START_RTS_GRP_CC;
-
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-    UT_SetDefaultReturnValue(UT_KEY(SC_VerifyCmdLength), true);
-
     /* Execute the function being tested */
-    UtAssert_VOIDCALL(SC_ProcessCommand(&UT_CmdBuf.Buf));
+    UtAssert_VOIDCALL(SC_StartRtsGrpCmd(&UT_CmdBuf.StartRtsGrpCmd));
 
     /* This function is already verified to work correctly in another file, so no verifications here. */
 }
 
 void SC_ProcessCommand_Test_StopRtsGrp(void)
 {
-    /**
-     **  Note: This test does not follow the standard test guideline to only test what's directly in the
-     *function-under-test.
-     **  Since the code for reaching each branch in SC_ProcessCommand is so trivial and non-verifiable, it was decided
-     *to
-     **  combine the tests for each command with the tests for reaching the command from SC_ProcessCommand.
-     **/
-
-    CFE_SB_MsgId_t    TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
-    CFE_MSG_FcnCode_t FcnCode   = SC_STOP_RTS_GRP_CC;
-
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-    UT_SetDefaultReturnValue(UT_KEY(SC_VerifyCmdLength), true);
-
     /* Execute the function being tested */
-    UtAssert_VOIDCALL(SC_ProcessCommand(&UT_CmdBuf.Buf));
+    UtAssert_VOIDCALL(SC_StopRtsGrpCmd(&UT_CmdBuf.StopRtsGrpCmd));
 
     /* This function is already verified to work correctly in another file, so no verifications here. */
 }
 
 void SC_ProcessCommand_Test_DisableRtsGrp(void)
 {
-    /**
-     **  Note: This test does not follow the standard test guideline to only test what's directly in the
-     *function-under-test.
-     **  Since the code for reaching each branch in SC_ProcessCommand is so trivial and non-verifiable, it was decided
-     *to
-     **  combine the tests for each command with the tests for reaching the command from SC_ProcessCommand.
-     **/
-
-    CFE_SB_MsgId_t    TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
-    CFE_MSG_FcnCode_t FcnCode   = SC_DISABLE_RTS_GRP_CC;
-
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-    UT_SetDefaultReturnValue(UT_KEY(SC_VerifyCmdLength), true);
-
     /* Execute the function being tested */
-    UtAssert_VOIDCALL(SC_ProcessCommand(&UT_CmdBuf.Buf));
+    UtAssert_VOIDCALL(SC_DisableRtsGrpCmd(&UT_CmdBuf.DisableRtsGrpCmd));
 
     /* This function is already verified to work correctly in another file, so no verifications here. */
 }
 
 void SC_ProcessCommand_Test_EnableRtsGrp(void)
 {
-    /**
-     **  Note: This test does not follow the standard test guideline to only test what's directly in the
-     *function-under-test.
-     **  Since the code for reaching each branch in SC_ProcessCommand is so trivial and non-verifiable, it was decided
-     *to
-     **  combine the tests for each command with the tests for reaching the command from SC_ProcessCommand.
-     **/
-
-    CFE_SB_MsgId_t    TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
-    CFE_MSG_FcnCode_t FcnCode   = SC_ENABLE_RTS_GRP_CC;
-
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-    UT_SetDefaultReturnValue(UT_KEY(SC_VerifyCmdLength), true);
-
     /* Execute the function being tested */
-    UtAssert_VOIDCALL(SC_ProcessCommand(&UT_CmdBuf.Buf));
+    UtAssert_VOIDCALL(SC_EnableRtsGrpCmd(&UT_CmdBuf.EnableRtsGrpCmd));
 
     /* This function is already verified to work correctly in another file, so no verifications here. */
-}
-
-void SC_ProcessCommand_Test_StartAtsInvalidCmdLength(void)
-{
-    CFE_SB_MsgId_t    TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
-    CFE_MSG_FcnCode_t FcnCode   = SC_START_ATS_CC;
-
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, false);
-
-    /* Execute the function being tested */
-    SC_ProcessCommand(&UT_CmdBuf.Buf);
-
-    /* Verify results */
-    UtAssert_True(SC_OperData.HkPacket.Payload.CmdCtr == 0, "SC_OperData.HkPacket.Payload.CmdCtr == 0");
-    UtAssert_True(SC_OperData.HkPacket.Payload.CmdErrCtr == 0, "SC_OperData.HkPacket.Payload.CmdErrCtr == 0");
-
-    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
-}
-
-void SC_ProcessCommand_Test_StopAtsInvalidCmdLength(void)
-{
-    CFE_SB_MsgId_t    TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
-    CFE_MSG_FcnCode_t FcnCode   = SC_STOP_ATS_CC;
-
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, false);
-
-    /* Execute the function being tested */
-    SC_ProcessCommand(&UT_CmdBuf.Buf);
-
-    /* Verify results */
-    UtAssert_True(SC_OperData.HkPacket.Payload.CmdCtr == 0, "SC_OperData.HkPacket.Payload.CmdCtr == 0");
-    UtAssert_True(SC_OperData.HkPacket.Payload.CmdErrCtr == 0, "SC_OperData.HkPacket.Payload.CmdErrCtr == 0");
-
-    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
-}
-
-void SC_ProcessCommand_Test_StartRtsInvalidCmdLength(void)
-{
-    CFE_SB_MsgId_t    TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
-    CFE_MSG_FcnCode_t FcnCode   = SC_START_RTS_CC;
-
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, false);
-
-    /* Execute the function being tested */
-    SC_ProcessCommand(&UT_CmdBuf.Buf);
-
-    /* Verify results */
-    UtAssert_True(SC_OperData.HkPacket.Payload.CmdCtr == 0, "SC_OperData.HkPacket.Payload.CmdCtr == 0");
-    UtAssert_True(SC_OperData.HkPacket.Payload.CmdErrCtr == 0, "SC_OperData.HkPacket.Payload.CmdErrCtr == 0");
-
-    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
-}
-
-void SC_ProcessCommand_Test_StopRtsInvalidCmdLength(void)
-{
-    CFE_SB_MsgId_t    TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
-    CFE_MSG_FcnCode_t FcnCode   = SC_STOP_RTS_CC;
-
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, false);
-
-    /* Execute the function being tested */
-    SC_ProcessCommand(&UT_CmdBuf.Buf);
-
-    /* Verify results */
-    UtAssert_True(SC_OperData.HkPacket.Payload.CmdCtr == 0, "SC_OperData.HkPacket.Payload.CmdCtr == 0");
-    UtAssert_True(SC_OperData.HkPacket.Payload.CmdErrCtr == 0, "SC_OperData.HkPacket.Payload.CmdErrCtr == 0");
-
-    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
-}
-
-void SC_ProcessCommand_Test_DisableRtsInvalidCmdLength(void)
-{
-    CFE_SB_MsgId_t    TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
-    CFE_MSG_FcnCode_t FcnCode   = SC_DISABLE_RTS_CC;
-
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, false);
-
-    /* Execute the function being tested */
-    SC_ProcessCommand(&UT_CmdBuf.Buf);
-
-    /* Verify results */
-    UtAssert_True(SC_OperData.HkPacket.Payload.CmdCtr == 0, "SC_OperData.HkPacket.Payload.CmdCtr == 0");
-    UtAssert_True(SC_OperData.HkPacket.Payload.CmdErrCtr == 0, "SC_OperData.HkPacket.Payload.CmdErrCtr == 0");
-
-    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
-}
-
-void SC_ProcessCommand_Test_EnableRtsInvalidCmdLength(void)
-{
-    CFE_SB_MsgId_t    TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
-    CFE_MSG_FcnCode_t FcnCode   = SC_ENABLE_RTS_CC;
-
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, false);
-
-    /* Execute the function being tested */
-    SC_ProcessCommand(&UT_CmdBuf.Buf);
-
-    /* Verify results */
-    UtAssert_True(SC_OperData.HkPacket.Payload.CmdCtr == 0, "SC_OperData.HkPacket.Payload.CmdCtr == 0");
-    UtAssert_True(SC_OperData.HkPacket.Payload.CmdErrCtr == 0, "SC_OperData.HkPacket.Payload.CmdErrCtr == 0");
-
-    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
-}
-
-void SC_ProcessCommand_Test_GroundSwitchInvalidCmdLength(void)
-{
-    CFE_SB_MsgId_t    TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
-    CFE_MSG_FcnCode_t FcnCode   = SC_SWITCH_ATS_CC;
-
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, false);
-
-    /* Execute the function being tested */
-    SC_ProcessCommand(&UT_CmdBuf.Buf);
-
-    /* Verify results */
-    UtAssert_True(SC_OperData.HkPacket.Payload.CmdCtr == 0, "SC_OperData.HkPacket.Payload.CmdCtr == 0");
-    UtAssert_True(SC_OperData.HkPacket.Payload.CmdErrCtr == 0, "SC_OperData.HkPacket.Payload.CmdErrCtr == 0");
-
-    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
-}
-
-void SC_ProcessCommand_Test_JumpAtsInvalidCmdLength(void)
-{
-    CFE_SB_MsgId_t    TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
-    CFE_MSG_FcnCode_t FcnCode   = SC_JUMP_ATS_CC;
-
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, false);
-
-    /* Execute the function being tested */
-    SC_ProcessCommand(&UT_CmdBuf.Buf);
-
-    /* Verify results */
-    UtAssert_True(SC_OperData.HkPacket.Payload.CmdCtr == 0, "SC_OperData.HkPacket.Payload.CmdCtr == 0");
-    UtAssert_True(SC_OperData.HkPacket.Payload.CmdErrCtr == 0, "SC_OperData.HkPacket.Payload.CmdErrCtr == 0");
-
-    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
-}
-
-void SC_ProcessCommand_Test_ContinueAtsOnFailureInvalidCmdLength(void)
-{
-    CFE_SB_MsgId_t    TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
-    CFE_MSG_FcnCode_t FcnCode   = SC_CONTINUE_ATS_ON_FAILURE_CC;
-
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, false);
-
-    /* Execute the function being tested */
-    SC_ProcessCommand(&UT_CmdBuf.Buf);
-
-    /* Verify results */
-    UtAssert_True(SC_OperData.HkPacket.Payload.CmdCtr == 0, "SC_OperData.HkPacket.Payload.CmdCtr == 0");
-    UtAssert_True(SC_OperData.HkPacket.Payload.CmdErrCtr == 0, "SC_OperData.HkPacket.Payload.CmdErrCtr == 0");
-
-    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
-}
-
-void SC_ProcessCommand_Test_AppendAtsInvalidCmdLength(void)
-{
-    CFE_SB_MsgId_t    TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
-    CFE_MSG_FcnCode_t FcnCode   = SC_APPEND_ATS_CC;
-
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, false);
-
-    /* Execute the function being tested */
-    SC_ProcessCommand(&UT_CmdBuf.Buf);
-
-    /* Verify results */
-    UtAssert_True(SC_OperData.HkPacket.Payload.CmdCtr == 0, "SC_OperData.HkPacket.Payload.CmdCtr == 0");
-    UtAssert_True(SC_OperData.HkPacket.Payload.CmdErrCtr == 0, "SC_OperData.HkPacket.Payload.CmdErrCtr == 0");
-
-    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
-}
-
-void SC_ProcessCommand_Test_TableManageInvalidCmdLength(void)
-{
-    CFE_SB_MsgId_t    TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
-    CFE_MSG_FcnCode_t FcnCode   = SC_MANAGE_TABLE_CC;
-
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, false);
-
-    /* Execute the function being tested */
-    SC_ProcessCommand(&UT_CmdBuf.Buf);
-
-    /* Verify results */
-    UtAssert_True(SC_OperData.HkPacket.Payload.CmdCtr == 0, "SC_OperData.HkPacket.Payload.CmdCtr == 0");
-    UtAssert_True(SC_OperData.HkPacket.Payload.CmdErrCtr == 0, "SC_OperData.HkPacket.Payload.CmdErrCtr == 0");
-
-    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
-}
-
-void SC_ProcessCommand_Test_StartRtsGrpInvalidCmdLength(void)
-{
-    CFE_SB_MsgId_t    TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
-    CFE_MSG_FcnCode_t FcnCode   = SC_START_RTS_GRP_CC;
-
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, false);
-
-    /* Execute the function being tested */
-    SC_ProcessCommand(&UT_CmdBuf.Buf);
-
-    /* Verify results */
-    UtAssert_True(SC_OperData.HkPacket.Payload.CmdCtr == 0, "SC_OperData.HkPacket.Payload.CmdCtr == 0");
-    UtAssert_True(SC_OperData.HkPacket.Payload.CmdErrCtr == 0, "SC_OperData.HkPacket.Payload.CmdErrCtr == 0");
-
-    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
-}
-
-void SC_ProcessCommand_Test_StopRtsGrpInvalidCmdLength(void)
-{
-    CFE_SB_MsgId_t    TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
-    CFE_MSG_FcnCode_t FcnCode   = SC_STOP_RTS_GRP_CC;
-
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, false);
-
-    /* Execute the function being tested */
-    SC_ProcessCommand(&UT_CmdBuf.Buf);
-
-    /* Verify results */
-    UtAssert_True(SC_OperData.HkPacket.Payload.CmdCtr == 0, "SC_OperData.HkPacket.Payload.CmdCtr == 0");
-    UtAssert_True(SC_OperData.HkPacket.Payload.CmdErrCtr == 0, "SC_OperData.HkPacket.Payload.CmdErrCtr == 0");
-
-    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
-}
-
-void SC_ProcessCommand_Test_DisableRtsGrpInvalidCmdLength(void)
-{
-    CFE_SB_MsgId_t    TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
-    CFE_MSG_FcnCode_t FcnCode   = SC_DISABLE_RTS_GRP_CC;
-
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, false);
-
-    /* Execute the function being tested */
-    SC_ProcessCommand(&UT_CmdBuf.Buf);
-
-    /* Verify results */
-    UtAssert_True(SC_OperData.HkPacket.Payload.CmdCtr == 0, "SC_OperData.HkPacket.Payload.CmdCtr == 0");
-    UtAssert_True(SC_OperData.HkPacket.Payload.CmdErrCtr == 0, "SC_OperData.HkPacket.Payload.CmdErrCtr == 0");
-
-    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
-}
-
-void SC_ProcessCommand_Test_EnableRtsGrpInvalidCmdLength(void)
-{
-    CFE_SB_MsgId_t    TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
-    CFE_MSG_FcnCode_t FcnCode   = SC_ENABLE_RTS_GRP_CC;
-
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-    UT_SetDeferredRetcode(UT_KEY(SC_VerifyCmdLength), 1, false);
-
-    /* Execute the function being tested */
-    SC_ProcessCommand(&UT_CmdBuf.Buf);
-
-    /* Verify results */
-    UtAssert_True(SC_OperData.HkPacket.Payload.CmdCtr == 0, "SC_OperData.HkPacket.Payload.CmdCtr == 0");
-    UtAssert_True(SC_OperData.HkPacket.Payload.CmdErrCtr == 0, "SC_OperData.HkPacket.Payload.CmdErrCtr == 0");
-
-    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
-}
-
-void SC_ProcessCommand_Test_InvalidCmdError(void)
-{
-    /**
-     **  Note: This test does not follow the standard test guideline to only test what's directly in the
-     *function-under-test.
-     **  Since the code for reaching each branch in SC_ProcessCommand is so trivial and non-verifiable, it was decided
-     *to
-     **  combine the tests for each command with the tests for reaching the command from SC_ProcessCommand.
-     **/
-
-    CFE_SB_MsgId_t    TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
-    CFE_MSG_FcnCode_t FcnCode   = 99;
-
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-
-    /* Execute the function being tested */
-    UtAssert_VOIDCALL(SC_ProcessCommand(&UT_CmdBuf.Buf));
-
-    /* Verify results */
-    UtAssert_True(SC_OperData.HkPacket.Payload.CmdCtr == 0, "CmdCtr == 0");
-    UtAssert_True(SC_OperData.HkPacket.Payload.CmdErrCtr == 1, "CmdErrCtr == 1");
-
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_INVLD_CMD_ERR_EID);
-    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
 }
 
 /* Unreachable branches in sc_cmds.c SC_ProcessAtpCmd:236, 274, 310.
@@ -2594,32 +1600,24 @@ void UtTest_Setup(void)
     UtTest_Add(SC_ProcessRtpCommand_Test_RtsStatus, SC_Test_Setup, SC_Test_TearDown,
                "SC_ProcessRtpCommand_Test_RtsStatus");
     UtTest_Add(SC_SendHkPacket_Test, SC_Test_Setup, SC_Test_TearDown, "SC_SendHkPacket_Test");
-    UtTest_Add(SC_ProcessRequest_Test_CmdMID, SC_Test_Setup, SC_Test_TearDown, "SC_ProcessRequest_Test_CmdMID");
     UtTest_Add(SC_ProcessRequest_Test_HkMID, SC_Test_Setup, SC_Test_TearDown, "SC_ProcessRequest_Test_HkMID");
-    UtTest_Add(SC_ProcessRequest_Test_HkMIDNoVerifyCmdLength, SC_Test_Setup, SC_Test_TearDown,
-               "SC_ProcessRequest_Test_HkMIDNoVerifyCmdLength");
     UtTest_Add(SC_ProcessRequest_Test_HkMIDAutoStartRts, SC_Test_Setup, SC_Test_TearDown,
                "SC_ProcessRequest_Test_HkMIDAutoStartRts");
     UtTest_Add(SC_ProcessRequest_Test_HkMIDAutoStartRtsLoaded, SC_Test_Setup, SC_Test_TearDown,
                "SC_ProcessRequest_Test_HkMIDAutoStartRtsLoaded");
-    UtTest_Add(SC_ProcessRequest_Test_1HzWakeupNONE, SC_Test_Setup, SC_Test_TearDown,
-               "SC_ProcessRequest_Test_1HzWakeupNONE");
-    UtTest_Add(SC_ProcessRequest_Test_1HzWakeupNoSwitchPending, SC_Test_Setup, SC_Test_TearDown,
-               "SC_ProcessRequest_Test_1HzWakeupNoSwitchPending");
-    UtTest_Add(SC_ProcessRequest_Test_1HzWakeupAtpNotExecutionTime, SC_Test_Setup, SC_Test_TearDown,
-               "SC_ProcessRequest_Test_1HzWakeupAtpNotExecutionTime");
-    UtTest_Add(SC_ProcessRequest_Test_1HzWakeupRtpExecutionTime, SC_Test_Setup, SC_Test_TearDown,
-               "SC_ProcessRequest_Test_1HzWakeupRtpExecutionTime");
-    UtTest_Add(SC_ProcessRequest_Test_1HzWakeupRtpExecutionTimeTooManyCmds, SC_Test_Setup, SC_Test_TearDown,
-               "SC_ProcessRequest_Test_1HzWakeupRtpExecutionTimeTooManyCmds");
-    UtTest_Add(SC_ProcessRequest_Test_MIDError, SC_Test_Setup, SC_Test_TearDown, "SC_ProcessRequest_Test_MIDError");
+    UtTest_Add(SC_ProcessRequest_Test_OneHzWakeupNONE, SC_Test_Setup, SC_Test_TearDown,
+               "SC_ProcessRequest_Test_OneHzWakeupNONE");
+    UtTest_Add(SC_ProcessRequest_Test_OneHzWakeupNoSwitchPending, SC_Test_Setup, SC_Test_TearDown,
+               "SC_ProcessRequest_Test_OneHzWakeupNoSwitchPending");
+    UtTest_Add(SC_ProcessRequest_Test_OneHzWakeupAtpNotExecutionTime, SC_Test_Setup, SC_Test_TearDown,
+               "SC_ProcessRequest_Test_OneHzWakeupAtpNotExecutionTime");
+    UtTest_Add(SC_ProcessRequest_Test_OneHzWakeupRtpExecutionTime, SC_Test_Setup, SC_Test_TearDown,
+               "SC_ProcessRequest_Test_OneHzWakeupRtpExecutionTime");
+    UtTest_Add(SC_ProcessRequest_Test_OneHzWakeupRtpExecutionTimeTooManyCmds, SC_Test_Setup, SC_Test_TearDown,
+               "SC_ProcessRequest_Test_OneHzWakeupRtpExecutionTimeTooManyCmds");
     UtTest_Add(SC_ProcessCommand_Test_NoOp, SC_Test_Setup, SC_Test_TearDown, "SC_ProcessCommand_Test_NoOp");
-    UtTest_Add(SC_ProcessCommand_Test_NoOpNoVerifyCmdLength, SC_Test_Setup, SC_Test_TearDown,
-               "SC_ProcessCommand_Test_NoOpNoVerifyCmdLength");
     UtTest_Add(SC_ProcessCommand_Test_ResetCounters, SC_Test_Setup, SC_Test_TearDown,
                "SC_ProcessCommand_Test_ResetCounters");
-    UtTest_Add(SC_ProcessCommand_Test_ResetCountersNoVerifyCmdLength, SC_Test_Setup, SC_Test_TearDown,
-               "SC_ProcessCommand_Test_ResetCountersNoVerifyCmdLength");
     UtTest_Add(SC_ProcessCommand_Test_StartAts, SC_Test_Setup, SC_Test_TearDown, "SC_ProcessCommand_Test_StartAts");
     UtTest_Add(SC_ProcessCommand_Test_StopAts, SC_Test_Setup, SC_Test_TearDown, "SC_ProcessCommand_Test_StopAts");
     UtTest_Add(SC_ProcessCommand_Test_StartRts, SC_Test_Setup, SC_Test_TearDown, "SC_ProcessCommand_Test_StartRts");
@@ -2682,36 +1680,4 @@ void UtTest_Setup(void)
                "SC_ProcessCommand_Test_DisableRtsGrp");
     UtTest_Add(SC_ProcessCommand_Test_EnableRtsGrp, SC_Test_Setup, SC_Test_TearDown,
                "SC_ProcessCommand_Test_EnableRtsGrp");
-    UtTest_Add(SC_ProcessCommand_Test_StartAtsInvalidCmdLength, SC_Test_Setup, SC_Test_TearDown,
-               "SC_ProcessCommand_Test_StartAtsInvalidCmdLength");
-    UtTest_Add(SC_ProcessCommand_Test_StopAtsInvalidCmdLength, SC_Test_Setup, SC_Test_TearDown,
-               "SC_ProcessCommand_Test_StopAtsInvalidCmdLength");
-    UtTest_Add(SC_ProcessCommand_Test_StartRtsInvalidCmdLength, SC_Test_Setup, SC_Test_TearDown,
-               "SC_ProcessCommand_Test_StartRtsInvalidCmdLength");
-    UtTest_Add(SC_ProcessCommand_Test_StopRtsInvalidCmdLength, SC_Test_Setup, SC_Test_TearDown,
-               "SC_ProcessCommand_Test_StopRtsInvalidCmdLength");
-    UtTest_Add(SC_ProcessCommand_Test_DisableRtsInvalidCmdLength, SC_Test_Setup, SC_Test_TearDown,
-               "SC_ProcessCommand_Test_DisableRtsInvalidCmdLength");
-    UtTest_Add(SC_ProcessCommand_Test_EnableRtsInvalidCmdLength, SC_Test_Setup, SC_Test_TearDown,
-               "SC_ProcessCommand_Test_EnableRtsInvalidCmdLength");
-    UtTest_Add(SC_ProcessCommand_Test_GroundSwitchInvalidCmdLength, SC_Test_Setup, SC_Test_TearDown,
-               "SC_ProcessCommand_Test_GroundSwitchInvalidCmdLength");
-    UtTest_Add(SC_ProcessCommand_Test_JumpAtsInvalidCmdLength, SC_Test_Setup, SC_Test_TearDown,
-               "SC_ProcessCommand_Test_JumpAtsInvalidCmdLength");
-    UtTest_Add(SC_ProcessCommand_Test_ContinueAtsOnFailureInvalidCmdLength, SC_Test_Setup, SC_Test_TearDown,
-               "SC_ProcessCommand_Test_ContinueAtsOnFailureInvalidCmdLength");
-    UtTest_Add(SC_ProcessCommand_Test_AppendAtsInvalidCmdLength, SC_Test_Setup, SC_Test_TearDown,
-               "SC_ProcessCommand_Test_AppendAtsInvalidCmdLength");
-    UtTest_Add(SC_ProcessCommand_Test_TableManageInvalidCmdLength, SC_Test_Setup, SC_Test_TearDown,
-               "SC_ProcessCommand_Test_TableManageInvalidCmdLength");
-    UtTest_Add(SC_ProcessCommand_Test_StartRtsGrpInvalidCmdLength, SC_Test_Setup, SC_Test_TearDown,
-               "SC_ProcessCommand_Test_StartRtsGrpInvalidCmdLength");
-    UtTest_Add(SC_ProcessCommand_Test_StopRtsGrpInvalidCmdLength, SC_Test_Setup, SC_Test_TearDown,
-               "SC_ProcessCommand_Test_StopRtsGrpInvalidCmdLength");
-    UtTest_Add(SC_ProcessCommand_Test_DisableRtsGrpInvalidCmdLength, SC_Test_Setup, SC_Test_TearDown,
-               "SC_ProcessCommand_Test_DisableRtsGrpInvalidCmdLength");
-    UtTest_Add(SC_ProcessCommand_Test_EnableRtsGrpInvalidCmdLength, SC_Test_Setup, SC_Test_TearDown,
-               "SC_ProcessCommand_Test_EnableRtsGrpInvalidCmdLength");
-    UtTest_Add(SC_ProcessCommand_Test_InvalidCmdError, SC_Test_Setup, SC_Test_TearDown,
-               "SC_ProcessCommand_Test_InvalidCmdError");
 }

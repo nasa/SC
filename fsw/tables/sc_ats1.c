@@ -72,14 +72,14 @@
 /* Custom table structure, modify as needed to add desired commands */
 typedef struct
 {
-    SC_AtsEntryHeader_t hdr1;
-    SC_NoArgsCmd_t      cmd1;
-    SC_AtsEntryHeader_t hdr2;
-    SC_RtsCmd_t         cmd2;
-    SC_AtsEntryHeader_t hdr3;
-    SC_RtsCmd_t         cmd3;
-    SC_AtsEntryHeader_t hdr4;
-    SC_NoArgsCmd_t      cmd4;
+    SC_AtsEntryHeader_t   hdr1;
+    SC_NoopCmd_t          cmd1;
+    SC_AtsEntryHeader_t   hdr2;
+    SC_EnableRtsCmd_t     cmd2;
+    SC_AtsEntryHeader_t   hdr3;
+    SC_StartRtsCmd_t      cmd3;
+    SC_AtsEntryHeader_t   hdr4;
+    SC_ResetCountersCmd_t cmd4;
 } SC_AtsStruct1_t;
 
 /* Define the union to size the table correctly */
@@ -101,18 +101,18 @@ SC_AtsTable1_t SC_Ats1 = {
     .ats.cmd1.CmdHeader  = CFE_MSG_CMD_HDR_INIT(SC_CMD_MID, SC_MEMBER_SIZE(cmd1), SC_NOOP_CC, SC_NOOP_CKSUM),
 
     /* 2 */
-    .ats.hdr2.CmdNumber     = 2,
-    .ats.hdr2.TimeTag_MS    = SC_CMD2_TIME >> 16,
-    .ats.hdr2.TimeTag_LS    = SC_CMD2_TIME & 0xFFFF,
-    .ats.cmd2.CmdHeader     =
+    .ats.hdr2.CmdNumber  = 2,
+    .ats.hdr2.TimeTag_MS = SC_CMD2_TIME >> 16,
+    .ats.hdr2.TimeTag_LS = SC_CMD2_TIME & 0xFFFF,
+    .ats.cmd2.CmdHeader =
         CFE_MSG_CMD_HDR_INIT(SC_CMD_MID, SC_MEMBER_SIZE(cmd2), SC_ENABLE_RTS_CC, SC_ENABLE_RTS1_CKSUM),
     .ats.cmd2.Payload.RtsId = 1,
 
     /* 3 */
-    .ats.hdr3.CmdNumber     = 3,
-    .ats.hdr3.TimeTag_MS    = SC_CMD3_TIME >> 16,
-    .ats.hdr3.TimeTag_LS    = SC_CMD3_TIME & 0xFFFF,
-    .ats.cmd3.CmdHeader     = CFE_MSG_CMD_HDR_INIT(SC_CMD_MID, SC_MEMBER_SIZE(cmd3), SC_START_RTS_CC, SC_START_RTS1_CKSUM),
+    .ats.hdr3.CmdNumber  = 3,
+    .ats.hdr3.TimeTag_MS = SC_CMD3_TIME >> 16,
+    .ats.hdr3.TimeTag_LS = SC_CMD3_TIME & 0xFFFF,
+    .ats.cmd3.CmdHeader  = CFE_MSG_CMD_HDR_INIT(SC_CMD_MID, SC_MEMBER_SIZE(cmd3), SC_START_RTS_CC, SC_START_RTS1_CKSUM),
     .ats.cmd3.Payload.RtsId = 1,
 
     /* 4 */

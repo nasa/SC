@@ -82,69 +82,6 @@ void SC_CompareAbsTime_Test_False(void)
     UtAssert_BOOL_FALSE(SC_CompareAbsTime(AbsTimeTag1, AbsTimeTag2));
 }
 
-void SC_VerifyCmdLength_Test_Nominal(void)
-{
-    SC_NoArgsCmd_t    CmdPacket;
-    CFE_SB_MsgId_t    TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
-    CFE_MSG_FcnCode_t FcnCode   = SC_NOOP_CC;
-    size_t            MsgSize   = sizeof(CmdPacket);
-
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(SC_AppendAtsCmd_t), false);
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &MsgSize, sizeof(MsgSize), false);
-
-    /* Execute the function being tested */
-    UtAssert_BOOL_TRUE(SC_VerifyCmdLength(&CmdPacket.CmdHeader.Msg, sizeof(CmdPacket)));
-
-    /* Verify results */
-    UtAssert_True(SC_OperData.HkPacket.Payload.CmdErrCtr == 0, "SC_OperData.HkPacket.Payload.CmdErrCtr == 0");
-
-    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
-}
-
-void SC_VerifyCmdLength_Test_LenError(void)
-{
-    SC_NoArgsCmd_t    CmdPacket;
-    CFE_SB_MsgId_t    TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
-    CFE_MSG_FcnCode_t FcnCode   = SC_NOOP_CC;
-    size_t            MsgSize   = sizeof(CmdPacket);
-
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(SC_AppendAtsCmd_t), false);
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &MsgSize, sizeof(MsgSize), false);
-
-    /* Execute the function being tested */
-    UtAssert_BOOL_FALSE(SC_VerifyCmdLength(&CmdPacket.CmdHeader.Msg, 999));
-
-    /* Verify results */
-    UtAssert_True(SC_OperData.HkPacket.Payload.CmdCtr == 0, "SC_OperData.HkPacket.Payload.CmdCtr == 0");
-    UtAssert_True(SC_OperData.HkPacket.Payload.CmdErrCtr == 1, "SC_OperData.HkPacket.Payload.CmdErrCtr == 1");
-
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_LEN_ERR_EID);
-    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
-}
-
-void SC_VerifyCmdLength_Test_LenErrorNotMID(void)
-{
-    SC_NoArgsCmd_t    CmdPacket;
-    CFE_SB_MsgId_t    TestMsgId = CFE_SB_ValueToMsgId(SC_SEND_HK_MID);
-    CFE_MSG_FcnCode_t FcnCode   = 0;
-    size_t            MsgSize   = sizeof(CmdPacket);
-
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(SC_AppendAtsCmd_t), false);
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &MsgSize, sizeof(MsgSize), false);
-
-    /* Execute the function being tested */
-    UtAssert_BOOL_FALSE(SC_VerifyCmdLength(&CmdPacket.CmdHeader.Msg, 999));
-
-    /* Verify results */
-    UtAssert_True(SC_OperData.HkPacket.Payload.CmdCtr == 0, "SC_OperData.HkPacket.Payload.CmdCtr == 0");
-
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_LEN_ERR_EID);
-    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
-}
-
 void SC_ToggleAtsIndex_Test(void)
 {
     SC_OperData.AtsCtrlBlckAddr->AtsNumber = 1;
@@ -163,9 +100,5 @@ void UtTest_Setup(void)
     UtTest_Add(SC_ComputeAbsTime_Test, SC_Test_Setup, SC_Test_TearDown, "SC_ComputeAbsTime_Test");
     UtTest_Add(SC_CompareAbsTime_Test_True, SC_Test_Setup, SC_Test_TearDown, "SC_CompareAbsTime_Test_True");
     UtTest_Add(SC_CompareAbsTime_Test_False, SC_Test_Setup, SC_Test_TearDown, "SC_CompareAbsTime_Test_False");
-    UtTest_Add(SC_VerifyCmdLength_Test_Nominal, SC_Test_Setup, SC_Test_TearDown, "SC_VerifyCmdLength_Test_Nominal");
-    UtTest_Add(SC_VerifyCmdLength_Test_LenError, SC_Test_Setup, SC_Test_TearDown, "SC_VerifyCmdLength_Test_LenError");
-    UtTest_Add(SC_VerifyCmdLength_Test_LenErrorNotMID, SC_Test_Setup, SC_Test_TearDown,
-               "SC_VerifyCmdLength_Test_LenErrorNotMID");
     UtTest_Add(SC_ToggleAtsIndex_Test, SC_Test_Setup, SC_Test_TearDown, "SC_ToggleAtsIndex_Test");
 }

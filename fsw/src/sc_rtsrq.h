@@ -26,7 +26,8 @@
 #ifndef SC_RTSRQ_H
 #define SC_RTSRQ_H
 
-#include "cfe.h"
+#include "common_types.h"
+#include "sc_msg.h"
 
 /**
  * \brief Start an RTS Command
@@ -37,11 +38,11 @@
  *  \par Assumptions, External Events, and Notes:
  *        None
  *
- *  \param [in]         CmdPacket      Pointer to Software Bus buffer
+ *  \param [in]         Cmd      Pointer to Software Bus buffer
  *
  *  \sa #SC_START_RTS_CC
  */
-void SC_StartRtsCmd(const CFE_SB_Buffer_t *CmdPacket);
+void SC_StartRtsCmd(const SC_StartRtsCmd_t *Cmd);
 
 /**
  * \brief Start a group of RTS Command
@@ -52,11 +53,11 @@ void SC_StartRtsCmd(const CFE_SB_Buffer_t *CmdPacket);
  *  \par Assumptions, External Events, and Notes:
  *        None
  *
- *  \param [in]         CmdPacket      Pointer to Software Bus buffer
+ *  \param [in]         Cmd      Pointer to Software Bus buffer
  *
  *  \sa #SC_START_RTS_GRP_CC
  */
-void SC_StartRtsGrpCmd(const CFE_SB_Buffer_t *CmdPacket);
+void SC_StartRtsGrpCmd(const SC_StartRtsGrpCmd_t *Cmd);
 
 /**
  * \brief  Stop an RTS from executing Command
@@ -67,11 +68,11 @@ void SC_StartRtsGrpCmd(const CFE_SB_Buffer_t *CmdPacket);
  *  \par Assumptions, External Events, and Notes:
  *        None
  *
- *  \param [in]         CmdPacket      Pointer to Software Bus buffer
+ *  \param [in]         Cmd      Pointer to Software Bus buffer
  *
  *  \sa #SC_STOP_RTS_CC
  */
-void SC_StopRtsCmd(const CFE_SB_Buffer_t *CmdPacket);
+void SC_StopRtsCmd(const SC_StopRtsCmd_t *Cmd);
 
 /**
  * \brief  Stop a group of RTS from executing Command
@@ -82,11 +83,11 @@ void SC_StopRtsCmd(const CFE_SB_Buffer_t *CmdPacket);
  *  \par Assumptions, External Events, and Notes:
  *        None
  *
- *  \param [in]         CmdPacket      Pointer to Software Bus buffer
+ *  \param [in]         Cmd      Pointer to Software Bus buffer
  *
  *  \sa #SC_STOP_RTS_CC
  */
-void SC_StopRtsGrpCmd(const CFE_SB_Buffer_t *CmdPacket);
+void SC_StopRtsGrpCmd(const SC_StopRtsGrpCmd_t *Cmd);
 
 /**
  * \brief Disable an RTS Command
@@ -97,11 +98,11 @@ void SC_StopRtsGrpCmd(const CFE_SB_Buffer_t *CmdPacket);
  *  \par Assumptions, External Events, and Notes:
  *        None
  *
- *  \param [in]         CmdPacket      Pointer to Software Bus buffer
+ *  \param [in]         Cmd      Pointer to Software Bus buffer
  *
  *  \sa #SC_DISABLE_RTS_CC
  */
-void SC_DisableRtsCmd(const CFE_SB_Buffer_t *CmdPacket);
+void SC_DisableRtsCmd(const SC_DisableRtsCmd_t *Cmd);
 
 /**
  * \brief Disable a group of RTS Command
@@ -112,11 +113,11 @@ void SC_DisableRtsCmd(const CFE_SB_Buffer_t *CmdPacket);
  *  \par Assumptions, External Events, and Notes:
  *        None
  *
- *  \param [in]         CmdPacket      Pointer to Software Bus buffer
+ *  \param [in]         Cmd      Pointer to Software Bus buffer
  *
  *  \sa #SC_DISABLE_RTS_CC
  */
-void SC_DisableRtsGrpCmd(const CFE_SB_Buffer_t *CmdPacket);
+void SC_DisableRtsGrpCmd(const SC_DisableRtsGrpCmd_t *Cmd);
 
 /**
  * \brief Enable an RTS Command
@@ -127,11 +128,11 @@ void SC_DisableRtsGrpCmd(const CFE_SB_Buffer_t *CmdPacket);
  *  \par Assumptions, External Events, and Notes:
  *        None
  *
- *  \param [in]         CmdPacket      Pointer to Software Bus buffer
+ *  \param [in]         Cmd      Pointer to Software Bus buffer
  *
  *  \sa #SC_ENABLE_RTS_CC
  */
-void SC_EnableRtsCmd(const CFE_SB_Buffer_t *CmdPacket);
+void SC_EnableRtsCmd(const SC_EnableRtsCmd_t *Cmd);
 
 /**
  * \brief Enable a group of RTS Command
@@ -142,11 +143,11 @@ void SC_EnableRtsCmd(const CFE_SB_Buffer_t *CmdPacket);
  *  \par Assumptions, External Events, and Notes:
  *        None
  *
- *  \param [in]         CmdPacket      Pointer to Software Bus buffer
+ *  \param [in]         Cmd      Pointer to Software Bus buffer
  *
  *  \sa #SC_ENABLE_RTS_GRP_CC
  */
-void SC_EnableRtsGrpCmd(const CFE_SB_Buffer_t *CmdPacket);
+void SC_EnableRtsGrpCmd(const SC_EnableRtsGrpCmd_t *Cmd);
 
 /**
  * \brief Stops an RTS & clears out data

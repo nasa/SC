@@ -90,29 +90,6 @@ SC_AbsTimeTag_t SC_ComputeAbsTime(SC_RelTimeTag_t RelTime);
 bool SC_CompareAbsTime(SC_AbsTimeTag_t AbsTime1, SC_AbsTimeTag_t AbsTime2);
 
 /**
- * \brief Verify command message length
- *
- *  \par Description
- *       This routine will check if the actual length of a software bus
- *       command message matches the expected length and send an
- *       error event message if a mismatch occurs
- *
- *  \par Assumptions, External Events, and Notes:
- *       None
- *
- *  \param [in]   Msg              Pointer to message
- *  \param [in]   ExpectedLength   The expected length of the message
- *                                 based upon the command code
- *
- *  \return Boolean length verification result
- *  \retval true  Length matches expected
- *  \retval false Length does not match expected
- *
- *  \sa #SC_LEN_ERR_EID
- */
-bool SC_VerifyCmdLength(const CFE_MSG_Message_t *Msg, size_t ExpectedLength);
-
-/**
  * \brief Toggles the ATS index
  *
  *  \par Description
