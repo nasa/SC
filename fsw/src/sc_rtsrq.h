@@ -43,8 +43,6 @@
  */
 void SC_StartRtsCmd(const CFE_SB_Buffer_t *CmdPacket);
 
-#if (SC_ENABLE_GROUP_COMMANDS == true)
-
 /**
  * \brief Start a group of RTS Command
  *
@@ -59,7 +57,6 @@ void SC_StartRtsCmd(const CFE_SB_Buffer_t *CmdPacket);
  *  \sa #SC_START_RTS_GRP_CC
  */
 void SC_StartRtsGrpCmd(const CFE_SB_Buffer_t *CmdPacket);
-#endif
 
 /**
  * \brief  Stop an RTS from executing Command
@@ -76,8 +73,6 @@ void SC_StartRtsGrpCmd(const CFE_SB_Buffer_t *CmdPacket);
  */
 void SC_StopRtsCmd(const CFE_SB_Buffer_t *CmdPacket);
 
-#if (SC_ENABLE_GROUP_COMMANDS == true)
-
 /**
  * \brief  Stop a group of RTS from executing Command
  *
@@ -92,7 +87,6 @@ void SC_StopRtsCmd(const CFE_SB_Buffer_t *CmdPacket);
  *  \sa #SC_STOP_RTS_CC
  */
 void SC_StopRtsGrpCmd(const CFE_SB_Buffer_t *CmdPacket);
-#endif
 
 /**
  * \brief Disable an RTS Command
@@ -109,8 +103,6 @@ void SC_StopRtsGrpCmd(const CFE_SB_Buffer_t *CmdPacket);
  */
 void SC_DisableRtsCmd(const CFE_SB_Buffer_t *CmdPacket);
 
-#if (SC_ENABLE_GROUP_COMMANDS == true)
-
 /**
  * \brief Disable a group of RTS Command
  *
@@ -125,7 +117,6 @@ void SC_DisableRtsCmd(const CFE_SB_Buffer_t *CmdPacket);
  *  \sa #SC_DISABLE_RTS_CC
  */
 void SC_DisableRtsGrpCmd(const CFE_SB_Buffer_t *CmdPacket);
-#endif
 
 /**
  * \brief Enable an RTS Command
@@ -142,8 +133,6 @@ void SC_DisableRtsGrpCmd(const CFE_SB_Buffer_t *CmdPacket);
  */
 void SC_EnableRtsCmd(const CFE_SB_Buffer_t *CmdPacket);
 
-#if (SC_ENABLE_GROUP_COMMANDS == true)
-
 /**
  * \brief Enable a group of RTS Command
  *
@@ -158,7 +147,6 @@ void SC_EnableRtsCmd(const CFE_SB_Buffer_t *CmdPacket);
  *  \sa #SC_ENABLE_RTS_GRP_CC
  */
 void SC_EnableRtsGrpCmd(const CFE_SB_Buffer_t *CmdPacket);
-#endif
 
 /**
  * \brief Stops an RTS & clears out data

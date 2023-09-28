@@ -162,7 +162,6 @@ void SC_StartRtsCmd(const CFE_SB_Buffer_t *CmdPacket)
     }
 }
 
-#if (SC_ENABLE_GROUP_COMMANDS == true)
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /*                                                                 */
 /* Start a group of RTS                                            */
@@ -247,7 +246,6 @@ void SC_StartRtsGrpCmd(const CFE_SB_Buffer_t *CmdPacket)
         SC_OperData.HkPacket.Payload.CmdErrCtr++;
     }
 }
-#endif
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /*                                                                 */
@@ -286,7 +284,6 @@ void SC_StopRtsCmd(const CFE_SB_Buffer_t *CmdPacket)
     } /* end if */
 }
 
-#if (SC_ENABLE_GROUP_COMMANDS == true)
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /*                                                                 */
 /* Stop a group of RTS                                             */
@@ -334,7 +331,6 @@ void SC_StopRtsGrpCmd(const CFE_SB_Buffer_t *CmdPacket)
             SC_OperData.HkPacket.Payload.CmdErrCtr++;
         }
 }
-#endif
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /*                                                                 */
@@ -372,7 +368,6 @@ void SC_DisableRtsCmd(const CFE_SB_Buffer_t *CmdPacket)
     } /* end if */
 }
 
-#if (SC_ENABLE_GROUP_COMMANDS == true)
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /*                                                                 */
 /* Disable a group of RTS                                          */
@@ -421,7 +416,6 @@ void SC_DisableRtsGrpCmd(const CFE_SB_Buffer_t *CmdPacket)
         SC_OperData.HkPacket.Payload.CmdErrCtr++;
     }
 }
-#endif
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /*                                                                 */
@@ -460,7 +454,6 @@ void SC_EnableRtsCmd(const CFE_SB_Buffer_t *CmdPacket)
     } /* end if */
 }
 
-#if (SC_ENABLE_GROUP_COMMANDS == true)
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /*                                                                 */
 /* Enable a group of RTS                                           */
@@ -509,7 +502,6 @@ void SC_EnableRtsGrpCmd(const CFE_SB_Buffer_t *CmdPacket)
         SC_OperData.HkPacket.Payload.CmdErrCtr++;
     }
 }
-#endif
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /*                                                                 */

@@ -203,12 +203,6 @@
 #endif
 #endif
 
-#ifndef SC_ENABLE_GROUP_COMMANDS
-#error SC_ENABLE_GROUP_COMMANDS must be defined!
-#elif ((SC_ENABLE_GROUP_COMMANDS != true) && (SC_ENABLE_GROUP_COMMANDS != false))
-#error SC_ENABLE_GROUP_COMMANDS must be either true or false!
-#endif
-
 #ifndef SC_MISSION_REV
 #error SC_MISSION_REV must be defined!
 #elif (SC_MISSION_REV < 0)

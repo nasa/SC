@@ -162,7 +162,6 @@ typedef struct
     uint16 Padding; /**< \brief Structure Padding */
 } SC_AppendAtsCmd_Payload_t;
 
-#if (SC_ENABLE_GROUP_COMMANDS == true)
 /**
  *  \brief RTS Group Command Payload
  */
@@ -171,7 +170,6 @@ typedef struct
     uint16 FirstRtsId; /**< \brief ID of the first RTS to act on, 1 through #SC_NUMBER_OF_RTS */
     uint16 LastRtsId;  /**< \brief ID of the last RTS to act on, 1 through #SC_NUMBER_OF_RTS */
 } SC_RtsGrpCmd_Payload_t;
-#endif
 
 /**
  *  \brief No Arguments Command
@@ -239,7 +237,6 @@ typedef struct
     SC_AppendAtsCmd_Payload_t Payload;
 } SC_AppendAtsCmd_t;
 
-#if (SC_ENABLE_GROUP_COMMANDS == true)
 /**
  *  \brief RTS Group Command
  *
@@ -250,7 +247,6 @@ typedef struct
     CFE_MSG_CommandHeader_t CmdHeader; /**< \brief Command Header */
     SC_RtsGrpCmd_Payload_t  Payload;
 } SC_RtsGrpCmd_t;
-#endif
 
 /**\}*/
 
