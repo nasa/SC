@@ -17,95 +17,193 @@
  * limitations under the License.
  ************************************************************************/
 
-/*
- * Includes
+/**
+ * @file
+ *
+ * Auto-Generated stub implementations for functions defined in sc_loads header
  */
 
 #include "sc_loads.h"
+#include "utgenstub.h"
 
-/* UT includes */
-#include "uttest.h"
-#include "utassert.h"
-#include "utstubs.h"
-
-bool SC_ParseRts(uint32 Buffer[])
-{
-    UT_Stub_RegisterContext(UT_KEY(SC_ParseRts), Buffer);
-    return UT_DEFAULT_IMPL(SC_ParseRts);
-}
-
+/*
+ * ----------------------------------------------------
+ * Generated stub function for SC_BuildTimeIndexTable()
+ * ----------------------------------------------------
+ */
 void SC_BuildTimeIndexTable(uint16 AtsIndex)
 {
-    UT_Stub_RegisterContextGenericArg(UT_KEY(SC_BuildTimeIndexTable), AtsIndex);
-    UT_DEFAULT_IMPL(SC_BuildTimeIndexTable);
+    UT_GenStub_AddParam(SC_BuildTimeIndexTable, uint16, AtsIndex);
+
+    UT_GenStub_Execute(SC_BuildTimeIndexTable, Basic, NULL);
 }
 
-void SC_Insert(uint16 AtsIndex, uint32 NewCmdIndex, uint32 ListLength)
-{
-    UT_Stub_RegisterContextGenericArg(UT_KEY(SC_Insert), AtsIndex);
-    UT_Stub_RegisterContextGenericArg(UT_KEY(SC_Insert), NewCmdIndex);
-    UT_Stub_RegisterContextGenericArg(UT_KEY(SC_Insert), ListLength);
-    UT_DEFAULT_IMPL(SC_Insert);
-}
-
+/*
+ * ----------------------------------------------------
+ * Generated stub function for SC_InitAtsTables()
+ * ----------------------------------------------------
+ */
 void SC_InitAtsTables(uint16 AtsIndex)
 {
-    UT_Stub_RegisterContextGenericArg(UT_KEY(SC_InitAtsTables), AtsIndex);
-    UT_DEFAULT_IMPL(SC_InitAtsTables);
+    UT_GenStub_AddParam(SC_InitAtsTables, uint16, AtsIndex);
+
+    UT_GenStub_Execute(SC_InitAtsTables, Basic, NULL);
 }
 
-int32 SC_VerifyAtsTable(uint32 *Buffer, int32 BufferWords)
+/*
+ * ----------------------------------------------------
+ * Generated stub function for SC_Insert()
+ * ----------------------------------------------------
+ */
+void SC_Insert(uint16 AtsIndex, uint32 NewCmdIndex, uint32 ListLength)
 {
-    UT_Stub_RegisterContext(UT_KEY(SC_VerifyAtsTable), Buffer);
-    UT_Stub_RegisterContextGenericArg(UT_KEY(SC_VerifyAtsTable), BufferWords);
-    return UT_DEFAULT_IMPL(SC_VerifyAtsTable);
+    UT_GenStub_AddParam(SC_Insert, uint16, AtsIndex);
+    UT_GenStub_AddParam(SC_Insert, uint32, NewCmdIndex);
+    UT_GenStub_AddParam(SC_Insert, uint32, ListLength);
+
+    UT_GenStub_Execute(SC_Insert, Basic, NULL);
 }
 
-int32 SC_VerifyAtsEntry(uint32 *Buffer, int32 EntryIndex, int32 BufferWords)
-{
-    UT_Stub_RegisterContext(UT_KEY(SC_VerifyAtsEntry), Buffer);
-    UT_Stub_RegisterContextGenericArg(UT_KEY(SC_VerifyAtsEntry), EntryIndex);
-    UT_Stub_RegisterContextGenericArg(UT_KEY(SC_VerifyAtsEntry), BufferWords);
-    return UT_DEFAULT_IMPL(SC_VerifyAtsEntry);
-}
-
+/*
+ * ----------------------------------------------------
+ * Generated stub function for SC_LoadAts()
+ * ----------------------------------------------------
+ */
 void SC_LoadAts(uint16 AtsIndex)
 {
-    UT_Stub_RegisterContextGenericArg(UT_KEY(SC_LoadAts), AtsIndex);
-    UT_DEFAULT_IMPL(SC_LoadAts);
+    UT_GenStub_AddParam(SC_LoadAts, uint16, AtsIndex);
+
+    UT_GenStub_Execute(SC_LoadAts, Basic, NULL);
 }
 
-int32 SC_ValidateAts(void *TableData)
-{
-    UT_Stub_RegisterContext(UT_KEY(SC_ValidateAts), TableData);
-    return UT_DEFAULT_IMPL(SC_ValidateAts);
-}
-
-int32 SC_ValidateAppend(void *TableData)
-{
-    UT_Stub_RegisterContext(UT_KEY(SC_ValidateAppend), TableData);
-    return UT_DEFAULT_IMPL(SC_ValidateAppend);
-}
-
-void SC_UpdateAppend(void)
-{
-    UT_DEFAULT_IMPL(SC_UpdateAppend);
-}
-
-void SC_ProcessAppend(uint16 AtsIndex)
-{
-    UT_Stub_RegisterContextGenericArg(UT_KEY(SC_ProcessAppend), AtsIndex);
-    UT_DEFAULT_IMPL(SC_ProcessAppend);
-}
-
+/*
+ * ----------------------------------------------------
+ * Generated stub function for SC_LoadRts()
+ * ----------------------------------------------------
+ */
 void SC_LoadRts(uint16 RtsIndex)
 {
-    UT_Stub_RegisterContextGenericArg(UT_KEY(SC_LoadRts), RtsIndex);
-    UT_DEFAULT_IMPL(SC_LoadRts);
+    UT_GenStub_AddParam(SC_LoadRts, uint16, RtsIndex);
+
+    UT_GenStub_Execute(SC_LoadRts, Basic, NULL);
 }
 
+/*
+ * ----------------------------------------------------
+ * Generated stub function for SC_ParseRts()
+ * ----------------------------------------------------
+ */
+bool SC_ParseRts(uint32 Buffer32[])
+{
+    UT_GenStub_SetupReturnBuffer(SC_ParseRts, bool);
+
+    UT_GenStub_Execute(SC_ParseRts, Basic, NULL);
+
+    return UT_GenStub_GetReturnValue(SC_ParseRts, bool);
+}
+
+/*
+ * ----------------------------------------------------
+ * Generated stub function for SC_ProcessAppend()
+ * ----------------------------------------------------
+ */
+void SC_ProcessAppend(uint16 AtsIndex)
+{
+    UT_GenStub_AddParam(SC_ProcessAppend, uint16, AtsIndex);
+
+    UT_GenStub_Execute(SC_ProcessAppend, Basic, NULL);
+}
+
+/*
+ * ----------------------------------------------------
+ * Generated stub function for SC_UpdateAppend()
+ * ----------------------------------------------------
+ */
+void SC_UpdateAppend(void)
+{
+
+    UT_GenStub_Execute(SC_UpdateAppend, Basic, NULL);
+}
+
+/*
+ * ----------------------------------------------------
+ * Generated stub function for SC_ValidateAppend()
+ * ----------------------------------------------------
+ */
+int32 SC_ValidateAppend(void *TableData)
+{
+    UT_GenStub_SetupReturnBuffer(SC_ValidateAppend, int32);
+
+    UT_GenStub_AddParam(SC_ValidateAppend, void *, TableData);
+
+    UT_GenStub_Execute(SC_ValidateAppend, Basic, NULL);
+
+    return UT_GenStub_GetReturnValue(SC_ValidateAppend, int32);
+}
+
+/*
+ * ----------------------------------------------------
+ * Generated stub function for SC_ValidateAts()
+ * ----------------------------------------------------
+ */
+int32 SC_ValidateAts(void *TableData)
+{
+    UT_GenStub_SetupReturnBuffer(SC_ValidateAts, int32);
+
+    UT_GenStub_AddParam(SC_ValidateAts, void *, TableData);
+
+    UT_GenStub_Execute(SC_ValidateAts, Basic, NULL);
+
+    return UT_GenStub_GetReturnValue(SC_ValidateAts, int32);
+}
+
+/*
+ * ----------------------------------------------------
+ * Generated stub function for SC_ValidateRts()
+ * ----------------------------------------------------
+ */
 int32 SC_ValidateRts(void *TableData)
 {
-    UT_Stub_RegisterContext(UT_KEY(SC_ValidateRts), TableData);
-    return UT_DEFAULT_IMPL(SC_ValidateRts);
+    UT_GenStub_SetupReturnBuffer(SC_ValidateRts, int32);
+
+    UT_GenStub_AddParam(SC_ValidateRts, void *, TableData);
+
+    UT_GenStub_Execute(SC_ValidateRts, Basic, NULL);
+
+    return UT_GenStub_GetReturnValue(SC_ValidateRts, int32);
+}
+
+/*
+ * ----------------------------------------------------
+ * Generated stub function for SC_VerifyAtsEntry()
+ * ----------------------------------------------------
+ */
+int32 SC_VerifyAtsEntry(uint32 *Buffer32, int32 EntryIndex, int32 BufferWords)
+{
+    UT_GenStub_SetupReturnBuffer(SC_VerifyAtsEntry, int32);
+
+    UT_GenStub_AddParam(SC_VerifyAtsEntry, uint32 *, Buffer32);
+    UT_GenStub_AddParam(SC_VerifyAtsEntry, int32, EntryIndex);
+    UT_GenStub_AddParam(SC_VerifyAtsEntry, int32, BufferWords);
+
+    UT_GenStub_Execute(SC_VerifyAtsEntry, Basic, NULL);
+
+    return UT_GenStub_GetReturnValue(SC_VerifyAtsEntry, int32);
+}
+
+/*
+ * ----------------------------------------------------
+ * Generated stub function for SC_VerifyAtsTable()
+ * ----------------------------------------------------
+ */
+int32 SC_VerifyAtsTable(uint32 *Buffer32, int32 BufferWords)
+{
+    UT_GenStub_SetupReturnBuffer(SC_VerifyAtsTable, int32);
+
+    UT_GenStub_AddParam(SC_VerifyAtsTable, uint32 *, Buffer32);
+    UT_GenStub_AddParam(SC_VerifyAtsTable, int32, BufferWords);
+
+    UT_GenStub_Execute(SC_VerifyAtsTable, Basic, NULL);
+
+    return UT_GenStub_GetReturnValue(SC_VerifyAtsTable, int32);
 }

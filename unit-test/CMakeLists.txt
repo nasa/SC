@@ -9,6 +9,7 @@
 
 add_cfe_coverage_stubs("sc_internal"
   utilities/sc_test_utils.c
+  stubs/sc_global_stubs.c
   stubs/sc_loads_stubs.c
   stubs/sc_cmds_stubs.c
   stubs/sc_atsrq_stubs.c

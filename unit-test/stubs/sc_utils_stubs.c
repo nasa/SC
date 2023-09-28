@@ -17,49 +17,102 @@
  * limitations under the License.
  ************************************************************************/
 
-/*
- * Includes
+/**
+ * @file
+ *
+ * Auto-Generated stub implementations for functions defined in sc_utils header
  */
 
 #include "sc_utils.h"
+#include "utgenstub.h"
 
-/* UT includes */
-#include "uttest.h"
-#include "utassert.h"
-#include "utstubs.h"
-
-void SC_GetCurrentTime(void)
-{
-    UT_DEFAULT_IMPL(SC_GetCurrentTime);
-}
-
-SC_AbsTimeTag_t SC_GetAtsEntryTime(SC_AtsEntryHeader_t *Entry)
-{
-    UT_Stub_RegisterContext(UT_KEY(SC_GetAtsEntryTime), Entry);
-    return UT_DEFAULT_IMPL(SC_GetAtsEntryTime);
-}
-
-SC_AbsTimeTag_t SC_ComputeAbsTime(SC_RelTimeTag_t RelTime)
-{
-    UT_Stub_RegisterContextGenericArg(UT_KEY(SC_ComputeAbsTime), RelTime);
-    return UT_DEFAULT_IMPL(SC_ComputeAbsTime);
-}
-
+/*
+ * ----------------------------------------------------
+ * Generated stub function for SC_CompareAbsTime()
+ * ----------------------------------------------------
+ */
 bool SC_CompareAbsTime(SC_AbsTimeTag_t AbsTime1, SC_AbsTimeTag_t AbsTime2)
 {
-    UT_Stub_RegisterContextGenericArg(UT_KEY(SC_CompareAbsTime), AbsTime1);
-    UT_Stub_RegisterContextGenericArg(UT_KEY(SC_CompareAbsTime), AbsTime2);
-    return UT_DEFAULT_IMPL(SC_CompareAbsTime);
+    UT_GenStub_SetupReturnBuffer(SC_CompareAbsTime, bool);
+
+    UT_GenStub_AddParam(SC_CompareAbsTime, SC_AbsTimeTag_t, AbsTime1);
+    UT_GenStub_AddParam(SC_CompareAbsTime, SC_AbsTimeTag_t, AbsTime2);
+
+    UT_GenStub_Execute(SC_CompareAbsTime, Basic, NULL);
+
+    return UT_GenStub_GetReturnValue(SC_CompareAbsTime, bool);
 }
 
-bool SC_VerifyCmdLength(const CFE_MSG_Message_t *Msg, size_t ExpectedLength)
+/*
+ * ----------------------------------------------------
+ * Generated stub function for SC_ComputeAbsTime()
+ * ----------------------------------------------------
+ */
+SC_AbsTimeTag_t SC_ComputeAbsTime(SC_RelTimeTag_t RelTime)
 {
-    UT_Stub_RegisterContext(UT_KEY(SC_VerifyCmdLength), Msg);
-    UT_Stub_RegisterContextGenericArg(UT_KEY(SC_VerifyCmdLength), ExpectedLength);
-    return UT_DEFAULT_IMPL(SC_VerifyCmdLength);
+    UT_GenStub_SetupReturnBuffer(SC_ComputeAbsTime, SC_AbsTimeTag_t);
+
+    UT_GenStub_AddParam(SC_ComputeAbsTime, SC_RelTimeTag_t, RelTime);
+
+    UT_GenStub_Execute(SC_ComputeAbsTime, Basic, NULL);
+
+    return UT_GenStub_GetReturnValue(SC_ComputeAbsTime, SC_AbsTimeTag_t);
 }
 
+/*
+ * ----------------------------------------------------
+ * Generated stub function for SC_GetAtsEntryTime()
+ * ----------------------------------------------------
+ */
+SC_AbsTimeTag_t SC_GetAtsEntryTime(SC_AtsEntryHeader_t *Entry)
+{
+    UT_GenStub_SetupReturnBuffer(SC_GetAtsEntryTime, SC_AbsTimeTag_t);
+
+    UT_GenStub_AddParam(SC_GetAtsEntryTime, SC_AtsEntryHeader_t *, Entry);
+
+    UT_GenStub_Execute(SC_GetAtsEntryTime, Basic, NULL);
+
+    return UT_GenStub_GetReturnValue(SC_GetAtsEntryTime, SC_AbsTimeTag_t);
+}
+
+/*
+ * ----------------------------------------------------
+ * Generated stub function for SC_GetCurrentTime()
+ * ----------------------------------------------------
+ */
+void SC_GetCurrentTime(void)
+{
+
+    UT_GenStub_Execute(SC_GetCurrentTime, Basic, NULL);
+}
+
+/*
+ * ----------------------------------------------------
+ * Generated stub function for SC_ToggleAtsIndex()
+ * ----------------------------------------------------
+ */
 uint16 SC_ToggleAtsIndex(void)
 {
-    return UT_DEFAULT_IMPL(SC_ToggleAtsIndex);
+    UT_GenStub_SetupReturnBuffer(SC_ToggleAtsIndex, uint16);
+
+    UT_GenStub_Execute(SC_ToggleAtsIndex, Basic, NULL);
+
+    return UT_GenStub_GetReturnValue(SC_ToggleAtsIndex, uint16);
+}
+
+/*
+ * ----------------------------------------------------
+ * Generated stub function for SC_VerifyCmdLength()
+ * ----------------------------------------------------
+ */
+bool SC_VerifyCmdLength(const CFE_MSG_Message_t *Msg, size_t ExpectedLength)
+{
+    UT_GenStub_SetupReturnBuffer(SC_VerifyCmdLength, bool);
+
+    UT_GenStub_AddParam(SC_VerifyCmdLength, const CFE_MSG_Message_t *, Msg);
+    UT_GenStub_AddParam(SC_VerifyCmdLength, size_t, ExpectedLength);
+
+    UT_GenStub_Execute(SC_VerifyCmdLength, Basic, NULL);
+
+    return UT_GenStub_GetReturnValue(SC_VerifyCmdLength, bool);
 }
