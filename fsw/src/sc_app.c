@@ -34,7 +34,7 @@
 #include "cfe.h"
 #include "sc_app.h"
 #include "sc_rts.h"
-#include "sc_cmds.h"
+#include "sc_dispatch.h"
 #include "sc_loads.h"
 #include "sc_events.h"
 #include "sc_msgids.h"

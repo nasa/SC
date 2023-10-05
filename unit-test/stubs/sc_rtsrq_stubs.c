@@ -43,9 +43,9 @@ void SC_AutoStartRts(uint16 RtsNumber)
  * Generated stub function for SC_DisableRtsCmd()
  * ----------------------------------------------------
  */
-void SC_DisableRtsCmd(const CFE_SB_Buffer_t *CmdPacket)
+void SC_DisableRtsCmd(const SC_DisableRtsCmd_t *Cmd)
 {
-    UT_GenStub_AddParam(SC_DisableRtsCmd, const CFE_SB_Buffer_t *, CmdPacket);
+    UT_GenStub_AddParam(SC_DisableRtsCmd, const SC_DisableRtsCmd_t *, Cmd);
 
     UT_GenStub_Execute(SC_DisableRtsCmd, Basic, NULL);
 }
@@ -55,9 +55,9 @@ void SC_DisableRtsCmd(const CFE_SB_Buffer_t *CmdPacket)
  * Generated stub function for SC_DisableRtsGrpCmd()
  * ----------------------------------------------------
  */
-void SC_DisableRtsGrpCmd(const CFE_SB_Buffer_t *CmdPacket)
+void SC_DisableRtsGrpCmd(const SC_DisableRtsGrpCmd_t *Cmd)
 {
-    UT_GenStub_AddParam(SC_DisableRtsGrpCmd, const CFE_SB_Buffer_t *, CmdPacket);
+    UT_GenStub_AddParam(SC_DisableRtsGrpCmd, const SC_DisableRtsGrpCmd_t *, Cmd);
 
     UT_GenStub_Execute(SC_DisableRtsGrpCmd, Basic, NULL);
 }
@@ -67,9 +67,9 @@ void SC_DisableRtsGrpCmd(const CFE_SB_Buffer_t *CmdPacket)
  * Generated stub function for SC_EnableRtsCmd()
  * ----------------------------------------------------
  */
-void SC_EnableRtsCmd(const CFE_SB_Buffer_t *CmdPacket)
+void SC_EnableRtsCmd(const SC_EnableRtsCmd_t *Cmd)
 {
-    UT_GenStub_AddParam(SC_EnableRtsCmd, const CFE_SB_Buffer_t *, CmdPacket);
+    UT_GenStub_AddParam(SC_EnableRtsCmd, const SC_EnableRtsCmd_t *, Cmd);
 
     UT_GenStub_Execute(SC_EnableRtsCmd, Basic, NULL);
 }
@@ -79,9 +79,9 @@ void SC_EnableRtsCmd(const CFE_SB_Buffer_t *CmdPacket)
  * Generated stub function for SC_EnableRtsGrpCmd()
  * ----------------------------------------------------
  */
-void SC_EnableRtsGrpCmd(const CFE_SB_Buffer_t *CmdPacket)
+void SC_EnableRtsGrpCmd(const SC_EnableRtsGrpCmd_t *Cmd)
 {
-    UT_GenStub_AddParam(SC_EnableRtsGrpCmd, const CFE_SB_Buffer_t *, CmdPacket);
+    UT_GenStub_AddParam(SC_EnableRtsGrpCmd, const SC_EnableRtsGrpCmd_t *, Cmd);
 
     UT_GenStub_Execute(SC_EnableRtsGrpCmd, Basic, NULL);
 }
@@ -103,9 +103,9 @@ void SC_KillRts(uint16 RtsIndex)
  * Generated stub function for SC_StartRtsCmd()
  * ----------------------------------------------------
  */
-void SC_StartRtsCmd(const CFE_SB_Buffer_t *CmdPacket)
+void SC_StartRtsCmd(const SC_StartRtsCmd_t *Cmd)
 {
-    UT_GenStub_AddParam(SC_StartRtsCmd, const CFE_SB_Buffer_t *, CmdPacket);
+    UT_GenStub_AddParam(SC_StartRtsCmd, const SC_StartRtsCmd_t *, Cmd);
 
     UT_GenStub_Execute(SC_StartRtsCmd, Basic, NULL);
 }
@@ -115,9 +115,9 @@ void SC_StartRtsCmd(const CFE_SB_Buffer_t *CmdPacket)
  * Generated stub function for SC_StartRtsGrpCmd()
  * ----------------------------------------------------
  */
-void SC_StartRtsGrpCmd(const CFE_SB_Buffer_t *CmdPacket)
+void SC_StartRtsGrpCmd(const SC_StartRtsGrpCmd_t *Cmd)
 {
-    UT_GenStub_AddParam(SC_StartRtsGrpCmd, const CFE_SB_Buffer_t *, CmdPacket);
+    UT_GenStub_AddParam(SC_StartRtsGrpCmd, const SC_StartRtsGrpCmd_t *, Cmd);
 
     UT_GenStub_Execute(SC_StartRtsGrpCmd, Basic, NULL);
 }
@@ -127,9 +127,9 @@ void SC_StartRtsGrpCmd(const CFE_SB_Buffer_t *CmdPacket)
  * Generated stub function for SC_StopRtsCmd()
  * ----------------------------------------------------
  */
-void SC_StopRtsCmd(const CFE_SB_Buffer_t *CmdPacket)
+void SC_StopRtsCmd(const SC_StopRtsCmd_t *Cmd)
 {
-    UT_GenStub_AddParam(SC_StopRtsCmd, const CFE_SB_Buffer_t *, CmdPacket);
+    UT_GenStub_AddParam(SC_StopRtsCmd, const SC_StopRtsCmd_t *, Cmd);
 
     UT_GenStub_Execute(SC_StopRtsCmd, Basic, NULL);
 }
@@ -139,9 +139,9 @@ void SC_StopRtsCmd(const CFE_SB_Buffer_t *CmdPacket)
  * Generated stub function for SC_StopRtsGrpCmd()
  * ----------------------------------------------------
  */
-void SC_StopRtsGrpCmd(const CFE_SB_Buffer_t *CmdPacket)
+void SC_StopRtsGrpCmd(const SC_StopRtsGrpCmd_t *Cmd)
 {
-    UT_GenStub_AddParam(SC_StopRtsGrpCmd, const CFE_SB_Buffer_t *, CmdPacket);
+    UT_GenStub_AddParam(SC_StopRtsGrpCmd, const SC_StopRtsGrpCmd_t *, Cmd);
 
     UT_GenStub_Execute(SC_StopRtsGrpCmd, Basic, NULL);
 }

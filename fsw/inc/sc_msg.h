@@ -36,6 +36,8 @@
 #include <sc_platform_cfg.h>
 #include <sc_msgdefs.h>
 
+#include "cfe_tbl_msg.h"
+
 /************************************************************************
  * Macro Definitions
  ************************************************************************/
@@ -172,17 +174,6 @@ typedef struct
 } SC_RtsGrpCmd_Payload_t;
 
 /**
- *  \brief No Arguments Command
- *
- *  For command details see #SC_NOOP_CC, #SC_RESET_COUNTERS_CC, #SC_STOP_ATS_CC, #SC_SWITCH_ATS_CC
- *  Also see #SC_SEND_HK_MID
- */
-typedef struct
-{
-    CFE_MSG_CommandHeader_t CmdHeader; /**< \brief Command Header */
-} SC_NoArgsCmd_t;
-
-/**
  *  \brief ATS Id Command
  *
  *  For command details see #SC_START_ATS_CC
@@ -192,17 +183,6 @@ typedef struct
     CFE_MSG_CommandHeader_t  CmdHeader; /**< \brief Command Header */
     SC_StartAtsCmd_Payload_t Payload;
 } SC_StartAtsCmd_t;
-
-/**
- *  \brief RTS Id Command
- *
- *  For command details see #SC_START_RTS_CC, #SC_STOP_RTS_CC, #SC_DISABLE_RTS_CC, #SC_ENABLE_RTS_CC
- */
-typedef struct
-{
-    CFE_MSG_CommandHeader_t CmdHeader; /**< \brief Command Header */
-    SC_RtsCmd_Payload_t     Payload;
-} SC_RtsCmd_t;
 
 /**
  *  \brief Jump running ATS to a new time Command
@@ -238,15 +218,174 @@ typedef struct
 } SC_AppendAtsCmd_t;
 
 /**
+ *  \brief Send HK Command
+ *
+ *  For command details see #SC_SEND_HK_MID
+ */
+typedef struct
+{
+    CFE_MSG_CommandHeader_t CmdHeader; /**< \brief Command Header */
+} SC_SendHkCmd_t;
+
+/**
+ *  \brief 1Hz Wakeup Command
+ *
+ *  For command details see #SC_1HZ_WAKEUP_MID
+ */
+typedef struct
+{
+    CFE_MSG_CommandHeader_t CmdHeader; /**< \brief Command Header */
+} SC_OneHzWakeupCmd_t;
+
+/**
+ *  \brief No operation Command
+ *
+ *  For command details see #SC_NOOP_CC
+ */
+typedef struct
+{
+    CFE_MSG_CommandHeader_t CmdHeader; /**< \brief Command Header */
+} SC_NoopCmd_t;
+
+/**
+ *  \brief Reset Counters Command
+ *
+ *  For command details see #SC_RESET_COUNTERS_CC
+ */
+typedef struct
+{
+    CFE_MSG_CommandHeader_t CmdHeader; /**< \brief Command Header */
+} SC_ResetCountersCmd_t;
+
+/**
+ *  \brief Stop ATS Command
+ *
+ *  For command details see #SC_STOP_ATS_CC
+ */
+typedef struct
+{
+    CFE_MSG_CommandHeader_t CmdHeader; /**< \brief Command Header */
+} SC_StopAtsCmd_t;
+
+/**
+ *  \brief Switch ATS Command
+ *
+ *  For command details see #SC_SWITCH_ATS_CC
+ */
+typedef struct
+{
+    CFE_MSG_CommandHeader_t CmdHeader; /**< \brief Command Header */
+} SC_SwitchAtsCmd_t;
+
+/**
+ *  \brief Start RTS Command
+ *
+ *  For command details see #SC_START_RTS_CC
+ */
+typedef struct
+{
+    CFE_MSG_CommandHeader_t CmdHeader; /**< \brief Command Header */
+    SC_RtsCmd_Payload_t     Payload;
+} SC_StartRtsCmd_t;
+
+/**
+ *  \brief Stop RTS Command
+ *
+ *  For command details see #SC_STOP_RTS_CC
+ */
+typedef struct
+{
+    CFE_MSG_CommandHeader_t CmdHeader; /**< \brief Command Header */
+    SC_RtsCmd_Payload_t     Payload;
+} SC_StopRtsCmd_t;
+
+/**
+ *  \brief Disable RTS Command
+ *
+ *  For command details see #SC_DISABLE_RTS_CC
+ */
+typedef struct
+{
+    CFE_MSG_CommandHeader_t CmdHeader; /**< \brief Command Header */
+    SC_RtsCmd_Payload_t     Payload;
+} SC_DisableRtsCmd_t;
+
+/**
+ *  \brief Enable RTS Command
+ *
+ *  For command details see #SC_ENABLE_RTS_CC
+ */
+typedef struct
+{
+    CFE_MSG_CommandHeader_t CmdHeader; /**< \brief Command Header */
+    SC_RtsCmd_Payload_t     Payload;
+} SC_EnableRtsCmd_t;
+
+/**
+ *  \brief Continue ATS on failure command
+ *
+ *  For command details see #SC_CONTINUE_ATS_ON_FAILURE_CC
+ */
+typedef struct
+{
+    CFE_MSG_CommandHeader_t                 CmdHeader; /**< \brief Command Header */
+    SC_SetContinueAtsOnFailureCmd_Payload_t Payload;
+} SC_ContinueAtsOnFailureCmd_t;
+
+/**
+ *  \brief Manage Table Command
+ *
+ *  For command details see #SC_MANAGE_TABLE_CC
+ */
+typedef struct
+{
+    CFE_MSG_CommandHeader_t     CmdHeader; /**< \brief Command Header */
+    CFE_TBL_NotifyCmd_Payload_t Payload;
+} SC_ManageTableCmd_t;
+
+/**
  *  \brief RTS Group Command
  *
- *  For command details see #SC_START_RTS_GRP_CC, #SC_STOP_RTS_GRP_CC, #SC_DISABLE_RTS_GRP_CC, #SC_ENABLE_RTS_GRP_CC
+ *  For command details see #SC_START_RTS_GRP_CC
  */
 typedef struct
 {
     CFE_MSG_CommandHeader_t CmdHeader; /**< \brief Command Header */
     SC_RtsGrpCmd_Payload_t  Payload;
-} SC_RtsGrpCmd_t;
+} SC_StartRtsGrpCmd_t;
+
+/**
+ *  \brief RTS Group Command
+ *
+ *  For command details see #SC_STOP_RTS_GRP_CC
+ */
+typedef struct
+{
+    CFE_MSG_CommandHeader_t CmdHeader; /**< \brief Command Header */
+    SC_RtsGrpCmd_Payload_t  Payload;
+} SC_StopRtsGrpCmd_t;
+
+/**
+ *  \brief RTS Group Command
+ *
+ *  For command details see #SC_DISABLE_RTS_GRP_CC
+ */
+typedef struct
+{
+    CFE_MSG_CommandHeader_t CmdHeader; /**< \brief Command Header */
+    SC_RtsGrpCmd_Payload_t  Payload;
+} SC_DisableRtsGrpCmd_t;
+
+/**
+ *  \brief RTS Group Command
+ *
+ *  For command details see #SC_ENABLE_RTS_GRP_CC
+ */
+typedef struct
+{
+    CFE_MSG_CommandHeader_t CmdHeader; /**< \brief Command Header */
+    SC_RtsGrpCmd_Payload_t  Payload;
+} SC_EnableRtsGrpCmd_t;
 
 /**\}*/
 

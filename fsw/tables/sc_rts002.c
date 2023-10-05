@@ -52,11 +52,11 @@
 typedef struct
 {
     SC_RtsEntryHeader_t hdr1;
-    SC_NoArgsCmd_t      cmd1;
+    SC_NoopCmd_t        cmd1;
     SC_RtsEntryHeader_t hdr2;
-    SC_NoArgsCmd_t      cmd2;
+    SC_NoopCmd_t        cmd2;
     SC_RtsEntryHeader_t hdr3;
-    SC_NoArgsCmd_t      cmd3;
+    SC_NoopCmd_t        cmd3;
 } SC_RtsStruct002_t;
 
 /* Define the union to size the table correctly */

@@ -65,14 +65,38 @@ void SC_ManageTable(SC_TableType type, int32 ArrayIndex)
 
 /*
  * ----------------------------------------------------
- * Generated stub function for SC_NoOpCmd()
+ * Generated stub function for SC_ManageTableCmd()
  * ----------------------------------------------------
  */
-void SC_NoOpCmd(const CFE_SB_Buffer_t *BufPtr)
+void SC_ManageTableCmd(const SC_ManageTableCmd_t *Cmd)
 {
-    UT_GenStub_AddParam(SC_NoOpCmd, const CFE_SB_Buffer_t *, BufPtr);
+    UT_GenStub_AddParam(SC_ManageTableCmd, const SC_ManageTableCmd_t *, Cmd);
 
-    UT_GenStub_Execute(SC_NoOpCmd, Basic, NULL);
+    UT_GenStub_Execute(SC_ManageTableCmd, Basic, NULL);
+}
+
+/*
+ * ----------------------------------------------------
+ * Generated stub function for SC_NoopCmd()
+ * ----------------------------------------------------
+ */
+void SC_NoopCmd(const SC_NoopCmd_t *Cmd)
+{
+    UT_GenStub_AddParam(SC_NoopCmd, const SC_NoopCmd_t *, Cmd);
+
+    UT_GenStub_Execute(SC_NoopCmd, Basic, NULL);
+}
+
+/*
+ * ----------------------------------------------------
+ * Generated stub function for SC_OneHzWakeupCmd()
+ * ----------------------------------------------------
+ */
+void SC_OneHzWakeupCmd(const SC_OneHzWakeupCmd_t *Cmd)
+{
+    UT_GenStub_AddParam(SC_OneHzWakeupCmd, const SC_OneHzWakeupCmd_t *, Cmd);
+
+    UT_GenStub_Execute(SC_OneHzWakeupCmd, Basic, NULL);
 }
 
 /*
@@ -84,30 +108,6 @@ void SC_ProcessAtpCmd(void)
 {
 
     UT_GenStub_Execute(SC_ProcessAtpCmd, Basic, NULL);
-}
-
-/*
- * ----------------------------------------------------
- * Generated stub function for SC_ProcessCommand()
- * ----------------------------------------------------
- */
-void SC_ProcessCommand(const CFE_SB_Buffer_t *BufPtr)
-{
-    UT_GenStub_AddParam(SC_ProcessCommand, const CFE_SB_Buffer_t *, BufPtr);
-
-    UT_GenStub_Execute(SC_ProcessCommand, Basic, NULL);
-}
-
-/*
- * ----------------------------------------------------
- * Generated stub function for SC_ProcessRequest()
- * ----------------------------------------------------
- */
-void SC_ProcessRequest(const CFE_SB_Buffer_t *BufPtr)
-{
-    UT_GenStub_AddParam(SC_ProcessRequest, const CFE_SB_Buffer_t *, BufPtr);
-
-    UT_GenStub_Execute(SC_ProcessRequest, Basic, NULL);
 }
 
 /*
@@ -126,11 +126,23 @@ void SC_ProcessRtpCommand(void)
  * Generated stub function for SC_ResetCountersCmd()
  * ----------------------------------------------------
  */
-void SC_ResetCountersCmd(const CFE_SB_Buffer_t *BufPtr)
+void SC_ResetCountersCmd(const SC_ResetCountersCmd_t *Cmd)
 {
-    UT_GenStub_AddParam(SC_ResetCountersCmd, const CFE_SB_Buffer_t *, BufPtr);
+    UT_GenStub_AddParam(SC_ResetCountersCmd, const SC_ResetCountersCmd_t *, Cmd);
 
     UT_GenStub_Execute(SC_ResetCountersCmd, Basic, NULL);
+}
+
+/*
+ * ----------------------------------------------------
+ * Generated stub function for SC_SendHkCmd()
+ * ----------------------------------------------------
+ */
+void SC_SendHkCmd(const SC_SendHkCmd_t *Cmd)
+{
+    UT_GenStub_AddParam(SC_SendHkCmd, const SC_SendHkCmd_t *, Cmd);
+
+    UT_GenStub_Execute(SC_SendHkCmd, Basic, NULL);
 }
 
 /*
@@ -142,16 +154,4 @@ void SC_SendHkPacket(void)
 {
 
     UT_GenStub_Execute(SC_SendHkPacket, Basic, NULL);
-}
-
-/*
- * ----------------------------------------------------
- * Generated stub function for SC_TableManageCmd()
- * ----------------------------------------------------
- */
-void SC_TableManageCmd(const CFE_SB_Buffer_t *BufPtr)
-{
-    UT_GenStub_AddParam(SC_TableManageCmd, const CFE_SB_Buffer_t *, BufPtr);
-
-    UT_GenStub_Execute(SC_TableManageCmd, Basic, NULL);
 }

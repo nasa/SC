@@ -101,7 +101,7 @@
  *       Implements the Noop command that insures the SC app is alive
  *
  *  \par Command Structure
- *       #SC_NoArgsCmd_t
+ *       #SC_NoopCmd_t
  *
  *  \par Command Verification
  *       Successful execution of this command may be verified with
@@ -132,7 +132,7 @@
  *       Resets the SC housekeeping counters
  *
  *  \par Command Structure
- *       #SC_NoArgsCmd_t
+ *       #SC_ResetCountersCmd_t
  *
  *  \par Command Verification
  *       Successful execution of this command may be verified with
@@ -195,7 +195,7 @@
  *       Stops the specified ATS
  *
  *  \par Command Structure
- *       #SC_NoArgsCmd_t
+ *       #SC_StopAtsCmd_t
  *
  *  \par Command Verification
  *       Successful execution of this command may be verified with
@@ -225,7 +225,7 @@
  *       Starts the specified RTS
  *
  *  \par Command Structure
- *       #SC_RtsCmd_t
+ *       #SC_StartRtsCmd_t
  *
  *  \par Command Verification
  *       Successful execution of this command may be verified with
@@ -261,7 +261,7 @@
  *       Stops the specified RTS
  *
  *  \par Command Structure
- *       #SC_RtsCmd_t
+ *       #SC_StopRtsCmd_t
  *
  *  \par Command Verification
  *       Successful execution of this command may be verified with
@@ -292,7 +292,7 @@
  *       Disables the specified RTS
  *
  *  \par Command Structure
- *       #SC_RtsCmd_t
+ *       #SC_DisableRtsCmd_t
  *
  *  \par Command Verification
  *       Successful execution of this command may be verified with
@@ -323,7 +323,7 @@
  *       Enables the specified RTS
  *
  *  \par Command Structure
- *       #SC_RtsCmd_t
+ *       #SC_EnableRtsCmd_t
  *
  *  \par Command Verification
  *       Successful execution of this command may be verified with
@@ -354,7 +354,7 @@
  *       Switches the running ATS and the ATS no running
  *
  *  \par Command Structure
- *       #SC_NoArgsCmd_t
+ *       #SC_SwitchAtsCmd_t
  *
  *  \par Command Verification
  *       Successful execution of this command may be verified with
@@ -416,7 +416,7 @@
  *        checksum validation before being sent out.
  *
  *  \par Command Structure
- *       #SC_SetContinueAtsOnFailureCmd_t
+ *       #SC_ContinueAtsOnFailureCmd_t
  *
  *  \par Command Verification
  *       Successful execution of this command may be verified with
@@ -485,7 +485,7 @@
  *       any source other than cFE Table Services.
  *
  *  \par Command Structure
- *       #CFE_TBL_NotifyCmd_t
+ *       #SC_ManageTableCmd_t
  *
  *  \par Command Verification
  *       Successful execution of this command may be verified via:
@@ -516,7 +516,7 @@
  *       currently LOADED, ENABLED and STOPPED.
  *
  *  \par Command Structure
- *       #SC_RtsGrpCmd_t
+ *       #SC_StartRtsGrpCmd_t
  *
  *  \par Command Verification
  *       Successful execution of this command may be verified with
@@ -556,7 +556,7 @@
  *       This command STOPS each RTS in the specified group that is currently STARTED.
  *
  *  \par Command Structure
- *       #SC_RtsGrpCmd_t
+ *       #SC_StopRtsGrpCmd_t
  *
  *  \par Command Verification
  *       Successful execution of this command may be verified with
@@ -594,7 +594,7 @@
  *       This command sets the enable state for the specified group of RTS to DISABLED.
  *
  *  \par Command Structure
- *       #SC_RtsGrpCmd_t
+ *       #SC_DisableRtsGrpCmd_t
  *
  *  \par Command Verification
  *       Successful execution of this command may be verified with
@@ -632,7 +632,7 @@
  *       This command sets the enable state for the specified group of RTS to ENABLED.
  *
  *  \par Command Structure
- *       #SC_RtsGrpCmd_t
+ *       #SC_EnableRtsGrpCmd_t
  *
  *  \par Command Verification
  *       Successful execution of this command may be verified with

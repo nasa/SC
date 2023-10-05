@@ -480,11 +480,38 @@ void SC_SendHkPacket(void)
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /*                                                                 */
+/* Send HK Command                                                 */
+/*                                                                 */
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+void SC_SendHkCmd(const SC_SendHkCmd_t *Cmd)
+{
+    /* set during init to power on or processor reset auto-exec RTS */
+    if (SC_AppData.AutoStartRTS != 0)
+    {
+        /* make sure the selected auto-exec RTS is enabled */
+        if (SC_OperData.RtsInfoTblAddr[SC_RTS_NUM_TO_INDEX(SC_AppData.AutoStartRTS)].RtsStatus == SC_LOADED)
+        {
+            SC_OperData.RtsInfoTblAddr[SC_RTS_NUM_TO_INDEX(SC_AppData.AutoStartRTS)].DisabledFlag = false;
+        }
+
+        /* send ground cmd to have SC start the RTS */
+        SC_AutoStartRts(SC_AppData.AutoStartRTS);
+
+        /* only start it once */
+        SC_AppData.AutoStartRTS = 0;
+    }
+
+    /* request from health and safety for housekeeping status */
+    SC_SendHkPacket();
+}
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+/*                                                                 */
 /* Reset Counters Command                                          */
 /*                                                                 */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-void SC_ResetCountersCmd(const CFE_SB_Buffer_t *BufPtr)
+void SC_ResetCountersCmd(const SC_ResetCountersCmd_t *Cmd)
 {
     CFE_EVS_SendEvent(SC_RESET_DEB_EID, CFE_EVS_EventType_DEBUG, "Reset counters command");
 
@@ -500,10 +527,66 @@ void SC_ResetCountersCmd(const CFE_SB_Buffer_t *BufPtr)
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /*                                                                 */
+/* 1Hz Wakeup Command                                              */
+/*                                                                 */
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+void SC_OneHzWakeupCmd(const SC_OneHzWakeupCmd_t *Cmd)
+{
+    bool IsThereAnotherCommandToExecute = false;
+
+    /*
+     * Time to execute a command in the SC memory
+     */
+    do
+    {
+        /*
+         *  Check to see if there is an ATS switch Pending, if so service it.
+         */
+        if (SC_OperData.AtsCtrlBlckAddr->SwitchPendFlag == true)
+        {
+            SC_ServiceSwitchPend();
+        }
+
+        if (SC_AppData.NextProcNumber == SC_ATP)
+        {
+            SC_ProcessAtpCmd();
+        }
+        else
+        {
+            if (SC_AppData.NextProcNumber == SC_RTP)
+            {
+                SC_ProcessRtpCommand();
+            }
+        }
+
+        SC_UpdateNextTime();
+        if ((SC_AppData.NextProcNumber == SC_NONE) ||
+            (SC_AppData.NextCmdTime[SC_AppData.NextProcNumber] > SC_AppData.CurrentTime))
+        {
+            SC_OperData.NumCmdsSec         = 0;
+            IsThereAnotherCommandToExecute = false;
+        }
+        else /* Command needs to run immediately */
+        {
+            if (SC_OperData.NumCmdsSec >= SC_MAX_CMDS_PER_SEC)
+            {
+                SC_OperData.NumCmdsSec         = 0;
+                IsThereAnotherCommandToExecute = false;
+            }
+            else
+            {
+                IsThereAnotherCommandToExecute = true;
+            }
+        }
+    } while (IsThereAnotherCommandToExecute);
+}
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+/*                                                                 */
 /* No Op Command                                                   */
 /*                                                                 */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-void SC_NoOpCmd(const CFE_SB_Buffer_t *BufPtr)
+void SC_NoopCmd(const SC_NoopCmd_t *Cmd)
 {
     SC_OperData.HkPacket.Payload.CmdCtr++;
     CFE_EVS_SendEvent(SC_NOOP_INF_EID, CFE_EVS_EventType_INFORMATION, "No-op command. Version %d.%d.%d.%d",
@@ -512,269 +595,14 @@ void SC_NoOpCmd(const CFE_SB_Buffer_t *BufPtr)
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /*                                                                 */
-/*  Process Requests                                               */
-/*                                                                 */
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-void SC_ProcessRequest(const CFE_SB_Buffer_t *BufPtr)
-{
-    CFE_SB_MsgId_t MessageID                      = CFE_SB_INVALID_MSG_ID;
-    int8           IsThereAnotherCommandToExecute = false;
-
-    /* cast the packet header pointer on the packet buffer */
-    CFE_MSG_GetMsgId(&BufPtr->Msg, &MessageID);
-
-    /*
-     ** Get the current system time in the global SC_AppData.CurrentTime
-     */
-    SC_GetCurrentTime();
-
-    switch (CFE_SB_MsgIdToValue(MessageID))
-    {
-        case SC_CMD_MID:
-            /* request from the ground */
-            SC_ProcessCommand(BufPtr);
-            break;
-
-        case SC_SEND_HK_MID:
-            if (SC_VerifyCmdLength(&BufPtr->Msg, sizeof(SC_NoArgsCmd_t)))
-            {
-                /* set during init to power on or processor reset auto-exec RTS */
-                if (SC_AppData.AutoStartRTS != 0)
-                {
-                    /* make sure the selected auto-exec RTS is enabled */
-                    if (SC_OperData.RtsInfoTblAddr[SC_RTS_NUM_TO_INDEX(SC_AppData.AutoStartRTS)].RtsStatus == SC_LOADED)
-                    {
-                        SC_OperData.RtsInfoTblAddr[SC_RTS_NUM_TO_INDEX(SC_AppData.AutoStartRTS)].DisabledFlag = false;
-                    }
-
-                    /* send ground cmd to have SC start the RTS */
-                    SC_AutoStartRts(SC_AppData.AutoStartRTS);
-
-                    /* only start it once */
-                    SC_AppData.AutoStartRTS = 0;
-                }
-
-                /* request from health and safety for housekeeping status */
-                SC_SendHkPacket();
-            }
-            break;
-
-        case SC_1HZ_WAKEUP_MID:
-            /*
-             ** Time to execute a command in the SC memory
-             */
-            do
-            {
-                /*
-                 **  Check to see if there is an ATS switch Pending, if so service it.
-                 */
-                if (SC_OperData.AtsCtrlBlckAddr->SwitchPendFlag == true)
-                {
-                    SC_ServiceSwitchPend();
-                }
-
-                if (SC_AppData.NextProcNumber == SC_ATP)
-                {
-                    SC_ProcessAtpCmd();
-                }
-                else
-                {
-                    if (SC_AppData.NextProcNumber == SC_RTP)
-                    {
-                        SC_ProcessRtpCommand();
-                    }
-                }
-
-                SC_UpdateNextTime();
-                if ((SC_AppData.NextProcNumber == SC_NONE) ||
-                    (SC_AppData.NextCmdTime[SC_AppData.NextProcNumber] > SC_AppData.CurrentTime))
-                {
-                    SC_OperData.NumCmdsSec         = 0;
-                    IsThereAnotherCommandToExecute = false;
-                }
-                else /* Command needs to run immediately */
-                {
-                    if (SC_OperData.NumCmdsSec >= SC_MAX_CMDS_PER_SEC)
-                    {
-                        SC_OperData.NumCmdsSec         = 0;
-                        IsThereAnotherCommandToExecute = false;
-                    }
-                    else
-                    {
-                        IsThereAnotherCommandToExecute = true;
-                    }
-                }
-            } while (IsThereAnotherCommandToExecute);
-
-            break;
-
-        default:
-            CFE_EVS_SendEvent(SC_MID_ERR_EID, CFE_EVS_EventType_ERROR, "Invalid command pipe message ID: 0x%08lX",
-                              (unsigned long)CFE_SB_MsgIdToValue(MessageID));
-
-            SC_OperData.HkPacket.Payload.CmdErrCtr++;
-            break;
-    } /* end switch */
-}
-
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-/*                                                                 */
-/*  Process a command                                              */
-/*                                                                 */
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-void SC_ProcessCommand(const CFE_SB_Buffer_t *BufPtr)
-{
-    CFE_MSG_FcnCode_t CommandCode = 0;
-    CFE_SB_MsgId_t    MessageID   = CFE_SB_INVALID_MSG_ID;
-
-    CFE_MSG_GetMsgId(&BufPtr->Msg, &MessageID);
-    CFE_MSG_GetFcnCode(&BufPtr->Msg, &CommandCode);
-
-    switch (CommandCode)
-    {
-        case SC_NOOP_CC:
-            if (SC_VerifyCmdLength(&BufPtr->Msg, sizeof(SC_NoArgsCmd_t)))
-            {
-                SC_NoOpCmd(BufPtr);
-            }
-            break;
-
-
-        case SC_RESET_COUNTERS_CC:
-            if (SC_VerifyCmdLength(&BufPtr->Msg, sizeof(SC_NoArgsCmd_t)))
-            {
-                 SC_ResetCountersCmd(BufPtr);
-            }
-            break;
-
-        case SC_START_ATS_CC:
-            if (SC_VerifyCmdLength(&BufPtr->Msg, sizeof(SC_StartAtsCmd_t)))
-            {
-                 SC_StartAtsCmd(BufPtr);
-            }
-            break;
-
-        case SC_STOP_ATS_CC:
-            if (SC_VerifyCmdLength(&BufPtr->Msg, sizeof(SC_NoArgsCmd_t)))
-            {
-                 SC_StopAtsCmd(BufPtr);
-            }
-            break;
-
-        case SC_START_RTS_CC:
-            if (SC_VerifyCmdLength(&BufPtr->Msg, sizeof(SC_RtsCmd_t)))
-            {
-                 SC_StartRtsCmd(BufPtr);
-            }
-            else
-            {
-                SC_OperData.HkPacket.Payload.RtsActiveErrCtr++;
-            }
-            break;
-
-        case SC_STOP_RTS_CC:
-            if (SC_VerifyCmdLength(&BufPtr->Msg, sizeof(SC_RtsCmd_t)))
-            {
-                 SC_StopRtsCmd(BufPtr);
-            }
-            break;
-
-        case SC_DISABLE_RTS_CC:
-            if (SC_VerifyCmdLength(&BufPtr->Msg, sizeof(SC_RtsCmd_t)))
-            {
-                 SC_DisableRtsCmd(BufPtr);
-            }
-            break;
-
-        case SC_ENABLE_RTS_CC:
-            if (SC_VerifyCmdLength(&BufPtr->Msg, sizeof(SC_RtsCmd_t)))
-            {
-                 SC_EnableRtsCmd(BufPtr);
-            }
-            break;
-
-        case SC_SWITCH_ATS_CC:
-            if (SC_VerifyCmdLength(&BufPtr->Msg, sizeof(SC_NoArgsCmd_t)))
-            {
-                 SC_GroundSwitchCmd(BufPtr);
-            }
-            break;
-
-        case SC_JUMP_ATS_CC:
-            if (SC_VerifyCmdLength(&BufPtr->Msg, sizeof(SC_JumpAtsCmd_t)))
-            {
-                 SC_JumpAtsCmd(BufPtr);
-            }
-            break;
-
-        case SC_CONTINUE_ATS_ON_FAILURE_CC:
-            if (SC_VerifyCmdLength(&BufPtr->Msg, sizeof(SC_SetContinueAtsOnFailureCmd_t)))
-            {
-                 SC_ContinueAtsOnFailureCmd(BufPtr);
-            }
-            break;
-
-        case SC_APPEND_ATS_CC:
-            if (SC_VerifyCmdLength(&BufPtr->Msg, sizeof(SC_AppendAtsCmd_t)))
-            {
-                 SC_AppendAtsCmd(BufPtr);
-            }
-            break;
-
-        case SC_MANAGE_TABLE_CC:
-            if (SC_VerifyCmdLength(&BufPtr->Msg, sizeof(SC_NoArgsCmd_t)))
-            {
-                 SC_TableManageCmd(BufPtr);
-            }
-            break;
-
-        case SC_START_RTS_GRP_CC:
-            if (SC_VerifyCmdLength(&BufPtr->Msg, sizeof(SC_RtsGrpCmd_t)))
-            {
-                 SC_StartRtsGrpCmd(BufPtr);
-            }
-            break;
-
-        case SC_STOP_RTS_GRP_CC:
-            if (SC_VerifyCmdLength(&BufPtr->Msg, sizeof(SC_RtsGrpCmd_t)))
-            {
-                 SC_StopRtsGrpCmd(BufPtr);
-            }
-            break;
-
-        case SC_DISABLE_RTS_GRP_CC:
-            if (SC_VerifyCmdLength(&BufPtr->Msg, sizeof(SC_RtsGrpCmd_t)))
-            {
-                 SC_DisableRtsGrpCmd(BufPtr);
-            }
-            break;
-
-        case SC_ENABLE_RTS_GRP_CC:
-            if (SC_VerifyCmdLength(&BufPtr->Msg, sizeof(SC_RtsGrpCmd_t)))
-            {
-                 SC_EnableRtsGrpCmd(BufPtr);
-            }
-            break;
-
-        default:
-            CFE_EVS_SendEvent(SC_INVLD_CMD_ERR_EID, CFE_EVS_EventType_ERROR,
-                              "Invalid Command Code: MID =  0x%08lX CC =  %d",
-                              (unsigned long)CFE_SB_MsgIdToValue(MessageID), CommandCode);
-            SC_OperData.HkPacket.Payload.CmdErrCtr++;
-            break;
-    } /* end switch */
-}
-
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-/*                                                                 */
 /* Table Manage Request Command (sent by cFE Table Services)       */
 /*                                                                 */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-void SC_TableManageCmd(const CFE_SB_Buffer_t *BufPtr)
+void SC_ManageTableCmd(const SC_ManageTableCmd_t *Cmd)
 {
     int32 ArrayIndex;
-    int32 TableID = (int32)((CFE_TBL_NotifyCmd_t *)BufPtr)->Payload.Parameter;
+    int32 TableID = Cmd->Payload.Parameter;
 
     /* Manage selected table as appropriate for each table type */
     if ((TableID >= SC_TBL_ID_ATS_0) && (TableID < (SC_TBL_ID_ATS_0 + SC_NUMBER_OF_ATS)))

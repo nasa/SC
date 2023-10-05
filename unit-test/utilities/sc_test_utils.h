@@ -29,6 +29,7 @@
  */
 
 #include "sc_app.h"
+#include "sc_msg.h"
 #include "utstubs.h"
 #include "cfe_msgids.h"
 #include "cfe_tbl_msg.h"
@@ -57,15 +58,26 @@ extern CFE_ES_WriteToSysLog_context_t context_CFE_ES_WriteToSysLog;
 /* Command buffer typedef for any handler */
 typedef union
 {
-    CFE_SB_Buffer_t                 Buf;
-    SC_NoArgsCmd_t                  NoArgsCmd;
-    SC_StartAtsCmd_t                StartAtsCmd;
-    SC_RtsCmd_t                     RtsCmd;
-    SC_JumpAtsCmd_t                 JumpAtsCmd;
-    SC_SetContinueAtsOnFailureCmd_t SetContinueAtsOnFailureCmd;
-    SC_AppendAtsCmd_t               AppendAtsCmd;
-    SC_RtsGrpCmd_t                  RtsGrpCmd;
-    CFE_TBL_NotifyCmd_t             NotifyCmd; /* SC subscribes to the table notify command */
+    CFE_SB_Buffer_t              Buf;
+    SC_SendHkCmd_t               SendHkCmd;
+    SC_OneHzWakeupCmd_t          OneHzWakeupCmd;
+    SC_NoopCmd_t                 NoopCmd;
+    SC_ResetCountersCmd_t        ResetCountersCmd;
+    SC_StopAtsCmd_t              StopAtsCmd;
+    SC_SwitchAtsCmd_t            SwitchAtsCmd;
+    SC_StartAtsCmd_t             StartAtsCmd;
+    SC_StartRtsCmd_t             StartRtsCmd;
+    SC_StopRtsCmd_t              StopRtsCmd;
+    SC_DisableRtsCmd_t           DisableRtsCmd;
+    SC_EnableRtsCmd_t            EnableRtsCmd;
+    SC_JumpAtsCmd_t              JumpAtsCmd;
+    SC_ContinueAtsOnFailureCmd_t ContinueAtsOnFailureCmd;
+    SC_AppendAtsCmd_t            AppendAtsCmd;
+    SC_ManageTableCmd_t          ManageTableCmd;
+    SC_StartRtsGrpCmd_t          StartRtsGrpCmd;
+    SC_StopRtsGrpCmd_t           StopRtsGrpCmd;
+    SC_DisableRtsGrpCmd_t        DisableRtsGrpCmd;
+    SC_EnableRtsGrpCmd_t         EnableRtsGrpCmd;
 } UT_CmdBuf_t;
 
 extern UT_CmdBuf_t UT_CmdBuf;

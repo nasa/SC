@@ -31,9 +31,9 @@
  * Generated stub function for SC_AppendAtsCmd()
  * ----------------------------------------------------
  */
-void SC_AppendAtsCmd(const CFE_SB_Buffer_t *BufPtr)
+void SC_AppendAtsCmd(const SC_AppendAtsCmd_t *Cmd)
 {
-    UT_GenStub_AddParam(SC_AppendAtsCmd, const CFE_SB_Buffer_t *, BufPtr);
+    UT_GenStub_AddParam(SC_AppendAtsCmd, const SC_AppendAtsCmd_t *, Cmd);
 
     UT_GenStub_Execute(SC_AppendAtsCmd, Basic, NULL);
 }
@@ -60,23 +60,11 @@ bool SC_BeginAts(uint16 AtsIndex, uint16 TimeOffset)
  * Generated stub function for SC_ContinueAtsOnFailureCmd()
  * ----------------------------------------------------
  */
-void SC_ContinueAtsOnFailureCmd(const CFE_SB_Buffer_t *BufPtr)
+void SC_ContinueAtsOnFailureCmd(const SC_ContinueAtsOnFailureCmd_t *Cmd)
 {
-    UT_GenStub_AddParam(SC_ContinueAtsOnFailureCmd, const CFE_SB_Buffer_t *, BufPtr);
+    UT_GenStub_AddParam(SC_ContinueAtsOnFailureCmd, const SC_ContinueAtsOnFailureCmd_t *, Cmd);
 
     UT_GenStub_Execute(SC_ContinueAtsOnFailureCmd, Basic, NULL);
-}
-
-/*
- * ----------------------------------------------------
- * Generated stub function for SC_GroundSwitchCmd()
- * ----------------------------------------------------
- */
-void SC_GroundSwitchCmd(const CFE_SB_Buffer_t *BufPtr)
-{
-    UT_GenStub_AddParam(SC_GroundSwitchCmd, const CFE_SB_Buffer_t *, BufPtr);
-
-    UT_GenStub_Execute(SC_GroundSwitchCmd, Basic, NULL);
 }
 
 /*
@@ -98,9 +86,9 @@ bool SC_InlineSwitch(void)
  * Generated stub function for SC_JumpAtsCmd()
  * ----------------------------------------------------
  */
-void SC_JumpAtsCmd(const CFE_SB_Buffer_t *BufPtr)
+void SC_JumpAtsCmd(const SC_JumpAtsCmd_t *Cmd)
 {
-    UT_GenStub_AddParam(SC_JumpAtsCmd, const CFE_SB_Buffer_t *, BufPtr);
+    UT_GenStub_AddParam(SC_JumpAtsCmd, const SC_JumpAtsCmd_t *, Cmd);
 
     UT_GenStub_Execute(SC_JumpAtsCmd, Basic, NULL);
 }
@@ -132,9 +120,9 @@ void SC_ServiceSwitchPend(void)
  * Generated stub function for SC_StartAtsCmd()
  * ----------------------------------------------------
  */
-void SC_StartAtsCmd(const CFE_SB_Buffer_t *BufPtr)
+void SC_StartAtsCmd(const SC_StartAtsCmd_t *Cmd)
 {
-    UT_GenStub_AddParam(SC_StartAtsCmd, const CFE_SB_Buffer_t *, BufPtr);
+    UT_GenStub_AddParam(SC_StartAtsCmd, const SC_StartAtsCmd_t *, Cmd);
 
     UT_GenStub_Execute(SC_StartAtsCmd, Basic, NULL);
 }
@@ -144,9 +132,21 @@ void SC_StartAtsCmd(const CFE_SB_Buffer_t *BufPtr)
  * Generated stub function for SC_StopAtsCmd()
  * ----------------------------------------------------
  */
-void SC_StopAtsCmd(const CFE_SB_Buffer_t *BufPtr)
+void SC_StopAtsCmd(const SC_StopAtsCmd_t *Cmd)
 {
-    UT_GenStub_AddParam(SC_StopAtsCmd, const CFE_SB_Buffer_t *, BufPtr);
+    UT_GenStub_AddParam(SC_StopAtsCmd, const SC_StopAtsCmd_t *, Cmd);
 
     UT_GenStub_Execute(SC_StopAtsCmd, Basic, NULL);
+}
+
+/*
+ * ----------------------------------------------------
+ * Generated stub function for SC_SwitchAtsCmd()
+ * ----------------------------------------------------
+ */
+void SC_SwitchAtsCmd(const SC_SwitchAtsCmd_t *Cmd)
+{
+    UT_GenStub_AddParam(SC_SwitchAtsCmd, const SC_SwitchAtsCmd_t *, Cmd);
+
+    UT_GenStub_Execute(SC_SwitchAtsCmd, Basic, NULL);
 }

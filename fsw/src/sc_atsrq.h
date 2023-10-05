@@ -27,6 +27,7 @@
 #define SC_ATSRQ_H
 
 #include "cfe.h"
+#include "sc_msg.h"
 
 /**
  * \brief Starts an ATS
@@ -59,11 +60,11 @@ bool SC_BeginAts(uint16 AtsIndex, uint16 TimeOffset);
  *  \par Assumptions, External Events, and Notes:
  *        None
  *
- *  \param[in] BufPtr Pointer to Software Bus buffer
+ *  \param[in] Cmd Pointer to Software Bus buffer
  *
  *  \sa #SC_START_ATS_CC
  */
-void SC_StartAtsCmd(const CFE_SB_Buffer_t *BufPtr);
+void SC_StartAtsCmd(const SC_StartAtsCmd_t *Cmd);
 
 /**
  * \brief Stop the executing ATS Command
@@ -76,11 +77,11 @@ void SC_StartAtsCmd(const CFE_SB_Buffer_t *BufPtr);
  *  \par Assumptions, External Events, and Notes:
  *        None
  *
- *  \param[in] BufPtr Pointer to Software Bus buffer
+ *  \param[in] Cmd Pointer to Software Bus buffer
  *
  *  \sa #SC_STOP_ATS_CC
  */
-void SC_StopAtsCmd(const CFE_SB_Buffer_t *BufPtr);
+void SC_StopAtsCmd(const SC_StopAtsCmd_t *Cmd);
 
 /**
  * \brief Stops an ATS & clears out data
@@ -110,11 +111,11 @@ void SC_KillAts(void);
  *  \par Assumptions, External Events, and Notes:
  *        None
  *
- *  \param[in] BufPtr Pointer to Software Bus buffer
+ *  \param[in] Cmd Pointer to Software Bus buffer
  *
  *  \sa #SC_SWITCH_ATS_CC
  */
-void SC_GroundSwitchCmd(const CFE_SB_Buffer_t *BufPtr);
+void SC_SwitchAtsCmd(const SC_SwitchAtsCmd_t *Cmd);
 
 /**
  * \brief
@@ -180,11 +181,11 @@ void SC_ServiceSwitchPend(void);
  *  \par Assumptions, External Events, and Notes:
  *        None
  *
- *  \param[in] BufPtr Pointer to Software Bus buffer
+ *  \param[in] Cmd Pointer to Software Bus buffer
  *
  *  \sa #SC_JUMP_ATS_CC
  */
-void SC_JumpAtsCmd(const CFE_SB_Buffer_t *BufPtr);
+void SC_JumpAtsCmd(const SC_JumpAtsCmd_t *Cmd);
 
 /**
  * \brief Lets an ATS continue if a command failed the checksum
@@ -196,11 +197,11 @@ void SC_JumpAtsCmd(const CFE_SB_Buffer_t *BufPtr);
  *  \par Assumptions, External Events, and Notes:
  *        None
  *
- *  \param[in] BufPtr Pointer to Software Bus buffer
+ *  \param[in] Cmd Pointer to Software Bus buffer
  *
  *  \sa #SC_CONTINUE_ATS_ON_FAILURE_CC
  */
-void SC_ContinueAtsOnFailureCmd(const CFE_SB_Buffer_t *BufPtr);
+void SC_ContinueAtsOnFailureCmd(const SC_ContinueAtsOnFailureCmd_t *Cmd);
 
 /**
  * \brief  Append to an ATS Command
@@ -215,10 +216,10 @@ void SC_ContinueAtsOnFailureCmd(const CFE_SB_Buffer_t *BufPtr);
  *  \par Assumptions, External Events, and Notes:
  *        None
  *
- *  \param[in] BufPtr Pointer to Software Bus buffer
+ *  \param[in] Cmd Pointer to Software Bus buffer
  *
  *  \sa #SC_APPEND_ATS_CC
  */
-void SC_AppendAtsCmd(const CFE_SB_Buffer_t *BufPtr);
+void SC_AppendAtsCmd(const SC_AppendAtsCmd_t *Cmd);
 
 #endif

@@ -99,20 +99,3 @@ uint16 SC_ToggleAtsIndex(void)
 
     return UT_GenStub_GetReturnValue(SC_ToggleAtsIndex, uint16);
 }
-
-/*
- * ----------------------------------------------------
- * Generated stub function for SC_VerifyCmdLength()
- * ----------------------------------------------------
- */
-bool SC_VerifyCmdLength(const CFE_MSG_Message_t *Msg, size_t ExpectedLength)
-{
-    UT_GenStub_SetupReturnBuffer(SC_VerifyCmdLength, bool);
-
-    UT_GenStub_AddParam(SC_VerifyCmdLength, const CFE_MSG_Message_t *, Msg);
-    UT_GenStub_AddParam(SC_VerifyCmdLength, size_t, ExpectedLength);
-
-    UT_GenStub_Execute(SC_VerifyCmdLength, Basic, NULL);
-
-    return UT_GenStub_GetReturnValue(SC_VerifyCmdLength, bool);
-}

@@ -173,8 +173,7 @@ void SC_UpdateNextTime_Test_RtpAtpPriority(void)
 
 void SC_GetNextRtsCommand_Test_GetNextCommand(void)
 {
-    SC_RtsEntryHeader_t *Entry;
-    size_t               MsgSize;
+    size_t MsgSize;
 
     SC_AppData.NextCmdTime[SC_RTP]                                                   = 0;
     SC_AppData.CurrentTime                                                           = 1;
@@ -182,10 +181,6 @@ void SC_GetNextRtsCommand_Test_GetNextCommand(void)
     SC_OperData.RtsCtrlBlckAddr->RtsNumber                                           = 1;
     SC_OperData.RtsInfoTblAddr[SC_OperData.RtsCtrlBlckAddr->RtsNumber - 1].RtsStatus = SC_EXECUTING;
     SC_OperData.AtsInfoTblAddr[1].NumberOfCommands                                   = 1;
-
-    Entry = (SC_RtsEntryHeader_t *)&SC_OperData.RtsTblAddr[0][0];
-
-    CFE_MSG_Init((CFE_MSG_Message_t *)Entry, CFE_SB_ValueToMsgId(SC_CMD_MID), sizeof(SC_NoArgsCmd_t));
 
     /* Give the packet the minimum possible size, to ensure that (CmdOffset < SC_RTS_HDR_WORDS) is met */
     MsgSize = SC_PACKET_MIN_SIZE;
@@ -219,8 +214,7 @@ void SC_GetNextRtsCommand_Test_RtsNumberZero(void)
 
 void SC_GetNextRtsCommand_Test_RtsNumberMax(void)
 {
-    SC_RtsEntryHeader_t *Entry;
-    size_t               MsgSize;
+    size_t MsgSize;
 
     SC_AppData.NextCmdTime[SC_RTP]                                                   = 0;
     SC_AppData.CurrentTime                                                           = 1;
@@ -228,10 +222,6 @@ void SC_GetNextRtsCommand_Test_RtsNumberMax(void)
     SC_OperData.RtsCtrlBlckAddr->RtsNumber                                           = SC_NUMBER_OF_RTS;
     SC_OperData.RtsInfoTblAddr[SC_OperData.RtsCtrlBlckAddr->RtsNumber - 1].RtsStatus = SC_EXECUTING;
     SC_OperData.AtsInfoTblAddr[1].NumberOfCommands                                   = 1;
-
-    Entry = (SC_RtsEntryHeader_t *)&SC_OperData.RtsTblAddr[SC_NUMBER_OF_RTS - 1][0];
-
-    CFE_MSG_Init((CFE_MSG_Message_t *)Entry, CFE_SB_ValueToMsgId(SC_CMD_MID), sizeof(SC_NoArgsCmd_t));
 
     /* Give the packet the minimum possible size, to ensure that (CmdOffset < SC_RTS_HDR_WORDS) is met */
     MsgSize = SC_PACKET_MIN_SIZE;
@@ -251,18 +241,13 @@ void SC_GetNextRtsCommand_Test_RtsNumberMax(void)
 
 void SC_GetNextRtsCommand_Test_RtsNumberOverMax(void)
 {
-    SC_RtsEntryHeader_t *Entry;
-    size_t               MsgSize;
+    size_t MsgSize;
 
     SC_AppData.NextCmdTime[SC_RTP]                 = 0;
     SC_AppData.CurrentTime                         = 1;
     SC_AppData.NextProcNumber                      = SC_RTP;
     SC_OperData.RtsCtrlBlckAddr->RtsNumber         = SC_NUMBER_OF_RTS + 1;
     SC_OperData.AtsInfoTblAddr[1].NumberOfCommands = 1;
-
-    Entry = (SC_RtsEntryHeader_t *)&SC_OperData.RtsTblAddr[SC_NUMBER_OF_RTS - 1][0];
-
-    CFE_MSG_Init((CFE_MSG_Message_t *)Entry, CFE_SB_ValueToMsgId(SC_CMD_MID), sizeof(SC_NoArgsCmd_t));
 
     /* Give the packet the minimum possible size, to ensure that (CmdOffset < SC_RTS_HDR_WORDS) is met */
     MsgSize = SC_PACKET_MIN_SIZE;
@@ -282,8 +267,7 @@ void SC_GetNextRtsCommand_Test_RtsNumberOverMax(void)
 
 void SC_GetNextRtsCommand_Test_RtsNotExecuting(void)
 {
-    SC_RtsEntryHeader_t *Entry;
-    size_t               MsgSize;
+    size_t MsgSize;
 
     SC_AppData.NextCmdTime[SC_RTP]                                                   = 0;
     SC_AppData.CurrentTime                                                           = 1;
@@ -291,10 +275,6 @@ void SC_GetNextRtsCommand_Test_RtsNotExecuting(void)
     SC_OperData.RtsCtrlBlckAddr->RtsNumber                                           = SC_NUMBER_OF_RTS;
     SC_OperData.RtsInfoTblAddr[SC_OperData.RtsCtrlBlckAddr->RtsNumber - 1].RtsStatus = SC_IDLE;
     SC_OperData.AtsInfoTblAddr[1].NumberOfCommands                                   = 1;
-
-    Entry = (SC_RtsEntryHeader_t *)&SC_OperData.RtsTblAddr[SC_NUMBER_OF_RTS - 1][0];
-
-    CFE_MSG_Init((CFE_MSG_Message_t *)Entry, CFE_SB_ValueToMsgId(SC_CMD_MID), sizeof(SC_NoArgsCmd_t));
 
     /* Give the packet the minimum possible size, to ensure that (CmdOffset < SC_RTS_HDR_WORDS) is met */
     MsgSize = SC_PACKET_MIN_SIZE;

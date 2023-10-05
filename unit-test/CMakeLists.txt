@@ -12,6 +12,7 @@ add_cfe_coverage_stubs("sc_internal"
   stubs/sc_global_stubs.c
   stubs/sc_loads_stubs.c
   stubs/sc_cmds_stubs.c
+  stubs/sc_dispatch_stubs.c
   stubs/sc_atsrq_stubs.c
   stubs/sc_state_stubs.c
   stubs/sc_app_stubs.c
