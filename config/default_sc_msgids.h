@@ -19,7 +19,7 @@
 
 /**
  * @file
- *   This file contains the message ID's used by Stored Command
+ *   CFS Stored Command (SC) Application Message IDs
  */
 #ifndef SC_MSGIDS_H
 #define SC_MSGIDS_H

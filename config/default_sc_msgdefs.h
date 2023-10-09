@@ -20,23 +20,15 @@
 /**
  * @file
  *   Specification for the CFS Stored Command (SC) command and telemetry
- *   message data types.
+ *   message constant definitions.
  *
- * @note
- *   Constants and enumerated types related to these message structures
- *   are defined in sc_msgdefs.h.
+ *  For SC this is only the function/command code definitions
  */
-#ifndef SC_MSG_H
-#define SC_MSG_H
+#ifndef SC_MSGDEFS_H
+#define SC_MSGDEFS_H
 
-/************************************************************************
- * Includes
- ************************************************************************/
-#include <cfe.h>
-#include <sc_platform_cfg.h>
-#include <sc_msgdefs.h>
-
-#include "cfe_tbl_msg.h"
+#include "common_types.h"
+#include "sc_fcncodes.h"
 
 /************************************************************************
  * Macro Definitions
@@ -44,12 +36,70 @@
 
 #define SC_NUMBER_OF_RTS_IN_UINT16 16 /**< \brief Number of RTS represented in a uint16 */
 
+/**
+ * \name ATS/RTS Cmd Status macros
+ * \{
+ */
+#define SC_EMPTY           0 /**< \brief the object is not loaded */
+#define SC_LOADED          1 /**< \brief the object is loaded */
+#define SC_IDLE            2 /**< \brief the object is not executing */
+#define SC_EXECUTED        3 /**< \brief the object has completed executing */
+#define SC_SKIPPED         4 /**< \brief the object (ats command) was skipped */
+#define SC_EXECUTING       5 /**< \brief the object is currently executing */
+#define SC_FAILED_CHECKSUM 6 /**< \brief the object failed a checksum test */
+#define SC_FAILED_DISTRIB  7 /**< \brief the object could not be sent on the SWB */
+#define SC_STARTING        8 /**< \brief used when an inline switch is executed */
+/**\}*/
+
+/************************************************************************
+ * Macro Definitions
+ ************************************************************************/
+
+/**
+ * \name Which processor runs next
+ * \{
+ */
+#define SC_ATP  0    /**< \brief ATP process next */
+#define SC_RTP  1    /**< \brief RTP process next */
+#define SC_NONE 0xFF /**< \brief No pending process */
+/**\}*/
+
+#define SC_MAX_TIME 0xFFFFFFFF /**< \brief Maximum time in SC */
+
+/**
+ * \name Defines for each ATS
+ * \{
+ */
+#define SC_NO_ATS 0 /**<\ brief No ATS */
+#define SC_ATSA   1 /**< \brief ATS A */
+#define SC_ATSB   2 /**< \brief ATS B */
+/**\}*/
+
+/**
+ * \name constants for config parameters for which TIME to use
+ * \{
+ */
+#define SC_USE_CFE_TIME 0 /**< \brief Use cFE configured time */
+#define SC_USE_TAI      1 /**< \brief Use TAI Time */
+#define SC_USE_UTC      2 /**< \brief USE UTC Time */
+/**\}*/
+
+#define SC_INVALID_RTS_NUMBER 0 /**< \brief Invalid RTS number */
+
+/**
+ * \name SC Continue Flags
+ * \{
+ */
+#define SC_CONTINUE_TRUE  1 /**< \brief Continue on failure */
+#define SC_CONTINUE_FALSE 0 /**< \brief Do not continue on failure */
+/**\}*/
+
 /************************************************************************
  * Type Definitions
  ************************************************************************/
 
 /**
- * \defgroup cfssctlm CFS Stored Command Telemetry
+ * \defgroup cfssctlmpayload CFS Stored Command Telemetry Payload
  * \{
  */
 
@@ -104,19 +154,10 @@ typedef struct
      If an RTS is DISABLED, then the corresponding bit is one. */
 } SC_HkTlm_Payload_t;
 
-/**
- *  \brief Housekeeping Packet Structure
- */
-typedef struct
-{
-    CFE_MSG_TelemetryHeader_t TlmHeader;
-    SC_HkTlm_Payload_t        Payload;
-} SC_HkTlm_t;
-
 /**\}*/
 
 /**
- * \defgroup cfssccmdstructs CFS Stored Command Command Structures
+ * \defgroup cfssccmdpayload CFS Stored Command Command Payload Structures
  * \{
  */
 
@@ -172,220 +213,6 @@ typedef struct
     uint16 FirstRtsId; /**< \brief ID of the first RTS to act on, 1 through #SC_NUMBER_OF_RTS */
     uint16 LastRtsId;  /**< \brief ID of the last RTS to act on, 1 through #SC_NUMBER_OF_RTS */
 } SC_RtsGrpCmd_Payload_t;
-
-/**
- *  \brief ATS Id Command
- *
- *  For command details see #SC_START_ATS_CC
- */
-typedef struct
-{
-    CFE_MSG_CommandHeader_t  CmdHeader; /**< \brief Command Header */
-    SC_StartAtsCmd_Payload_t Payload;
-} SC_StartAtsCmd_t;
-
-/**
- *  \brief Jump running ATS to a new time Command
- *
- *  For command details see #SC_JUMP_ATS_CC
- */
-typedef struct
-{
-    CFE_MSG_CommandHeader_t CmdHeader; /**< \brief Command Header */
-    SC_JumpAtsCmd_Payload_t Payload;
-} SC_JumpAtsCmd_t;
-
-/**
- *  \brief Continue ATS on failure command
- *
- *  For command details see #SC_CONTINUE_ATS_ON_FAILURE_CC
- */
-typedef struct
-{
-    CFE_MSG_CommandHeader_t                 CmdHeader; /**< \brief Command Header */
-    SC_SetContinueAtsOnFailureCmd_Payload_t Payload;
-} SC_SetContinueAtsOnFailureCmd_t;
-
-/**
- *  \brief Append to ATS Command
- *
- *  For command details see #SC_APPEND_ATS_CC
- */
-typedef struct
-{
-    CFE_MSG_CommandHeader_t   CmdHeader; /**< \brief Command Header */
-    SC_AppendAtsCmd_Payload_t Payload;
-} SC_AppendAtsCmd_t;
-
-/**
- *  \brief Send HK Command
- *
- *  For command details see #SC_SEND_HK_MID
- */
-typedef struct
-{
-    CFE_MSG_CommandHeader_t CmdHeader; /**< \brief Command Header */
-} SC_SendHkCmd_t;
-
-/**
- *  \brief 1Hz Wakeup Command
- *
- *  For command details see #SC_1HZ_WAKEUP_MID
- */
-typedef struct
-{
-    CFE_MSG_CommandHeader_t CmdHeader; /**< \brief Command Header */
-} SC_OneHzWakeupCmd_t;
-
-/**
- *  \brief No operation Command
- *
- *  For command details see #SC_NOOP_CC
- */
-typedef struct
-{
-    CFE_MSG_CommandHeader_t CmdHeader; /**< \brief Command Header */
-} SC_NoopCmd_t;
-
-/**
- *  \brief Reset Counters Command
- *
- *  For command details see #SC_RESET_COUNTERS_CC
- */
-typedef struct
-{
-    CFE_MSG_CommandHeader_t CmdHeader; /**< \brief Command Header */
-} SC_ResetCountersCmd_t;
-
-/**
- *  \brief Stop ATS Command
- *
- *  For command details see #SC_STOP_ATS_CC
- */
-typedef struct
-{
-    CFE_MSG_CommandHeader_t CmdHeader; /**< \brief Command Header */
-} SC_StopAtsCmd_t;
-
-/**
- *  \brief Switch ATS Command
- *
- *  For command details see #SC_SWITCH_ATS_CC
- */
-typedef struct
-{
-    CFE_MSG_CommandHeader_t CmdHeader; /**< \brief Command Header */
-} SC_SwitchAtsCmd_t;
-
-/**
- *  \brief Start RTS Command
- *
- *  For command details see #SC_START_RTS_CC
- */
-typedef struct
-{
-    CFE_MSG_CommandHeader_t CmdHeader; /**< \brief Command Header */
-    SC_RtsCmd_Payload_t     Payload;
-} SC_StartRtsCmd_t;
-
-/**
- *  \brief Stop RTS Command
- *
- *  For command details see #SC_STOP_RTS_CC
- */
-typedef struct
-{
-    CFE_MSG_CommandHeader_t CmdHeader; /**< \brief Command Header */
-    SC_RtsCmd_Payload_t     Payload;
-} SC_StopRtsCmd_t;
-
-/**
- *  \brief Disable RTS Command
- *
- *  For command details see #SC_DISABLE_RTS_CC
- */
-typedef struct
-{
-    CFE_MSG_CommandHeader_t CmdHeader; /**< \brief Command Header */
-    SC_RtsCmd_Payload_t     Payload;
-} SC_DisableRtsCmd_t;
-
-/**
- *  \brief Enable RTS Command
- *
- *  For command details see #SC_ENABLE_RTS_CC
- */
-typedef struct
-{
-    CFE_MSG_CommandHeader_t CmdHeader; /**< \brief Command Header */
-    SC_RtsCmd_Payload_t     Payload;
-} SC_EnableRtsCmd_t;
-
-/**
- *  \brief Continue ATS on failure command
- *
- *  For command details see #SC_CONTINUE_ATS_ON_FAILURE_CC
- */
-typedef struct
-{
-    CFE_MSG_CommandHeader_t                 CmdHeader; /**< \brief Command Header */
-    SC_SetContinueAtsOnFailureCmd_Payload_t Payload;
-} SC_ContinueAtsOnFailureCmd_t;
-
-/**
- *  \brief Manage Table Command
- *
- *  For command details see #SC_MANAGE_TABLE_CC
- */
-typedef struct
-{
-    CFE_MSG_CommandHeader_t     CmdHeader; /**< \brief Command Header */
-    CFE_TBL_NotifyCmd_Payload_t Payload;
-} SC_ManageTableCmd_t;
-
-/**
- *  \brief RTS Group Command
- *
- *  For command details see #SC_START_RTS_GRP_CC
- */
-typedef struct
-{
-    CFE_MSG_CommandHeader_t CmdHeader; /**< \brief Command Header */
-    SC_RtsGrpCmd_Payload_t  Payload;
-} SC_StartRtsGrpCmd_t;
-
-/**
- *  \brief RTS Group Command
- *
- *  For command details see #SC_STOP_RTS_GRP_CC
- */
-typedef struct
-{
-    CFE_MSG_CommandHeader_t CmdHeader; /**< \brief Command Header */
-    SC_RtsGrpCmd_Payload_t  Payload;
-} SC_StopRtsGrpCmd_t;
-
-/**
- *  \brief RTS Group Command
- *
- *  For command details see #SC_DISABLE_RTS_GRP_CC
- */
-typedef struct
-{
-    CFE_MSG_CommandHeader_t CmdHeader; /**< \brief Command Header */
-    SC_RtsGrpCmd_Payload_t  Payload;
-} SC_DisableRtsGrpCmd_t;
-
-/**
- *  \brief RTS Group Command
- *
- *  For command details see #SC_ENABLE_RTS_GRP_CC
- */
-typedef struct
-{
-    CFE_MSG_CommandHeader_t CmdHeader; /**< \brief Command Header */
-    SC_RtsGrpCmd_Payload_t  Payload;
-} SC_EnableRtsGrpCmd_t;
 
 /**\}*/
 

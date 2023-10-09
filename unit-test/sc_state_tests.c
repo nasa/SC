@@ -21,7 +21,6 @@
  * Includes
  */
 
-#include "sc_rts.h"
 #include "sc_app.h"
 #include "sc_cmds.h"
 #include "sc_state.h"
