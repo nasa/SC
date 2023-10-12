@@ -56,7 +56,7 @@ void SC_StartAtsCmd(const SC_StartAtsCmd_t *Cmd)
     AtsNum = Cmd->Payload.AtsNum;
 
     /* validate ATS ID */
-    if ((AtsNum > 0) && (AtsNum <= SC_NUMBER_OF_ATS))
+    if (SC_AtsNumIsValid(AtsNum))
     {
         /* convert ATS ID to array index */
         AtsIndex   = SC_AtsNumToIndex(AtsNum);
@@ -133,19 +133,22 @@ void SC_StopAtsCmd(const SC_StopAtsCmd_t *Cmd)
     int32 Result      = SC_ERROR;
 
     /*
-     ** Set the temp ATS ID if it is valid
+     ** Check if the ATS ID is valid
      */
+    if (SC_AtsNumIsValid(SC_OperData.AtsCtrlBlckAddr->CurrAtsNum))
+    {
+        Result = CFE_SUCCESS;
+    }
+
     if (SC_OperData.AtsCtrlBlckAddr->CurrAtsNum == SC_AtsId_ATSA)
     {
         TempAtsChar = 'A';
-        Result      = CFE_SUCCESS;
     }
     else
     {
         if (SC_OperData.AtsCtrlBlckAddr->CurrAtsNum == SC_AtsId_ATSB)
         {
             TempAtsChar = 'B';
-            Result      = CFE_SUCCESS;
         }
     }
 
@@ -186,7 +189,7 @@ bool SC_BeginAts(SC_AtsIndex_t AtsIndex, uint16 TimeOffset)
     SC_AtsCmdStatusEntry_t *      StatusEntryPtr;
 
     /* validate ATS array index */
-    if (AtsIndex >= SC_NUMBER_OF_ATS)
+    if (!SC_AtsIndexIsValid(AtsIndex))
     {
         CFE_EVS_SendEvent(SC_BEGINATS_INVLD_INDEX_ERR_EID, CFE_EVS_EventType_ERROR,
                           "Begin ATS error: invalid ATS index %d", AtsIndex);
@@ -204,7 +207,7 @@ bool SC_BeginAts(SC_AtsIndex_t AtsIndex, uint16 TimeOffset)
     TimeIndex = SC_SEQUENCE_IDX_FIRST; /* pointer into the time index table */
     CmdIndex  = SC_COMMAND_IDX_C(0);   /* updated in loop */
 
-    while (TimeIndex < AtsInfoPtr->NumberOfCommands)
+    while (SC_IDX_WITHIN_LIMIT(TimeIndex, AtsInfoPtr->NumberOfCommands))
     {
         /* first get the cmd index at this list entry */
         CmdIndex = SC_CommandNumToIndex(SC_GetAtsCommandNumAtSeq(AtsIndex, TimeIndex)->CmdNum);
@@ -223,7 +226,7 @@ bool SC_BeginAts(SC_AtsIndex_t AtsIndex, uint16 TimeOffset)
 
             StatusEntryPtr->Status = SC_Status_SKIPPED;
             CmdsSkipped++;
-            TimeIndex++;
+            SC_IDX_INCREMENT(TimeIndex);
         }
         else
         {
@@ -235,7 +238,7 @@ bool SC_BeginAts(SC_AtsIndex_t AtsIndex, uint16 TimeOffset)
     /*
      ** Check to see if the whole ATS was skipped
      */
-    if (TimeIndex == AtsInfoPtr->NumberOfCommands)
+    if (!SC_IDX_WITHIN_LIMIT(TimeIndex, AtsInfoPtr->NumberOfCommands))
     {
         CFE_EVS_SendEvent(SC_ATS_SKP_ALL_ERR_EID, CFE_EVS_EventType_ERROR,
                           "All ATS commands were skipped, ATS stopped");
@@ -312,7 +315,8 @@ void SC_SwitchAtsCmd(const SC_SwitchAtsCmd_t *Cmd)
     SC_AtsInfoTable_t *AtsInfoPtr;
 
     /* make sure that an ATS is running on the ATP */
-    if (SC_OperData.AtsCtrlBlckAddr->AtpState == SC_Status_EXECUTING)
+    if (SC_AtsNumIsValid(SC_OperData.AtsCtrlBlckAddr->CurrAtsNum) &&
+        SC_OperData.AtsCtrlBlckAddr->AtpState == SC_Status_EXECUTING)
     {
         /* get the ATS to switch to */
         NewAtsIndex = SC_ToggleAtsIndex();
@@ -532,7 +536,7 @@ void SC_JumpAtsCmd(const SC_JumpAtsCmd_t *Cmd)
         CmdIndex   = SC_COMMAND_IDX_C(0); /* updated in loop */
         NumSkipped = 0;
 
-        while (TimeIndex < AtsInfoPtr->NumberOfCommands)
+        while (SC_IDX_WITHIN_LIMIT(TimeIndex, AtsInfoPtr->NumberOfCommands))
         {
             /* first get the cmd index at this list entry */
             CmdIndex = SC_CommandNumToIndex(SC_GetAtsCommandNumAtSeq(AtsIndex, TimeIndex)->CmdNum);
@@ -561,7 +565,7 @@ void SC_JumpAtsCmd(const SC_JumpAtsCmd_t *Cmd)
                     NumSkipped++;
                 }
 
-                TimeIndex++;
+                SC_IDX_INCREMENT(TimeIndex);
             }
             else
             {
@@ -575,7 +579,7 @@ void SC_JumpAtsCmd(const SC_JumpAtsCmd_t *Cmd)
         /*
          ** Check to see if the whole ATS was skipped
          */
-        if (TimeIndex == AtsInfoPtr->NumberOfCommands)
+        if (!SC_IDX_WITHIN_LIMIT(TimeIndex, AtsInfoPtr->NumberOfCommands))
         {
             CFE_EVS_SendEvent(SC_JUMPATS_CMD_STOPPED_ERR_EID, CFE_EVS_EventType_ERROR,
                               "Jump Cmd: All ATS commands were skipped, ATS stopped");
@@ -667,7 +671,7 @@ void SC_AppendAtsCmd(const SC_AppendAtsCmd_t *Cmd)
     SC_AtsIndex_t      AtsIndex; /* index (not ID) of target ATS */
     SC_AtsInfoTable_t *AtsInfoPtr;
 
-    if ((Cmd->Payload.AtsNum == 0) || (Cmd->Payload.AtsNum > SC_NUMBER_OF_ATS))
+    if (!SC_AtsNumIsValid(Cmd->Payload.AtsNum))
     {
         /* invalid target ATS selection */
         SC_OperData.HkPacket.Payload.CmdErrCtr++;

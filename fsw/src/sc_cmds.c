@@ -313,12 +313,15 @@ void SC_ProcessRtpCommand(void)
      */
     /* convert the RTS number so that it can be directly indexed into the table*/
     RtsIndex = SC_RtsNumToIndex(SC_OperData.RtsCtrlBlckAddr->CurrRtsNum);
+    if (!SC_RtsIndexIsValid(RtsIndex))
+    {
+        return;
+    }
 
     RtsInfoPtr = SC_GetRtsInfoObject(RtsIndex);
 
     if ((SC_AppData.NextCmdTime[SC_AppData.NextProcNumber] <= SC_AppData.CurrentTime) &&
-        (SC_AppData.NextProcNumber == SC_Process_RTP) && (SC_OperData.RtsCtrlBlckAddr->CurrRtsNum > 0) &&
-        (SC_OperData.RtsCtrlBlckAddr->CurrRtsNum <= SC_NUMBER_OF_RTS) && (RtsInfoPtr->RtsStatus == SC_Status_EXECUTING))
+        (SC_AppData.NextProcNumber == SC_Process_RTP) && (RtsInfoPtr->RtsStatus == SC_Status_EXECUTING))
     {
         /*
          ** Count the command for the rate limiter
@@ -494,7 +497,7 @@ void SC_SendHkCmd(const SC_SendHkCmd_t *Cmd)
     SC_RtsInfoEntry_t *RtsInfoPtr;
 
     /* set during init to power on or processor reset auto-exec RTS */
-    if (SC_AppData.AutoStartRTS != 0)
+    if (SC_RtsNumIsValid(SC_AppData.AutoStartRTS))
     {
         RtsInfoPtr = SC_GetRtsInfoObject(SC_RtsNumToIndex(SC_AppData.AutoStartRTS));
 

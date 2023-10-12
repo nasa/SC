@@ -51,10 +51,10 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 void SC_LoadAts(SC_AtsIndex_t AtsIndex)
 {
-    uint16                        AtsEntryWords; /* current ats entry length in words */
-    SC_CommandNum_t               AtsCmdNum;     /* current ats entry command number */
-    SC_EntryOffset_t              AtsEntryIndex; /* index into the load for current ats entry */
-    SC_AtsEntry_t *               EntryPtr;      /* a pointer to an ats entry */
+    SC_CommandNum_t               AtsCmdNum;         /* current ats entry command number */
+    SC_EntryOffset_t              AtsEntryIndex;     /* index into the load for current ats entry */
+    SC_EntryOffset_t              PendingEntryIndex; /* index into the load for current ats entry */
+    SC_AtsEntry_t *               EntryPtr;          /* a pointer to an ats entry */
     CFE_MSG_Size_t                MessageSize     = 0;
     int32                         Result          = CFE_SUCCESS;
     bool                          StillProcessing = true;
@@ -63,7 +63,7 @@ void SC_LoadAts(SC_AtsIndex_t AtsIndex)
     SC_AtsCmdEntryOffsetRecord_t *CmdOffsetRec; /* ATS entry location in table */
 
     /* validate ATS array index */
-    if (AtsIndex >= SC_NUMBER_OF_ATS)
+    if (!SC_AtsIndexIsValid(AtsIndex))
     {
         CFE_EVS_SendEvent(SC_LOADATS_INV_INDEX_ERR_EID, CFE_EVS_EventType_ERROR, "ATS load error: invalid ATS index %d",
                           AtsIndex);
@@ -85,7 +85,7 @@ void SC_LoadAts(SC_AtsIndex_t AtsIndex)
          ** Make sure that the pointer as well as the primary packet
          ** header fit in the buffer, so a G.P fault is not caused.
          */
-        if (AtsEntryIndex < SC_ATS_BUFF_SIZE32)
+        if (SC_IDX_WITHIN_LIMIT(AtsEntryIndex, SC_ATS_BUFF_SIZE32))
         {
             /* get a pointer to the ats command in the table */
             EntryPtr = SC_GetAtsEntryAtOffset(AtsIndex, AtsEntryIndex);
@@ -93,7 +93,7 @@ void SC_LoadAts(SC_AtsIndex_t AtsIndex)
             /* get the next command number from the buffer */
             AtsCmdNum = EntryPtr->Header.CmdNumber;
 
-            if (AtsCmdNum == 0)
+            if (SC_IDNUM_IS_NULL(AtsCmdNum))
             {
                 /* end of the load reached */
                 Result = CFE_SUCCESS;
@@ -108,7 +108,8 @@ void SC_LoadAts(SC_AtsIndex_t AtsIndex)
             }
 
             /* make sure the CmdPtr can fit in a whole Ats Cmd Header at the very least */
-            if (AtsEntryIndex > (SC_ATS_BUFF_SIZE32 - SC_ATS_HDR_WORDS))
+            if (!SC_IDX_WITHIN_LIMIT(AtsEntryIndex,
+                                     1 + (SC_ATS_BUFF_SIZE32 - SC_ATS_HDR_WORDS))) /* jphfix - revisit? */
             {
                 /* even the smallest command will not fit in the buffer */
                 Result = SC_ERROR;
@@ -127,10 +128,10 @@ void SC_LoadAts(SC_AtsIndex_t AtsIndex)
                 if (MessageSize >= SC_PACKET_MIN_SIZE && MessageSize <= SC_PACKET_MAX_SIZE)
                 {
                     /* get the length of the entry in WORDS (plus 1 to round byte len up to word len) */
-                    AtsEntryWords = ((MessageSize + SC_ROUND_UP_BYTES) / SC_BYTES_IN_WORD) + SC_ATS_HDR_NOPKT_WORDS;
+                    PendingEntryIndex = SC_EntryOffsetAdvance(AtsEntryIndex, MessageSize + SC_ATS_HEADER_SIZE);
 
                     /* if the command does not run off of the end of the buffer */
-                    if (AtsEntryIndex + AtsEntryWords <= SC_ATS_BUFF_SIZE32)
+                    if (SC_IDX_WITHIN_LIMIT(PendingEntryIndex, 1 + SC_ATS_BUFF_SIZE32))
                     {
                         /* set the command pointer in the command index table */
                         /* CmdNum starts at one....                          */
@@ -144,7 +145,7 @@ void SC_LoadAts(SC_AtsIndex_t AtsIndex)
                         AtsInfoPtr->NumberOfCommands++;
 
                         /* increment the ats_entry index to the next ats entry */
-                        AtsEntryIndex = AtsEntryIndex + AtsEntryWords;
+                        AtsEntryIndex = PendingEntryIndex;
                     }
                     else
                     { /* the command runs off the end of the buffer */
@@ -212,7 +213,7 @@ void SC_BuildTimeIndexTable(SC_AtsIndex_t AtsIndex)
     SC_AtsCmdNumRecord_t *AtsCmdNumRec;
 
     /* validate ATS array index */
-    if (AtsIndex >= SC_NUMBER_OF_ATS)
+    if (!SC_AtsIndexIsValid(AtsIndex))
     {
         CFE_EVS_SendEvent(SC_BUILD_TIME_IDXTBL_ERR_EID, CFE_EVS_EventType_ERROR,
                           "Build time index table error: invalid ATS index %d", AtsIndex);
@@ -255,7 +256,7 @@ void SC_Insert(SC_AtsIndex_t AtsIndex, SC_CommandIndex_t NewCmdIndex, uint32 Lis
     SC_AtsCmdNumRecord_t *        AtsCmdNumRec;
 
     /* validate ATS array index */
-    if (AtsIndex >= SC_NUMBER_OF_ATS)
+    if (!SC_AtsIndexIsValid(AtsIndex))
     {
         CFE_EVS_SendEvent(SC_INSERTATS_INV_INDEX_ERR_EID, CFE_EVS_EventType_ERROR,
                           "ATS insert error: invalid ATS index %d", AtsIndex);
@@ -274,9 +275,9 @@ void SC_Insert(SC_AtsIndex_t AtsIndex, SC_CommandIndex_t NewCmdIndex, uint32 Lis
     }
 
     /* start at last element in the sorted by time list */
-    TimeBufIndex = ListLength - 1;
+    TimeBufIndex = SC_SEQUENCE_IDX_C(ListLength - 1);
 
-    while (TimeBufIndex >= 0)
+    while (SC_IDX_WITHIN_LIMIT(TimeBufIndex, ListLength))
     {
         /* first get the cmd index for this list entry */
         CmdIndex = SC_CommandNumToIndex(SC_GetAtsCommandNumAtSeq(AtsIndex, TimeBufIndex)->CmdNum);
@@ -300,7 +301,7 @@ void SC_Insert(SC_AtsIndex_t AtsIndex, SC_CommandIndex_t NewCmdIndex, uint32 Lis
                 SC_GetAtsCommandNumAtSeq(AtsIndex, TimeBufIndex)->CmdNum;
 
             /* back up to previous list entry (ok if -1) */
-            TimeBufIndex--;
+            SC_IDX_DECREMENT(TimeBufIndex);
         }
         else
         {
@@ -336,7 +337,7 @@ void SC_InitAtsTables(SC_AtsIndex_t AtsIndex)
     SC_AtsCmdNumRecord_t *        AtsCmdNumRec;
 
     /* validate ATS array index */
-    if (AtsIndex >= SC_NUMBER_OF_ATS)
+    if (!SC_AtsIndexIsValid(AtsIndex))
     {
         CFE_EVS_SendEvent(SC_INIT_ATSTBL_INV_INDEX_ERR_EID, CFE_EVS_EventType_ERROR,
                           "ATS table init error: invalid ATS index %d", AtsIndex);
@@ -371,7 +372,7 @@ void SC_LoadRts(SC_RtsIndex_t RtsIndex)
     SC_RtsInfoEntry_t *RtsInfoPtr;
 
     /* validate RTS array index */
-    if (RtsIndex < SC_NUMBER_OF_RTS)
+    if (SC_RtsIndexIsValid(RtsIndex))
     {
         /* Clear out the RTS info table */
         RtsInfoPtr = SC_GetRtsInfoObject(RtsIndex);
@@ -585,7 +586,7 @@ void SC_UpdateAppend(void)
         {
             EntryPtr = (SC_AtsEntry_t *)&SC_OperData.AppendTblAddr[EntryIndex];
 
-            if ((EntryPtr->Header.CmdNumber == 0) || (EntryPtr->Header.CmdNumber > SC_MAX_ATS_CMDS))
+            if (!SC_AtsCommandNumIsValid(EntryPtr->Header.CmdNumber))
             {
                 /* End of valid command numbers */
                 StillProcessing = false;
@@ -636,7 +637,6 @@ void SC_ProcessAppend(SC_AtsIndex_t AtsIndex)
 {
     SC_AtsEntry_t *               EntryPtr;
     CFE_MSG_Size_t                CommandBytes = 0;
-    int32                         CommandWords;
     SC_EntryOffset_t              EntryIndex;
     int32                         i;
     SC_CommandIndex_t             CmdIndex;
@@ -645,7 +645,7 @@ void SC_ProcessAppend(SC_AtsIndex_t AtsIndex)
     SC_AtsCmdEntryOffsetRecord_t *CmdOffsetRec;
 
     /* validate ATS array index */
-    if (AtsIndex >= SC_NUMBER_OF_ATS)
+    if (!SC_AtsIndexIsValid(AtsIndex))
     {
         CFE_EVS_SendEvent(SC_PROCESS_APPEND_INV_INDEX_ERR_EID, CFE_EVS_EventType_ERROR,
                           "ATS process append error: invalid ATS index %d", AtsIndex);
@@ -687,8 +687,7 @@ void SC_ProcessAppend(SC_AtsIndex_t AtsIndex)
 
         /* update entry index to point to the next entry */
         CFE_MSG_GetSize(CFE_MSG_PTR(EntryPtr->Msg), &CommandBytes);
-        CommandWords = (CommandBytes + SC_ROUND_UP_BYTES) / SC_BYTES_IN_WORD;
-        EntryIndex += (SC_ATS_HDR_NOPKT_WORDS + CommandWords);
+        EntryIndex = SC_EntryOffsetAdvance(EntryIndex, CommandBytes + SC_ATS_HEADER_SIZE);
     }
 
     /* rebuild time sorted list of commands */
@@ -710,7 +709,7 @@ void SC_ProcessAppend(SC_AtsIndex_t AtsIndex)
     }
 
     /* notify cFE that we have modified the ats table */
-    CFE_TBL_Modified(SC_OperData.AtsTblHandle[AtsIndex]);
+    CFE_TBL_Modified(SC_OperData.AtsTblHandle[SC_IDX_AS_UINT(AtsIndex)]);
 }
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -818,7 +817,7 @@ int32 SC_VerifyAtsEntry(uint32 *Buffer32, int32 EntryIndex, int32 BufferWords)
         /* All done -- end of in-use portion of buffer */
         Result = CFE_SUCCESS;
     }
-    else if (EntryPtr->Header.CmdNumber > SC_MAX_ATS_CMDS)
+    else if (!SC_AtsCommandNumIsValid(EntryPtr->Header.CmdNumber))
     {
         /* Error -- invalid command number */
         Result = SC_ERROR;

@@ -393,4 +393,20 @@ static inline bool SC_RtsNumValidateRange(SC_RtsNum_t FirstRtsNum, SC_RtsNum_t L
            SC_RtsNumWithinRange(FirstRtsNum, LastRtsNum);
 }
 
+/**
+ * @brief Advance the entry offset by the given amount
+ *
+ * Entries in ATS/RTS buffers are always aligned to 32-bit words.  This advances the
+ * offset by the specified number of bytes.  The given number of bytes will be converted
+ * to words, rounding up as needed to get to the next word boundary.
+ *
+ * @param Pos   Starting entry offset
+ * @param Bytes Amount to advance, in bytes
+ * @returns Updated entry offset
+ */
+static inline SC_EntryOffset_t SC_EntryOffsetAdvance(SC_EntryOffset_t Pos, size_t Bytes)
+{
+    return (SC_EntryOffset_t) {SC_IDX_AS_UINT(Pos) + ((Bytes + sizeof(uint32) - 1) / sizeof(uint32))};
+}
+
 #endif

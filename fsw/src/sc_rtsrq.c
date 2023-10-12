@@ -62,7 +62,7 @@ void SC_StartRtsCmd(const SC_StartRtsCmd_t *Cmd)
      */
     RtsNum = Cmd->Payload.RtsNum;
 
-    if ((RtsNum > 0) && (RtsNum <= SC_NUMBER_OF_RTS))
+    if (SC_RtsNumIsValid(RtsNum))
     {
         /* convert RTS ID to RTS array index */
         RtsIndex   = SC_RtsNumToIndex(RtsNum);
@@ -181,14 +181,13 @@ void SC_StartRtsGrpCmd(const SC_StartRtsGrpCmd_t *Cmd)
     LastRtsNum  = Cmd->Payload.LastRtsNum;
 
     /* make sure the specified group is valid */
-    if ((FirstRtsNum > 0) && (LastRtsNum > 0) && (FirstRtsNum <= SC_NUMBER_OF_RTS) &&
-        (LastRtsNum <= SC_NUMBER_OF_RTS) && (FirstRtsNum <= LastRtsNum))
+    if (SC_RtsNumValidateRange(FirstRtsNum, LastRtsNum))
     {
         /* convert RTS ID to RTS array index */
         FirstIndex = SC_RtsNumToIndex(FirstRtsNum);
         LastIndex  = SC_RtsNumToIndex(LastRtsNum);
 
-        for (RtsIndex = FirstIndex; RtsIndex <= LastIndex; RtsIndex++)
+        for (RtsIndex = FirstIndex; SC_IDX_LESS_OR_EQ(RtsIndex, LastIndex); SC_IDX_INCREMENT(RtsIndex))
         {
             RtsInfoPtr = SC_GetRtsInfoObject(RtsIndex);
 
@@ -264,7 +263,7 @@ void SC_StopRtsCmd(const SC_StopRtsCmd_t *Cmd)
     RtsNum = Cmd->Payload.RtsNum;
 
     /* check the command parameter */
-    if (RtsNum <= SC_NUMBER_OF_RTS)
+    if (SC_RtsNumIsValid(RtsNum))
     {
         /* convert RTS ID to RTS array index */
         RtsIndex = SC_RtsNumToIndex(RtsNum);
@@ -307,14 +306,13 @@ void SC_StopRtsGrpCmd(const SC_StopRtsGrpCmd_t *Cmd)
     LastRtsNum  = Cmd->Payload.LastRtsNum;
 
     /* make sure the specified group is valid */
-    if ((FirstRtsNum > 0) && (LastRtsNum > 0) && (FirstRtsNum <= SC_NUMBER_OF_RTS) &&
-        (LastRtsNum <= SC_NUMBER_OF_RTS) && (FirstRtsNum <= LastRtsNum))
+    if (SC_RtsNumValidateRange(FirstRtsNum, LastRtsNum))
     {
         /* convert RTS ID to RTS array index */
         FirstIndex = SC_RtsNumToIndex(FirstRtsNum);
         LastIndex  = SC_RtsNumToIndex(LastRtsNum);
 
-        for (RtsIndex = FirstIndex; RtsIndex <= LastIndex; RtsIndex++)
+        for (RtsIndex = FirstIndex; SC_IDX_LESS_OR_EQ(RtsIndex, LastIndex); SC_IDX_INCREMENT(RtsIndex))
         {
             RtsInfoPtr = SC_GetRtsInfoObject(RtsIndex);
 
@@ -354,7 +352,7 @@ void SC_DisableRtsCmd(const SC_DisableRtsCmd_t *Cmd)
     RtsNum = Cmd->Payload.RtsNum;
 
     /* make sure tha specified rts is valid */
-    if (RtsNum <= SC_NUMBER_OF_RTS)
+    if (SC_RtsNumIsValid(RtsNum))
     {
         /* convert RTS ID to RTS array index */
         RtsIndex   = SC_RtsNumToIndex(RtsNum);
@@ -397,14 +395,13 @@ void SC_DisableRtsGrpCmd(const SC_DisableRtsGrpCmd_t *Cmd)
     LastRtsNum  = Cmd->Payload.LastRtsNum;
 
     /* make sure the specified group is valid */
-    if ((FirstRtsNum > 0) && (LastRtsNum > 0) && (FirstRtsNum <= SC_NUMBER_OF_RTS) &&
-        (LastRtsNum <= SC_NUMBER_OF_RTS) && (FirstRtsNum <= LastRtsNum))
+    if (SC_RtsNumValidateRange(FirstRtsNum, LastRtsNum))
     {
         /* convert RTS ID to RTS array index */
         FirstIndex = SC_RtsNumToIndex(FirstRtsNum);
         LastIndex  = SC_RtsNumToIndex(LastRtsNum);
 
-        for (RtsIndex = FirstIndex; RtsIndex <= LastIndex; RtsIndex++)
+        for (RtsIndex = FirstIndex; SC_IDX_LESS_OR_EQ(RtsIndex, LastIndex); SC_IDX_INCREMENT(RtsIndex))
         {
             RtsInfoPtr = SC_GetRtsInfoObject(RtsIndex);
 
@@ -444,7 +441,7 @@ void SC_EnableRtsCmd(const SC_EnableRtsCmd_t *Cmd)
     RtsNum = Cmd->Payload.RtsNum;
 
     /* make sure the specified rts is valid */
-    if ((RtsNum > 0) && (RtsNum <= SC_NUMBER_OF_RTS))
+    if (SC_RtsNumIsValid(RtsNum))
     {
         /* convert RTS ID to RTS array index */
         RtsIndex   = SC_RtsNumToIndex(RtsNum);
@@ -488,14 +485,13 @@ void SC_EnableRtsGrpCmd(const SC_EnableRtsGrpCmd_t *Cmd)
     LastRtsNum  = Cmd->Payload.LastRtsNum;
 
     /* make sure the specified group is valid */
-    if ((FirstRtsNum > 0) && (LastRtsNum > 0) && (FirstRtsNum <= SC_NUMBER_OF_RTS) &&
-        (LastRtsNum <= SC_NUMBER_OF_RTS) && (FirstRtsNum <= LastRtsNum))
+    if (SC_RtsNumValidateRange(FirstRtsNum, LastRtsNum))
     {
         /* convert RTS ID to RTS array index */
         FirstIndex = SC_RtsNumToIndex(FirstRtsNum);
         LastIndex  = SC_RtsNumToIndex(LastRtsNum);
 
-        for (RtsIndex = FirstIndex; RtsIndex <= LastIndex; RtsIndex++)
+        for (RtsIndex = FirstIndex; SC_IDX_LESS_OR_EQ(RtsIndex, LastIndex); SC_IDX_INCREMENT(RtsIndex))
         {
             RtsInfoPtr = SC_GetRtsInfoObject(RtsIndex);
 
@@ -533,7 +529,7 @@ void SC_KillRts(SC_RtsIndex_t RtsIndex)
     RtsInfoPtr = SC_GetRtsInfoObject(RtsIndex);
 
     /* validate RTS array index */
-    if (RtsIndex >= SC_NUMBER_OF_RTS)
+    if (!SC_RtsIndexIsValid(RtsIndex))
     {
         CFE_EVS_SendEvent(SC_KILLRTS_INV_INDEX_ERR_EID, CFE_EVS_EventType_ERROR, "RTS kill error: invalid RTS index %d",
                           RtsIndex);
@@ -571,7 +567,7 @@ void SC_AutoStartRts(SC_RtsNum_t RtsNum)
     memset(&CmdPkt, 0, sizeof(CmdPkt));
 
     /* validate RTS ID */
-    if ((RtsNum > 0) && (RtsNum <= SC_NUMBER_OF_RTS))
+    if (SC_RtsNumIsValid(RtsNum))
     {
         /*
          ** Format the command packet to start the first RTS

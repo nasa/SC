@@ -84,7 +84,7 @@ void SC_GetNextRtsTime(void)
         }     /* end if */
     }         /* end for */
 
-    if (NextRts == SC_INVALID_RTS_INDEX)
+    if (!SC_RtsIndexIsValid(NextRts))
     {
         SC_OperData.RtsCtrlBlckAddr->CurrRtsNum = SC_RTS_NUM_NULL;
         SC_AppData.NextCmdTime[SC_Process_RTP]  = SC_MAX_TIME;
@@ -125,7 +125,7 @@ void SC_UpdateNextTime(void)
      ** This is determined by the RTS number in the RTP control block
      ** If it is zero, there is no RTS that needs to run
      */
-    if (SC_OperData.RtsCtrlBlckAddr->CurrRtsNum > 0)
+    if (SC_RtsNumIsValid(SC_OperData.RtsCtrlBlckAddr->CurrRtsNum))
     {
         /*
          ** If the RTP needs to send commands, only send them if
@@ -148,6 +148,7 @@ void SC_GetNextRtsCommand(void)
 {
     SC_RtsIndex_t      RtsIndex;
     SC_EntryOffset_t   CmdOffset;
+    SC_EntryOffset_t   PendingOffset;
     SC_RtsEntry_t *    EntryPtr;
     CFE_MSG_Size_t     CmdLength = 0;
     SC_RtsInfoEntry_t *RtsInfoPtr;
@@ -155,12 +156,11 @@ void SC_GetNextRtsCommand(void)
     /*
      ** Make sure that the RTP is executing some RTS
      */
-
-    if ((SC_OperData.RtsCtrlBlckAddr->CurrRtsNum > 0) && (SC_OperData.RtsCtrlBlckAddr->CurrRtsNum <= SC_NUMBER_OF_RTS))
+    RtsIndex = SC_RtsNumToIndex(SC_OperData.RtsCtrlBlckAddr->CurrRtsNum);
+    if (SC_RtsIndexIsValid(RtsIndex))
     {
-        /* Get the index of the rts that is running */
-        RtsIndex   = SC_RtsNumToIndex(SC_OperData.RtsCtrlBlckAddr->CurrRtsNum);
         RtsInfoPtr = SC_GetRtsInfoObject(RtsIndex);
+
         /*
          ** Find out if the RTS is EXECUTING or just STARTED
          */
@@ -181,7 +181,7 @@ void SC_GetNextRtsCommand(void)
              ** (plus 1 to round byte len up to word len)
              */
 
-            CmdOffset = CmdOffset + ((CmdLength + SC_ROUND_UP_BYTES) / SC_BYTES_IN_WORD);
+            CmdOffset = SC_EntryOffsetAdvance(CmdOffset, CmdLength);
             /*
              ** if the end of the buffer is not reached.
              ** This check is made to make sure that at least the minimum
@@ -190,7 +190,7 @@ void SC_GetNextRtsCommand(void)
              */
 
             /* If at least the header for a command plus the RTS header can fit in the buffer */
-            if (CmdOffset <= (SC_RTS_BUFF_SIZE32 - SC_RTS_HDR_WORDS))
+            if (SC_IDX_WITHIN_LIMIT(CmdOffset, 1 + SC_RTS_BUFF_SIZE32 - SC_RTS_HDR_WORDS))
             {
                 /*
                  ** Get the next RTS command
@@ -221,7 +221,8 @@ void SC_GetNextRtsCommand(void)
                          ** runs off of the end of the buffer
                          ** (plus 1 to round byte len up to word len)
                          */
-                        if (CmdOffset + ((CmdLength + SC_ROUND_UP_BYTES) / SC_BYTES_IN_WORD) <= SC_RTS_BUFF_SIZE32)
+                        PendingOffset = SC_EntryOffsetAdvance(CmdOffset, CmdLength);
+                        if (SC_IDX_WITHIN_LIMIT(PendingOffset, 1 + SC_RTS_BUFF_SIZE32))
                         {
                             /*
                              ** Everything passed!
@@ -282,7 +283,7 @@ void SC_GetNextRtsCommand(void)
 
                     /* Stop the RTS from executing */
                     SC_KillRts(RtsIndex);
-                    if ((SC_OperData.RtsCtrlBlckAddr->CurrRtsNum) <= SC_LAST_RTS_WITH_EVENTS)
+                    if (SC_RtsNumHasEvent(SC_OperData.RtsCtrlBlckAddr->CurrRtsNum))
                     {
                         CFE_EVS_SendEvent(SC_RTS_COMPL_INF_EID, CFE_EVS_EventType_INFORMATION,
                                           "RTS %03d Execution Completed", SC_OperData.RtsCtrlBlckAddr->CurrRtsNum);
@@ -293,7 +294,7 @@ void SC_GetNextRtsCommand(void)
             { /* The end of the RTS buffer has been reached... */
                 /* Stop the RTS from executing */
                 SC_KillRts(RtsIndex);
-                if ((SC_OperData.RtsCtrlBlckAddr->CurrRtsNum) <= SC_LAST_RTS_WITH_EVENTS)
+                if (SC_RtsNumHasEvent(SC_OperData.RtsCtrlBlckAddr->CurrRtsNum))
                 {
                     CFE_EVS_SendEvent(SC_RTS_COMPL_INF_EID, CFE_EVS_EventType_INFORMATION,
                                       "RTS %03d Execution Completed", SC_OperData.RtsCtrlBlckAddr->CurrRtsNum);
@@ -327,13 +328,14 @@ void SC_GetNextAtsCommand(void)
          ** Get the information that is needed to find the next command
          */
         AtsIndex   = SC_AtsNumToIndex(SC_OperData.AtsCtrlBlckAddr->CurrAtsNum);
-        TimeIndex  = SC_OperData.AtsCtrlBlckAddr->TimeIndexPtr + 1;
+        TimeIndex  = SC_OperData.AtsCtrlBlckAddr->TimeIndexPtr;
         AtsInfoPtr = SC_GetAtsInfoObject(AtsIndex);
+        SC_IDX_INCREMENT(TimeIndex);
 
         /*
          ** Check to see if there are more ATS commands
          */
-        if (TimeIndex < AtsInfoPtr->NumberOfCommands)
+        if (SC_IDX_WITHIN_LIMIT(TimeIndex, AtsInfoPtr->NumberOfCommands))
         {
             /* get the information for the next command in the ATP control block */
             AtsCmdNumRec = SC_GetAtsCommandNumAtSeq(AtsIndex, TimeIndex);

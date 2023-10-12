@@ -1152,6 +1152,43 @@ void SC_ProcessAppend_Test_NotExecuting(void)
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
 }
 
+void SC_ProcessAppend_Test_IdMismatch(void)
+{
+    SC_AtsIndex_t                 AtsIndex = SC_ATS_IDX_C(0);
+    void *                        TailPtr;
+    SC_AtsInfoTable_t *           AtsInfoPtr;
+    SC_AtsCmdStatusEntry_t *      StatusEntryPtr;
+    SC_AtsCmdEntryOffsetRecord_t *CmdOffsetRec;
+
+    CmdOffsetRec   = SC_GetAtsEntryOffsetForCmd(AtsIndex, SC_COMMAND_IDX_C(0));
+    StatusEntryPtr = SC_GetAtsStatusEntryForCommand(AtsIndex, SC_COMMAND_IDX_C(0));
+
+    AtsInfoPtr = SC_GetAtsInfoObject(AtsIndex);
+
+    UT_SC_SetupSingleAtsEntry(AtsIndex, 1, UT_SC_NOMINAL_CMD_SIZE);
+
+    TailPtr = UT_SC_GetAppendTable();
+    UT_SC_AppendSingleAtsEntry(&TailPtr, 1, UT_SC_NOMINAL_CMD_SIZE);
+
+    SC_AppData.AppendWordCount                    = 1;
+    SC_OperData.HkPacket.Payload.AppendEntryCount = 1;
+
+    SC_OperData.AtsCtrlBlckAddr->AtpState   = SC_Status_EXECUTING;
+    SC_OperData.AtsCtrlBlckAddr->CurrAtsNum = SC_AtsIndexToNum(SC_ATS_IDX_C(1));
+
+    /* Execute the function being tested */
+    SC_ProcessAppend(AtsIndex);
+
+    /* Verify results */
+    UtAssert_UINT32_EQ(AtsInfoPtr->AtsSize, 1);
+    UtAssert_UINT32_EQ(AtsInfoPtr->NumberOfCommands, 1);
+    SC_Assert_IDX_EQ(CmdOffsetRec->Offset, SC_ENTRY_OFFSET_FIRST);
+    SC_Assert_CmdStatus(StatusEntryPtr->Status, SC_Status_LOADED);
+    SC_Assert_CmdStatus(SC_OperData.AtsCtrlBlckAddr->AtpState, SC_Status_EXECUTING);
+
+    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
+}
+
 void SC_ProcessAppend_Test_AtsNum(void)
 {
     SC_AtsIndex_t                 AtsIndex = SC_ATS_IDX_C(0);
@@ -1479,6 +1516,8 @@ void UtTest_Setup(void)
                "SC_ProcessAppend_Test_CmdLoaded");
     UtTest_Add(SC_ProcessAppend_Test_NotExecuting, UT_SC_Loads_Test_Setup, SC_Test_TearDown,
                "SC_ProcessAppend_Test_NotExecuting");
+    UtTest_Add(SC_ProcessAppend_Test_IdMismatch, UT_SC_Loads_Test_Setup, SC_Test_TearDown,
+               "SC_ProcessAppend_Test_IdMismatch");
     UtTest_Add(SC_ProcessAppend_Test_AtsNum, UT_SC_Loads_Test_Setup, SC_Test_TearDown, "SC_ProcessAppend_Test_AtsNum");
     UtTest_Add(SC_ProcessAppend_Test_InvalidIndex, UT_SC_Loads_Test_Setup, SC_Test_TearDown,
                "SC_ProcessAppend_Test_InvalidIndex");

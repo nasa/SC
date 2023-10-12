@@ -124,7 +124,7 @@ void SC_StartRtsCmd_Test_StartRtsNoEvents(void)
     UtAssert_True(SC_OperData.HkPacket.Payload.CmdCtr == 1, "SC_OperData.HkPacket.Payload.CmdCtr == 1");
 
     /* Handle if SC_LAST_RTS_WITH_EVENTS is the same as SC_NUM_OF_RTS */
-    if (UT_CmdBuf.DisableRtsCmd.Payload.RtsNum > SC_LAST_RTS_WITH_EVENTS)
+    if (!SC_RtsNumHasEvent(UT_CmdBuf.DisableRtsCmd.Payload.RtsNum))
     {
         UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_STARTRTS_CMD_DBG_EID);
     }
@@ -246,7 +246,7 @@ void SC_StartRtsCmd_Test_RtsDisabled(void)
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
 }
 
-void SC_StartRtsCmd_Test_InvalidRtsId(void)
+void SC_StartRtsCmd_Test_InvalidRtsNum(void)
 {
     UT_CmdBuf.StartRtsCmd.Payload.RtsNum = SC_RTS_NUM_C(SC_NUMBER_OF_RTS * 2);
 
@@ -258,7 +258,7 @@ void SC_StartRtsCmd_Test_InvalidRtsId(void)
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
 }
 
-void SC_StartRtsCmd_Test_InvalidRtsIdZero(void)
+void SC_StartRtsCmd_Test_InvalidRtsNumZero(void)
 {
     UT_CmdBuf.StartRtsCmd.Payload.RtsNum = SC_RTS_NUM_C(0);
 
@@ -1072,10 +1072,10 @@ void UtTest_Setup(void)
     UtTest_Add(SC_StartRtsCmd_Test_RtsNotLoadedOrInUse, SC_Test_Setup, SC_Test_TearDown,
                "SC_StartRtsCmd_Test_RtsNotLoadedOrInUse");
     UtTest_Add(SC_StartRtsCmd_Test_RtsDisabled, SC_Test_Setup, SC_Test_TearDown, "SC_StartRtsCmd_Test_RtsDisabled");
-    UtTest_Add(SC_StartRtsCmd_Test_InvalidRtsId, SC_Test_Setup, SC_Test_TearDown, "SC_StartRtsCmd_Test_InvalidRtsId");
+    UtTest_Add(SC_StartRtsCmd_Test_InvalidRtsNum, SC_Test_Setup, SC_Test_TearDown, "SC_StartRtsCmd_Test_InvalidRtsNum");
 
-    UtTest_Add(SC_StartRtsCmd_Test_InvalidRtsIdZero, SC_Test_Setup, SC_Test_TearDown,
-               "SC_StartRtsCmd_Test_InvalidRtsIdZero");
+    UtTest_Add(SC_StartRtsCmd_Test_InvalidRtsNumZero, SC_Test_Setup, SC_Test_TearDown,
+               "SC_StartRtsCmd_Test_InvalidRtsNumZero");
     UtTest_Add(SC_StartRtsGrpCmd_Test_Nominal, SC_Test_Setup, SC_Test_TearDown, "SC_StartRtsGrpCmd_Test_Nominal");
     UtTest_Add(SC_StartRtsGrpCmd_Test_StartRtsGroupError, SC_Test_Setup, SC_Test_TearDown,
                "SC_StartRtsGrpCmd_Test_StartRtsGroupError");
