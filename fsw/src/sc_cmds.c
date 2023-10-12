@@ -58,7 +58,6 @@ void SC_ProcessAtpCmd(void)
     SC_AtsIndex_t                 AtsIndex; /* ATS selection index */
     SC_CommandIndex_t             CmdIndex; /* ATS command index */
     CFE_Status_t                  Result;
-    char                          TempAtsChar;
     bool                          AbortATS = false;
     SC_AtsEntry_t *               EntryPtr;
     CFE_SB_MsgId_t                MessageID   = CFE_SB_INVALID_MSG_ID;
@@ -174,8 +173,8 @@ void SC_ProcessAtpCmd(void)
                             SC_OperData.HkPacket.Payload.LastAtsErrCmd = SC_OperData.AtsCtrlBlckAddr->CmdNumber;
 
                             CFE_EVS_SendEvent(SC_ATS_DIST_ERR_EID, CFE_EVS_EventType_ERROR,
-                                              "ATS Command Distribution Failed, Cmd Number: %d, SB returned: 0x%08X",
-                                              EntryPtr->Header.CmdNumber, (unsigned int)Result);
+                                              "ATS Command Distribution Failed, Cmd Number: %u, SB returned: 0x%08X",
+                                              SC_IDNUM_AS_UINT(EntryPtr->Header.CmdNumber), (unsigned int)Result);
 
                             /* Mark this ATS for abortion */
                             AbortATS = true;
@@ -188,7 +187,8 @@ void SC_ProcessAtpCmd(void)
                      ** Send an event message to report the invalid command status
                      */
                     CFE_EVS_SendEvent(SC_ATS_CHKSUM_ERR_EID, CFE_EVS_EventType_ERROR,
-                                      "ATS Command Failed Checksum: Command #%d Skipped", EntryPtr->Header.CmdNumber);
+                                      "ATS Command Failed Checksum: Command #%u Skipped",
+                                      SC_IDNUM_AS_UINT(EntryPtr->Header.CmdNumber));
                     /*
                      ** Increment the ATS error counter
                      */
@@ -217,8 +217,9 @@ void SC_ProcessAtpCmd(void)
                  */
 
                 CFE_EVS_SendEvent(SC_ATS_MSMTCH_ERR_EID, CFE_EVS_EventType_ERROR,
-                                  "ATS Command Number Mismatch: Command Skipped, expected: %d received: %d",
-                                  (int)SC_CommandIndexToNum(CmdIndex), EntryPtr->Header.CmdNumber);
+                                  "ATS Command Number Mismatch: Command Skipped, expected: %u received: %u",
+                                  SC_IDNUM_AS_UINT(SC_CommandIndexToNum(CmdIndex)),
+                                  SC_IDNUM_AS_UINT(EntryPtr->Header.CmdNumber));
                 /*
                  ** Increment the ATS error counter
                  */
@@ -263,16 +264,7 @@ void SC_ProcessAtpCmd(void)
 
         if (AbortATS == true)
         {
-            if (SC_OperData.AtsCtrlBlckAddr->CurrAtsNum == SC_AtsId_ATSA)
-            {
-                TempAtsChar = 'A';
-            }
-            else
-            {
-                TempAtsChar = 'B';
-            }
-
-            CFE_EVS_SendEvent(SC_ATS_ABT_ERR_EID, CFE_EVS_EventType_ERROR, "ATS %c Aborted", TempAtsChar);
+            CFE_EVS_SendEvent(SC_ATS_ABT_ERR_EID, CFE_EVS_EventType_ERROR, "ATS %c Aborted", SC_IDX_AS_CHAR(AtsIndex));
 
             /* Stop the ATS from executing */
             SC_KillAts();
@@ -371,8 +363,8 @@ void SC_ProcessRtpCommand(void)
                  ** Send an event message to report the invalid command status
                  */
                 CFE_EVS_SendEvent(SC_RTS_DIST_ERR_EID, CFE_EVS_EventType_ERROR,
-                                  "RTS %03d Command Distribution Failed: RTS Stopped. SB returned 0x%08X",
-                                  (int)SC_OperData.RtsCtrlBlckAddr->CurrRtsNum, (unsigned int)Result);
+                                  "RTS %03u Command Distribution Failed: RTS Stopped. SB returned 0x%08X",
+                                  SC_IDNUM_AS_UINT(SC_OperData.RtsCtrlBlckAddr->CurrRtsNum), (unsigned int)Result);
 
                 SC_OperData.HkPacket.Payload.RtsCmdErrCtr++;
                 RtsInfoPtr->CmdErrCtr++;
@@ -393,8 +385,8 @@ void SC_ProcessRtpCommand(void)
              ** Send an event message to report the invalid command status
              */
             CFE_EVS_SendEvent(SC_RTS_CHKSUM_ERR_EID, CFE_EVS_EventType_ERROR,
-                              "RTS %03d Command Failed Checksum: RTS Stopped",
-                              (int)SC_OperData.RtsCtrlBlckAddr->CurrRtsNum);
+                              "RTS %03u Command Failed Checksum: RTS Stopped",
+                              SC_IDNUM_AS_UINT(SC_OperData.RtsCtrlBlckAddr->CurrRtsNum));
             /*
             ** Update the RTS command error counter and last RTS error info
             */
