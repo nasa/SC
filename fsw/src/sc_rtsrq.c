@@ -55,6 +55,7 @@ void SC_StartRtsCmd(const SC_StartRtsCmd_t *Cmd)
     SC_RtsEntryHeader_t *RtsEntryPtr;   /* pointer to an rts entry */
     CFE_MSG_Message_t *  RtsEntryCmd;   /* pointer to an rts command */
     CFE_MSG_Size_t       CmdLength = 0; /* the length of the 1st cmd */
+    SC_RtsInfoEntry_t *  RtsInfoPtr;
 
     /*
      ** Check start RTS parameters
@@ -64,18 +65,19 @@ void SC_StartRtsCmd(const SC_StartRtsCmd_t *Cmd)
     if ((RtsNum > 0) && (RtsNum <= SC_NUMBER_OF_RTS))
     {
         /* convert RTS ID to RTS array index */
-        RtsIndex = SC_RtsNumToIndex(RtsNum);
+        RtsIndex   = SC_RtsNumToIndex(RtsNum);
+        RtsInfoPtr = SC_GetRtsInfoObject(RtsIndex);
 
         /* make sure that RTS is not disabled */
-        if (SC_OperData.RtsInfoTblAddr[RtsIndex].DisabledFlag == false)
+        if (RtsInfoPtr->DisabledFlag == false)
         {
             /* the requested RTS is not being used and is not empty */
-            if (SC_OperData.RtsInfoTblAddr[RtsIndex].RtsStatus == SC_Status_LOADED)
+            if (RtsInfoPtr->RtsStatus == SC_Status_LOADED)
             {
                 /*
                  ** Check the command length
                  */
-                RtsEntryPtr = (SC_RtsEntryHeader_t *)SC_OperData.RtsTblAddr[RtsIndex];
+                RtsEntryPtr = &SC_GetRtsEntryAtOffset(RtsIndex, SC_ENTRY_OFFSET_FIRST)->Header;
                 RtsEntryCmd = (CFE_MSG_Message_t *)((uint8_t *)RtsEntryPtr + SC_RTS_HEADER_SIZE);
 
                 CFE_MSG_GetSize(RtsEntryCmd, &CmdLength);
@@ -86,18 +88,17 @@ void SC_StartRtsCmd(const SC_StartRtsCmd_t *Cmd)
                     /*
                      **  Initialize the RTS info table entry
                      */
-                    SC_OperData.RtsInfoTblAddr[RtsIndex].RtsStatus      = SC_Status_EXECUTING;
-                    SC_OperData.RtsInfoTblAddr[RtsIndex].CmdCtr         = 0;
-                    SC_OperData.RtsInfoTblAddr[RtsIndex].CmdErrCtr      = 0;
-                    SC_OperData.RtsInfoTblAddr[RtsIndex].NextCommandPtr = 0;
-                    SC_OperData.RtsInfoTblAddr[RtsIndex].UseCtr++;
+                    RtsInfoPtr->RtsStatus      = SC_Status_EXECUTING;
+                    RtsInfoPtr->CmdCtr         = 0;
+                    RtsInfoPtr->CmdErrCtr      = 0;
+                    RtsInfoPtr->NextCommandPtr = SC_ENTRY_OFFSET_FIRST;
+                    RtsInfoPtr->UseCtr++;
 
                     /*
                      ** Get the absolute time for the RTSs next_cmd_time
                      ** using the current time and the relative time tag.
                      */
-                    SC_OperData.RtsInfoTblAddr[RtsIndex].NextCommandTime =
-                        SC_ComputeAbsTime(((SC_RtsEntryHeader_t *)SC_OperData.RtsTblAddr[RtsIndex])->TimeTag);
+                    RtsInfoPtr->NextCommandTime = SC_ComputeAbsTime(RtsEntryPtr->TimeTag);
 
                     /*
                      ** Last, Increment some global counters associated with the
@@ -135,7 +136,7 @@ void SC_StartRtsCmd(const SC_StartRtsCmd_t *Cmd)
 
                 CFE_EVS_SendEvent(SC_STARTRTS_CMD_NOT_LDED_ERR_EID, CFE_EVS_EventType_ERROR,
                                   "Start RTS %03d Rejected: RTS Not Loaded or In Use, Status: %d", Cmd->Payload.RtsNum,
-                                  SC_OperData.RtsInfoTblAddr[RtsIndex].RtsStatus);
+                                  RtsInfoPtr->RtsStatus);
 
                 SC_OperData.HkPacket.Payload.CmdErrCtr++;
                 SC_OperData.HkPacket.Payload.RtsActiveErrCtr++;
@@ -168,12 +169,13 @@ void SC_StartRtsCmd(const SC_StartRtsCmd_t *Cmd)
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 void SC_StartRtsGrpCmd(const SC_StartRtsGrpCmd_t *Cmd)
 {
-    SC_RtsNum_t   FirstRtsNum;
-    SC_RtsNum_t   LastRtsNum;
-    SC_RtsIndex_t FirstIndex; /* RTS array index */
-    SC_RtsIndex_t LastIndex;
-    SC_RtsIndex_t RtsIndex;
-    int32         StartCount = 0;
+    SC_RtsNum_t        FirstRtsNum;
+    SC_RtsNum_t        LastRtsNum;
+    SC_RtsIndex_t      FirstIndex; /* RTS array index */
+    SC_RtsIndex_t      LastIndex;
+    SC_RtsIndex_t      RtsIndex;
+    int32              StartCount = 0;
+    SC_RtsInfoEntry_t *RtsInfoPtr;
 
     FirstRtsNum = Cmd->Payload.FirstRtsNum;
     LastRtsNum  = Cmd->Payload.LastRtsNum;
@@ -188,21 +190,23 @@ void SC_StartRtsGrpCmd(const SC_StartRtsGrpCmd_t *Cmd)
 
         for (RtsIndex = FirstIndex; RtsIndex <= LastIndex; RtsIndex++)
         {
+            RtsInfoPtr = SC_GetRtsInfoObject(RtsIndex);
+
             /* make sure that RTS is not disabled, empty or executing */
-            if (SC_OperData.RtsInfoTblAddr[RtsIndex].DisabledFlag == false)
+            if (RtsInfoPtr->DisabledFlag == false)
             {
-                if (SC_OperData.RtsInfoTblAddr[RtsIndex].RtsStatus == SC_Status_LOADED)
+                if (RtsInfoPtr->RtsStatus == SC_Status_LOADED)
                 {
                     /* initialize the RTS info table entry */
-                    SC_OperData.RtsInfoTblAddr[RtsIndex].RtsStatus      = SC_Status_EXECUTING;
-                    SC_OperData.RtsInfoTblAddr[RtsIndex].CmdCtr         = 0;
-                    SC_OperData.RtsInfoTblAddr[RtsIndex].CmdErrCtr      = 0;
-                    SC_OperData.RtsInfoTblAddr[RtsIndex].NextCommandPtr = 0;
-                    SC_OperData.RtsInfoTblAddr[RtsIndex].UseCtr++;
+                    RtsInfoPtr->RtsStatus      = SC_Status_EXECUTING;
+                    RtsInfoPtr->CmdCtr         = 0;
+                    RtsInfoPtr->CmdErrCtr      = 0;
+                    RtsInfoPtr->NextCommandPtr = SC_ENTRY_OFFSET_FIRST;
+                    RtsInfoPtr->UseCtr++;
 
                     /* get absolute time for 1st cmd in the RTS */
-                    SC_OperData.RtsInfoTblAddr[RtsIndex].NextCommandTime =
-                        SC_ComputeAbsTime(((SC_RtsEntryHeader_t *)SC_OperData.RtsTblAddr[RtsIndex])->TimeTag);
+                    RtsInfoPtr->NextCommandTime =
+                        SC_ComputeAbsTime(SC_GetRtsEntryAtOffset(RtsIndex, SC_ENTRY_OFFSET_FIRST)->Header.TimeTag);
 
                     /* maintain counters associated with starting RTS */
                     SC_OperData.RtsCtrlBlckAddr->NumRtsActive++;
@@ -216,7 +220,7 @@ void SC_StartRtsGrpCmd(const SC_StartRtsGrpCmd_t *Cmd)
                     CFE_EVS_SendEvent(
                         SC_STARTRTSGRP_CMD_NOT_LDED_ERR_EID, CFE_EVS_EventType_ERROR,
                         "Start RTS group error: rejected RTS ID %03d, RTS Not Loaded or In Use, Status: %d",
-                        SC_RtsIndexToNum(RtsIndex), SC_OperData.RtsInfoTblAddr[RtsIndex].RtsStatus);
+                        SC_RtsIndexToNum(RtsIndex), RtsInfoPtr->RtsStatus);
 
                     SC_OperData.HkPacket.Payload.RtsActiveErrCtr++;
 
@@ -291,12 +295,13 @@ void SC_StopRtsCmd(const SC_StopRtsCmd_t *Cmd)
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 void SC_StopRtsGrpCmd(const SC_StopRtsGrpCmd_t *Cmd)
 {
-    SC_RtsNum_t   FirstRtsNum;
-    SC_RtsNum_t   LastRtsNum;
-    SC_RtsIndex_t FirstIndex; /* RTS array index */
-    SC_RtsIndex_t LastIndex;
-    SC_RtsIndex_t RtsIndex;
-    int32         StopCount = 0;
+    SC_RtsNum_t        FirstRtsNum;
+    SC_RtsNum_t        LastRtsNum;
+    SC_RtsIndex_t      FirstIndex; /* RTS array index */
+    SC_RtsIndex_t      LastIndex;
+    SC_RtsIndex_t      RtsIndex;
+    int32              StopCount = 0;
+    SC_RtsInfoEntry_t *RtsInfoPtr;
 
     FirstRtsNum = Cmd->Payload.FirstRtsNum;
     LastRtsNum  = Cmd->Payload.LastRtsNum;
@@ -311,8 +316,10 @@ void SC_StopRtsGrpCmd(const SC_StopRtsGrpCmd_t *Cmd)
 
         for (RtsIndex = FirstIndex; RtsIndex <= LastIndex; RtsIndex++)
         {
+            RtsInfoPtr = SC_GetRtsInfoObject(RtsIndex);
+
             /* count the entries that were actually stopped */
-            if (SC_OperData.RtsInfoTblAddr[RtsIndex].RtsStatus == SC_Status_EXECUTING)
+            if (RtsInfoPtr->RtsStatus == SC_Status_EXECUTING)
             {
                 SC_KillRts(RtsIndex);
                 StopCount++;
@@ -340,8 +347,9 @@ void SC_StopRtsGrpCmd(const SC_StopRtsGrpCmd_t *Cmd)
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 void SC_DisableRtsCmd(const SC_DisableRtsCmd_t *Cmd)
 {
-    SC_RtsNum_t   RtsNum;   /* RTS number */
-    SC_RtsIndex_t RtsIndex; /* RTS array index */
+    SC_RtsNum_t        RtsNum;   /* RTS number */
+    SC_RtsIndex_t      RtsIndex; /* RTS array index */
+    SC_RtsInfoEntry_t *RtsInfoPtr;
 
     RtsNum = Cmd->Payload.RtsNum;
 
@@ -349,10 +357,11 @@ void SC_DisableRtsCmd(const SC_DisableRtsCmd_t *Cmd)
     if (RtsNum <= SC_NUMBER_OF_RTS)
     {
         /* convert RTS ID to RTS array index */
-        RtsIndex = SC_RtsNumToIndex(RtsNum);
+        RtsIndex   = SC_RtsNumToIndex(RtsNum);
+        RtsInfoPtr = SC_GetRtsInfoObject(RtsIndex);
 
         /* disable the RTS */
-        SC_OperData.RtsInfoTblAddr[RtsIndex].DisabledFlag = true;
+        RtsInfoPtr->DisabledFlag = true;
 
         /* update the command status */
         SC_OperData.HkPacket.Payload.CmdCtr++;
@@ -376,12 +385,13 @@ void SC_DisableRtsCmd(const SC_DisableRtsCmd_t *Cmd)
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 void SC_DisableRtsGrpCmd(const SC_DisableRtsGrpCmd_t *Cmd)
 {
-    SC_RtsNum_t   FirstRtsNum;
-    SC_RtsNum_t   LastRtsNum;
-    SC_RtsIndex_t FirstIndex; /* RTS array index */
-    SC_RtsIndex_t LastIndex;
-    SC_RtsIndex_t RtsIndex;
-    int32         DisableCount = 0;
+    SC_RtsNum_t        FirstRtsNum;
+    SC_RtsNum_t        LastRtsNum;
+    SC_RtsIndex_t      FirstIndex; /* RTS array index */
+    SC_RtsIndex_t      LastIndex;
+    SC_RtsIndex_t      RtsIndex;
+    int32              DisableCount = 0;
+    SC_RtsInfoEntry_t *RtsInfoPtr;
 
     FirstRtsNum = Cmd->Payload.FirstRtsNum;
     LastRtsNum  = Cmd->Payload.LastRtsNum;
@@ -396,11 +406,13 @@ void SC_DisableRtsGrpCmd(const SC_DisableRtsGrpCmd_t *Cmd)
 
         for (RtsIndex = FirstIndex; RtsIndex <= LastIndex; RtsIndex++)
         {
+            RtsInfoPtr = SC_GetRtsInfoObject(RtsIndex);
+
             /* count the entries that were actually disabled */
-            if (SC_OperData.RtsInfoTblAddr[RtsIndex].DisabledFlag == false)
+            if (RtsInfoPtr->DisabledFlag == false)
             {
                 DisableCount++;
-                SC_OperData.RtsInfoTblAddr[RtsIndex].DisabledFlag = true;
+                RtsInfoPtr->DisabledFlag = true;
             }
         }
 
@@ -425,8 +437,9 @@ void SC_DisableRtsGrpCmd(const SC_DisableRtsGrpCmd_t *Cmd)
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 void SC_EnableRtsCmd(const SC_EnableRtsCmd_t *Cmd)
 {
-    SC_RtsNum_t   RtsNum;   /* RTS number */
-    SC_RtsIndex_t RtsIndex; /* RTS array index */
+    SC_RtsNum_t        RtsNum;   /* RTS number */
+    SC_RtsIndex_t      RtsIndex; /* RTS array index */
+    SC_RtsInfoEntry_t *RtsInfoPtr;
 
     RtsNum = Cmd->Payload.RtsNum;
 
@@ -434,10 +447,11 @@ void SC_EnableRtsCmd(const SC_EnableRtsCmd_t *Cmd)
     if ((RtsNum > 0) && (RtsNum <= SC_NUMBER_OF_RTS))
     {
         /* convert RTS ID to RTS array index */
-        RtsIndex = SC_RtsNumToIndex(RtsNum);
+        RtsIndex   = SC_RtsNumToIndex(RtsNum);
+        RtsInfoPtr = SC_GetRtsInfoObject(RtsIndex);
 
         /* re-enable the RTS */
-        SC_OperData.RtsInfoTblAddr[RtsIndex].DisabledFlag = false;
+        RtsInfoPtr->DisabledFlag = false;
 
         /* update the command status */
         SC_OperData.HkPacket.Payload.CmdCtr++;
@@ -462,12 +476,13 @@ void SC_EnableRtsCmd(const SC_EnableRtsCmd_t *Cmd)
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 void SC_EnableRtsGrpCmd(const SC_EnableRtsGrpCmd_t *Cmd)
 {
-    SC_RtsNum_t   FirstRtsNum;
-    SC_RtsNum_t   LastRtsNum;
-    SC_RtsIndex_t FirstIndex; /* RTS array index */
-    SC_RtsIndex_t LastIndex;
-    SC_RtsIndex_t RtsIndex;
-    int32         EnableCount = 0;
+    SC_RtsNum_t        FirstRtsNum;
+    SC_RtsNum_t        LastRtsNum;
+    SC_RtsIndex_t      FirstIndex; /* RTS array index */
+    SC_RtsIndex_t      LastIndex;
+    SC_RtsIndex_t      RtsIndex;
+    int32              EnableCount = 0;
+    SC_RtsInfoEntry_t *RtsInfoPtr;
 
     FirstRtsNum = Cmd->Payload.FirstRtsNum;
     LastRtsNum  = Cmd->Payload.LastRtsNum;
@@ -482,11 +497,13 @@ void SC_EnableRtsGrpCmd(const SC_EnableRtsGrpCmd_t *Cmd)
 
         for (RtsIndex = FirstIndex; RtsIndex <= LastIndex; RtsIndex++)
         {
+            RtsInfoPtr = SC_GetRtsInfoObject(RtsIndex);
+
             /* count the entries that were actually enabled */
-            if (SC_OperData.RtsInfoTblAddr[RtsIndex].DisabledFlag == true)
+            if (RtsInfoPtr->DisabledFlag == true)
             {
                 EnableCount++;
-                SC_OperData.RtsInfoTblAddr[RtsIndex].DisabledFlag = false;
+                RtsInfoPtr->DisabledFlag = false;
             }
         }
 
@@ -511,25 +528,29 @@ void SC_EnableRtsGrpCmd(const SC_EnableRtsGrpCmd_t *Cmd)
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 void SC_KillRts(SC_RtsIndex_t RtsIndex)
 {
+    SC_RtsInfoEntry_t *RtsInfoPtr;
+
+    RtsInfoPtr = SC_GetRtsInfoObject(RtsIndex);
+
     /* validate RTS array index */
     if (RtsIndex >= SC_NUMBER_OF_RTS)
     {
         CFE_EVS_SendEvent(SC_KILLRTS_INV_INDEX_ERR_EID, CFE_EVS_EventType_ERROR, "RTS kill error: invalid RTS index %d",
                           RtsIndex);
     }
-    else if (SC_OperData.RtsInfoTblAddr[RtsIndex].RtsStatus == SC_Status_EXECUTING)
+    else if (RtsInfoPtr->RtsStatus == SC_Status_EXECUTING)
     {
         /*
-         ** Stop the RTS from executing
-         */
-        SC_OperData.RtsInfoTblAddr[RtsIndex].RtsStatus       = SC_Status_LOADED;
-        SC_OperData.RtsInfoTblAddr[RtsIndex].NextCommandTime = SC_MAX_TIME;
+        ** Stop the RTS from executing
+        */
+        RtsInfoPtr->RtsStatus       = SC_Status_LOADED;
+        RtsInfoPtr->NextCommandTime = SC_MAX_TIME;
 
         /*
-         ** Note: the rest of the fields are left alone
-         ** to provide information on where the
-         ** rts stopped. They are cleared out when it is restarted.
-         */
+        ** Note: the rest of the fields are left alone
+        ** to provide information on where the
+        ** rts stopped. They are cleared out when it is restarted.
+        */
 
         if (SC_OperData.RtsCtrlBlckAddr->NumRtsActive > 0)
         {

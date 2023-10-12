@@ -57,9 +57,10 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 void SC_GetNextRtsTime(void)
 {
-    int16           i;        /* loop counter MUST be SIGNED !*/
-    SC_RtsIndex_t   NextRts;  /* the next rts to schedule */
-    SC_AbsTimeTag_t NextTime; /* the next time for the RTS */
+    int16              i;        /* loop counter MUST be SIGNED !*/
+    SC_RtsIndex_t      NextRts;  /* the next rts to schedule */
+    SC_AbsTimeTag_t    NextTime; /* the next time for the RTS */
+    SC_RtsInfoEntry_t *RtsInfoPtr;
 
     NextRts  = SC_INVALID_RTS_INDEX;
     NextTime = SC_MAX_TIME;
@@ -72,11 +73,12 @@ void SC_GetNextRtsTime(void)
      */
     for (i = SC_NUMBER_OF_RTS - 1; i >= 0; i--)
     {
-        if (SC_OperData.RtsInfoTblAddr[i].RtsStatus == SC_Status_EXECUTING)
+        RtsInfoPtr = SC_GetRtsInfoObject(SC_RTS_IDX_C(i));
+        if (RtsInfoPtr->RtsStatus == SC_Status_EXECUTING)
         {
-            if (SC_OperData.RtsInfoTblAddr[i].NextCommandTime <= NextTime)
+            if (RtsInfoPtr->NextCommandTime <= NextTime)
             {
-                NextTime = SC_OperData.RtsInfoTblAddr[i].NextCommandTime;
+                NextTime = RtsInfoPtr->NextCommandTime;
                 NextRts  = SC_RTS_IDX_C(i);
             } /* end if */
         }     /* end if */
@@ -89,7 +91,7 @@ void SC_GetNextRtsTime(void)
     }
     else
     {
-        SC_OperData.RtsCtrlBlckAddr->CurrRtsNum = NextRts + 1;
+        SC_OperData.RtsCtrlBlckAddr->CurrRtsNum = SC_RtsIndexToNum(NextRts);
         SC_AppData.NextCmdTime[SC_Process_RTP]  = NextTime;
     } /* end if */
 }
@@ -144,10 +146,11 @@ void SC_UpdateNextTime(void)
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 void SC_GetNextRtsCommand(void)
 {
-    SC_RtsIndex_t    RtsIndex;
-    SC_EntryOffset_t CmdOffset;
-    SC_RtsEntry_t *  EntryPtr;
-    CFE_MSG_Size_t   CmdLength = 0;
+    SC_RtsIndex_t      RtsIndex;
+    SC_EntryOffset_t   CmdOffset;
+    SC_RtsEntry_t *    EntryPtr;
+    CFE_MSG_Size_t     CmdLength = 0;
+    SC_RtsInfoEntry_t *RtsInfoPtr;
 
     /*
      ** Make sure that the RTP is executing some RTS
@@ -156,17 +159,18 @@ void SC_GetNextRtsCommand(void)
     if ((SC_OperData.RtsCtrlBlckAddr->CurrRtsNum > 0) && (SC_OperData.RtsCtrlBlckAddr->CurrRtsNum <= SC_NUMBER_OF_RTS))
     {
         /* Get the index of the rts that is running */
-        RtsIndex = SC_RtsNumToIndex(SC_OperData.RtsCtrlBlckAddr->CurrRtsNum);
+        RtsIndex   = SC_RtsNumToIndex(SC_OperData.RtsCtrlBlckAddr->CurrRtsNum);
+        RtsInfoPtr = SC_GetRtsInfoObject(RtsIndex);
         /*
          ** Find out if the RTS is EXECUTING or just STARTED
          */
-        if (SC_OperData.RtsInfoTblAddr[RtsIndex].RtsStatus == SC_Status_EXECUTING)
+        if (RtsInfoPtr->RtsStatus == SC_Status_EXECUTING)
         {
             /*
              ** Get the information needed to find the next command
              */
-            CmdOffset = SC_OperData.RtsInfoTblAddr[RtsIndex].NextCommandPtr;
-            EntryPtr  = (SC_RtsEntry_t *)&SC_OperData.RtsTblAddr[RtsIndex][CmdOffset];
+            CmdOffset = RtsInfoPtr->NextCommandPtr;
+            EntryPtr  = SC_GetRtsEntryAtOffset(RtsIndex, CmdOffset);
 
             CFE_MSG_GetSize(CFE_MSG_PTR(EntryPtr->Msg), &CmdLength);
             CmdLength += SC_RTS_HEADER_SIZE;
@@ -191,7 +195,7 @@ void SC_GetNextRtsCommand(void)
                 /*
                  ** Get the next RTS command
                  */
-                EntryPtr = (SC_RtsEntry_t *)&SC_OperData.RtsTblAddr[RtsIndex][CmdOffset];
+                EntryPtr = SC_GetRtsEntryAtOffset(RtsIndex, CmdOffset);
 
                 /*
                  ** get the length of the new command
@@ -223,13 +227,12 @@ void SC_GetNextRtsCommand(void)
                              ** Everything passed!
                              ** Update the proper next command time for that RTS
                              */
-                            SC_OperData.RtsInfoTblAddr[RtsIndex].NextCommandTime =
-                                SC_ComputeAbsTime(EntryPtr->Header.TimeTag);
+                            RtsInfoPtr->NextCommandTime = SC_ComputeAbsTime(EntryPtr->Header.TimeTag);
 
                             /*
                              ** Update the appropriate RTS info table current command pointer
                              */
-                            SC_OperData.RtsInfoTblAddr[RtsIndex].NextCommandPtr = CmdOffset;
+                            RtsInfoPtr->NextCommandPtr = CmdOffset;
                         }
                         else
                         { /* the command runs past the end of the buffer */
@@ -239,7 +242,7 @@ void SC_GetNextRtsCommand(void)
                              ** is an error condition, so record it
                              */
                             SC_OperData.HkPacket.Payload.RtsCmdErrCtr++;
-                            SC_OperData.RtsInfoTblAddr[RtsIndex].CmdErrCtr++;
+                            RtsInfoPtr->CmdErrCtr++;
                             SC_OperData.HkPacket.Payload.LastRtsErrSeq = SC_OperData.RtsCtrlBlckAddr->CurrRtsNum;
                             SC_OperData.HkPacket.Payload.LastRtsErrCmd = CmdOffset;
 
@@ -258,7 +261,7 @@ void SC_GetNextRtsCommand(void)
 
                         /* update the error information */
                         SC_OperData.HkPacket.Payload.RtsCmdErrCtr++;
-                        SC_OperData.RtsInfoTblAddr[RtsIndex].CmdErrCtr++;
+                        RtsInfoPtr->CmdErrCtr++;
                         SC_OperData.HkPacket.Payload.LastRtsErrSeq = SC_OperData.RtsCtrlBlckAddr->CurrRtsNum;
                         SC_OperData.HkPacket.Payload.LastRtsErrCmd = CmdOffset;
 
@@ -310,32 +313,40 @@ void SC_GetNextRtsCommand(void)
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 void SC_GetNextAtsCommand(void)
 {
-    SC_AtsIndex_t    AtsIndex;  /* ats array index */
-    SC_SeqIndex_t    TimeIndex; /* a time index pointer */
-    SC_EntryOffset_t CmdIndex;  /* ats command array index */
-    SC_AtsEntry_t *  EntryPtr;
+    SC_AtsIndex_t                 AtsIndex;  /* ats array index */
+    SC_SeqIndex_t                 TimeIndex; /* a time index pointer */
+    SC_AtsCmdEntryOffsetRecord_t *CmdOffsetRec;
+    SC_AtsEntry_t *               EntryPtr;
+    SC_AtsInfoTable_t *           AtsInfoPtr;
+    SC_AtsCmdNumRecord_t *        AtsCmdNumRec;
+    SC_CommandIndex_t             CurrCmdIndex;
 
     if (SC_OperData.AtsCtrlBlckAddr->AtpState == SC_Status_EXECUTING)
     {
         /*
          ** Get the information that is needed to find the next command
          */
-        AtsIndex  = SC_AtsNumToIndex(SC_OperData.AtsCtrlBlckAddr->CurrAtsNum);
-        TimeIndex = SC_OperData.AtsCtrlBlckAddr->TimeIndexPtr + 1;
+        AtsIndex   = SC_AtsNumToIndex(SC_OperData.AtsCtrlBlckAddr->CurrAtsNum);
+        TimeIndex  = SC_OperData.AtsCtrlBlckAddr->TimeIndexPtr + 1;
+        AtsInfoPtr = SC_GetAtsInfoObject(AtsIndex);
 
         /*
          ** Check to see if there are more ATS commands
          */
-        if (TimeIndex < SC_OperData.AtsInfoTblAddr[AtsIndex].NumberOfCommands)
+        if (TimeIndex < AtsInfoPtr->NumberOfCommands)
         {
             /* get the information for the next command in the ATP control block */
+            AtsCmdNumRec = SC_GetAtsCommandNumAtSeq(AtsIndex, TimeIndex);
+            CurrCmdIndex = SC_CommandNumToIndex(AtsCmdNumRec->CmdNum);
+
             SC_OperData.AtsCtrlBlckAddr->TimeIndexPtr = TimeIndex;
-            SC_OperData.AtsCtrlBlckAddr->CmdNumber    = SC_AppData.AtsTimeIndexBuffer[AtsIndex][TimeIndex];
+            SC_OperData.AtsCtrlBlckAddr->CmdNumber    = AtsCmdNumRec->CmdNum;
 
             /* update the next command time */
-            CmdIndex =
-                SC_AppData.AtsCmdIndexBuffer[AtsIndex][SC_CommandNumToIndex(SC_OperData.AtsCtrlBlckAddr->CmdNumber)];
-            EntryPtr                               = (SC_AtsEntry_t *)&SC_OperData.AtsTblAddr[AtsIndex][CmdIndex];
+            CmdOffsetRec = SC_GetAtsEntryOffsetForCmd(AtsIndex, CurrCmdIndex);
+
+            EntryPtr = SC_GetAtsEntryAtOffset(AtsIndex, CmdOffsetRec->Offset);
+
             SC_AppData.NextCmdTime[SC_Process_ATP] = SC_GetAtsEntryTime(&EntryPtr->Header);
         }
         else

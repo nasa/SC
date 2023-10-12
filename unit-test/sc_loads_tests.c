@@ -41,6 +41,9 @@
 
 #define UT_SC_NOMINAL_CMD_SIZE (SC_PACKET_MAX_SIZE / 2)
 
+static const SC_SeqIndex_t UT_SEQ_INDEX_0 = SC_IDX_FROM_UINT(0);
+static const SC_SeqIndex_t UT_SEQ_INDEX_1 = SC_IDX_FROM_UINT(1);
+
 /*
  * Function Definitions
  */
@@ -284,7 +287,15 @@ SC_RtsEntryHeader_t *UT_SC_SetupRtsTable(SC_RtsIndex_t RtsIndex, CFE_SB_MsgId_t 
 
 void SC_LoadAts_Test_Nominal(void)
 {
-    SC_AtsIndex_t AtsIndex = SC_ATS_IDX_C(0);
+    SC_AtsIndex_t                 AtsIndex = SC_ATS_IDX_C(0);
+    SC_AtsInfoTable_t *           AtsInfoPtr;
+    SC_AtsCmdStatusEntry_t *      StatusEntryPtr;
+    SC_AtsCmdEntryOffsetRecord_t *CmdOffsetRec;
+
+    CmdOffsetRec   = SC_GetAtsEntryOffsetForCmd(AtsIndex, SC_COMMAND_IDX_C(0));
+    StatusEntryPtr = SC_GetAtsStatusEntryForCommand(AtsIndex, SC_COMMAND_IDX_C(0));
+
+    AtsInfoPtr = SC_GetAtsInfoObject(AtsIndex);
 
     UT_SC_SetupSingleAtsEntry(AtsIndex, 1, sizeof(SC_NoopCmd_t));
 
@@ -292,15 +303,23 @@ void SC_LoadAts_Test_Nominal(void)
     SC_LoadAts(AtsIndex);
 
     /* Verify results */
-    UtAssert_INT32_EQ(SC_AppData.AtsCmdIndexBuffer[AtsIndex][0], 0);
-    UtAssert_UINT32_EQ(SC_OperData.AtsCmdStatusTblAddr[AtsIndex][0], SC_Status_LOADED);
-    UtAssert_UINT32_EQ(SC_OperData.AtsInfoTblAddr[AtsIndex].NumberOfCommands, 1);
+    SC_Assert_IDX_EQ(CmdOffsetRec->Offset, SC_ENTRY_OFFSET_FIRST);
+    SC_Assert_CmdStatus(StatusEntryPtr->Status, SC_Status_LOADED);
+    UtAssert_UINT32_EQ(AtsInfoPtr->NumberOfCommands, 1);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
 }
 
 void SC_LoadAts_Test_CmdRunOffEndOfBuffer(void)
 {
-    SC_AtsIndex_t AtsIndex = SC_ATS_IDX_C(0);
+    SC_AtsIndex_t                 AtsIndex = SC_ATS_IDX_C(0);
+    SC_AtsInfoTable_t *           AtsInfoPtr;
+    SC_AtsCmdStatusEntry_t *      StatusEntryPtr;
+    SC_AtsCmdEntryOffsetRecord_t *CmdOffsetRec;
+
+    CmdOffsetRec   = SC_GetAtsEntryOffsetForCmd(AtsIndex, SC_COMMAND_IDX_C(0));
+    StatusEntryPtr = SC_GetAtsStatusEntryForCommand(AtsIndex, SC_COMMAND_IDX_C(0));
+
+    AtsInfoPtr = SC_GetAtsInfoObject(AtsIndex);
 
     /* Set up -- Modify the final entry so it would go off the end of the table */
     UT_SC_SetupAtsTable(AtsIndex, UT_SC_NOMINAL_CMD_SIZE, SC_ATS_BUFF_SIZE32 + 1, NULL);
@@ -308,67 +327,99 @@ void SC_LoadAts_Test_CmdRunOffEndOfBuffer(void)
     /* Execute the function being tested */
     SC_LoadAts(AtsIndex);
 
-    UtAssert_INT32_EQ(SC_AppData.AtsCmdIndexBuffer[AtsIndex][0], SC_ERROR);
-    UtAssert_UINT32_EQ(SC_OperData.AtsCmdStatusTblAddr[AtsIndex][0], SC_Status_EMPTY);
-    UtAssert_ZERO(SC_OperData.AtsInfoTblAddr[AtsIndex].NumberOfCommands);
-    UtAssert_ZERO(SC_OperData.AtsInfoTblAddr[AtsIndex].AtsSize);
+    SC_Assert_IDX_EQ(CmdOffsetRec->Offset, SC_ENTRY_OFFSET_INVALID);
+    SC_Assert_CmdStatus(StatusEntryPtr->Status, SC_Status_EMPTY);
+    UtAssert_ZERO(AtsInfoPtr->NumberOfCommands);
+    UtAssert_ZERO(AtsInfoPtr->AtsSize);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
 }
 
 void SC_LoadAts_Test_CmdLengthInvalid(void)
 {
-    SC_AtsIndex_t AtsIndex = SC_ATS_IDX_C(0);
+    SC_AtsIndex_t                 AtsIndex = SC_ATS_IDX_C(0);
+    SC_AtsInfoTable_t *           AtsInfoPtr;
+    SC_AtsCmdStatusEntry_t *      StatusEntryPtr;
+    SC_AtsCmdEntryOffsetRecord_t *CmdOffsetRec;
+
+    CmdOffsetRec   = SC_GetAtsEntryOffsetForCmd(AtsIndex, SC_COMMAND_IDX_C(0));
+    StatusEntryPtr = SC_GetAtsStatusEntryForCommand(AtsIndex, SC_COMMAND_IDX_C(0));
+
+    AtsInfoPtr = SC_GetAtsInfoObject(AtsIndex);
 
     UT_SC_SetupSingleAtsEntry(AtsIndex, 1, SC_PACKET_MAX_SIZE + 1);
 
     /* Execute the function being tested */
     SC_LoadAts(AtsIndex);
 
-    UtAssert_INT32_EQ(SC_AppData.AtsCmdIndexBuffer[AtsIndex][0], SC_ERROR);
-    UtAssert_UINT32_EQ(SC_OperData.AtsCmdStatusTblAddr[AtsIndex][0], SC_Status_EMPTY);
-    UtAssert_ZERO(SC_OperData.AtsInfoTblAddr[AtsIndex].NumberOfCommands);
-    UtAssert_ZERO(SC_OperData.AtsInfoTblAddr[AtsIndex].AtsSize);
+    SC_Assert_IDX_EQ(CmdOffsetRec->Offset, SC_ENTRY_OFFSET_INVALID);
+    SC_Assert_CmdStatus(StatusEntryPtr->Status, SC_Status_EMPTY);
+    UtAssert_ZERO(AtsInfoPtr->NumberOfCommands);
+    UtAssert_ZERO(AtsInfoPtr->AtsSize);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
 }
 
 void SC_LoadAts_Test_CmdLengthZero(void)
 {
-    SC_AtsIndex_t AtsIndex = SC_ATS_IDX_C(0);
+    SC_AtsIndex_t                 AtsIndex = SC_ATS_IDX_C(0);
+    SC_AtsInfoTable_t *           AtsInfoPtr;
+    SC_AtsCmdStatusEntry_t *      StatusEntryPtr;
+    SC_AtsCmdEntryOffsetRecord_t *CmdOffsetRec;
+
+    CmdOffsetRec   = SC_GetAtsEntryOffsetForCmd(AtsIndex, SC_COMMAND_IDX_C(0));
+    StatusEntryPtr = SC_GetAtsStatusEntryForCommand(AtsIndex, SC_COMMAND_IDX_C(0));
+
+    AtsInfoPtr = SC_GetAtsInfoObject(AtsIndex);
 
     UT_SC_SetupSingleAtsEntry(AtsIndex, 1, SC_PACKET_MIN_SIZE - 1);
 
     /* Execute the function being tested */
     SC_LoadAts(AtsIndex);
 
-    UtAssert_INT32_EQ(SC_AppData.AtsCmdIndexBuffer[AtsIndex][0], SC_ERROR);
-    UtAssert_UINT32_EQ(SC_OperData.AtsCmdStatusTblAddr[AtsIndex][0], SC_Status_EMPTY);
-    UtAssert_ZERO(SC_OperData.AtsInfoTblAddr[AtsIndex].NumberOfCommands);
-    UtAssert_ZERO(SC_OperData.AtsInfoTblAddr[AtsIndex].AtsSize);
+    SC_Assert_IDX_EQ(CmdOffsetRec->Offset, SC_ENTRY_OFFSET_INVALID);
+    SC_Assert_CmdStatus(StatusEntryPtr->Status, SC_Status_EMPTY);
+    UtAssert_ZERO(AtsInfoPtr->NumberOfCommands);
+    UtAssert_ZERO(AtsInfoPtr->AtsSize);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
 }
 
 void SC_LoadAts_Test_CmdNumberInvalid(void)
 {
-    SC_AtsIndex_t AtsIndex = SC_ATS_IDX_C(0);
+    SC_AtsIndex_t                 AtsIndex = SC_ATS_IDX_C(0);
+    SC_AtsInfoTable_t *           AtsInfoPtr;
+    SC_AtsCmdStatusEntry_t *      StatusEntryPtr;
+    SC_AtsCmdEntryOffsetRecord_t *CmdOffsetRec;
+
+    CmdOffsetRec   = SC_GetAtsEntryOffsetForCmd(AtsIndex, SC_COMMAND_IDX_C(0));
+    StatusEntryPtr = SC_GetAtsStatusEntryForCommand(AtsIndex, SC_COMMAND_IDX_C(0));
+
+    AtsInfoPtr = SC_GetAtsInfoObject(AtsIndex);
 
     UT_SC_SetupSingleAtsEntry(AtsIndex, SC_MAX_ATS_CMDS * 2, UT_SC_NOMINAL_CMD_SIZE);
 
     /* Execute the function being tested */
     SC_LoadAts(AtsIndex);
 
-    UtAssert_INT32_EQ(SC_AppData.AtsCmdIndexBuffer[AtsIndex][0], SC_ERROR);
-    UtAssert_UINT32_EQ(SC_OperData.AtsCmdStatusTblAddr[AtsIndex][0], SC_Status_EMPTY);
-    UtAssert_ZERO(SC_OperData.AtsInfoTblAddr[AtsIndex].NumberOfCommands);
-    UtAssert_ZERO(SC_OperData.AtsInfoTblAddr[AtsIndex].AtsSize);
+    SC_Assert_IDX_EQ(CmdOffsetRec->Offset, SC_ENTRY_OFFSET_INVALID);
+    SC_Assert_CmdStatus(StatusEntryPtr->Status, SC_Status_EMPTY);
+    UtAssert_ZERO(AtsInfoPtr->NumberOfCommands);
+    UtAssert_ZERO(AtsInfoPtr->AtsSize);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
 }
 
 void SC_LoadAts_Test_AtsBufferTooSmall(void)
 {
-    SC_AtsEntryHeader_t *LastValidEntry;
-    void *               TailPtr;
-    SC_AtsEntryHeader_t *InvalidEntry;
-    SC_AtsIndex_t        AtsIndex = SC_ATS_IDX_C(0);
+    SC_AtsEntryHeader_t *         LastValidEntry;
+    void *                        TailPtr;
+    SC_AtsEntryHeader_t *         InvalidEntry;
+    SC_AtsIndex_t                 AtsIndex = SC_ATS_IDX_C(0);
+    SC_AtsInfoTable_t *           AtsInfoPtr;
+    SC_AtsCmdStatusEntry_t *      StatusEntryPtr;
+    SC_AtsCmdEntryOffsetRecord_t *CmdOffsetRec;
+
+    CmdOffsetRec   = SC_GetAtsEntryOffsetForCmd(AtsIndex, SC_COMMAND_IDX_C(0));
+    StatusEntryPtr = SC_GetAtsStatusEntryForCommand(AtsIndex, SC_COMMAND_IDX_C(0));
+
+    AtsInfoPtr = SC_GetAtsInfoObject(AtsIndex);
 
     /* Set up -- Modify the final entry so it would go off the end of the table */
     LastValidEntry =
@@ -386,32 +437,48 @@ void SC_LoadAts_Test_AtsBufferTooSmall(void)
     SC_LoadAts(AtsIndex);
 
     /* Verify results */
-    UtAssert_INT32_EQ(SC_AppData.AtsCmdIndexBuffer[AtsIndex][0], SC_ERROR);
-    UtAssert_UINT32_EQ(SC_OperData.AtsCmdStatusTblAddr[AtsIndex][0], SC_Status_EMPTY);
-    UtAssert_ZERO(SC_OperData.AtsInfoTblAddr[AtsIndex].NumberOfCommands);
-    UtAssert_ZERO(SC_OperData.AtsInfoTblAddr[AtsIndex].AtsSize);
+    SC_Assert_IDX_EQ(CmdOffsetRec->Offset, SC_ENTRY_OFFSET_INVALID);
+    SC_Assert_CmdStatus(StatusEntryPtr->Status, SC_Status_EMPTY);
+    UtAssert_ZERO(AtsInfoPtr->NumberOfCommands);
+    UtAssert_ZERO(AtsInfoPtr->AtsSize);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
 }
 
 void SC_LoadAts_Test_AtsEmpty(void)
 {
-    SC_AtsIndex_t AtsIndex = SC_ATS_IDX_C(0);
+    SC_AtsIndex_t                 AtsIndex = SC_ATS_IDX_C(0);
+    SC_AtsInfoTable_t *           AtsInfoPtr;
+    SC_AtsCmdStatusEntry_t *      StatusEntryPtr;
+    SC_AtsCmdEntryOffsetRecord_t *CmdOffsetRec;
+
+    CmdOffsetRec   = SC_GetAtsEntryOffsetForCmd(AtsIndex, SC_COMMAND_IDX_C(0));
+    StatusEntryPtr = SC_GetAtsStatusEntryForCommand(AtsIndex, SC_COMMAND_IDX_C(0));
+
+    AtsInfoPtr = SC_GetAtsInfoObject(AtsIndex);
 
     /* Execute the function being tested */
     SC_LoadAts(AtsIndex);
 
     /* Verify results */
-    UtAssert_INT32_EQ(SC_AppData.AtsCmdIndexBuffer[AtsIndex][0], SC_ERROR);
-    UtAssert_UINT32_EQ(SC_OperData.AtsCmdStatusTblAddr[AtsIndex][0], SC_Status_EMPTY);
-    UtAssert_ZERO(SC_OperData.AtsInfoTblAddr[AtsIndex].NumberOfCommands);
-    UtAssert_ZERO(SC_OperData.AtsInfoTblAddr[AtsIndex].AtsSize);
+    SC_Assert_IDX_EQ(CmdOffsetRec->Offset, SC_ENTRY_OFFSET_INVALID);
+    SC_Assert_CmdStatus(StatusEntryPtr->Status, SC_Status_EMPTY);
+    UtAssert_ZERO(AtsInfoPtr->NumberOfCommands);
+    UtAssert_ZERO(AtsInfoPtr->AtsSize);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
 }
 
 void SC_LoadAts_Test_LoadExactlyBufferLength(void)
 {
-    SC_AtsEntryHeader_t *Entry;
-    SC_AtsIndex_t        AtsIndex = SC_ATS_IDX_C(0);
+    SC_AtsEntryHeader_t *         Entry;
+    SC_AtsIndex_t                 AtsIndex = SC_ATS_IDX_C(0);
+    SC_AtsInfoTable_t *           AtsInfoPtr;
+    SC_AtsCmdStatusEntry_t *      StatusEntryPtr;
+    SC_AtsCmdEntryOffsetRecord_t *CmdOffsetRec;
+
+    CmdOffsetRec   = SC_GetAtsEntryOffsetForCmd(AtsIndex, SC_COMMAND_IDX_C(0));
+    StatusEntryPtr = SC_GetAtsStatusEntryForCommand(AtsIndex, SC_COMMAND_IDX_C(0));
+
+    AtsInfoPtr = SC_GetAtsInfoObject(AtsIndex);
 
     /* Set up -- Modify the final entry so it exactly takes up the remainder of the buffer */
     Entry = UT_SC_SetupAtsTable(AtsIndex, UT_SC_NOMINAL_CMD_SIZE, SC_ATS_BUFF_SIZE32, NULL);
@@ -420,17 +487,25 @@ void SC_LoadAts_Test_LoadExactlyBufferLength(void)
     SC_LoadAts(AtsIndex);
 
     /* Verify results */
-    UtAssert_INT32_EQ(SC_AppData.AtsCmdIndexBuffer[AtsIndex][0], 0);
-    UtAssert_UINT32_EQ(SC_OperData.AtsCmdStatusTblAddr[AtsIndex][0], SC_Status_LOADED);
-    UtAssert_UINT32_EQ(SC_OperData.AtsInfoTblAddr[AtsIndex].NumberOfCommands, Entry->CmdNumber);
-    UtAssert_UINT32_EQ(SC_OperData.AtsInfoTblAddr[AtsIndex].AtsSize, SC_ATS_BUFF_SIZE32);
+    SC_Assert_IDX_VALUE(CmdOffsetRec->Offset, 0);
+    SC_Assert_CmdStatus(StatusEntryPtr->Status, SC_Status_LOADED);
+    SC_Assert_ID_VALUE(Entry->CmdNumber, AtsInfoPtr->NumberOfCommands);
+    UtAssert_UINT32_EQ(AtsInfoPtr->AtsSize, SC_ATS_BUFF_SIZE32);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
 }
 
 void SC_LoadAts_Test_CmdNotEmpty(void)
 {
-    void *        TailPtr;
-    SC_AtsIndex_t AtsIndex = SC_ATS_IDX_C(0);
+    void *                        TailPtr;
+    SC_AtsIndex_t                 AtsIndex = SC_ATS_IDX_C(0);
+    SC_AtsInfoTable_t *           AtsInfoPtr;
+    SC_AtsCmdStatusEntry_t *      StatusEntryPtr;
+    SC_AtsCmdEntryOffsetRecord_t *CmdOffsetRec;
+
+    CmdOffsetRec   = SC_GetAtsEntryOffsetForCmd(AtsIndex, SC_COMMAND_IDX_C(0));
+    StatusEntryPtr = SC_GetAtsStatusEntryForCommand(AtsIndex, SC_COMMAND_IDX_C(0));
+
+    AtsInfoPtr = SC_GetAtsInfoObject(AtsIndex);
 
     /* Set up a buffer that has a duplicate command number entry */
     TailPtr = UT_SC_GetAtsTable(AtsIndex);
@@ -441,10 +516,10 @@ void SC_LoadAts_Test_CmdNotEmpty(void)
     SC_LoadAts(AtsIndex);
 
     /* Verify results */
-    UtAssert_UINT32_EQ(SC_AppData.AtsCmdIndexBuffer[AtsIndex][0], SC_ERROR);
-    UtAssert_UINT32_EQ(SC_OperData.AtsCmdStatusTblAddr[AtsIndex][0], SC_Status_EMPTY);
-    UtAssert_UINT32_EQ(SC_OperData.AtsInfoTblAddr[AtsIndex].NumberOfCommands, 0);
-    UtAssert_UINT32_EQ(SC_OperData.AtsInfoTblAddr[AtsIndex].AtsSize, 0);
+    SC_Assert_IDX_EQ(CmdOffsetRec->Offset, SC_ENTRY_OFFSET_INVALID);
+    SC_Assert_CmdStatus(StatusEntryPtr->Status, SC_Status_EMPTY);
+    UtAssert_UINT32_EQ(AtsInfoPtr->NumberOfCommands, 0);
+    UtAssert_UINT32_EQ(AtsInfoPtr->AtsSize, 0);
 
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
 }
@@ -477,11 +552,16 @@ void SC_BuildTimeIndexTable_Test_InvalidIndex(void)
 
 void SC_Insert_Test(void)
 {
-    SC_AtsIndex_t     AtsIndex    = SC_ATS_IDX_C(0);
-    uint8             ListLength  = 1;
-    SC_CommandIndex_t NewCmdIndex = SC_COMMAND_IDX_C(0);
+    SC_AtsIndex_t         AtsIndex    = SC_ATS_IDX_C(0);
+    uint8                 ListLength  = 1;
+    SC_CommandIndex_t     NewCmdIndex = SC_COMMAND_IDX_C(0);
+    SC_AtsCmdNumRecord_t *AtsCmdNumRec0;
+    SC_AtsCmdNumRecord_t *AtsCmdNumRec1;
 
-    SC_AppData.AtsTimeIndexBuffer[AtsIndex][0] = 1;
+    AtsCmdNumRec0 = SC_GetAtsCommandNumAtSeq(AtsIndex, UT_SEQ_INDEX_0);
+    AtsCmdNumRec1 = SC_GetAtsCommandNumAtSeq(AtsIndex, UT_SEQ_INDEX_1);
+
+    AtsCmdNumRec0->CmdNum = SC_CommandIndexToNum(NewCmdIndex);
 
     /* Execute the function being tested */
     SC_Insert(AtsIndex, NewCmdIndex, ListLength);
@@ -489,21 +569,26 @@ void SC_Insert_Test(void)
     /* Verify results */
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
 
-    UtAssert_UINT16_EQ(SC_AppData.AtsTimeIndexBuffer[AtsIndex][1], SC_AppData.AtsTimeIndexBuffer[AtsIndex][0]);
-    UtAssert_UINT16_EQ(SC_AppData.AtsTimeIndexBuffer[AtsIndex][1], NewCmdIndex + 1);
+    SC_Assert_ID_EQ(AtsCmdNumRec1->CmdNum, AtsCmdNumRec0->CmdNum);
+    SC_Assert_ID_EQ(AtsCmdNumRec1->CmdNum, SC_CommandIndexToNum(NewCmdIndex));
 }
 
 void SC_Insert_Test_MiddleOfList(void)
 {
-    SC_AtsIndex_t     AtsIndex    = SC_ATS_IDX_C(0);
-    uint8             ListLength  = 1;
-    SC_CommandIndex_t NewCmdIndex = SC_COMMAND_IDX_C(0);
+    SC_AtsIndex_t         AtsIndex    = SC_ATS_IDX_C(0);
+    uint8                 ListLength  = 1;
+    SC_CommandIndex_t     NewCmdIndex = SC_COMMAND_IDX_C(0);
+    SC_AtsCmdNumRecord_t *AtsCmdNumRec0;
+    SC_AtsCmdNumRecord_t *AtsCmdNumRec1;
+
+    AtsCmdNumRec0 = SC_GetAtsCommandNumAtSeq(AtsIndex, UT_SEQ_INDEX_0);
+    AtsCmdNumRec1 = SC_GetAtsCommandNumAtSeq(AtsIndex, UT_SEQ_INDEX_1);
 
     /* Set to cause SC_CompareAbsTime to return false, in order to reach block starting with
       "new cmd will execute at same time or after this list entry" */
     UT_SetDeferredRetcode(UT_KEY(SC_CompareAbsTime), 1, false);
 
-    SC_AppData.AtsTimeIndexBuffer[AtsIndex][0] = 1;
+    AtsCmdNumRec0->CmdNum = SC_CommandIndexToNum(NewCmdIndex);
 
     /* Execute the function being tested */
     SC_Insert(AtsIndex, NewCmdIndex, ListLength);
@@ -511,21 +596,26 @@ void SC_Insert_Test_MiddleOfList(void)
     /* Verify results */
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
 
-    UtAssert_UINT16_EQ(SC_AppData.AtsTimeIndexBuffer[AtsIndex][1], SC_AppData.AtsTimeIndexBuffer[AtsIndex][0]);
-    UtAssert_UINT16_EQ(SC_AppData.AtsTimeIndexBuffer[AtsIndex][1], NewCmdIndex + 1);
+    SC_Assert_ID_EQ(AtsCmdNumRec1->CmdNum, AtsCmdNumRec0->CmdNum);
+    SC_Assert_ID_EQ(AtsCmdNumRec1->CmdNum, SC_CommandIndexToNum(NewCmdIndex));
 }
 
 void SC_Insert_Test_MiddleOfListCompareAbsTimeTrue(void)
 {
-    SC_AtsIndex_t     AtsIndex    = SC_ATS_IDX_C(0);
-    uint8             ListLength  = 1;
-    SC_CommandIndex_t NewCmdIndex = SC_COMMAND_IDX_C(0);
+    SC_AtsIndex_t         AtsIndex    = SC_ATS_IDX_C(0);
+    uint8                 ListLength  = 1;
+    SC_CommandIndex_t     NewCmdIndex = SC_COMMAND_IDX_C(0);
+    SC_AtsCmdNumRecord_t *AtsCmdNumRec0;
+    SC_AtsCmdNumRecord_t *AtsCmdNumRec1;
+
+    AtsCmdNumRec0 = SC_GetAtsCommandNumAtSeq(AtsIndex, UT_SEQ_INDEX_0);
+    AtsCmdNumRec1 = SC_GetAtsCommandNumAtSeq(AtsIndex, UT_SEQ_INDEX_1);
 
     /* Set to cause SC_CompareAbsTime to return false, in order to reach block starting with
       "new cmd will execute at same time or after this list entry" */
     UT_SetDeferredRetcode(UT_KEY(SC_CompareAbsTime), 1, true);
 
-    SC_AppData.AtsTimeIndexBuffer[AtsIndex][0] = 1;
+    AtsCmdNumRec0->CmdNum = SC_CommandIndexToNum(NewCmdIndex);
 
     /* Execute the function being tested */
     SC_Insert(AtsIndex, NewCmdIndex, ListLength);
@@ -533,8 +623,8 @@ void SC_Insert_Test_MiddleOfListCompareAbsTimeTrue(void)
     /* Verify results */
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
 
-    UtAssert_UINT16_EQ(SC_AppData.AtsTimeIndexBuffer[AtsIndex][1], SC_AppData.AtsTimeIndexBuffer[AtsIndex][0]);
-    UtAssert_UINT16_EQ(SC_AppData.AtsTimeIndexBuffer[AtsIndex][1], NewCmdIndex + 1);
+    SC_Assert_ID_EQ(AtsCmdNumRec1->CmdNum, AtsCmdNumRec0->CmdNum);
+    SC_Assert_ID_EQ(AtsCmdNumRec1->CmdNum, SC_CommandIndexToNum(NewCmdIndex));
 }
 
 void SC_Insert_Test_InvalidIndex(void)
@@ -950,8 +1040,16 @@ void SC_UpdateAppend_Test_CmdNumberTooHigh(void)
 
 void SC_ProcessAppend_Test(void)
 {
-    SC_AtsIndex_t AtsIndex = SC_ATS_IDX_C(0);
-    void *        TailPtr;
+    SC_AtsIndex_t                 AtsIndex = SC_ATS_IDX_C(0);
+    void *                        TailPtr;
+    SC_AtsInfoTable_t *           AtsInfoPtr;
+    SC_AtsCmdStatusEntry_t *      StatusEntryPtr;
+    SC_AtsCmdEntryOffsetRecord_t *CmdOffsetRec;
+
+    CmdOffsetRec   = SC_GetAtsEntryOffsetForCmd(AtsIndex, SC_COMMAND_IDX_C(0));
+    StatusEntryPtr = SC_GetAtsStatusEntryForCommand(AtsIndex, SC_COMMAND_IDX_C(0));
+
+    AtsInfoPtr = SC_GetAtsInfoObject(AtsIndex);
 
     UT_SC_SetupSingleAtsEntry(AtsIndex, 1, UT_SC_NOMINAL_CMD_SIZE);
 
@@ -971,19 +1069,26 @@ void SC_ProcessAppend_Test(void)
     SC_ProcessAppend(AtsIndex);
 
     /* Verify results */
-    UtAssert_UINT32_EQ(SC_OperData.AtsInfoTblAddr[AtsIndex].AtsSize, 1);
-    UtAssert_UINT32_EQ(SC_OperData.AtsInfoTblAddr[AtsIndex].NumberOfCommands, 1);
-    UtAssert_ZERO(SC_AppData.AtsCmdIndexBuffer[AtsIndex][0]);
-    UtAssert_UINT32_EQ(SC_OperData.AtsCmdStatusTblAddr[AtsIndex][0], SC_Status_LOADED);
-    UtAssert_UINT32_EQ(SC_OperData.AtsCtrlBlckAddr->AtpState, SC_Status_EXECUTING);
+    UtAssert_UINT32_EQ(AtsInfoPtr->AtsSize, 1);
+    UtAssert_UINT32_EQ(AtsInfoPtr->NumberOfCommands, 1);
+    SC_Assert_IDX_EQ(CmdOffsetRec->Offset, SC_ENTRY_OFFSET_FIRST);
+    SC_Assert_CmdStatus(StatusEntryPtr->Status, SC_Status_LOADED);
+    SC_Assert_CmdStatus(SC_OperData.AtsCtrlBlckAddr->AtpState, SC_Status_EXECUTING);
 
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
 }
 
 void SC_ProcessAppend_Test_CmdLoaded(void)
 {
-    SC_AtsIndex_t AtsIndex = SC_ATS_IDX_C(0);
-    void *        TailPtr;
+    SC_AtsIndex_t                 AtsIndex = SC_ATS_IDX_C(0);
+    void *                        TailPtr;
+    SC_AtsInfoTable_t *           AtsInfoPtr;
+    SC_AtsCmdStatusEntry_t *      StatusEntryPtr;
+    SC_AtsCmdEntryOffsetRecord_t *CmdOffsetRec;
+
+    CmdOffsetRec   = SC_GetAtsEntryOffsetForCmd(AtsIndex, SC_COMMAND_IDX_C(0));
+    StatusEntryPtr = SC_GetAtsStatusEntryForCommand(AtsIndex, SC_COMMAND_IDX_C(0));
+    AtsInfoPtr     = SC_GetAtsInfoObject(AtsIndex);
 
     UT_SC_SetupSingleAtsEntry(AtsIndex, 1, UT_SC_NOMINAL_CMD_SIZE);
 
@@ -993,27 +1098,35 @@ void SC_ProcessAppend_Test_CmdLoaded(void)
     SC_AppData.AppendWordCount                    = 1;
     SC_OperData.HkPacket.Payload.AppendEntryCount = 1;
 
-    SC_OperData.AtsCmdStatusTblAddr[AtsIndex][0] = SC_Status_LOADED;
-    SC_OperData.AtsCtrlBlckAddr->AtpState        = SC_Status_EXECUTING;
-    SC_OperData.AtsCtrlBlckAddr->CurrAtsNum      = SC_AtsIndexToNum(AtsIndex);
+    StatusEntryPtr->Status                  = SC_Status_LOADED;
+    SC_OperData.AtsCtrlBlckAddr->AtpState   = SC_Status_EXECUTING;
+    SC_OperData.AtsCtrlBlckAddr->CurrAtsNum = SC_AtsIndexToNum(AtsIndex);
 
     /* Execute the function being tested */
     SC_ProcessAppend(AtsIndex);
 
     /* Verify results */
-    UtAssert_UINT32_EQ(SC_OperData.AtsInfoTblAddr[AtsIndex].AtsSize, 1);
-    UtAssert_UINT32_EQ(SC_OperData.AtsInfoTblAddr[AtsIndex].NumberOfCommands, 0);
-    UtAssert_ZERO(SC_AppData.AtsCmdIndexBuffer[AtsIndex][0]);
-    UtAssert_UINT32_EQ(SC_OperData.AtsCmdStatusTblAddr[AtsIndex][0], SC_Status_LOADED);
-    UtAssert_UINT32_EQ(SC_OperData.AtsCtrlBlckAddr->AtpState, SC_Status_EXECUTING);
+    UtAssert_UINT32_EQ(AtsInfoPtr->AtsSize, 1);
+    UtAssert_UINT32_EQ(AtsInfoPtr->NumberOfCommands, 0);
+    SC_Assert_IDX_EQ(CmdOffsetRec->Offset, SC_ENTRY_OFFSET_FIRST);
+    SC_Assert_CmdStatus(StatusEntryPtr->Status, SC_Status_LOADED);
+    SC_Assert_CmdStatus(SC_OperData.AtsCtrlBlckAddr->AtpState, SC_Status_EXECUTING);
 
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
 }
 
 void SC_ProcessAppend_Test_NotExecuting(void)
 {
-    SC_AtsIndex_t AtsIndex = SC_ATS_IDX_C(0);
-    void *        TailPtr;
+    SC_AtsIndex_t                 AtsIndex = SC_ATS_IDX_C(0);
+    void *                        TailPtr;
+    SC_AtsInfoTable_t *           AtsInfoPtr;
+    SC_AtsCmdStatusEntry_t *      StatusEntryPtr;
+    SC_AtsCmdEntryOffsetRecord_t *CmdOffsetRec;
+
+    CmdOffsetRec   = SC_GetAtsEntryOffsetForCmd(AtsIndex, SC_COMMAND_IDX_C(0));
+    StatusEntryPtr = SC_GetAtsStatusEntryForCommand(AtsIndex, SC_COMMAND_IDX_C(0));
+
+    AtsInfoPtr = SC_GetAtsInfoObject(AtsIndex);
 
     UT_SC_SetupSingleAtsEntry(AtsIndex, 1, UT_SC_NOMINAL_CMD_SIZE);
 
@@ -1030,19 +1143,27 @@ void SC_ProcessAppend_Test_NotExecuting(void)
     SC_ProcessAppend(AtsIndex);
 
     /* Verify results */
-    UtAssert_UINT32_EQ(SC_OperData.AtsInfoTblAddr[AtsIndex].AtsSize, 1);
-    UtAssert_UINT32_EQ(SC_OperData.AtsInfoTblAddr[AtsIndex].NumberOfCommands, 1);
-    UtAssert_ZERO(SC_AppData.AtsCmdIndexBuffer[AtsIndex][0]);
-    UtAssert_UINT32_EQ(SC_OperData.AtsCmdStatusTblAddr[AtsIndex][0], SC_Status_LOADED);
-    UtAssert_UINT32_EQ(SC_OperData.AtsCtrlBlckAddr->AtpState, SC_Status_IDLE);
+    UtAssert_UINT32_EQ(AtsInfoPtr->AtsSize, 1);
+    UtAssert_UINT32_EQ(AtsInfoPtr->NumberOfCommands, 1);
+    SC_Assert_IDX_EQ(CmdOffsetRec->Offset, SC_ENTRY_OFFSET_FIRST);
+    SC_Assert_CmdStatus(StatusEntryPtr->Status, SC_Status_LOADED);
+    SC_Assert_CmdStatus(SC_OperData.AtsCtrlBlckAddr->AtpState, SC_Status_IDLE);
 
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
 }
 
 void SC_ProcessAppend_Test_AtsNum(void)
 {
-    SC_AtsIndex_t AtsIndex = SC_ATS_IDX_C(0);
-    void *        TailPtr;
+    SC_AtsIndex_t                 AtsIndex = SC_ATS_IDX_C(0);
+    void *                        TailPtr;
+    SC_AtsInfoTable_t *           AtsInfoPtr;
+    SC_AtsCmdStatusEntry_t *      StatusEntryPtr;
+    SC_AtsCmdEntryOffsetRecord_t *CmdOffsetRec;
+
+    CmdOffsetRec   = SC_GetAtsEntryOffsetForCmd(AtsIndex, SC_COMMAND_IDX_C(0));
+    StatusEntryPtr = SC_GetAtsStatusEntryForCommand(AtsIndex, SC_COMMAND_IDX_C(0));
+
+    AtsInfoPtr = SC_GetAtsInfoObject(AtsIndex);
 
     UT_SC_SetupSingleAtsEntry(AtsIndex, 1, UT_SC_NOMINAL_CMD_SIZE);
 
@@ -1059,11 +1180,11 @@ void SC_ProcessAppend_Test_AtsNum(void)
     UtAssert_VOIDCALL(SC_ProcessAppend(AtsIndex));
 
     /* Verify results */
-    UtAssert_UINT32_EQ(SC_OperData.AtsInfoTblAddr[AtsIndex].AtsSize, 1);
-    UtAssert_UINT32_EQ(SC_OperData.AtsInfoTblAddr[AtsIndex].NumberOfCommands, 1);
-    UtAssert_ZERO(SC_AppData.AtsCmdIndexBuffer[AtsIndex][0]);
-    UtAssert_UINT32_EQ(SC_OperData.AtsCmdStatusTblAddr[AtsIndex][0], SC_Status_LOADED);
-    UtAssert_UINT32_EQ(SC_OperData.AtsCtrlBlckAddr->AtpState, SC_Status_EXECUTING);
+    UtAssert_UINT32_EQ(AtsInfoPtr->AtsSize, 1);
+    UtAssert_UINT32_EQ(AtsInfoPtr->NumberOfCommands, 1);
+    SC_Assert_IDX_EQ(CmdOffsetRec->Offset, SC_ENTRY_OFFSET_FIRST);
+    SC_Assert_CmdStatus(StatusEntryPtr->Status, SC_Status_LOADED);
+    SC_Assert_CmdStatus(SC_OperData.AtsCtrlBlckAddr->AtpState, SC_Status_EXECUTING);
 
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
 }

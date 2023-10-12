@@ -41,14 +41,14 @@ CFE_ES_WriteToSysLog_context_t context_CFE_ES_WriteToSysLog;
 UT_CmdBuf_t UT_CmdBuf;
 
 /* Table buffers */
-uint32               AtsTblAddr[SC_NUMBER_OF_ATS][SC_ATS_BUFF_SIZE32];
-uint32               AppendTblAddr[SC_APPEND_BUFF_SIZE32];
-uint32               RtsTblAddr[SC_NUMBER_OF_RTS][SC_RTS_BUFF_SIZE32];
-SC_AtsInfoTable_t    AtsInfoTblAddr[SC_NUMBER_OF_ATS];
-SC_RtsInfoEntry_t    RtsInfoTblAddr[SC_NUMBER_OF_RTS];
-SC_RtpControlBlock_t RtsCtrlBlckAddr;
-SC_AtpControlBlock_t AtsCtrlBlckAddr;
-SC_Status_Enum_t     AtsCmdStatusTblAddr[SC_NUMBER_OF_ATS][SC_MAX_ATS_CMDS];
+uint32                 AtsTblAddr[SC_NUMBER_OF_ATS][SC_ATS_BUFF_SIZE32];
+uint32                 AppendTblAddr[SC_APPEND_BUFF_SIZE32];
+uint32                 RtsTblAddr[SC_NUMBER_OF_RTS][SC_RTS_BUFF_SIZE32];
+SC_AtsInfoTable_t      AtsInfoTblAddr[SC_NUMBER_OF_ATS];
+SC_RtsInfoEntry_t      RtsInfoTblAddr[SC_NUMBER_OF_RTS];
+SC_RtpControlBlock_t   RtsCtrlBlckAddr;
+SC_AtpControlBlock_t   AtsCtrlBlckAddr;
+SC_AtsCmdStatusEntry_t AtsCmdStatusTblAddr[SC_NUMBER_OF_ATS][SC_MAX_ATS_CMDS];
 
 /*
  * Function Definitions

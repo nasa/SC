@@ -240,9 +240,11 @@ CFE_Status_t SC_AppInit(void)
 
 CFE_Status_t SC_InitTables(void)
 {
-    CFE_Status_t Result;
-    int32        i;
-    int32        j;
+    CFE_Status_t            Result;
+    int32                   i;
+    int32                   j;
+    SC_RtsInfoEntry_t *     RtsInfoPtr;
+    SC_AtsCmdStatusEntry_t *StatusEntryPtr;
 
     /* Must be able to register all tables with cFE Table Services */
     Result = SC_RegisterAllTables();
@@ -272,17 +274,21 @@ CFE_Status_t SC_InitTables(void)
     {
         for (j = 0; j < SC_MAX_ATS_CMDS; j++)
         {
-            SC_OperData.AtsCmdStatusTblAddr[i][j] = SC_Status_EMPTY;
+            StatusEntryPtr = SC_GetAtsStatusEntryForCommand(SC_ATS_IDX_C(i), SC_COMMAND_IDX_C(j));
+
+            StatusEntryPtr->Status = SC_Status_EMPTY;
         }
     }
 
     /* RTS information table */
     for (i = 0; i < SC_NUMBER_OF_RTS; i++)
     {
-        SC_OperData.RtsInfoTblAddr[i].NextCommandTime = SC_MAX_TIME;
-        SC_OperData.RtsInfoTblAddr[i].NextCommandPtr  = SC_ENTRY_OFFSET_FIRST;
-        SC_OperData.RtsInfoTblAddr[i].RtsStatus       = SC_Status_EMPTY;
-        SC_OperData.RtsInfoTblAddr[i].DisabledFlag    = true;
+        RtsInfoPtr = SC_GetRtsInfoObject(SC_RTS_IDX_C(i));
+
+        RtsInfoPtr->NextCommandTime = SC_MAX_TIME;
+        RtsInfoPtr->NextCommandPtr  = SC_ENTRY_OFFSET_FIRST;
+        RtsInfoPtr->RtsStatus       = SC_Status_EMPTY;
+        RtsInfoPtr->DisabledFlag    = true;
     }
 
     /* Load default RTS tables */

@@ -49,8 +49,9 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 void SC_StartAtsCmd(const SC_StartAtsCmd_t *Cmd)
 {
-    SC_AtsNum_t   AtsNum;   /* ATS ID */
-    SC_AtsIndex_t AtsIndex; /* ATS array index */
+    SC_AtsNum_t        AtsNum;   /* ATS ID */
+    SC_AtsIndex_t      AtsIndex; /* ATS array index */
+    SC_AtsInfoTable_t *AtsInfoPtr;
 
     AtsNum = Cmd->Payload.AtsNum;
 
@@ -58,13 +59,14 @@ void SC_StartAtsCmd(const SC_StartAtsCmd_t *Cmd)
     if ((AtsNum > 0) && (AtsNum <= SC_NUMBER_OF_ATS))
     {
         /* convert ATS ID to array index */
-        AtsIndex = SC_AtsNumToIndex(AtsNum);
+        AtsIndex   = SC_AtsNumToIndex(AtsNum);
+        AtsInfoPtr = SC_GetAtsInfoObject(AtsIndex);
 
         /* make sure that there is no ATS running on the ATP */
         if (SC_OperData.AtsCtrlBlckAddr->AtpState == SC_Status_IDLE)
         {
             /* make sure the specified ATS is ready */
-            if (SC_OperData.AtsInfoTblAddr[AtsIndex].NumberOfCommands > 0)
+            if (AtsInfoPtr->NumberOfCommands > 0)
             {
                 /* start the ats */
                 if (SC_BeginAts(AtsIndex, 0))
@@ -172,14 +174,16 @@ void SC_StopAtsCmd(const SC_StopAtsCmd_t *Cmd)
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 bool SC_BeginAts(SC_AtsIndex_t AtsIndex, uint16 TimeOffset)
 {
-    SC_AtsEntryHeader_t *Entry;           /* ATS table entry pointer */
-    SC_EntryOffset_t     EntryIndex;      /* ATS entry location in table */
-    SC_AbsTimeTag_t      ListCmdTime = 0; /* list entry execution time */
-    SC_SeqIndex_t        TimeIndex;       /* the current time buffer index */
-    SC_CommandIndex_t    CmdIndex;        /* ATS command index */
-    bool                 ReturnCode;
-    SC_AbsTimeTag_t      TimeToStartAts; /* the REAL time to start the ATS */
-    uint16               CmdsSkipped = 0;
+    SC_AtsEntryHeader_t *         Entry;           /* ATS table entry pointer */
+    SC_AtsCmdEntryOffsetRecord_t *CmdOffsetRec;    /* ATS entry location in table */
+    SC_AbsTimeTag_t               ListCmdTime = 0; /* list entry execution time */
+    SC_SeqIndex_t                 TimeIndex;       /* the current time buffer index */
+    SC_CommandIndex_t             CmdIndex;        /* ATS command index */
+    bool                          ReturnCode;
+    SC_AbsTimeTag_t               TimeToStartAts; /* the REAL time to start the ATS */
+    uint16                        CmdsSkipped = 0;
+    SC_AtsInfoTable_t *           AtsInfoPtr;
+    SC_AtsCmdStatusEntry_t *      StatusEntryPtr;
 
     /* validate ATS array index */
     if (AtsIndex >= SC_NUMBER_OF_ATS)
@@ -189,6 +193,7 @@ bool SC_BeginAts(SC_AtsIndex_t AtsIndex, uint16 TimeOffset)
         return false;
     }
 
+    AtsInfoPtr     = SC_GetAtsInfoObject(AtsIndex);
     TimeToStartAts = SC_ComputeAbsTime(TimeOffset);
 
     /*
@@ -199,14 +204,14 @@ bool SC_BeginAts(SC_AtsIndex_t AtsIndex, uint16 TimeOffset)
     TimeIndex = SC_SEQUENCE_IDX_FIRST; /* pointer into the time index table */
     CmdIndex  = SC_COMMAND_IDX_C(0);   /* updated in loop */
 
-    while (TimeIndex < SC_OperData.AtsInfoTblAddr[AtsIndex].NumberOfCommands)
+    while (TimeIndex < AtsInfoPtr->NumberOfCommands)
     {
         /* first get the cmd index at this list entry */
-        CmdIndex = SC_CommandNumToIndex(SC_AppData.AtsTimeIndexBuffer[AtsIndex][TimeIndex]);
+        CmdIndex = SC_CommandNumToIndex(SC_GetAtsCommandNumAtSeq(AtsIndex, TimeIndex)->CmdNum);
         /* then get the entry index from the cmd index table */
-        EntryIndex = SC_AppData.AtsCmdIndexBuffer[AtsIndex][CmdIndex];
+        CmdOffsetRec = SC_GetAtsEntryOffsetForCmd(AtsIndex, CmdIndex);
         /* then get a pointer to the ATS entry data */
-        Entry = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[AtsIndex][EntryIndex];
+        Entry = &SC_GetAtsEntryAtOffset(AtsIndex, CmdOffsetRec->Offset)->Header;
         /* then get cmd execution time from the ATS entry */
         ListCmdTime = SC_GetAtsEntryTime(Entry);
 
@@ -214,8 +219,9 @@ bool SC_BeginAts(SC_AtsIndex_t AtsIndex, uint16 TimeOffset)
         if (SC_CompareAbsTime(TimeToStartAts, ListCmdTime))
         {
             /* start time is greater than this list entry time */
+            StatusEntryPtr = SC_GetAtsStatusEntryForCommand(AtsIndex, CmdIndex);
 
-            SC_OperData.AtsCmdStatusTblAddr[AtsIndex][CmdIndex] = SC_Status_SKIPPED;
+            StatusEntryPtr->Status = SC_Status_SKIPPED;
             CmdsSkipped++;
             TimeIndex++;
         }
@@ -229,7 +235,7 @@ bool SC_BeginAts(SC_AtsIndex_t AtsIndex, uint16 TimeOffset)
     /*
      ** Check to see if the whole ATS was skipped
      */
-    if (TimeIndex == SC_OperData.AtsInfoTblAddr[AtsIndex].NumberOfCommands)
+    if (TimeIndex == AtsInfoPtr->NumberOfCommands)
     {
         CFE_EVS_SendEvent(SC_ATS_SKP_ALL_ERR_EID, CFE_EVS_EventType_ERROR,
                           "All ATS commands were skipped, ATS stopped");
@@ -272,7 +278,8 @@ bool SC_BeginAts(SC_AtsIndex_t AtsIndex, uint16 TimeOffset)
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 void SC_KillAts(void)
 {
-    SC_AtsIndex_t AtsIndex;
+    SC_AtsIndex_t      AtsIndex;
+    SC_AtsInfoTable_t *AtsInfoPtr;
 
     /*
      * Check if the ATS ID is valid
@@ -281,7 +288,9 @@ void SC_KillAts(void)
     if (SC_AtsIndexIsValid(AtsIndex) && SC_OperData.AtsCtrlBlckAddr->AtpState != SC_Status_IDLE)
     {
         /* Increment the ats use counter */
-        SC_OperData.AtsInfoTblAddr[AtsIndex].AtsUseCtr++;
+        AtsInfoPtr = SC_GetAtsInfoObject(AtsIndex);
+
+        AtsInfoPtr->AtsUseCtr++;
     }
     /*
      ** Reset the state in the atp control block
@@ -299,16 +308,18 @@ void SC_KillAts(void)
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 void SC_SwitchAtsCmd(const SC_SwitchAtsCmd_t *Cmd)
 {
-    SC_AtsIndex_t NewAtsIndex; /* the index of the ats to switch to*/
+    SC_AtsIndex_t      NewAtsIndex; /* the index of the ats to switch to*/
+    SC_AtsInfoTable_t *AtsInfoPtr;
 
     /* make sure that an ATS is running on the ATP */
     if (SC_OperData.AtsCtrlBlckAddr->AtpState == SC_Status_EXECUTING)
     {
         /* get the ATS to switch to */
         NewAtsIndex = SC_ToggleAtsIndex();
+        AtsInfoPtr  = SC_GetAtsInfoObject(NewAtsIndex);
 
         /* Now check to see if the new ATS has commands in it */
-        if (SC_OperData.AtsInfoTblAddr[NewAtsIndex].NumberOfCommands > 0)
+        if (AtsInfoPtr->NumberOfCommands > 0)
         {
             /* set the global switch pend flag */
             SC_OperData.AtsCtrlBlckAddr->SwitchPendFlag = true;
@@ -352,8 +363,9 @@ void SC_SwitchAtsCmd(const SC_SwitchAtsCmd_t *Cmd)
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 void SC_ServiceSwitchPend(void)
 {
-    SC_AtsIndex_t NewAtsIndex; /* the ats index that we are switching to */
-    SC_AtsIndex_t OldAtsIndex; /* the ats index we are switching from */
+    SC_AtsIndex_t      NewAtsIndex; /* the ats index that we are switching to */
+    SC_AtsIndex_t      OldAtsIndex; /* the ats index we are switching from */
+    SC_AtsInfoTable_t *AtsInfoPtr;
 
     /*
      **  See if it is time to switch the ATS
@@ -366,9 +378,10 @@ void SC_ServiceSwitchPend(void)
             /* get the ATS number to switch to and from */
             OldAtsIndex = SC_AtsNumToIndex(SC_OperData.AtsCtrlBlckAddr->CurrAtsNum);
             NewAtsIndex = SC_ToggleAtsIndex();
+            AtsInfoPtr  = SC_GetAtsInfoObject(NewAtsIndex);
 
             /* Now check to see if the new ATS has commands in it */
-            if (SC_OperData.AtsInfoTblAddr[NewAtsIndex].NumberOfCommands > 0)
+            if (AtsInfoPtr->NumberOfCommands > 0)
             {
                 /* stop the current ATS */
                 SC_KillAts();
@@ -419,9 +432,10 @@ void SC_ServiceSwitchPend(void)
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 bool SC_InlineSwitch(void)
 {
-    SC_AtsIndex_t NewAtsIndex; /* the index of the ats to switch to*/
-    SC_AtsIndex_t OldAtsIndex; /* the index of the ats to switch from*/
-    bool          ReturnCode;  /* return code for function */
+    SC_AtsIndex_t      NewAtsIndex; /* the index of the ats to switch to*/
+    SC_AtsIndex_t      OldAtsIndex; /* the index of the ats to switch from*/
+    bool               ReturnCode;  /* return code for function */
+    SC_AtsInfoTable_t *AtsInfoPtr;
 
     /* figure out which ATS to switch to */
     NewAtsIndex = SC_ToggleAtsIndex();
@@ -430,7 +444,8 @@ bool SC_InlineSwitch(void)
     OldAtsIndex = SC_AtsNumToIndex(SC_OperData.AtsCtrlBlckAddr->CurrAtsNum);
 
     /* Now check to see if the new ATS has commands in it */
-    if (SC_OperData.AtsInfoTblAddr[NewAtsIndex].NumberOfCommands > 0)
+    AtsInfoPtr = SC_GetAtsInfoObject(NewAtsIndex);
+    if (AtsInfoPtr->NumberOfCommands > 0)
     {
         /*
          ** Stop the current ATS
@@ -489,21 +504,24 @@ bool SC_InlineSwitch(void)
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 void SC_JumpAtsCmd(const SC_JumpAtsCmd_t *Cmd)
 {
-    SC_AtsEntryHeader_t *Entry;       /* ATS table entry pointer */
-    SC_EntryOffset_t     EntryIndex;  /* ATS entry location in table */
-    SC_AbsTimeTag_t      JumpTime;    /* the time to jump to in the ATS */
-    SC_AbsTimeTag_t      ListCmdTime; /* list entry execution time */
-    SC_AtsIndex_t        AtsIndex;    /* index of the ATS that is running */
-    SC_SeqIndex_t        TimeIndex;   /* the current time buffer index */
-    SC_CommandIndex_t    CmdIndex;    /* ATS command index (cmd num - 1) */
-    char                 TimeBuffer[CFE_TIME_PRINTED_STRING_SIZE];
-    CFE_TIME_SysTime_t   NewTime;
-    uint16               NumSkipped;
+    SC_AtsEntryHeader_t *         Entry;        /* ATS table entry pointer */
+    SC_AtsCmdEntryOffsetRecord_t *CmdOffsetRec; /* ATS entry location in table */
+    SC_AbsTimeTag_t               JumpTime;     /* the time to jump to in the ATS */
+    SC_AbsTimeTag_t               ListCmdTime;  /* list entry execution time */
+    SC_AtsIndex_t                 AtsIndex;     /* index of the ATS that is running */
+    SC_SeqIndex_t                 TimeIndex;    /* the current time buffer index */
+    SC_CommandIndex_t             CmdIndex;     /* ATS command index (cmd num - 1) */
+    char                          TimeBuffer[CFE_TIME_PRINTED_STRING_SIZE];
+    CFE_TIME_SysTime_t            NewTime;
+    uint16                        NumSkipped;
+    SC_AtsInfoTable_t *           AtsInfoPtr;
+    SC_AtsCmdStatusEntry_t *      StatusEntryPtr;
 
     if (SC_OperData.AtsCtrlBlckAddr->AtpState == SC_Status_EXECUTING)
     {
-        JumpTime = Cmd->Payload.NewTime;
-        AtsIndex = SC_AtsNumToIndex(SC_OperData.AtsCtrlBlckAddr->CurrAtsNum);
+        JumpTime   = Cmd->Payload.NewTime;
+        AtsIndex   = SC_AtsNumToIndex(SC_OperData.AtsCtrlBlckAddr->CurrAtsNum);
+        AtsInfoPtr = SC_GetAtsInfoObject(AtsIndex);
 
         /*
          ** Loop through the commands until a time tag is found
@@ -514,14 +532,14 @@ void SC_JumpAtsCmd(const SC_JumpAtsCmd_t *Cmd)
         CmdIndex   = SC_COMMAND_IDX_C(0); /* updated in loop */
         NumSkipped = 0;
 
-        while (TimeIndex < SC_OperData.AtsInfoTblAddr[AtsIndex].NumberOfCommands)
+        while (TimeIndex < AtsInfoPtr->NumberOfCommands)
         {
             /* first get the cmd index at this list entry */
-            CmdIndex = SC_CommandNumToIndex(SC_AppData.AtsTimeIndexBuffer[AtsIndex][TimeIndex]);
+            CmdIndex = SC_CommandNumToIndex(SC_GetAtsCommandNumAtSeq(AtsIndex, TimeIndex)->CmdNum);
             /* then get the entry index from the cmd index table */
-            EntryIndex = SC_AppData.AtsCmdIndexBuffer[AtsIndex][CmdIndex];
+            CmdOffsetRec = SC_GetAtsEntryOffsetForCmd(AtsIndex, CmdIndex);
             /* then get a pointer to the ATS entry data */
-            Entry = (SC_AtsEntryHeader_t *)&SC_OperData.AtsTblAddr[AtsIndex][EntryIndex];
+            Entry = &SC_GetAtsEntryAtOffset(AtsIndex, CmdOffsetRec->Offset)->Header;
             /* then get cmd execution time from the ATS entry */
             ListCmdTime = SC_GetAtsEntryTime(Entry);
 
@@ -536,9 +554,10 @@ void SC_JumpAtsCmd(const SC_JumpAtsCmd_t *Cmd)
                 **  if the command has any other status, SC_Status_SKIPPED, SC_Status_EXECUTED,
                 **   etc, then leave the status alone.
                 */
-                if (SC_OperData.AtsCmdStatusTblAddr[AtsIndex][CmdIndex] == SC_Status_LOADED)
+                StatusEntryPtr = SC_GetAtsStatusEntryForCommand(AtsIndex, CmdIndex);
+                if (StatusEntryPtr->Status == SC_Status_LOADED)
                 {
-                    SC_OperData.AtsCmdStatusTblAddr[AtsIndex][CmdIndex] = SC_Status_SKIPPED;
+                    StatusEntryPtr->Status = SC_Status_SKIPPED;
                     NumSkipped++;
                 }
 
@@ -556,7 +575,7 @@ void SC_JumpAtsCmd(const SC_JumpAtsCmd_t *Cmd)
         /*
          ** Check to see if the whole ATS was skipped
          */
-        if (TimeIndex == SC_OperData.AtsInfoTblAddr[AtsIndex].NumberOfCommands)
+        if (TimeIndex == AtsInfoPtr->NumberOfCommands)
         {
             CFE_EVS_SendEvent(SC_JUMPATS_CMD_STOPPED_ERR_EID, CFE_EVS_EventType_ERROR,
                               "Jump Cmd: All ATS commands were skipped, ATS stopped");
@@ -645,7 +664,8 @@ void SC_ContinueAtsOnFailureCmd(const SC_ContinueAtsOnFailureCmd_t *Cmd)
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 void SC_AppendAtsCmd(const SC_AppendAtsCmd_t *Cmd)
 {
-    SC_AtsIndex_t AtsIndex; /* index (not ID) of target ATS */
+    SC_AtsIndex_t      AtsIndex; /* index (not ID) of target ATS */
+    SC_AtsInfoTable_t *AtsInfoPtr;
 
     if ((Cmd->Payload.AtsNum == 0) || (Cmd->Payload.AtsNum > SC_NUMBER_OF_ATS))
     {
@@ -659,9 +679,10 @@ void SC_AppendAtsCmd(const SC_AppendAtsCmd_t *Cmd)
     }
 
     /* create base zero array index from base one ID value */
-    AtsIndex = SC_AtsNumToIndex(Cmd->Payload.AtsNum);
+    AtsIndex   = SC_AtsNumToIndex(Cmd->Payload.AtsNum);
+    AtsInfoPtr = SC_GetAtsInfoObject(AtsIndex);
 
-    if (SC_OperData.AtsInfoTblAddr[AtsIndex].NumberOfCommands == 0)
+    if (AtsInfoPtr->NumberOfCommands == 0)
     {
         /* target ATS table is empty */
         SC_OperData.HkPacket.Payload.CmdErrCtr++;
@@ -677,15 +698,14 @@ void SC_AppendAtsCmd(const SC_AppendAtsCmd_t *Cmd)
         CFE_EVS_SendEvent(SC_APPEND_CMD_SRC_ERR_EID, CFE_EVS_EventType_ERROR,
                           "Append ATS %c error: Append table is empty", 'A' + AtsIndex);
     }
-    else if ((SC_OperData.AtsInfoTblAddr[AtsIndex].AtsSize + SC_AppData.AppendWordCount) > SC_ATS_BUFF_SIZE32)
+    else if ((AtsInfoPtr->AtsSize + SC_AppData.AppendWordCount) > SC_ATS_BUFF_SIZE32)
     {
         /* not enough room in ATS buffer for Append table data */
         SC_OperData.HkPacket.Payload.CmdErrCtr++;
 
         CFE_EVS_SendEvent(SC_APPEND_CMD_FIT_ERR_EID, CFE_EVS_EventType_ERROR,
                           "Append ATS %c error: ATS size = %d, Append size = %d, ATS buffer = %d", 'A' + AtsIndex,
-                          (int)SC_OperData.AtsInfoTblAddr[AtsIndex].AtsSize, SC_AppData.AppendWordCount,
-                          SC_ATS_BUFF_SIZE32);
+                          (int)AtsInfoPtr->AtsSize, SC_AppData.AppendWordCount, SC_ATS_BUFF_SIZE32);
     }
     else
     {

@@ -102,6 +102,10 @@ extern UT_CmdBuf_t UT_CmdBuf;
     UtAssert_GenericUnsignedCompare(SC_IDX_AS_UINT(actual), UtAssert_Compare_EQ, (unsigned int)(ref), \
                                     UtAssert_Radix_DECIMAL, __FILE__, __LINE__, "IDXV", #actual, #ref)
 
+#define SC_Assert_CmdStatus(actual, ref)                                                                \
+    UtAssert_GenericUnsignedCompare((unsigned long)(actual), UtAssert_Compare_EQ, (unsigned long)(ref), \
+                                    UtAssert_Radix_DECIMAL, __FILE__, __LINE__, "Status", #actual, #ref)
+
 /*
  * Function Definitions
  */
