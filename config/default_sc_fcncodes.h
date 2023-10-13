@@ -19,75 +19,15 @@
 
 /**
  * @file
- *   Specification for the CFS Stored Command (SC) command and telemetry
- *   message constant definitions.
+ *   Specification for the CFS Stored Command (SC) command function codes
  *
  * @note
- *   DO NOT PUT ANY TYPEDEFS OR STRUCTURE DEFINITIONS IN THIS FILE!
- *   ADD THEM TO sc_msg.h IF NEEDED!
+ *   This file should be strictly limited to the command/function code (CC)
+ *   macro definitions.  Other definitions such as enums, typedefs, or other
+ *   macros should be placed in the msgdefs.h or msg.h files.
  */
-#ifndef SC_MSGDEFS_H
-#define SC_MSGDEFS_H
-
-/************************************************************************
- * Macro Definitions
- ************************************************************************/
-
-/**
- * \name Which processor runs next
- * \{
- */
-#define SC_ATP  0    /**< \brief ATP process next */
-#define SC_RTP  1    /**< \brief RTP process next */
-#define SC_NONE 0xFF /**< \brief No pending process */
-/**\}*/
-
-#define SC_MAX_TIME 0xFFFFFFFF /**< \brief Maximum time in SC */
-
-/**
- * \name ATS/RTS Cmd Status macros
- * \{
- */
-#define SC_EMPTY           0 /**< \brief the object is not loaded */
-#define SC_LOADED          1 /**< \brief the object is loaded */
-#define SC_IDLE            2 /**< \brief the object is not executing */
-#define SC_EXECUTED        3 /**< \brief the object has completed executing */
-#define SC_SKIPPED         4 /**< \brief the object (ats command) was skipped */
-#define SC_EXECUTING       5 /**< \brief the object is currently executing */
-#define SC_FAILED_CHECKSUM 6 /**< \brief the object failed a checksum test */
-#define SC_FAILED_DISTRIB  7 /**< \brief the object could not be sent on the SWB */
-#define SC_STARTING        8 /**< \brief used when an inline switch is executed */
-/**\}*/
-
-/**
- * \name Defines for each ATS
- * \{
- */
-#define SC_NO_ATS 0 /**<\ brief No ATS */
-#define SC_ATSA   1 /**< \brief ATS A */
-#define SC_ATSB   2 /**< \brief ATS B */
-/**\}*/
-
-/**
- * \name constants for config parameters for which TIME to use
- * \{
- */
-#define SC_USE_CFE_TIME 0 /**< \brief Use cFE configured time */
-#define SC_USE_TAI      1 /**< \brief Use TAI Time */
-#define SC_USE_UTC      2 /**< \brief USE UTC Time */
-/**\}*/
-
-#define SC_INVALID_RTS_NUMBER 0 /**< \brief Invalid RTS number */
-
-#define SC_NUMBER_OF_ATS 2 /**< \brief the number of Absolute Time Sequences */
-
-/**
- * \name SC Continue Flags
- * \{
- */
-#define SC_CONTINUE_TRUE  1 /**< \brief Continue on failure */
-#define SC_CONTINUE_FALSE 0 /**< \brief Do not continue on failure */
-/**\}*/
+#ifndef SC_FCNCODES_H
+#define SC_FCNCODES_H
 
 /**
  * \defgroup cfssccmdcodes CFS Stored Command Command Codes

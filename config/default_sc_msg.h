@@ -19,19 +19,21 @@
 
 /**
  * @file
- *   This file contains autostart RTS IDs
+ *   Specification for the CFS Stored Command (SC) command and telemetry
+ *   message data types.
+ *
+ * This is a compatibility header for the "sc_msg.h" file that has
+ * traditionally provided the message definitions for cFS apps.
+ *
+ * @note This file may be overridden/superceded by mission-provided defintions
+ * either by overriding this header or by generating definitions from a command/data
+ * dictionary tool.
  */
-#ifndef SC_RTS_H
-#define SC_RTS_H
+#ifndef SC_MSG_H
+#define SC_MSG_H
 
-/**
- * \ingroup cfsscplatformcfg
- * \{
- */
-
-#define RTS_ID_AUTO_POWER_ON  1 /**< \brief Autostart RTS ID after power on (0 to disable) */
-#define RTS_ID_AUTO_PROCESSOR 2 /**< \brief Autostart RTS ID after processor reset (0 to disable) */
-
-/**\}*/
+#include "sc_interface_cfg.h"
+#include "sc_msgdefs.h"
+#include "sc_msgstruct.h"
 
 #endif

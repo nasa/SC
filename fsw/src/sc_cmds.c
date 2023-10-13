@@ -41,7 +41,6 @@
 #include "sc_msgids.h"
 #include "sc_events.h"
 #include "sc_version.h"
-#include "sc_rts.h"
 
 /**************************************************************************
  **
