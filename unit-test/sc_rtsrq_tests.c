@@ -46,13 +46,13 @@
 void SC_StartRtsCmd_Test_Nominal(void)
 {
     SC_RtsEntryHeader_t *Entry;
-    uint8                RtsIndex = 0;
+    SC_RtsIndex_t        RtsIndex = SC_RTS_IDX_C(0);
     size_t               MsgSize;
 
     Entry          = (SC_RtsEntryHeader_t *)&SC_OperData.RtsTblAddr[RtsIndex][0];
     Entry->TimeTag = 0;
 
-    UT_CmdBuf.StartRtsCmd.Payload.RtsId = 1;
+    UT_CmdBuf.StartRtsCmd.Payload.RtsNum = SC_RtsIndexToNum(RtsIndex);
 
     SC_OperData.RtsInfoTblAddr[RtsIndex].DisabledFlag = false;
     SC_OperData.RtsInfoTblAddr[RtsIndex].RtsStatus    = SC_Status_LOADED;
@@ -87,12 +87,12 @@ void SC_StartRtsCmd_Test_Nominal(void)
 void SC_StartRtsCmd_Test_StartRtsNoEvents(void)
 {
     SC_RtsEntryHeader_t *Entry;
-    uint8                RtsIndex;
+    SC_RtsIndex_t        RtsIndex;
     size_t               MsgSize;
 
-    UT_CmdBuf.StartRtsCmd.Payload.RtsId = SC_NUMBER_OF_RTS;
+    UT_CmdBuf.StartRtsCmd.Payload.RtsNum = SC_RTS_NUM_C(SC_NUMBER_OF_RTS);
 
-    RtsIndex = UT_CmdBuf.StartRtsCmd.Payload.RtsId - 1;
+    RtsIndex = SC_RtsNumToIndex(UT_CmdBuf.StartRtsCmd.Payload.RtsNum);
 
     Entry          = (SC_RtsEntryHeader_t *)&SC_OperData.RtsTblAddr[RtsIndex][0];
     Entry->TimeTag = 0;
@@ -125,7 +125,7 @@ void SC_StartRtsCmd_Test_StartRtsNoEvents(void)
     UtAssert_True(SC_OperData.HkPacket.Payload.CmdCtr == 1, "SC_OperData.HkPacket.Payload.CmdCtr == 1");
 
     /* Handle if SC_LAST_RTS_WITH_EVENTS is the same as SC_NUM_OF_RTS */
-    if (UT_CmdBuf.DisableRtsCmd.Payload.RtsId > SC_LAST_RTS_WITH_EVENTS)
+    if (UT_CmdBuf.DisableRtsCmd.Payload.RtsNum > SC_LAST_RTS_WITH_EVENTS)
     {
         UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_STARTRTS_CMD_DBG_EID);
     }
@@ -140,13 +140,13 @@ void SC_StartRtsCmd_Test_StartRtsNoEvents(void)
 void SC_StartRtsCmd_Test_InvalidCommandLength1(void)
 {
     SC_RtsEntryHeader_t *Entry;
-    uint8                RtsIndex = 0;
+    SC_RtsIndex_t        RtsIndex = SC_RTS_IDX_C(0);
     size_t               MsgSize;
 
     Entry          = (SC_RtsEntryHeader_t *)&SC_OperData.RtsTblAddr[RtsIndex][0];
     Entry->TimeTag = 0;
 
-    UT_CmdBuf.StartRtsCmd.Payload.RtsId = 1;
+    UT_CmdBuf.StartRtsCmd.Payload.RtsNum = SC_RtsIndexToNum(RtsIndex);
 
     SC_OperData.RtsInfoTblAddr[RtsIndex].DisabledFlag = false;
     SC_OperData.RtsInfoTblAddr[RtsIndex].RtsStatus    = SC_Status_LOADED;
@@ -168,13 +168,13 @@ void SC_StartRtsCmd_Test_InvalidCommandLength1(void)
 void SC_StartRtsCmd_Test_InvalidCommandLength2(void)
 {
     SC_RtsEntryHeader_t *Entry;
-    uint8                RtsIndex = 0;
+    SC_RtsIndex_t        RtsIndex = SC_RTS_IDX_C(0);
     size_t               MsgSize;
 
     Entry          = (SC_RtsEntryHeader_t *)&SC_OperData.RtsTblAddr[RtsIndex][0];
     Entry->TimeTag = 0;
 
-    UT_CmdBuf.StartRtsCmd.Payload.RtsId = 1;
+    UT_CmdBuf.StartRtsCmd.Payload.RtsNum = SC_RtsIndexToNum(RtsIndex);
 
     SC_OperData.RtsInfoTblAddr[RtsIndex].DisabledFlag = false;
     SC_OperData.RtsInfoTblAddr[RtsIndex].RtsStatus    = SC_Status_LOADED;
@@ -196,12 +196,12 @@ void SC_StartRtsCmd_Test_InvalidCommandLength2(void)
 void SC_StartRtsCmd_Test_RtsNotLoadedOrInUse(void)
 {
     SC_RtsEntryHeader_t *Entry;
-    uint8                RtsIndex = 0;
+    SC_RtsIndex_t        RtsIndex = SC_RTS_IDX_C(0);
 
     Entry          = (SC_RtsEntryHeader_t *)&SC_OperData.RtsTblAddr[RtsIndex][0];
     Entry->TimeTag = 0;
 
-    UT_CmdBuf.StartRtsCmd.Payload.RtsId = 1;
+    UT_CmdBuf.StartRtsCmd.Payload.RtsNum = SC_RtsIndexToNum(RtsIndex);
 
     SC_OperData.RtsInfoTblAddr[RtsIndex].DisabledFlag = false;
     SC_OperData.RtsInfoTblAddr[RtsIndex].RtsStatus    = SC_Status_IDLE;
@@ -217,12 +217,12 @@ void SC_StartRtsCmd_Test_RtsNotLoadedOrInUse(void)
 void SC_StartRtsCmd_Test_RtsDisabled(void)
 {
     SC_RtsEntryHeader_t *Entry;
-    uint8                RtsIndex = 0;
+    SC_RtsIndex_t        RtsIndex = SC_RTS_IDX_C(0);
 
     Entry          = (SC_RtsEntryHeader_t *)&SC_OperData.RtsTblAddr[RtsIndex][0];
     Entry->TimeTag = 0;
 
-    UT_CmdBuf.StartRtsCmd.Payload.RtsId = 1;
+    UT_CmdBuf.StartRtsCmd.Payload.RtsNum = SC_RtsIndexToNum(RtsIndex);
 
     SC_OperData.RtsInfoTblAddr[RtsIndex].DisabledFlag = true;
     SC_OperData.RtsInfoTblAddr[RtsIndex].RtsStatus    = SC_Status_LOADED;
@@ -237,7 +237,7 @@ void SC_StartRtsCmd_Test_RtsDisabled(void)
 
 void SC_StartRtsCmd_Test_InvalidRtsId(void)
 {
-    UT_CmdBuf.StartRtsCmd.Payload.RtsId = SC_NUMBER_OF_RTS * 2;
+    UT_CmdBuf.StartRtsCmd.Payload.RtsNum = SC_RTS_NUM_C(SC_NUMBER_OF_RTS * 2);
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_StartRtsCmd(&UT_CmdBuf.StartRtsCmd));
@@ -249,7 +249,7 @@ void SC_StartRtsCmd_Test_InvalidRtsId(void)
 
 void SC_StartRtsCmd_Test_InvalidRtsIdZero(void)
 {
-    UT_CmdBuf.StartRtsCmd.Payload.RtsId = 0;
+    UT_CmdBuf.StartRtsCmd.Payload.RtsNum = SC_RTS_NUM_C(0);
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_StartRtsCmd(&UT_CmdBuf.StartRtsCmd));
@@ -261,13 +261,13 @@ void SC_StartRtsCmd_Test_InvalidRtsIdZero(void)
 
 void SC_StartRtsGrpCmd_Test_Nominal(void)
 {
-    uint8 RtsIndex = 0;
+    SC_RtsIndex_t RtsIndex = SC_RTS_IDX_C(0);
 
     SC_OperData.RtsInfoTblAddr[RtsIndex].RtsStatus = SC_Status_LOADED;
     SC_OperData.RtsInfoTblAddr[RtsIndex].UseCtr    = 0;
 
-    UT_CmdBuf.StartRtsGrpCmd.Payload.FirstRtsId = 1;
-    UT_CmdBuf.StartRtsGrpCmd.Payload.LastRtsId  = 1;
+    UT_CmdBuf.StartRtsGrpCmd.Payload.FirstRtsNum = SC_RtsIndexToNum(RtsIndex);
+    UT_CmdBuf.StartRtsGrpCmd.Payload.LastRtsNum  = SC_RtsIndexToNum(RtsIndex);
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_StartRtsGrpCmd(&UT_CmdBuf.StartRtsGrpCmd));
@@ -292,8 +292,8 @@ void SC_StartRtsGrpCmd_Test_Nominal(void)
 
 void SC_StartRtsGrpCmd_Test_StartRtsGroupError(void)
 {
-    UT_CmdBuf.StartRtsGrpCmd.Payload.FirstRtsId = SC_NUMBER_OF_RTS * 2;
-    UT_CmdBuf.StartRtsGrpCmd.Payload.LastRtsId  = SC_NUMBER_OF_RTS * 2;
+    UT_CmdBuf.StartRtsGrpCmd.Payload.FirstRtsNum = SC_RTS_NUM_C(SC_NUMBER_OF_RTS * 2);
+    UT_CmdBuf.StartRtsGrpCmd.Payload.LastRtsNum  = SC_RTS_NUM_C(SC_NUMBER_OF_RTS * 2);
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_StartRtsGrpCmd(&UT_CmdBuf.StartRtsGrpCmd));
@@ -307,8 +307,8 @@ void SC_StartRtsGrpCmd_Test_StartRtsGroupError(void)
 
 void SC_StartRtsGrpCmd_Test_FirstRtsIndex(void)
 {
-    UT_CmdBuf.StartRtsGrpCmd.Payload.FirstRtsId = SC_NUMBER_OF_RTS + 1;
-    UT_CmdBuf.StartRtsGrpCmd.Payload.LastRtsId  = 1;
+    UT_CmdBuf.StartRtsGrpCmd.Payload.FirstRtsNum = SC_RTS_NUM_C(SC_NUMBER_OF_RTS + 1);
+    UT_CmdBuf.StartRtsGrpCmd.Payload.LastRtsNum  = SC_RTS_NUM_C(1);
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_StartRtsGrpCmd(&UT_CmdBuf.StartRtsGrpCmd));
@@ -322,8 +322,8 @@ void SC_StartRtsGrpCmd_Test_FirstRtsIndex(void)
 
 void SC_StartRtsGrpCmd_Test_FirstRtsIndexZero(void)
 {
-    UT_CmdBuf.StartRtsGrpCmd.Payload.FirstRtsId = 0;
-    UT_CmdBuf.StartRtsGrpCmd.Payload.LastRtsId  = 1;
+    UT_CmdBuf.StartRtsGrpCmd.Payload.FirstRtsNum = SC_RTS_NUM_C(0);
+    UT_CmdBuf.StartRtsGrpCmd.Payload.LastRtsNum  = SC_RTS_NUM_C(1);
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_StartRtsGrpCmd(&UT_CmdBuf.StartRtsGrpCmd));
@@ -337,8 +337,8 @@ void SC_StartRtsGrpCmd_Test_FirstRtsIndexZero(void)
 
 void SC_StartRtsGrpCmd_Test_LastRtsIndex(void)
 {
-    UT_CmdBuf.StartRtsGrpCmd.Payload.FirstRtsId = 1;
-    UT_CmdBuf.StartRtsGrpCmd.Payload.LastRtsId  = SC_NUMBER_OF_RTS + 1;
+    UT_CmdBuf.StartRtsGrpCmd.Payload.FirstRtsNum = SC_RTS_NUM_C(1);
+    UT_CmdBuf.StartRtsGrpCmd.Payload.LastRtsNum  = SC_RTS_NUM_C(SC_NUMBER_OF_RTS + 1);
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_StartRtsGrpCmd(&UT_CmdBuf.StartRtsGrpCmd));
@@ -352,8 +352,8 @@ void SC_StartRtsGrpCmd_Test_LastRtsIndex(void)
 
 void SC_StartRtsGrpCmd_Test_LastRtsIndexZero(void)
 {
-    UT_CmdBuf.StartRtsGrpCmd.Payload.FirstRtsId = 1;
-    UT_CmdBuf.StartRtsGrpCmd.Payload.LastRtsId  = 0;
+    UT_CmdBuf.StartRtsGrpCmd.Payload.FirstRtsNum = SC_RTS_NUM_C(1);
+    UT_CmdBuf.StartRtsGrpCmd.Payload.LastRtsNum  = SC_RTS_NUM_C(0);
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_StartRtsGrpCmd(&UT_CmdBuf.StartRtsGrpCmd));
@@ -367,8 +367,8 @@ void SC_StartRtsGrpCmd_Test_LastRtsIndexZero(void)
 
 void SC_StartRtsGrpCmd_Test_FirstLastRtsIndex(void)
 {
-    UT_CmdBuf.StartRtsGrpCmd.Payload.FirstRtsId = 2;
-    UT_CmdBuf.StartRtsGrpCmd.Payload.LastRtsId  = 1;
+    UT_CmdBuf.StartRtsGrpCmd.Payload.FirstRtsNum = SC_RTS_NUM_C(2);
+    UT_CmdBuf.StartRtsGrpCmd.Payload.LastRtsNum  = SC_RTS_NUM_C(1);
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_StartRtsGrpCmd(&UT_CmdBuf.StartRtsGrpCmd));
@@ -382,16 +382,16 @@ void SC_StartRtsGrpCmd_Test_FirstLastRtsIndex(void)
 
 void SC_StartRtsGrpCmd_Test_DisabledFlag(void)
 {
-    uint8 RtsIndex = 0;
+    SC_RtsIndex_t RtsIndex = SC_RTS_IDX_C(0);
 
     SC_OperData.RtsInfoTblAddr[RtsIndex].DisabledFlag   = true;
     SC_OperData.RtsInfoTblAddr[RtsIndex].RtsStatus      = SC_Status_EXECUTING;
     SC_OperData.RtsInfoTblAddr[RtsIndex].UseCtr         = 0;
     SC_OperData.RtsInfoTblAddr[RtsIndex].CmdCtr         = 0;
-    SC_OperData.RtsInfoTblAddr[RtsIndex].NextCommandPtr = 0;
+    SC_OperData.RtsInfoTblAddr[RtsIndex].NextCommandPtr = SC_ENTRY_OFFSET_FIRST;
 
-    UT_CmdBuf.StartRtsGrpCmd.Payload.FirstRtsId = 1;
-    UT_CmdBuf.StartRtsGrpCmd.Payload.LastRtsId  = 1;
+    UT_CmdBuf.StartRtsGrpCmd.Payload.FirstRtsNum = SC_RtsIndexToNum(RtsIndex);
+    UT_CmdBuf.StartRtsGrpCmd.Payload.LastRtsNum  = SC_RtsIndexToNum(RtsIndex);
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_StartRtsGrpCmd(&UT_CmdBuf.StartRtsGrpCmd));
@@ -417,15 +417,15 @@ void SC_StartRtsGrpCmd_Test_DisabledFlag(void)
 
 void SC_StartRtsGrpCmd_Test_RtsStatus(void)
 {
-    uint8 RtsIndex = 0;
+    SC_RtsIndex_t RtsIndex = SC_RTS_IDX_C(0);
 
     SC_OperData.RtsInfoTblAddr[RtsIndex].RtsStatus      = SC_Status_EXECUTING;
     SC_OperData.RtsInfoTblAddr[RtsIndex].UseCtr         = 0;
     SC_OperData.RtsInfoTblAddr[RtsIndex].CmdCtr         = 0;
-    SC_OperData.RtsInfoTblAddr[RtsIndex].NextCommandPtr = 0;
+    SC_OperData.RtsInfoTblAddr[RtsIndex].NextCommandPtr = SC_ENTRY_OFFSET_FIRST;
 
-    UT_CmdBuf.StartRtsGrpCmd.Payload.FirstRtsId = 1;
-    UT_CmdBuf.StartRtsGrpCmd.Payload.LastRtsId  = 1;
+    UT_CmdBuf.StartRtsGrpCmd.Payload.FirstRtsNum = SC_RTS_NUM_C(1);
+    UT_CmdBuf.StartRtsGrpCmd.Payload.LastRtsNum  = SC_RTS_NUM_C(1);
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_StartRtsGrpCmd(&UT_CmdBuf.StartRtsGrpCmd));
@@ -453,7 +453,7 @@ void SC_StartRtsGrpCmd_Test_RtsStatus(void)
 
 void SC_StopRtsCmd_Test_Nominal(void)
 {
-    UT_CmdBuf.StopRtsCmd.Payload.RtsId = 1;
+    UT_CmdBuf.StopRtsCmd.Payload.RtsNum = SC_RTS_NUM_C(1);
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_StopRtsCmd(&UT_CmdBuf.StopRtsCmd));
@@ -467,7 +467,7 @@ void SC_StopRtsCmd_Test_Nominal(void)
 
 void SC_StopRtsCmd_Test_InvalidRts(void)
 {
-    UT_CmdBuf.StopRtsCmd.Payload.RtsId = SC_NUMBER_OF_RTS * 2;
+    UT_CmdBuf.StopRtsCmd.Payload.RtsNum = SC_RTS_NUM_C(SC_NUMBER_OF_RTS * 2);
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_StopRtsCmd(&UT_CmdBuf.StopRtsCmd));
@@ -481,8 +481,8 @@ void SC_StopRtsCmd_Test_InvalidRts(void)
 
 void SC_StopRtsGrpCmd_Test_Nominal(void)
 {
-    UT_CmdBuf.StopRtsGrpCmd.Payload.FirstRtsId = 1;
-    UT_CmdBuf.StopRtsGrpCmd.Payload.LastRtsId  = 1;
+    UT_CmdBuf.StopRtsGrpCmd.Payload.FirstRtsNum = SC_RTS_NUM_C(1);
+    UT_CmdBuf.StopRtsGrpCmd.Payload.LastRtsNum  = SC_RTS_NUM_C(1);
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_StopRtsGrpCmd(&UT_CmdBuf.StopRtsGrpCmd));
@@ -496,8 +496,8 @@ void SC_StopRtsGrpCmd_Test_Nominal(void)
 
 void SC_StopRtsGrpCmd_Test_Error(void)
 {
-    UT_CmdBuf.StopRtsGrpCmd.Payload.FirstRtsId = SC_NUMBER_OF_RTS * 2;
-    UT_CmdBuf.StopRtsGrpCmd.Payload.LastRtsId  = SC_NUMBER_OF_RTS * 2;
+    UT_CmdBuf.StopRtsGrpCmd.Payload.FirstRtsNum = SC_RTS_NUM_C(SC_NUMBER_OF_RTS * 2);
+    UT_CmdBuf.StopRtsGrpCmd.Payload.LastRtsNum  = SC_RTS_NUM_C(SC_NUMBER_OF_RTS * 2);
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_StopRtsGrpCmd(&UT_CmdBuf.StopRtsGrpCmd));
@@ -511,12 +511,12 @@ void SC_StopRtsGrpCmd_Test_Error(void)
 
 void SC_StopRtsGrpCmd_Test_NotExecuting(void)
 {
-    uint8 RtsIndex = 0;
+    SC_RtsIndex_t RtsIndex = SC_RTS_IDX_C(0);
 
     SC_OperData.RtsInfoTblAddr[RtsIndex].RtsStatus = SC_Status_EXECUTING;
 
-    UT_CmdBuf.StopRtsGrpCmd.Payload.FirstRtsId = 1;
-    UT_CmdBuf.StopRtsGrpCmd.Payload.LastRtsId  = 1;
+    UT_CmdBuf.StopRtsGrpCmd.Payload.FirstRtsNum = SC_RTS_NUM_C(1);
+    UT_CmdBuf.StopRtsGrpCmd.Payload.LastRtsNum  = SC_RTS_NUM_C(1);
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_StopRtsGrpCmd(&UT_CmdBuf.StopRtsGrpCmd));
@@ -530,8 +530,8 @@ void SC_StopRtsGrpCmd_Test_NotExecuting(void)
 
 void SC_StopRtsGrpCmd_Test_FirstRtsIndex(void)
 {
-    UT_CmdBuf.StopRtsGrpCmd.Payload.FirstRtsId = SC_NUMBER_OF_RTS + 1;
-    UT_CmdBuf.StopRtsGrpCmd.Payload.LastRtsId  = 1;
+    UT_CmdBuf.StopRtsGrpCmd.Payload.FirstRtsNum = SC_RTS_NUM_C(SC_NUMBER_OF_RTS + 1);
+    UT_CmdBuf.StopRtsGrpCmd.Payload.LastRtsNum  = SC_RTS_NUM_C(1);
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_StopRtsGrpCmd(&UT_CmdBuf.StopRtsGrpCmd));
@@ -545,8 +545,8 @@ void SC_StopRtsGrpCmd_Test_FirstRtsIndex(void)
 
 void SC_StopRtsGrpCmd_Test_FirstRtsIndexZero(void)
 {
-    UT_CmdBuf.StopRtsGrpCmd.Payload.FirstRtsId = 0;
-    UT_CmdBuf.StopRtsGrpCmd.Payload.LastRtsId  = 1;
+    UT_CmdBuf.StopRtsGrpCmd.Payload.FirstRtsNum = SC_RTS_NUM_C(0);
+    UT_CmdBuf.StopRtsGrpCmd.Payload.LastRtsNum  = SC_RTS_NUM_C(1);
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_StopRtsGrpCmd(&UT_CmdBuf.StopRtsGrpCmd));
@@ -560,8 +560,8 @@ void SC_StopRtsGrpCmd_Test_FirstRtsIndexZero(void)
 
 void SC_StopRtsGrpCmd_Test_LastRtsIndex(void)
 {
-    UT_CmdBuf.StopRtsGrpCmd.Payload.FirstRtsId = 1;
-    UT_CmdBuf.StopRtsGrpCmd.Payload.LastRtsId  = SC_NUMBER_OF_RTS + 1;
+    UT_CmdBuf.StopRtsGrpCmd.Payload.FirstRtsNum = SC_RTS_NUM_C(1);
+    UT_CmdBuf.StopRtsGrpCmd.Payload.LastRtsNum  = SC_RTS_NUM_C(SC_NUMBER_OF_RTS + 1);
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_StopRtsGrpCmd(&UT_CmdBuf.StopRtsGrpCmd));
@@ -575,8 +575,8 @@ void SC_StopRtsGrpCmd_Test_LastRtsIndex(void)
 
 void SC_StopRtsGrpCmd_Test_LastRtsIndexZero(void)
 {
-    UT_CmdBuf.StopRtsGrpCmd.Payload.FirstRtsId = 1;
-    UT_CmdBuf.StopRtsGrpCmd.Payload.LastRtsId  = 0;
+    UT_CmdBuf.StopRtsGrpCmd.Payload.FirstRtsNum = SC_RTS_NUM_C(1);
+    UT_CmdBuf.StopRtsGrpCmd.Payload.LastRtsNum  = SC_RTS_NUM_C(0);
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_StopRtsGrpCmd(&UT_CmdBuf.StopRtsGrpCmd));
@@ -590,8 +590,8 @@ void SC_StopRtsGrpCmd_Test_LastRtsIndexZero(void)
 
 void SC_StopRtsGrpCmd_Test_FirstLastRtsIndex(void)
 {
-    UT_CmdBuf.StopRtsGrpCmd.Payload.FirstRtsId = 2;
-    UT_CmdBuf.StopRtsGrpCmd.Payload.LastRtsId  = 1;
+    UT_CmdBuf.StopRtsGrpCmd.Payload.FirstRtsNum = SC_RTS_NUM_C(2);
+    UT_CmdBuf.StopRtsGrpCmd.Payload.LastRtsNum  = SC_RTS_NUM_C(1);
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_StopRtsGrpCmd(&UT_CmdBuf.StopRtsGrpCmd));
@@ -605,9 +605,9 @@ void SC_StopRtsGrpCmd_Test_FirstLastRtsIndex(void)
 
 void SC_DisableRtsCmd_Test_Nominal(void)
 {
-    uint8 RtsIndex = 0;
+    SC_RtsIndex_t RtsIndex = SC_RTS_IDX_C(0);
 
-    UT_CmdBuf.DisableRtsCmd.Payload.RtsId = 1;
+    UT_CmdBuf.DisableRtsCmd.Payload.RtsNum = SC_RtsIndexToNum(RtsIndex);
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_DisableRtsCmd(&UT_CmdBuf.DisableRtsCmd));
@@ -623,7 +623,7 @@ void SC_DisableRtsCmd_Test_Nominal(void)
 
 void SC_DisableRtsCmd_Test_InvalidRtsID(void)
 {
-    UT_CmdBuf.DisableRtsCmd.Payload.RtsId = SC_NUMBER_OF_RTS * 2;
+    UT_CmdBuf.DisableRtsCmd.Payload.RtsNum = SC_RTS_NUM_C(SC_NUMBER_OF_RTS * 2);
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_DisableRtsCmd(&UT_CmdBuf.DisableRtsCmd));
@@ -637,10 +637,10 @@ void SC_DisableRtsCmd_Test_InvalidRtsID(void)
 
 void SC_DisableRtsGrpCmd_Test_Nominal(void)
 {
-    uint8 RtsIndex = 0; /* RtsId - 1 */
+    SC_RtsIndex_t RtsIndex = SC_RTS_IDX_C(0); /* RtsNum - 1 */
 
-    UT_CmdBuf.DisableRtsGrpCmd.Payload.FirstRtsId = 1;
-    UT_CmdBuf.DisableRtsGrpCmd.Payload.LastRtsId  = 1;
+    UT_CmdBuf.DisableRtsGrpCmd.Payload.FirstRtsNum = SC_RtsIndexToNum(RtsIndex);
+    UT_CmdBuf.DisableRtsGrpCmd.Payload.LastRtsNum  = SC_RtsIndexToNum(RtsIndex);
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_DisableRtsGrpCmd(&UT_CmdBuf.DisableRtsGrpCmd));
@@ -656,8 +656,8 @@ void SC_DisableRtsGrpCmd_Test_Nominal(void)
 
 void SC_DisableRtsGrpCmd_Test_Error(void)
 {
-    UT_CmdBuf.DisableRtsGrpCmd.Payload.FirstRtsId = SC_NUMBER_OF_RTS * 2;
-    UT_CmdBuf.DisableRtsGrpCmd.Payload.LastRtsId  = SC_NUMBER_OF_RTS * 2;
+    UT_CmdBuf.DisableRtsGrpCmd.Payload.FirstRtsNum = SC_RTS_NUM_C(SC_NUMBER_OF_RTS * 2);
+    UT_CmdBuf.DisableRtsGrpCmd.Payload.LastRtsNum  = SC_RTS_NUM_C(SC_NUMBER_OF_RTS * 2);
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_DisableRtsGrpCmd(&UT_CmdBuf.DisableRtsGrpCmd));
@@ -671,8 +671,8 @@ void SC_DisableRtsGrpCmd_Test_Error(void)
 
 void SC_DisableRtsGrpCmd_Test_FirstRtsIndex(void)
 {
-    UT_CmdBuf.DisableRtsGrpCmd.Payload.FirstRtsId = SC_NUMBER_OF_RTS + 1;
-    UT_CmdBuf.DisableRtsGrpCmd.Payload.LastRtsId  = 1;
+    UT_CmdBuf.DisableRtsGrpCmd.Payload.FirstRtsNum = SC_RTS_NUM_C(SC_NUMBER_OF_RTS + 1);
+    UT_CmdBuf.DisableRtsGrpCmd.Payload.LastRtsNum  = SC_RTS_NUM_C(1);
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_DisableRtsGrpCmd(&UT_CmdBuf.DisableRtsGrpCmd));
@@ -686,8 +686,8 @@ void SC_DisableRtsGrpCmd_Test_FirstRtsIndex(void)
 
 void SC_DisableRtsGrpCmd_Test_FirstRtsIndexZero(void)
 {
-    UT_CmdBuf.DisableRtsGrpCmd.Payload.FirstRtsId = 0;
-    UT_CmdBuf.DisableRtsGrpCmd.Payload.LastRtsId  = 1;
+    UT_CmdBuf.DisableRtsGrpCmd.Payload.FirstRtsNum = SC_RTS_NUM_C(0);
+    UT_CmdBuf.DisableRtsGrpCmd.Payload.LastRtsNum  = SC_RTS_NUM_C(1);
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_DisableRtsGrpCmd(&UT_CmdBuf.DisableRtsGrpCmd));
@@ -701,8 +701,8 @@ void SC_DisableRtsGrpCmd_Test_FirstRtsIndexZero(void)
 
 void SC_DisableRtsGrpCmd_Test_LastRtsIndex(void)
 {
-    UT_CmdBuf.DisableRtsGrpCmd.Payload.FirstRtsId = 1;
-    UT_CmdBuf.DisableRtsGrpCmd.Payload.LastRtsId  = SC_NUMBER_OF_RTS + 1;
+    UT_CmdBuf.DisableRtsGrpCmd.Payload.FirstRtsNum = SC_RTS_NUM_C(1);
+    UT_CmdBuf.DisableRtsGrpCmd.Payload.LastRtsNum  = SC_RTS_NUM_C(SC_NUMBER_OF_RTS + 1);
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_DisableRtsGrpCmd(&UT_CmdBuf.DisableRtsGrpCmd));
@@ -716,8 +716,8 @@ void SC_DisableRtsGrpCmd_Test_LastRtsIndex(void)
 
 void SC_DisableRtsGrpCmd_Test_LastRtsIndexZero(void)
 {
-    UT_CmdBuf.DisableRtsGrpCmd.Payload.FirstRtsId = 1;
-    UT_CmdBuf.DisableRtsGrpCmd.Payload.LastRtsId  = 0;
+    UT_CmdBuf.DisableRtsGrpCmd.Payload.FirstRtsNum = SC_RTS_NUM_C(1);
+    UT_CmdBuf.DisableRtsGrpCmd.Payload.LastRtsNum  = SC_RTS_NUM_C(0);
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_DisableRtsGrpCmd(&UT_CmdBuf.DisableRtsGrpCmd));
@@ -731,8 +731,8 @@ void SC_DisableRtsGrpCmd_Test_LastRtsIndexZero(void)
 
 void SC_DisableRtsGrpCmd_Test_FirstLastRtsIndex(void)
 {
-    UT_CmdBuf.DisableRtsGrpCmd.Payload.FirstRtsId = 2;
-    UT_CmdBuf.DisableRtsGrpCmd.Payload.LastRtsId  = 1;
+    UT_CmdBuf.DisableRtsGrpCmd.Payload.FirstRtsNum = SC_RTS_NUM_C(2);
+    UT_CmdBuf.DisableRtsGrpCmd.Payload.LastRtsNum  = SC_RTS_NUM_C(1);
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_DisableRtsGrpCmd(&UT_CmdBuf.DisableRtsGrpCmd));
@@ -746,12 +746,12 @@ void SC_DisableRtsGrpCmd_Test_FirstLastRtsIndex(void)
 
 void SC_DisableRtsGrpCmd_Test_DisabledFlag(void)
 {
-    uint8 RtsIndex = 0; /* RtsId - 1 */
+    SC_RtsIndex_t RtsIndex = SC_RTS_IDX_C(0); /* RtsNum - 1 */
 
     SC_OperData.RtsInfoTblAddr[RtsIndex].DisabledFlag = true;
 
-    UT_CmdBuf.DisableRtsGrpCmd.Payload.FirstRtsId = 1;
-    UT_CmdBuf.DisableRtsGrpCmd.Payload.LastRtsId  = 1;
+    UT_CmdBuf.DisableRtsGrpCmd.Payload.FirstRtsNum = SC_RtsIndexToNum(RtsIndex);
+    UT_CmdBuf.DisableRtsGrpCmd.Payload.LastRtsNum  = SC_RtsIndexToNum(RtsIndex);
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_DisableRtsGrpCmd(&UT_CmdBuf.DisableRtsGrpCmd));
@@ -767,9 +767,9 @@ void SC_DisableRtsGrpCmd_Test_DisabledFlag(void)
 
 void SC_EnableRtsCmd_Test_Nominal(void)
 {
-    uint8 RtsIndex = 0;
+    SC_RtsIndex_t RtsIndex = SC_RTS_IDX_C(0);
 
-    UT_CmdBuf.EnableRtsCmd.Payload.RtsId = 1;
+    UT_CmdBuf.EnableRtsCmd.Payload.RtsNum = SC_RtsIndexToNum(RtsIndex);
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_EnableRtsCmd(&UT_CmdBuf.EnableRtsCmd));
@@ -785,7 +785,7 @@ void SC_EnableRtsCmd_Test_Nominal(void)
 
 void SC_EnableRtsCmd_Test_InvalidRtsID(void)
 {
-    UT_CmdBuf.EnableRtsCmd.Payload.RtsId = SC_NUMBER_OF_RTS * 2;
+    UT_CmdBuf.EnableRtsCmd.Payload.RtsNum = SC_RTS_NUM_C(SC_NUMBER_OF_RTS * 2);
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_EnableRtsCmd(&UT_CmdBuf.EnableRtsCmd));
@@ -799,7 +799,7 @@ void SC_EnableRtsCmd_Test_InvalidRtsID(void)
 
 void SC_EnableRtsCmd_Test_InvalidRtsIDZero(void)
 {
-    UT_CmdBuf.EnableRtsCmd.Payload.RtsId = 0;
+    UT_CmdBuf.EnableRtsCmd.Payload.RtsNum = SC_RTS_NUM_C(0);
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_EnableRtsCmd(&UT_CmdBuf.EnableRtsCmd));
@@ -813,10 +813,10 @@ void SC_EnableRtsCmd_Test_InvalidRtsIDZero(void)
 
 void SC_EnableRtsGrpCmd_Test_Nominal(void)
 {
-    uint8 RtsIndex = 0; /* RtsId - 1 */
+    SC_RtsIndex_t RtsIndex = SC_RTS_IDX_C(0); /* RtsNum - 1 */
 
-    UT_CmdBuf.EnableRtsGrpCmd.Payload.FirstRtsId = 1;
-    UT_CmdBuf.EnableRtsGrpCmd.Payload.LastRtsId  = 1;
+    UT_CmdBuf.EnableRtsGrpCmd.Payload.FirstRtsNum = SC_RtsIndexToNum(RtsIndex);
+    UT_CmdBuf.EnableRtsGrpCmd.Payload.LastRtsNum  = SC_RtsIndexToNum(RtsIndex);
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_EnableRtsGrpCmd(&UT_CmdBuf.EnableRtsGrpCmd));
@@ -832,8 +832,8 @@ void SC_EnableRtsGrpCmd_Test_Nominal(void)
 
 void SC_EnableRtsGrpCmd_Test_Error(void)
 {
-    UT_CmdBuf.EnableRtsGrpCmd.Payload.FirstRtsId = SC_NUMBER_OF_RTS * 2;
-    UT_CmdBuf.EnableRtsGrpCmd.Payload.LastRtsId  = SC_NUMBER_OF_RTS * 2;
+    UT_CmdBuf.EnableRtsGrpCmd.Payload.FirstRtsNum = SC_RTS_NUM_C(SC_NUMBER_OF_RTS * 2);
+    UT_CmdBuf.EnableRtsGrpCmd.Payload.LastRtsNum  = SC_RTS_NUM_C(SC_NUMBER_OF_RTS * 2);
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_EnableRtsGrpCmd(&UT_CmdBuf.EnableRtsGrpCmd));
@@ -847,8 +847,8 @@ void SC_EnableRtsGrpCmd_Test_Error(void)
 
 void SC_EnableRtsGrpCmd_Test_FirstRtsIndex(void)
 {
-    UT_CmdBuf.EnableRtsGrpCmd.Payload.FirstRtsId = SC_NUMBER_OF_RTS + 1;
-    UT_CmdBuf.EnableRtsGrpCmd.Payload.LastRtsId  = 1;
+    UT_CmdBuf.EnableRtsGrpCmd.Payload.FirstRtsNum = SC_RTS_NUM_C(SC_NUMBER_OF_RTS + 1);
+    UT_CmdBuf.EnableRtsGrpCmd.Payload.LastRtsNum  = SC_RTS_NUM_C(1);
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_EnableRtsGrpCmd(&UT_CmdBuf.EnableRtsGrpCmd));
@@ -862,8 +862,8 @@ void SC_EnableRtsGrpCmd_Test_FirstRtsIndex(void)
 
 void SC_EnableRtsGrpCmd_Test_FirstRtsIndexZero(void)
 {
-    UT_CmdBuf.EnableRtsGrpCmd.Payload.FirstRtsId = 0;
-    UT_CmdBuf.EnableRtsGrpCmd.Payload.LastRtsId  = 1;
+    UT_CmdBuf.EnableRtsGrpCmd.Payload.FirstRtsNum = SC_RTS_NUM_C(0);
+    UT_CmdBuf.EnableRtsGrpCmd.Payload.LastRtsNum  = SC_RTS_NUM_C(1);
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_EnableRtsGrpCmd(&UT_CmdBuf.EnableRtsGrpCmd));
@@ -877,8 +877,8 @@ void SC_EnableRtsGrpCmd_Test_FirstRtsIndexZero(void)
 
 void SC_EnableRtsGrpCmd_Test_LastRtsIndex(void)
 {
-    UT_CmdBuf.EnableRtsGrpCmd.Payload.FirstRtsId = 1;
-    UT_CmdBuf.EnableRtsGrpCmd.Payload.LastRtsId  = SC_NUMBER_OF_RTS + 1;
+    UT_CmdBuf.EnableRtsGrpCmd.Payload.FirstRtsNum = SC_RTS_NUM_C(1);
+    UT_CmdBuf.EnableRtsGrpCmd.Payload.LastRtsNum  = SC_RTS_NUM_C(SC_NUMBER_OF_RTS + 1);
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_EnableRtsGrpCmd(&UT_CmdBuf.EnableRtsGrpCmd));
@@ -892,8 +892,8 @@ void SC_EnableRtsGrpCmd_Test_LastRtsIndex(void)
 
 void SC_EnableRtsGrpCmd_Test_LastRtsIndexZero(void)
 {
-    UT_CmdBuf.EnableRtsGrpCmd.Payload.FirstRtsId = 1;
-    UT_CmdBuf.EnableRtsGrpCmd.Payload.LastRtsId  = 0;
+    UT_CmdBuf.EnableRtsGrpCmd.Payload.FirstRtsNum = SC_RTS_NUM_C(1);
+    UT_CmdBuf.EnableRtsGrpCmd.Payload.LastRtsNum  = SC_RTS_NUM_C(0);
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_EnableRtsGrpCmd(&UT_CmdBuf.EnableRtsGrpCmd));
@@ -907,8 +907,8 @@ void SC_EnableRtsGrpCmd_Test_LastRtsIndexZero(void)
 
 void SC_EnableRtsGrpCmd_Test_FirstLastRtsIndex(void)
 {
-    UT_CmdBuf.EnableRtsGrpCmd.Payload.FirstRtsId = 2;
-    UT_CmdBuf.EnableRtsGrpCmd.Payload.LastRtsId  = 1;
+    UT_CmdBuf.EnableRtsGrpCmd.Payload.FirstRtsNum = SC_RTS_NUM_C(2);
+    UT_CmdBuf.EnableRtsGrpCmd.Payload.LastRtsNum  = SC_RTS_NUM_C(1);
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_EnableRtsGrpCmd(&UT_CmdBuf.EnableRtsGrpCmd));
@@ -922,19 +922,19 @@ void SC_EnableRtsGrpCmd_Test_FirstLastRtsIndex(void)
 
 void SC_EnableRtsGrpCmd_Test_DisabledFlag(void)
 {
-    uint8 RtsIndex = 0; /* RtsId - 1 */
+    SC_RtsIndex_t RtsIndex0 = SC_RTS_IDX_C(0);
+    SC_RtsIndex_t RtsIndex1 = SC_RTS_IDX_C(1);
 
-    SC_OperData.RtsInfoTblAddr[RtsIndex].DisabledFlag = false;
-    SC_OperData.RtsInfoTblAddr[1].DisabledFlag        = true;
-    UT_CmdBuf.EnableRtsGrpCmd.Payload.FirstRtsId      = 1;
-    UT_CmdBuf.EnableRtsGrpCmd.Payload.LastRtsId       = 2;
+    SC_OperData.RtsInfoTblAddr[RtsIndex0].DisabledFlag = false;
+    SC_OperData.RtsInfoTblAddr[RtsIndex1].DisabledFlag = true;
+    UT_CmdBuf.EnableRtsGrpCmd.Payload.FirstRtsNum      = SC_RtsIndexToNum(RtsIndex0);
+    UT_CmdBuf.EnableRtsGrpCmd.Payload.LastRtsNum       = SC_RtsIndexToNum(RtsIndex1);
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_EnableRtsGrpCmd(&UT_CmdBuf.EnableRtsGrpCmd));
 
     /* Verify results */
-    UtAssert_True(SC_OperData.RtsInfoTblAddr[RtsIndex].DisabledFlag == false,
-                  "SC_OperData.RtsInfoTblAddr[RtsIndex].DisabledFlag == false");
+    UtAssert_BOOL_FALSE(SC_OperData.RtsInfoTblAddr[RtsIndex0].DisabledFlag);
     UtAssert_True(SC_OperData.HkPacket.Payload.CmdCtr == 1, "SC_OperData.HkPacket.Payload.CmdCtr == 1");
 
     UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_ENARTSGRP_CMD_INF_EID);
@@ -943,7 +943,7 @@ void SC_EnableRtsGrpCmd_Test_DisabledFlag(void)
 
 void SC_KillRts_Test(void)
 {
-    uint8 RtsIndex = 0;
+    SC_RtsIndex_t RtsIndex = SC_RTS_IDX_C(0);
 
     SC_OperData.RtsInfoTblAddr[RtsIndex].RtsStatus = SC_Status_EXECUTING;
     SC_OperData.RtsCtrlBlckAddr->NumRtsActive      = 1;
@@ -963,7 +963,7 @@ void SC_KillRts_Test(void)
 
 void SC_KillRts_Test_NoActiveRts(void)
 {
-    uint8 RtsIndex = 0;
+    SC_RtsIndex_t RtsIndex = SC_RTS_IDX_C(0);
 
     SC_OperData.RtsInfoTblAddr[RtsIndex].RtsStatus = SC_Status_EXECUTING;
     SC_OperData.RtsCtrlBlckAddr->NumRtsActive      = 0;
@@ -983,7 +983,7 @@ void SC_KillRts_Test_NoActiveRts(void)
 
 void SC_KillRts_Test_InvalidIndex(void)
 {
-    uint8 RtsIndex = SC_NUMBER_OF_RTS;
+    SC_RtsIndex_t RtsIndex = SC_RTS_IDX_C(SC_NUMBER_OF_RTS);
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_KillRts(RtsIndex));
@@ -995,10 +995,10 @@ void SC_KillRts_Test_InvalidIndex(void)
 
 void SC_AutoStartRts_Test_Nominal(void)
 {
-    uint8 RtsId = 1;
+    SC_RtsNum_t RtsNum = SC_RTS_NUM_C(1);
 
     /* Execute the function being tested */
-    UtAssert_VOIDCALL(SC_AutoStartRts(RtsId));
+    UtAssert_VOIDCALL(SC_AutoStartRts(RtsNum));
 
     /* Verify results */
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
@@ -1006,10 +1006,10 @@ void SC_AutoStartRts_Test_Nominal(void)
 
 void SC_AutoStartRts_Test_InvalidId(void)
 {
-    uint8 RtsId = SC_NUMBER_OF_RTS + 1;
+    SC_RtsNum_t RtsNum = SC_RTS_NUM_C(SC_NUMBER_OF_RTS + 1);
 
     /* Execute the function being tested */
-    UtAssert_VOIDCALL(SC_AutoStartRts(RtsId));
+    UtAssert_VOIDCALL(SC_AutoStartRts(RtsNum));
 
     /* Verify results */
     UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_AUTOSTART_RTS_INV_ID_ERR_EID);
@@ -1018,10 +1018,10 @@ void SC_AutoStartRts_Test_InvalidId(void)
 
 void SC_AutoStartRts_Test_InvalidIdZero(void)
 {
-    uint8 RtsId = 0;
+    SC_RtsNum_t RtsNum = SC_RTS_NUM_C(0);
 
     /* Execute the function being tested */
-    UtAssert_VOIDCALL(SC_AutoStartRts(RtsId));
+    UtAssert_VOIDCALL(SC_AutoStartRts(RtsNum));
 
     /* Verify results */
     UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_AUTOSTART_RTS_INV_ID_ERR_EID);

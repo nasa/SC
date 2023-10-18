@@ -48,7 +48,7 @@ SC_AtsInfoTable_t    AtsInfoTblAddr[SC_NUMBER_OF_ATS];
 SC_RtsInfoEntry_t    RtsInfoTblAddr[SC_NUMBER_OF_RTS];
 SC_RtpControlBlock_t RtsCtrlBlckAddr;
 SC_AtpControlBlock_t AtsCtrlBlckAddr;
-uint32               AtsCmdStatusTblAddr[SC_NUMBER_OF_ATS][SC_MAX_ATS_CMDS];
+SC_Status_Enum_t     AtsCmdStatusTblAddr[SC_NUMBER_OF_ATS][SC_MAX_ATS_CMDS];
 
 /*
  * Function Definitions

@@ -107,13 +107,13 @@ void SC_CompareAbsTime_Test_False(void)
 
 void SC_ToggleAtsIndex_Test(void)
 {
-    SC_OperData.AtsCtrlBlckAddr->AtsNumber = 1;
+    SC_OperData.AtsCtrlBlckAddr->CurrAtsNum = SC_ATS_NUM_C(1);
 
-    UtAssert_UINT16_EQ(SC_ToggleAtsIndex(), 1);
+    UtAssert_UINT32_EQ(SC_IDX_AS_UINT(SC_ToggleAtsIndex()), 1);
 
-    SC_OperData.AtsCtrlBlckAddr->AtsNumber = 2;
+    SC_OperData.AtsCtrlBlckAddr->CurrAtsNum = SC_ATS_NUM_C(2);
 
-    UtAssert_UINT16_EQ(SC_ToggleAtsIndex(), 0);
+    UtAssert_UINT32_EQ(SC_IDX_AS_UINT(SC_ToggleAtsIndex()), 0);
 }
 
 void UtTest_Setup(void)

@@ -107,11 +107,11 @@ SC_TimeAccessor_t SC_LookupTimeAccessor(SC_TimeRef_Enum_t TimeRef)
  * Generated stub function for SC_ToggleAtsIndex()
  * ----------------------------------------------------
  */
-uint16 SC_ToggleAtsIndex(void)
+SC_AtsIndex_t SC_ToggleAtsIndex(void)
 {
-    UT_GenStub_SetupReturnBuffer(SC_ToggleAtsIndex, uint16);
+    UT_GenStub_SetupReturnBuffer(SC_ToggleAtsIndex, SC_AtsIndex_t);
 
     UT_GenStub_Execute(SC_ToggleAtsIndex, Basic, NULL);
 
-    return UT_GenStub_GetReturnValue(SC_ToggleAtsIndex, uint16);
+    return UT_GenStub_GetReturnValue(SC_ToggleAtsIndex, SC_AtsIndex_t);
 }

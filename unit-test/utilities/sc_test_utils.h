@@ -85,6 +85,23 @@ extern UT_CmdBuf_t UT_CmdBuf;
 /* Unit test ids */
 #define SC_UT_MID_1 CFE_SB_ValueToMsgId(CFE_PLATFORM_TLM_MID_BASE + 1)
 
+/* SC-specific assert macros */
+#define SC_Assert_ID_EQ(actual, ref)                                                                      \
+    UtAssert_GenericUnsignedCompare(SC_IDNUM_AS_UINT(actual), UtAssert_Compare_EQ, SC_IDNUM_AS_UINT(ref), \
+                                    UtAssert_Radix_DECIMAL, __FILE__, __LINE__, "ID", #actual, #ref)
+
+#define SC_Assert_ID_VALUE(actual, ref)                                                                 \
+    UtAssert_GenericUnsignedCompare(SC_IDNUM_AS_UINT(actual), UtAssert_Compare_EQ, (unsigned int)(ref), \
+                                    UtAssert_Radix_DECIMAL, __FILE__, __LINE__, "IDV", #actual, #ref)
+
+#define SC_Assert_IDX_EQ(actual, ref)                                                                 \
+    UtAssert_GenericUnsignedCompare(SC_IDX_AS_UINT(actual), UtAssert_Compare_EQ, SC_IDX_AS_UINT(ref), \
+                                    UtAssert_Radix_DECIMAL, __FILE__, __LINE__, "IDX", #actual, #ref)
+
+#define SC_Assert_IDX_VALUE(actual, ref)                                                              \
+    UtAssert_GenericUnsignedCompare(SC_IDX_AS_UINT(actual), UtAssert_Compare_EQ, (unsigned int)(ref), \
+                                    UtAssert_Radix_DECIMAL, __FILE__, __LINE__, "IDXV", #actual, #ref)
+
 /*
  * Function Definitions
  */

@@ -27,6 +27,7 @@
 #define SC_TBLDEFS_H
 
 #include "common_types.h"
+#include "sc_extern_typedefs.h"
 #include "cfe_msg_hdr.h"
 
 /*************************************************************************
@@ -70,7 +71,7 @@ typedef struct
 {
     uint16 Pad; /**< \brief Structure padding */
 
-    uint16 CmdNumber; /**< \brief command number, range = 1 to SC_MAX_ATS_CMDS */
+    SC_CommandNum_t CmdNumber; /**< \brief command number, range = 1 to SC_MAX_ATS_CMDS */
 
     uint16 TimeTag_MS; /**< \brief Time tag most significant 16 bits */
     uint16 TimeTag_LS; /**< \brief Time tag least significant 16 bits */

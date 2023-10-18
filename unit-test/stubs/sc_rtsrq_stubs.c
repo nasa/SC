@@ -31,9 +31,9 @@
  * Generated stub function for SC_AutoStartRts()
  * ----------------------------------------------------
  */
-void SC_AutoStartRts(uint16 RtsNumber)
+void SC_AutoStartRts(SC_RtsNum_t RtsNum)
 {
-    UT_GenStub_AddParam(SC_AutoStartRts, uint16, RtsNumber);
+    UT_GenStub_AddParam(SC_AutoStartRts, SC_RtsNum_t, RtsNum);
 
     UT_GenStub_Execute(SC_AutoStartRts, Basic, NULL);
 }
@@ -91,9 +91,9 @@ void SC_EnableRtsGrpCmd(const SC_EnableRtsGrpCmd_t *Cmd)
  * Generated stub function for SC_KillRts()
  * ----------------------------------------------------
  */
-void SC_KillRts(uint16 RtsIndex)
+void SC_KillRts(SC_RtsIndex_t RtsIndex)
 {
-    UT_GenStub_AddParam(SC_KillRts, uint16, RtsIndex);
+    UT_GenStub_AddParam(SC_KillRts, SC_RtsIndex_t, RtsIndex);
 
     UT_GenStub_Execute(SC_KillRts, Basic, NULL);
 }

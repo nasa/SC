@@ -48,7 +48,7 @@
  **************************************************************************/
 
 /* used for RTS table iteration */
-#define SC_INVALID_RTS_INDEX 0xFFFF
+#define SC_INVALID_RTS_INDEX ((SC_RtsIndex_t) {-1})
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /*                                                                 */
@@ -58,7 +58,7 @@
 void SC_GetNextRtsTime(void)
 {
     int16           i;        /* loop counter MUST be SIGNED !*/
-    uint16          NextRts;  /* the next rts to schedule */
+    SC_RtsIndex_t   NextRts;  /* the next rts to schedule */
     SC_AbsTimeTag_t NextTime; /* the next time for the RTS */
 
     NextRts  = SC_INVALID_RTS_INDEX;
@@ -77,20 +77,20 @@ void SC_GetNextRtsTime(void)
             if (SC_OperData.RtsInfoTblAddr[i].NextCommandTime <= NextTime)
             {
                 NextTime = SC_OperData.RtsInfoTblAddr[i].NextCommandTime;
-                NextRts  = i;
+                NextRts  = SC_RTS_IDX_C(i);
             } /* end if */
         }     /* end if */
     }         /* end for */
 
     if (NextRts == SC_INVALID_RTS_INDEX)
     {
-        SC_OperData.RtsCtrlBlckAddr->RtsNumber = SC_INVALID_RTS_NUMBER;
-        SC_AppData.NextCmdTime[SC_Process_RTP] = SC_MAX_TIME;
+        SC_OperData.RtsCtrlBlckAddr->CurrRtsNum = SC_RTS_NUM_NULL;
+        SC_AppData.NextCmdTime[SC_Process_RTP]  = SC_MAX_TIME;
     }
     else
     {
-        SC_OperData.RtsCtrlBlckAddr->RtsNumber = NextRts + 1;
-        SC_AppData.NextCmdTime[SC_Process_RTP] = NextTime;
+        SC_OperData.RtsCtrlBlckAddr->CurrRtsNum = NextRts + 1;
+        SC_AppData.NextCmdTime[SC_Process_RTP]  = NextTime;
     } /* end if */
 }
 
@@ -123,7 +123,7 @@ void SC_UpdateNextTime(void)
      ** This is determined by the RTS number in the RTP control block
      ** If it is zero, there is no RTS that needs to run
      */
-    if (SC_OperData.RtsCtrlBlckAddr->RtsNumber > 0)
+    if (SC_OperData.RtsCtrlBlckAddr->CurrRtsNum > 0)
     {
         /*
          ** If the RTP needs to send commands, only send them if
@@ -144,19 +144,19 @@ void SC_UpdateNextTime(void)
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 void SC_GetNextRtsCommand(void)
 {
-    uint16         RtsIndex;
-    uint16         CmdOffset;
-    SC_RtsEntry_t *EntryPtr;
-    CFE_MSG_Size_t CmdLength = 0;
+    SC_RtsIndex_t    RtsIndex;
+    SC_EntryOffset_t CmdOffset;
+    SC_RtsEntry_t *  EntryPtr;
+    CFE_MSG_Size_t   CmdLength = 0;
 
     /*
      ** Make sure that the RTP is executing some RTS
      */
 
-    if ((SC_OperData.RtsCtrlBlckAddr->RtsNumber > 0) && (SC_OperData.RtsCtrlBlckAddr->RtsNumber <= SC_NUMBER_OF_RTS))
+    if ((SC_OperData.RtsCtrlBlckAddr->CurrRtsNum > 0) && (SC_OperData.RtsCtrlBlckAddr->CurrRtsNum <= SC_NUMBER_OF_RTS))
     {
         /* Get the index of the rts that is running */
-        RtsIndex = SC_RTS_NUM_TO_INDEX(SC_OperData.RtsCtrlBlckAddr->RtsNumber);
+        RtsIndex = SC_RtsNumToIndex(SC_OperData.RtsCtrlBlckAddr->CurrRtsNum);
         /*
          ** Find out if the RTS is EXECUTING or just STARTED
          */
@@ -240,7 +240,7 @@ void SC_GetNextRtsCommand(void)
                              */
                             SC_OperData.HkPacket.Payload.RtsCmdErrCtr++;
                             SC_OperData.RtsInfoTblAddr[RtsIndex].CmdErrCtr++;
-                            SC_OperData.HkPacket.Payload.LastRtsErrSeq = SC_OperData.RtsCtrlBlckAddr->RtsNumber;
+                            SC_OperData.HkPacket.Payload.LastRtsErrSeq = SC_OperData.RtsCtrlBlckAddr->CurrRtsNum;
                             SC_OperData.HkPacket.Payload.LastRtsErrCmd = CmdOffset;
 
                             /*
@@ -249,7 +249,7 @@ void SC_GetNextRtsCommand(void)
                             SC_KillRts(RtsIndex);
                             CFE_EVS_SendEvent(SC_RTS_LNGTH_ERR_EID, CFE_EVS_EventType_ERROR,
                                               "Cmd Runs passed end of table, RTS %03d Aborted",
-                                              SC_OperData.RtsCtrlBlckAddr->RtsNumber);
+                                              SC_OperData.RtsCtrlBlckAddr->CurrRtsNum);
 
                         } /* end if the command runs off the end of the buffer */
                     }
@@ -259,14 +259,14 @@ void SC_GetNextRtsCommand(void)
                         /* update the error information */
                         SC_OperData.HkPacket.Payload.RtsCmdErrCtr++;
                         SC_OperData.RtsInfoTblAddr[RtsIndex].CmdErrCtr++;
-                        SC_OperData.HkPacket.Payload.LastRtsErrSeq = SC_OperData.RtsCtrlBlckAddr->RtsNumber;
+                        SC_OperData.HkPacket.Payload.LastRtsErrSeq = SC_OperData.RtsCtrlBlckAddr->CurrRtsNum;
                         SC_OperData.HkPacket.Payload.LastRtsErrCmd = CmdOffset;
 
                         /* Stop the RTS from executing */
                         SC_KillRts(RtsIndex);
                         CFE_EVS_SendEvent(SC_RTS_CMD_LNGTH_ERR_EID, CFE_EVS_EventType_ERROR,
                                           "Invalid Length Field in RTS Command, RTS %03d Aborted. Length: %u, Max: %d",
-                                          SC_OperData.RtsCtrlBlckAddr->RtsNumber,
+                                          SC_OperData.RtsCtrlBlckAddr->CurrRtsNum,
                                           (unsigned int)(CmdLength - (uint16)SC_RTS_HEADER_SIZE), SC_PACKET_MAX_SIZE);
 
                     } /* end if the command length is invalid */
@@ -279,10 +279,10 @@ void SC_GetNextRtsCommand(void)
 
                     /* Stop the RTS from executing */
                     SC_KillRts(RtsIndex);
-                    if ((SC_OperData.RtsCtrlBlckAddr->RtsNumber) <= SC_LAST_RTS_WITH_EVENTS)
+                    if ((SC_OperData.RtsCtrlBlckAddr->CurrRtsNum) <= SC_LAST_RTS_WITH_EVENTS)
                     {
                         CFE_EVS_SendEvent(SC_RTS_COMPL_INF_EID, CFE_EVS_EventType_INFORMATION,
-                                          "RTS %03d Execution Completed", SC_OperData.RtsCtrlBlckAddr->RtsNumber);
+                                          "RTS %03d Execution Completed", SC_OperData.RtsCtrlBlckAddr->CurrRtsNum);
                     }
                 }
             }
@@ -290,10 +290,10 @@ void SC_GetNextRtsCommand(void)
             { /* The end of the RTS buffer has been reached... */
                 /* Stop the RTS from executing */
                 SC_KillRts(RtsIndex);
-                if ((SC_OperData.RtsCtrlBlckAddr->RtsNumber) <= SC_LAST_RTS_WITH_EVENTS)
+                if ((SC_OperData.RtsCtrlBlckAddr->CurrRtsNum) <= SC_LAST_RTS_WITH_EVENTS)
                 {
                     CFE_EVS_SendEvent(SC_RTS_COMPL_INF_EID, CFE_EVS_EventType_INFORMATION,
-                                      "RTS %03d Execution Completed", SC_OperData.RtsCtrlBlckAddr->RtsNumber);
+                                      "RTS %03d Execution Completed", SC_OperData.RtsCtrlBlckAddr->CurrRtsNum);
                 }
 
             } /* end if */
@@ -310,17 +310,17 @@ void SC_GetNextRtsCommand(void)
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 void SC_GetNextAtsCommand(void)
 {
-    uint16         AtsIndex;  /* ats array index */
-    uint16         TimeIndex; /* a time index pointer */
-    uint16         CmdIndex;  /* ats command array index */
-    SC_AtsEntry_t *EntryPtr;
+    SC_AtsIndex_t    AtsIndex;  /* ats array index */
+    SC_SeqIndex_t    TimeIndex; /* a time index pointer */
+    SC_EntryOffset_t CmdIndex;  /* ats command array index */
+    SC_AtsEntry_t *  EntryPtr;
 
     if (SC_OperData.AtsCtrlBlckAddr->AtpState == SC_Status_EXECUTING)
     {
         /*
          ** Get the information that is needed to find the next command
          */
-        AtsIndex  = SC_ATS_NUM_TO_INDEX(SC_OperData.AtsCtrlBlckAddr->AtsNumber);
+        AtsIndex  = SC_AtsNumToIndex(SC_OperData.AtsCtrlBlckAddr->CurrAtsNum);
         TimeIndex = SC_OperData.AtsCtrlBlckAddr->TimeIndexPtr + 1;
 
         /*
@@ -334,7 +334,7 @@ void SC_GetNextAtsCommand(void)
 
             /* update the next command time */
             CmdIndex =
-                SC_AppData.AtsCmdIndexBuffer[AtsIndex][SC_ATS_CMD_NUM_TO_INDEX(SC_OperData.AtsCtrlBlckAddr->CmdNumber)];
+                SC_AppData.AtsCmdIndexBuffer[AtsIndex][SC_CommandNumToIndex(SC_OperData.AtsCtrlBlckAddr->CmdNumber)];
             EntryPtr                               = (SC_AtsEntry_t *)&SC_OperData.AtsTblAddr[AtsIndex][CmdIndex];
             SC_AppData.NextCmdTime[SC_Process_ATP] = SC_GetAtsEntryTime(&EntryPtr->Header);
         }
