@@ -211,6 +211,12 @@ bool SC_BeginAts(SC_AtsIndex_t AtsIndex, uint16 TimeOffset)
     {
         /* first get the cmd index at this list entry */
         CmdIndex = SC_CommandNumToIndex(SC_GetAtsCommandNumAtSeq(AtsIndex, TimeIndex)->CmdNum);
+        if (!SC_AtsCommandIndexIsValid(CmdIndex))
+        {
+            SC_IDX_INCREMENT(TimeIndex);
+            continue;
+        }
+
         /* then get the entry index from the cmd index table */
         CmdOffsetRec = SC_GetAtsEntryOffsetForCmd(AtsIndex, CmdIndex);
         /* then get a pointer to the ATS entry data */
@@ -540,6 +546,12 @@ void SC_JumpAtsCmd(const SC_JumpAtsCmd_t *Cmd)
         {
             /* first get the cmd index at this list entry */
             CmdIndex = SC_CommandNumToIndex(SC_GetAtsCommandNumAtSeq(AtsIndex, TimeIndex)->CmdNum);
+            if (!SC_AtsCommandIndexIsValid(CmdIndex))
+            {
+                SC_IDX_INCREMENT(TimeIndex);
+                continue;
+            }
+
             /* then get the entry index from the cmd index table */
             CmdOffsetRec = SC_GetAtsEntryOffsetForCmd(AtsIndex, CmdIndex);
             /* then get a pointer to the ATS entry data */
