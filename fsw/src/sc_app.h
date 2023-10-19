@@ -35,6 +35,19 @@
 #include "sc_msg.h"
 
 /**
+ * SC time accessor object
+ *
+ * Wrapper structure containing a method to get
+ * the current reference time.  This reference is
+ * used for evaluationg all time references in ATSs
+ * and RTSs.
+ */
+typedef struct SC_TimeAccessor
+{
+    CFE_TIME_SysTime_t (*GetTime)(void);
+} SC_TimeAccessor_t;
+
+/**
  *  \brief ATP Control Block Type
  */
 typedef struct
@@ -329,6 +342,9 @@ typedef struct
     /**< \brief  This table is used to keep a list of ATS table command offsets.
          These offsets correspond to the addresses of ATS commands located in the ATS table.
          The index used is the ATS command index with values from 0 to SC_MAX_ATS_CMDS-1 */
+
+
+    SC_TimeAccessor_t TimeRef; /**< \brief Configured time reference */
 
     bool EnableHeaderUpdate; /**< \brief whether to update headers in outgoing messages */
 

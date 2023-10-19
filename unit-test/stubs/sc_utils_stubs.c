@@ -88,6 +88,22 @@ void SC_GetCurrentTime(void)
 
 /*
  * ----------------------------------------------------
+ * Generated stub function for SC_LookupTimeAccessor()
+ * ----------------------------------------------------
+ */
+SC_TimeAccessor_t SC_LookupTimeAccessor(SC_TimeRef_Enum_t TimeRef)
+{
+    UT_GenStub_SetupReturnBuffer(SC_LookupTimeAccessor, SC_TimeAccessor_t);
+
+    UT_GenStub_AddParam(SC_LookupTimeAccessor, SC_TimeRef_Enum_t, TimeRef);
+
+    UT_GenStub_Execute(SC_LookupTimeAccessor, Basic, NULL);
+
+    return UT_GenStub_GetReturnValue(SC_LookupTimeAccessor, SC_TimeAccessor_t);
+}
+
+/*
+ * ----------------------------------------------------
  * Generated stub function for SC_ToggleAtsIndex()
  * ----------------------------------------------------
  */

@@ -195,10 +195,10 @@
 
 #ifndef SC_TIME_TO_USE
 #error SC_TIME_TO_USE must be defined!
-#elif (SC_TIME_TO_USE != SC_USE_CFE_TIME)
-#if (SC_TIME_TO_USE != SC_USE_TAI)
-#if (SC_TIME_TO_USE != SC_USE_UTC)
-#error SC_TIME_TO_USE must be either SC_USE_CFE_TIME, SC_USE_TAI or SC_USE_UTC!
+#elif (SC_TIME_TO_USE != SC_TimeRef_USE_CFE_TIME)
+#if (SC_TIME_TO_USE != SC_TimeRef_USE_TAI)
+#if (SC_TIME_TO_USE != SC_TimeRef_USE_UTC)
+#error SC_TIME_TO_USE must be either SC_TimeRef_USE_CFE_TIME, SC_TimeRef_USE_TAI or SC_TimeRef_USE_UTC!
 #endif
 #endif
 #endif

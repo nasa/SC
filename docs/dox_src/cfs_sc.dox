@@ -57,7 +57,7 @@
   is intended primarily for users of the software (operations personnel, test
   engineers, and maintenance personnel). The deployment guide section, is
   intended for mission developers when deploying and configuring the SC
-  application software for a mission flight software build environment. 
+  application software for a mission flight software build environment.
 
   \ref cfsscversion
 
@@ -112,7 +112,7 @@
   command has a time tag associated with it, permitting the command to be
   released for distribution at predetermined times. SC supports both Absolute
   Time tagged command Sequences (ATSs) and multiple Relative Time tagged
-  command Sequences (RTSs).  
+  command Sequences (RTSs).
 
   \section SC Design Overview
 
@@ -124,7 +124,7 @@
   housekeeping request packet from the Scheduler Application. When SC receives
   the HK request, it processes the request, sends out the housekeeping packet,
   and looks for table updates to the load/dump tables that SC maintains. SC is
-  also driven by commands, responding to them as they are received. 
+  also driven by commands, responding to them as they are received.
 **/
 
 /**
@@ -174,9 +174,9 @@
   sent to the Software Bus, the ATP sets up the next ATS command for processing.
   If the ATP detects the end of the ATS buffer, it will stop the ATS. After
   finding the next command (or stopping the ATS buffer) the ATP will return
-  control to the main function of the SC. 
+  control to the main function of the SC.
 
-  <H2>ATP Error Handling</H2> 
+  <H2>ATP Error Handling</H2>
 
   There are many error checks built in to the ATP to assure that it does not
   cause any ill effects on the spacecraft. The error handling within the ATP can
@@ -204,8 +204,8 @@
   that the ATS loads are valid and not corrupted. If the ATS does not pass the
   load checks, it will be rejected. This check will eliminate many of the
   run-time errors before the ATS gets started. The ATP also does memory error
-  checking. Before each command is sent out, the checksum in the command 
-  secondary header is recomputed and compared to the checksum stored with the 
+  checking. Before each command is sent out, the checksum in the command
+  secondary header is recomputed and compared to the checksum stored with the
   command. If the checksum fails, the command is not sent out and the
   appropriate entry in the ATS Command Status Table is set to FAILED_CHECKSUM.
   Also, the command number is checked to make sure it matches the number of the
@@ -224,21 +224,21 @@
   command is processed, the SC application will copy the contents of the Append
   Table to the specified ATS and rebuild the pending execution list with the new
   commands.
-  
+
   <H2>ATP Precaution</H2>
-  
+
   Despite the many error checks built in to the ATP to assure that it does not
   cause any ill effects on the spacecraft, there is a crucial safety measure that
   is required of all ATS tables.  The ATP relies on a sentinel word of zeroes at the
-  end of an ATS table to signal the end of the ATS table (end of data marker).  cFE 
-  Table Services, when loading a new table, unconditionally fills the table working 
-  buffer with the contents of the current table prior to placing the new table file 
-  contents into the buffer.  If a newly loaded ATS table does not contain the 
-  sentinel word of zeroes at the end of the table and is smaller than the table that 
-  was previously loaded, the newly loaded table has potential to execute the "old" 
-  invalid commands that were part of the prior table load.  It is therefore essential 
-  for operators to place the sentinel word of zeroes at the end of each ATS table 
-  including ATS append tables.  
+  end of an ATS table to signal the end of the ATS table (end of data marker).  cFE
+  Table Services, when loading a new table, unconditionally fills the table working
+  buffer with the contents of the current table prior to placing the new table file
+  contents into the buffer.  If a newly loaded ATS table does not contain the
+  sentinel word of zeroes at the end of the table and is smaller than the table that
+  was previously loaded, the newly loaded table has potential to execute the "old"
+  invalid commands that were part of the prior table load.  It is therefore essential
+  for operators to place the sentinel word of zeroes at the end of each ATS table
+  including ATS append tables.
 
   <H2>Relative Time Processor (RTP)</H2>
 
@@ -249,7 +249,7 @@
   determine when this command needs to execute.
 
   The RTP will continue to process commands in the RTS until one of the
-  following conditions occur: 
+  following conditions occur:
     - The SCP receives a Stop RTS command from any source.
     - The RTP detects the end of the RTS sequence (Zero value for the first word
       of the cFE command) or detect the end of the buffer.
@@ -280,10 +280,10 @@
   go out at 12:00:01, then the command from RTS 1 will be sent first, followed
   by 7 commands from RTS 50. At 12:00:02, the 8th command from RTS 50 will be
   sent.
-     
-  <H2>RTP Error Handling</H2> 
 
-  Like the ATP, the RTP performs many error checks. The RTP detects and handles 
+  <H2>RTP Error Handling</H2>
+
+  Like the ATP, the RTP performs many error checks. The RTP detects and handles
   errors in ground commands, in sequences and in memory. Each ground command
   sent to the RTP must pass validation checks on each of the parameters required
   for that command. After the parameter check, a logical check is performed to
@@ -298,7 +298,7 @@
   sent out to the data system, the checksum in the command secondary header is
   computed and compared to the checksum attached to the command. If the checksum
   fails, the command is discarded, the error is reported through an event
-  message, and the RTS is stopped. 
+  message, and the RTS is stopped.
 **/
 
 /**
@@ -324,12 +324,12 @@
   SC will look for files upon startup.
 
   The #SC_TIME_TO_USE specifies the type of time format SC should use. If the
-  time format is set to anything but #SC_USE_CFE_TIME, then the user must take
+  time format is set to anything but #SC_TimeRef_USE_CFE_TIME, then the user must take
   special care when creating ATS commands to take this time difference into
-  account. 
+  account.
 
   Also, please be aware that SC has a performance ID, #SC_APPMAIN_PERF_ID, that
-  keeps track of the performance of the SC app. 
+  keeps track of the performance of the SC app.
 **/
 
 /**
@@ -348,7 +348,7 @@
   header followed by variable length command pairs.
 
   <B>ATS Tables</B>
-  
+
   The ATS tables are double-buffer tables. The size of these tables are defined
   by the configuration parameters #SC_ATS_BUFF_SIZE times #SC_BYTES_IN_WORD.
   Each table contains a series of ATS commands defined by #SC_AtsEntryHeader_t.
@@ -356,15 +356,15 @@
   <B>NOTE:</B> Headers must start on a 32-bit boundary. See also the ATP Precaution section.
 
   <B>RTS Tables</B>
-  
+
   The RTS tables are single-buffer tables. The size of these tables are defined
   by the configuration parameters #SC_RTS_BUFF_SIZE times #SC_BYTES_IN_WORD.
-  Each table contains a series of RTS commands defined by #SC_RtsEntryHeader_t. 
+  Each table contains a series of RTS commands defined by #SC_RtsEntryHeader_t.
 
   <B>NOTE:</B> Headers must start on a 32-bit boundary.
 
   <B>ATS Append Table</B>
-  
+
   The ATS Append table is a double-buffer table. The size of this table is
   defined by the configuration parameters #SC_APPEND_BUFF_SIZE times
   #SC_BYTES_IN_WORD. The table contains a series of ATS commands defined by
@@ -397,7 +397,7 @@
   <B>RTS Information Table</B>
 
   The RTS Information Table is used to keep the current status of each RTS
-  table. This table contains one record for each RTS table as defined by 
+  table. This table contains one record for each RTS table as defined by
   #SC_RtsInfoEntry_t.
 
   <B>RTP Control Block Table</B>
@@ -434,18 +434,18 @@
   command. From the Absolute time a delay time is computed, which is used to
   tell SC how long to delay. When time is adjusted on an RTS, the command that
   is currently waiting to execute gets "thrown off". Depending on the time
-  adjustment, the command could go out sooner or later than expected. Once the 
+  adjustment, the command could go out sooner or later than expected. Once the
   "current" command is out, however, the remaining commands in the sequence will
   execute as scheduled because they are relative to the previous command.
 
   The point of this discussion is that SC will not react well to time changes.
   It is recommended that SC be idle during large time adjustments (1 second or
   greater). Small adjustments can be tolerated if there is not an exact second
-  tolerance for every command being executed.  
+  tolerance for every command being executed.
 
   <H2>Over-scheduling the Stored Command Application</H2>
 
-  Another way to stress SC is to send out many commands in one second from many 
+  Another way to stress SC is to send out many commands in one second from many
   sequences. The time tags for both ATS commands and RTS commands have one
   second resolution. However, there is a way to send multiple commands in one
   second. For ATS commands, set the time tags to the same second. For RTS
@@ -460,55 +460,55 @@
   <H2>Unsorted ATS Loads</H2>
 
   Although there is no requirement for the ATS command loads to be sorted in
-  time order, having a full command load (Platform Defined ATS commands) of 
-  completely unsorted commands can cause the SC to block the execution of lower 
+  time order, having a full command load (Platform Defined ATS commands) of
+  completely unsorted commands can cause the SC to block the execution of lower
   priority tasks until it is finished sorting. The recommendation is that
   maximum unsorted loads are not used.
 
   <H2>ATS Switching Buffers</H2>
-  
-  Because the ATS switch is one of the most complicated SC operations, it is 
-  important to discuss the complete details of the ATS switch here. In normal 
-  operations, one ATS buffer will be running on the ATP, executing commands 
-  while the unused command buffer can be loaded and patched with the next 
-  sequence of commands. Because of the way the ATP skips commands that have 
-  time tags "in the past" when the ATS is started, the two ATS buffers can be 
-  built with some overlap in them. This allows a window of time during which 
-  the switch command could be sent. Figure 4.6 shows the overlapping buffer 
-  concept with the ATSs. As mentioned earlier, the ATP can execute commands 
-  with the same time tag. Because the resolution of the time tag only goes 
-  down to one second, in order to execute more than one command in one second, 
-  the commands should have the same time tag. Now suppose that the ATP receives 
-  the command to Switch ATSs while one ATS is in the middle of sending 8 
-  commands out with the same time tag, and only 5 of these commands were 
-  sent out before the buffer is switched (assuming a switch command coming 
-  from the ground, not the internal switch command). At first glance this 
-  seems to work because the other ATS buffer has an overlap with the same 8 
-  commands that want to go out in one second. This is where a problem occurs: 
-  when the new ATS is started, the ATP will walk down the list of commands 
-  until it finds a command with a time tag that is greater than or equal to 
-  the current time tag. Because the resolution of the time tags only goes 
-  down to a second, the ATP will execute all 8 commands in that one second, 
-  causing 5 of the eight commands to be sent out twice. In order to solve the 
-  problem of the ATS Switch sending out duplicate commands, the Switch ATS 
-  command received from the ground causes a wait condition until it is "safe" 
-  to switch the ATS buffer. So, when the Switch ATS command is received by the 
-  ATP, the command is validated and then a SWITCH_PEND flag is set. When it 
+
+  Because the ATS switch is one of the most complicated SC operations, it is
+  important to discuss the complete details of the ATS switch here. In normal
+  operations, one ATS buffer will be running on the ATP, executing commands
+  while the unused command buffer can be loaded and patched with the next
+  sequence of commands. Because of the way the ATP skips commands that have
+  time tags "in the past" when the ATS is started, the two ATS buffers can be
+  built with some overlap in them. This allows a window of time during which
+  the switch command could be sent. Figure 4.6 shows the overlapping buffer
+  concept with the ATSs. As mentioned earlier, the ATP can execute commands
+  with the same time tag. Because the resolution of the time tag only goes
+  down to one second, in order to execute more than one command in one second,
+  the commands should have the same time tag. Now suppose that the ATP receives
+  the command to Switch ATSs while one ATS is in the middle of sending 8
+  commands out with the same time tag, and only 5 of these commands were
+  sent out before the buffer is switched (assuming a switch command coming
+  from the ground, not the internal switch command). At first glance this
+  seems to work because the other ATS buffer has an overlap with the same 8
+  commands that want to go out in one second. This is where a problem occurs:
+  when the new ATS is started, the ATP will walk down the list of commands
+  until it finds a command with a time tag that is greater than or equal to
+  the current time tag. Because the resolution of the time tags only goes
+  down to a second, the ATP will execute all 8 commands in that one second,
+  causing 5 of the eight commands to be sent out twice. In order to solve the
+  problem of the ATS Switch sending out duplicate commands, the Switch ATS
+  command received from the ground causes a wait condition until it is "safe"
+  to switch the ATS buffer. So, when the Switch ATS command is received by the
+  ATP, the command is validated and then a SWITCH_PEND flag is set. When it
   becomes safe for the ATS to switch (i.e. at a 1 second boundary in UTC Time),
-  the switch will be serviced. This method assures that sending the Switch ATS 
-  command from the ground will not cause any duplicate commands to be sent 
-  out to the data system, nor any missed commands. Note that all of this 
-  switch logic only comes into use when there are multiple commands per second. 
-  The safe switch will wait until all commands during the current second have 
-  been sent out, then it will switch. If there are no commands with the same 
-  time tag in the overlap region (including the switch command) this logic 
-  does not get used. In either case, the switch can be performed without 
-  sending any duplicate commands to be sent out. There are certain conditions 
-  that can cause an ATS switch that is pending to be canceled. If the ATP is 
-  stopped by the ground while the ATP is waiting for a "safe" time to switch, 
-  then the switch will not occur. Also if the ATP detects the end of the ATS 
-  buffer before there is a "safe" time to switch, the switch will be canceled. 
-  Note that the typical time frame for a "switch pend" is one second or less. 
+  the switch will be serviced. This method assures that sending the Switch ATS
+  command from the ground will not cause any duplicate commands to be sent
+  out to the data system, nor any missed commands. Note that all of this
+  switch logic only comes into use when there are multiple commands per second.
+  The safe switch will wait until all commands during the current second have
+  been sent out, then it will switch. If there are no commands with the same
+  time tag in the overlap region (including the switch command) this logic
+  does not get used. In either case, the switch can be performed without
+  sending any duplicate commands to be sent out. There are certain conditions
+  that can cause an ATS switch that is pending to be canceled. If the ATP is
+  stopped by the ground while the ATP is waiting for a "safe" time to switch,
+  then the switch will not occur. Also if the ATP detects the end of the ATS
+  buffer before there is a "safe" time to switch, the switch will be canceled.
+  Note that the typical time frame for a "switch pend" is one second or less.
   The operation of the switch is transparent to the ground.
 
   <H2>Updating ATS/RTS Loads</H2>
@@ -520,7 +520,7 @@
 
   <H2>Null ATS/RTS Loads</H2>
 
-  Loading a NULL RTS or ATS is an invalid SC operation. In the event that 
+  Loading a NULL RTS or ATS is an invalid SC operation. In the event that
   the user does execute a NULL RTS the following happens:
     - An SC event message will be sent out.
     - The RTS that was being overwritten will NOT be cleared.
@@ -536,7 +536,7 @@
   specific naming convention.
 
   <H3>RTS's</H3>
-  
+
   Because RTS's can be loaded at startup, the files for the those RTS's must be
   in a predetermined location as determined by the platform configuration
   parameter #SC_RTS_FILE_NAME. This location must be in non-volatile memory.
@@ -553,11 +553,11 @@
   'SC.RTS_TBL001, if the name of the application is "SC".
 
   <H3>ATS's</H3>
-  
+
   ATS's are not loaded at startup, nor are they loaded automatically at any
-  other time. Therefore, neither the name of the file of the ATS nor the file's 
+  other time. Therefore, neither the name of the file of the ATS nor the file's
   location matter. All that matters to SC is the name of the table itself in the
-  header of the table file. The name should either be 'SC.ATS_TBL1' or 
+  header of the table file. The name should either be 'SC.ATS_TBL1' or
   'SC.ATS_TBL2' provided that the name of the the application is "SC" and which
   ATS the table is meant for (1 is for A, 2 is for B).
 **/
@@ -574,7 +574,7 @@
   <B> (Q)
      Can an RTS start itself?
   </B> <BR> <BR> <I>
-     Answer is Yes. Since the RTS is just a collection of commands, an RTS can include the StartRTS command. 
+     Answer is Yes. Since the RTS is just a collection of commands, an RTS can include the StartRTS command.
      However, it is recommended that this be the last command in the RTS.
   </I> <BR><BR>
 
