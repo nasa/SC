@@ -146,10 +146,10 @@ void SC_AppInit_Test_NominalPowerOnReset(void)
     memset(&Expected_SC_OperData, 0, sizeof(Expected_SC_OperData));
     memset(&Expected_SC_AppData, 0, sizeof(Expected_SC_AppData));
 
-    Expected_SC_AppData.NextProcNumber      = SC_NONE;
-    Expected_SC_AppData.NextCmdTime[SC_ATP] = SC_MAX_TIME;
-    Expected_SC_AppData.NextCmdTime[SC_RTP] = SC_MAX_TIME;
-    Expected_SC_AppData.AutoStartRTS        = RTS_ID_AUTO_POWER_ON;
+    Expected_SC_AppData.NextProcNumber              = SC_Process_NONE;
+    Expected_SC_AppData.NextCmdTime[SC_Process_ATP] = SC_MAX_TIME;
+    Expected_SC_AppData.NextCmdTime[SC_Process_RTP] = SC_MAX_TIME;
+    Expected_SC_AppData.AutoStartRTS                = RTS_ID_AUTO_POWER_ON;
 
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &MsgSize, sizeof(MsgSize), false);
@@ -168,7 +168,7 @@ void SC_AppInit_Test_NominalPowerOnReset(void)
     Expected_SC_OperData.AtsCmdStatusHandle[0] = 0;
     Expected_SC_OperData.AtsCmdStatusHandle[1] = 0;
 
-    Expected_SC_OperData.HkPacket.Payload.ContinueAtsOnFailureFlag = 1;
+    Expected_SC_OperData.HkPacket.Payload.ContinueAtsOnFailureFlag = SC_AtsCont_TRUE;
 
     UtAssert_MemCmp(&SC_OperData.CmdPipe, &Expected_SC_OperData.CmdPipe, sizeof(Expected_SC_OperData.CmdPipe), "2");
     UtAssert_MemCmp(&SC_OperData.AtsInfoHandle, &Expected_SC_OperData.AtsInfoHandle,
@@ -210,12 +210,12 @@ void SC_AppInit_Test_Nominal(void)
     memset(&Expected_SC_OperData, 0, sizeof(Expected_SC_OperData));
     memset(&Expected_SC_AppData, 0, sizeof(Expected_SC_AppData));
 
-    Expected_SC_AppData.NextProcNumber      = SC_NONE;
-    Expected_SC_AppData.NextCmdTime[SC_ATP] = SC_MAX_TIME;
-    Expected_SC_AppData.NextCmdTime[SC_RTP] = SC_MAX_TIME;
-    Expected_SC_AppData.AutoStartRTS        = RTS_ID_AUTO_PROCESSOR;
+    Expected_SC_AppData.NextProcNumber              = SC_Process_NONE;
+    Expected_SC_AppData.NextCmdTime[SC_Process_ATP] = SC_MAX_TIME;
+    Expected_SC_AppData.NextCmdTime[SC_Process_RTP] = SC_MAX_TIME;
+    Expected_SC_AppData.AutoStartRTS                = RTS_ID_AUTO_PROCESSOR;
 
-    Expected_SC_OperData.HkPacket.Payload.ContinueAtsOnFailureFlag = 1;
+    Expected_SC_OperData.HkPacket.Payload.ContinueAtsOnFailureFlag = SC_AtsCont_TRUE;
 
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &MsgSize, sizeof(MsgSize), false);
@@ -299,14 +299,14 @@ void SC_AppInit_Test_SBSubscribeHKError(void)
 void SC_AppInit_Test_SubscribeTo1HzError(void)
 {
     /* Set CFE_SB_Subscribe to return -1 on the 2nd call in order to generate error message
-     * SC_INIT_SB_SUBSCRIBE_1HZ_ERR_EID */
+     * SC_INIT_SB_SUBSCRIBE_ONEHZ_ERR_EID */
     UT_SetDeferredRetcode(UT_KEY(CFE_SB_Subscribe), 2, -1);
 
     /* Execute the function being tested */
     UtAssert_INT32_EQ(SC_AppInit(), -1);
 
     /* Verify results */
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_INIT_SB_SUBSCRIBE_1HZ_ERR_EID);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_INIT_SB_SUBSCRIBE_ONEHZ_ERR_EID);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
 }
 

@@ -310,7 +310,7 @@
   CFS Stored Command requires that two message ID's be put in the CFS Scheduler
   table for proper operation. Those message ID's are #SC_SEND_HK_MID, which
   should be sent out at the housekeeping request interval, and
-  #SC_1HZ_WAKEUP_MID, which needs to be sent out every second.
+  #SC_ONEHZ_WAKEUP_MID, which needs to be sent out every second.
 
   CFS Stored Command generates telemetry when it receives the housekeeping
   request. Its telemetry message ID is #SC_HK_TLM_MID.

@@ -37,43 +37,94 @@
 #define SC_NUMBER_OF_RTS_IN_UINT16 16 /**< \brief Number of RTS represented in a uint16 */
 
 /**
- * \name ATS/RTS Cmd Status macros
+ * ATS/RTS Cmd Status Enumeratoion
+ */
+enum SC_Status
+{
+    SC_Status_EMPTY,           /**< \brief the object is not loaded */
+    SC_Status_LOADED,          /**< \brief the object is loaded */
+    SC_Status_IDLE,            /**< \brief the object is not executing */
+    SC_Status_EXECUTED,        /**< \brief the object has completed executing */
+    SC_Status_SKIPPED,         /**< \brief the object (ats command) was skipped */
+    SC_Status_EXECUTING,       /**< \brief the object is currently executing */
+    SC_Status_FAILED_CHECKSUM, /**< \brief the object failed a checksum test */
+    SC_Status_FAILED_DISTRIB,  /**< \brief the object could not be sent on the SWB */
+    SC_Status_STARTING         /**< \brief used when an inline switch is executed */
+};
+
+typedef uint8 SC_Status_Enum_t;
+
+#ifndef SC_OMIT_DEPRECATED
+/**
+ * \name Old-style ATS/RTS Cmd Status macros
  * \{
  */
-#define SC_EMPTY           0 /**< \brief the object is not loaded */
-#define SC_LOADED          1 /**< \brief the object is loaded */
-#define SC_IDLE            2 /**< \brief the object is not executing */
-#define SC_EXECUTED        3 /**< \brief the object has completed executing */
-#define SC_SKIPPED         4 /**< \brief the object (ats command) was skipped */
-#define SC_EXECUTING       5 /**< \brief the object is currently executing */
-#define SC_FAILED_CHECKSUM 6 /**< \brief the object failed a checksum test */
-#define SC_FAILED_DISTRIB  7 /**< \brief the object could not be sent on the SWB */
-#define SC_STARTING        8 /**< \brief used when an inline switch is executed */
+#define SC_EMPTY           SC_Status_EMPTY
+#define SC_LOADED          SC_Status_LOADED
+#define SC_IDLE            SC_Status_IDLE
+#define SC_EXECUTED        SC_Status_EXECUTED
+#define SC_SKIPPED         SC_Status_SKIPPED
+#define SC_EXECUTING       SC_Status_EXECUTING
+#define SC_FAILED_CHECKSUM SC_Status_FAILED_CHECKSUM
+#define SC_FAILED_DISTRIB  SC_Status_FAILED_DISTRIB
+#define SC_STARTING        SC_Status_STARTING
 /**\}*/
+#endif
 
 /************************************************************************
  * Macro Definitions
  ************************************************************************/
 
 /**
- * \name Which processor runs next
+ * Enumeration for SC processes
+ * This specifies which process runs next
+ */
+enum SC_ProcessNum
+{
+    SC_Process_ATP  = 0,   /**< \brief ATP process next */
+    SC_Process_RTP  = 1,   /**< \brief RTP process next */
+    SC_Process_NONE = 0xFF /**< \brief No pending process */
+};
+
+typedef uint8 SC_Process_Enum_t;
+
+#ifndef SC_OMIT_DEPRECATED
+/**
+ * \name Old-style defines for which process runs next
  * \{
  */
-#define SC_ATP  0    /**< \brief ATP process next */
-#define SC_RTP  1    /**< \brief RTP process next */
-#define SC_NONE 0xFF /**< \brief No pending process */
+#define SC_ATP  SC_Process_ATP
+#define SC_RTP  SC_Process_RTP
+#define SC_NONE SC_Process_NONE
 /**\}*/
+#endif
 
 #define SC_MAX_TIME 0xFFFFFFFF /**< \brief Maximum time in SC */
 
 /**
- * \name Defines for each ATS
+ * Enumeration for ATS identifiers
+ *
+ * ATS identifiers are alphabetic letters that correspond to ATS numbers
+ */
+enum SC_AtsId
+{
+    SC_AtsId_NO_ATS, /**<\ brief No ATS */
+    SC_AtsId_ATSA,   /**< \brief ATS A */
+    SC_AtsId_ATSB    /**< \brief ATS B */
+};
+
+typedef uint8 SC_AtsId_Enum_t;
+
+#ifndef SC_OMIT_DEPRECATED
+/**
+ * \name Old-style defines for each ATS
  * \{
  */
-#define SC_NO_ATS 0 /**<\ brief No ATS */
-#define SC_ATSA   1 /**< \brief ATS A */
-#define SC_ATSB   2 /**< \brief ATS B */
+#define SC_NO_ATS SC_AtsId_NO_ATS
+#define SC_ATSA   SC_AtsId_ATSA
+#define SC_ATSB   SC_AtsId_ATSB
 /**\}*/
+#endif
 
 /**
  * \name constants for config parameters for which TIME to use
@@ -87,12 +138,24 @@
 #define SC_INVALID_RTS_NUMBER 0 /**< \brief Invalid RTS number */
 
 /**
- * \name SC Continue Flags
+ * SC Continue After Failure Enumeration
+ */
+enum SC_AtsCont
+{
+    SC_AtsCont_FALSE = false, /**< \brief Do not continue on failure */
+    SC_AtsCont_TRUE  = true   /**< \brief Continue on failure */
+};
+typedef uint8 SC_AtsCont_Enum_t;
+
+#ifndef SC_OMIT_DEPRECATED
+/**
+ * \name Old-style SC Continue Flags
  * \{
  */
-#define SC_CONTINUE_TRUE  1 /**< \brief Continue on failure */
-#define SC_CONTINUE_FALSE 0 /**< \brief Do not continue on failure */
+#define SC_CONTINUE_TRUE  SC_AtsCont_TRUE
+#define SC_CONTINUE_FALSE SC_AtsCont_FALSE
 /**\}*/
+#endif
 
 /************************************************************************
  * Type Definitions
@@ -108,9 +171,9 @@
  */
 typedef struct
 {
-    uint8 AtsNumber;                /**< \brief Current ATS number: 1 = ATS A, 2 = ATS B */
-    uint8 AtpState;                 /**< \brief Current ATP state: 2 = IDLE, 5 = EXECUTING */
-    uint8 ContinueAtsOnFailureFlag; /**< \brief Continue ATS execution on failure flag */
+    SC_AtsId_Enum_t   CurrAtsId;                /**< \brief Current ATS number: 1 = ATS A, 2 = ATS B */
+    SC_Status_Enum_t  AtpState;                 /**< \brief Current ATP state: 2 = IDLE, 5 = EXECUTING */
+    SC_AtsCont_Enum_t ContinueAtsOnFailureFlag; /**< \brief Continue ATS execution on failure flag */
 
     uint8 CmdErrCtr; /**< \brief Counts Request Errors */
     uint8 CmdCtr;    /**< \brief Counts Ground Requests */
@@ -192,8 +255,8 @@ typedef struct
  */
 typedef struct
 {
-    uint16 ContinueState; /**< \brief true or false, to continue ATS after a failure  */
-    uint16 Padding;       /**< \brief Structure Padding */
+    SC_AtsCont_Enum_t ContinueState; /**< \brief true or false, to continue ATS after a failure  */
+    uint16            Padding;       /**< \brief Structure Padding */
 } SC_SetContinueAtsOnFailureCmd_Payload_t;
 
 /**

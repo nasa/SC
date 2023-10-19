@@ -83,7 +83,7 @@
  *  This event message is issued when #CFE_SB_Subscribe to the 1 Hz
  *  Request packet fails
  */
-#define SC_INIT_SB_SUBSCRIBE_1HZ_ERR_EID 5
+#define SC_INIT_SB_SUBSCRIBE_ONEHZ_ERR_EID 5
 
 /**
  * \brief HS Command Message Subscribe Failed Event ID
@@ -474,7 +474,7 @@
  *
  *  \par Cause:
  *  This event message is issued when an ATS command is about to be send out,
- *  but the command isn't marked as '#SC_LOADED'
+ *  but the command isn't marked as '#SC_Status_LOADED'
  */
 #define SC_ATS_SKP_ERR_EID 48
 
@@ -701,7 +701,7 @@
  *
  *  \par Cause:
  *  This event message is issued when an RTS is tried to be started, but the RTS is not
- *  marked as #SC_LOADED
+ *  marked as #SC_Status_LOADED
  */
 #define SC_STARTRTS_CMD_NOT_LDED_ERR_EID 75
 
@@ -1225,7 +1225,7 @@
  *
  *  \par Cause:
  *  This event message is issued when a #SC_START_RTS_GRP_CC command was received, but an
- *  RTS is marked as #SC_LOADED
+ *  RTS is marked as #SC_Status_LOADED
  */
 #define SC_STARTRTSGRP_CMD_NOT_LDED_ERR_EID 126
 

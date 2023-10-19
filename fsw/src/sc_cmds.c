@@ -74,8 +74,9 @@ void SC_ProcessAtpCmd(void)
      ** 3.) The atp is currently EXECUTING
      */
 
-    if ((SC_OperData.AtsCtrlBlckAddr->AtpState == SC_EXECUTING) && (SC_AppData.NextProcNumber == SC_ATP) &&
-        (!SC_CompareAbsTime(SC_AppData.NextCmdTime[SC_ATP], SC_AppData.CurrentTime)))
+    if ((SC_OperData.AtsCtrlBlckAddr->AtpState == SC_Status_EXECUTING) &&
+        (SC_AppData.NextProcNumber == SC_Process_ATP) &&
+        (!SC_CompareAbsTime(SC_AppData.NextCmdTime[SC_Process_ATP], SC_AppData.CurrentTime)))
     {
         /*
          ** Get a pointer to the next ats command
@@ -88,7 +89,7 @@ void SC_ProcessAtpCmd(void)
         /*
          ** Make sure the command has not been executed, skipped or has any other bad status
          */
-        if (SC_OperData.AtsCmdStatusTblAddr[AtsIndex][CmdIndex] == SC_LOADED)
+        if (SC_OperData.AtsCmdStatusTblAddr[AtsIndex][CmdIndex] == SC_Status_LOADED)
         {
             /*
              ** Make sure the command number matches what the command
@@ -141,13 +142,13 @@ void SC_ProcessAtpCmd(void)
                              ** Increment the counter and update the status for
                              ** this command
                              */
-                            SC_OperData.AtsCmdStatusTblAddr[AtsIndex][CmdIndex] = SC_EXECUTED;
+                            SC_OperData.AtsCmdStatusTblAddr[AtsIndex][CmdIndex] = SC_Status_EXECUTED;
                             SC_OperData.HkPacket.Payload.AtsCmdCtr++;
                         }
                         else
                         { /* the switch failed for some reason */
 
-                            SC_OperData.AtsCmdStatusTblAddr[AtsIndex][CmdIndex] = SC_FAILED_DISTRIB;
+                            SC_OperData.AtsCmdStatusTblAddr[AtsIndex][CmdIndex] = SC_Status_FAILED_DISTRIB;
                             SC_OperData.HkPacket.Payload.AtsCmdErrCtr++;
                             SC_OperData.HkPacket.Payload.LastAtsErrSeq = SC_OperData.AtsCtrlBlckAddr->AtsNumber;
                             SC_OperData.HkPacket.Payload.LastAtsErrCmd = SC_OperData.AtsCtrlBlckAddr->CmdNumber;
@@ -161,12 +162,12 @@ void SC_ProcessAtpCmd(void)
                         if (Result == CFE_SUCCESS)
                         {
                             /* The command sent OK */
-                            SC_OperData.AtsCmdStatusTblAddr[AtsIndex][CmdIndex] = SC_EXECUTED;
+                            SC_OperData.AtsCmdStatusTblAddr[AtsIndex][CmdIndex] = SC_Status_EXECUTED;
                             SC_OperData.HkPacket.Payload.AtsCmdCtr++;
                         }
                         else
                         { /* the command had Software Bus problems */
-                            SC_OperData.AtsCmdStatusTblAddr[AtsIndex][CmdIndex] = SC_FAILED_DISTRIB;
+                            SC_OperData.AtsCmdStatusTblAddr[AtsIndex][CmdIndex] = SC_Status_FAILED_DISTRIB;
                             SC_OperData.HkPacket.Payload.AtsCmdErrCtr++;
                             SC_OperData.HkPacket.Payload.LastAtsErrSeq = SC_OperData.AtsCtrlBlckAddr->AtsNumber;
                             SC_OperData.HkPacket.Payload.LastAtsErrCmd = SC_OperData.AtsCtrlBlckAddr->CmdNumber;
@@ -199,7 +200,7 @@ void SC_ProcessAtpCmd(void)
                     SC_OperData.HkPacket.Payload.LastAtsErrCmd = SC_OperData.AtsCtrlBlckAddr->CmdNumber;
 
                     /* update the command status index table */
-                    SC_OperData.AtsCmdStatusTblAddr[AtsIndex][CmdIndex] = SC_FAILED_CHECKSUM;
+                    SC_OperData.AtsCmdStatusTblAddr[AtsIndex][CmdIndex] = SC_Status_FAILED_CHECKSUM;
 
                     if (SC_OperData.HkPacket.Payload.ContinueAtsOnFailureFlag == false)
                     {
@@ -229,7 +230,7 @@ void SC_ProcessAtpCmd(void)
                 SC_OperData.HkPacket.Payload.LastAtsErrCmd = SC_OperData.AtsCtrlBlckAddr->CmdNumber;
 
                 /* update the command status index table */
-                SC_OperData.AtsCmdStatusTblAddr[AtsIndex][CmdIndex] = SC_SKIPPED;
+                SC_OperData.AtsCmdStatusTblAddr[AtsIndex][CmdIndex] = SC_Status_SKIPPED;
 
                 /* Mark this ATS for abortion */
                 AbortATS = true;
@@ -261,7 +262,7 @@ void SC_ProcessAtpCmd(void)
 
         if (AbortATS == true)
         {
-            if (SC_OperData.AtsCtrlBlckAddr->AtsNumber == SC_ATSA)
+            if (SC_OperData.AtsCtrlBlckAddr->AtsNumber == SC_AtsId_ATSA)
             {
                 TempAtsChar = 'A';
             }
@@ -304,16 +305,16 @@ void SC_ProcessRtpCommand(void)
     /*
      ** The following conditions must be met before a RTS command is executed:
      ** 1.) The next command time must be <= the current time
-     ** 2.) The next processor number must be SC_RTP
+     ** 2.) The next processor number must be SC_Process_RTP
      ** 3.) The RTS number in the RTP control block must be valid and
      ** 4.) the RTS must be EXECUTING
      */
 
     if ((SC_AppData.NextCmdTime[SC_AppData.NextProcNumber] <= SC_AppData.CurrentTime) &&
-        (SC_AppData.NextProcNumber == SC_RTP) && (SC_OperData.RtsCtrlBlckAddr->RtsNumber > 0) &&
+        (SC_AppData.NextProcNumber == SC_Process_RTP) && (SC_OperData.RtsCtrlBlckAddr->RtsNumber > 0) &&
         (SC_OperData.RtsCtrlBlckAddr->RtsNumber <= SC_NUMBER_OF_RTS) &&
         (SC_OperData.RtsInfoTblAddr[SC_RTS_NUM_TO_INDEX(SC_OperData.RtsCtrlBlckAddr->RtsNumber)].RtsStatus ==
-         SC_EXECUTING))
+         SC_Status_EXECUTING))
     {
         /*
          ** Count the command for the rate limiter
@@ -418,12 +419,12 @@ void SC_SendHkPacket(void)
     /*
      ** fill in the free bytes in each ATS
      */
-    SC_OperData.HkPacket.Payload.AtpFreeBytes[SC_ATS_NUM_TO_INDEX(SC_ATSA)] =
+    SC_OperData.HkPacket.Payload.AtpFreeBytes[SC_ATS_NUM_TO_INDEX(SC_AtsId_ATSA)] =
         (SC_ATS_BUFF_SIZE32 * SC_BYTES_IN_WORD) -
-        (SC_OperData.AtsInfoTblAddr[SC_ATS_NUM_TO_INDEX(SC_ATSA)].AtsSize * SC_BYTES_IN_WORD);
-    SC_OperData.HkPacket.Payload.AtpFreeBytes[SC_ATS_NUM_TO_INDEX(SC_ATSB)] =
+        (SC_OperData.AtsInfoTblAddr[SC_ATS_NUM_TO_INDEX(SC_AtsId_ATSA)].AtsSize * SC_BYTES_IN_WORD);
+    SC_OperData.HkPacket.Payload.AtpFreeBytes[SC_ATS_NUM_TO_INDEX(SC_AtsId_ATSB)] =
         (SC_ATS_BUFF_SIZE32 * SC_BYTES_IN_WORD) -
-        (SC_OperData.AtsInfoTblAddr[SC_ATS_NUM_TO_INDEX(SC_ATSB)].AtsSize * SC_BYTES_IN_WORD);
+        (SC_OperData.AtsInfoTblAddr[SC_ATS_NUM_TO_INDEX(SC_AtsId_ATSB)].AtsSize * SC_BYTES_IN_WORD);
 
     /*
      **
@@ -431,13 +432,13 @@ void SC_SendHkPacket(void)
      **
      */
 
-    SC_OperData.HkPacket.Payload.AtsNumber = SC_OperData.AtsCtrlBlckAddr->AtsNumber;
+    SC_OperData.HkPacket.Payload.CurrAtsId = SC_OperData.AtsCtrlBlckAddr->AtsNumber;
 
     SC_OperData.HkPacket.Payload.AtpState       = SC_OperData.AtsCtrlBlckAddr->AtpState;
     SC_OperData.HkPacket.Payload.AtpCmdNumber   = SC_OperData.AtsCtrlBlckAddr->CmdNumber;
     SC_OperData.HkPacket.Payload.SwitchPendFlag = SC_OperData.AtsCtrlBlckAddr->SwitchPendFlag;
 
-    SC_OperData.HkPacket.Payload.NextAtsTime = SC_AppData.NextCmdTime[SC_ATP];
+    SC_OperData.HkPacket.Payload.NextAtsTime = SC_AppData.NextCmdTime[SC_Process_ATP];
 
     /*
      ** Fill out the RTP control block information
@@ -445,7 +446,7 @@ void SC_SendHkPacket(void)
 
     SC_OperData.HkPacket.Payload.NumRtsActive = SC_OperData.RtsCtrlBlckAddr->NumRtsActive;
     SC_OperData.HkPacket.Payload.RtsNumber    = SC_OperData.RtsCtrlBlckAddr->RtsNumber;
-    SC_OperData.HkPacket.Payload.NextRtsTime  = SC_AppData.NextCmdTime[SC_RTP];
+    SC_OperData.HkPacket.Payload.NextRtsTime  = SC_AppData.NextCmdTime[SC_Process_RTP];
 
     /*
      ** Fill out the RTS status bit mask
@@ -465,7 +466,7 @@ void SC_SendHkPacket(void)
             SC_OperData.HkPacket.Payload.RtsDisabledStatus[i / SC_NUMBER_OF_RTS_IN_UINT16] |=
                 (1 << (i % SC_NUMBER_OF_RTS_IN_UINT16));
         }
-        if (SC_OperData.RtsInfoTblAddr[i].RtsStatus == SC_EXECUTING)
+        if (SC_OperData.RtsInfoTblAddr[i].RtsStatus == SC_Status_EXECUTING)
         {
             SC_OperData.HkPacket.Payload.RtsExecutingStatus[i / SC_NUMBER_OF_RTS_IN_UINT16] |=
                 (1 << (i % SC_NUMBER_OF_RTS_IN_UINT16));
@@ -473,8 +474,8 @@ void SC_SendHkPacket(void)
     } /* end for */
 
     /* send the status packet */
-    CFE_SB_TimeStampMsg(&SC_OperData.HkPacket.TlmHeader.Msg);
-    CFE_SB_TransmitMsg(&SC_OperData.HkPacket.TlmHeader.Msg, true);
+    CFE_SB_TimeStampMsg(&SC_OperData.HkPacket.TelemetryHeader.Msg);
+    CFE_SB_TransmitMsg(&SC_OperData.HkPacket.TelemetryHeader.Msg, true);
 }
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -488,7 +489,7 @@ void SC_SendHkCmd(const SC_SendHkCmd_t *Cmd)
     if (SC_AppData.AutoStartRTS != 0)
     {
         /* make sure the selected auto-exec RTS is enabled */
-        if (SC_OperData.RtsInfoTblAddr[SC_RTS_NUM_TO_INDEX(SC_AppData.AutoStartRTS)].RtsStatus == SC_LOADED)
+        if (SC_OperData.RtsInfoTblAddr[SC_RTS_NUM_TO_INDEX(SC_AppData.AutoStartRTS)].RtsStatus == SC_Status_LOADED)
         {
             SC_OperData.RtsInfoTblAddr[SC_RTS_NUM_TO_INDEX(SC_AppData.AutoStartRTS)].DisabledFlag = false;
         }
@@ -546,20 +547,20 @@ void SC_OneHzWakeupCmd(const SC_OneHzWakeupCmd_t *Cmd)
             SC_ServiceSwitchPend();
         }
 
-        if (SC_AppData.NextProcNumber == SC_ATP)
+        if (SC_AppData.NextProcNumber == SC_Process_ATP)
         {
             SC_ProcessAtpCmd();
         }
         else
         {
-            if (SC_AppData.NextProcNumber == SC_RTP)
+            if (SC_AppData.NextProcNumber == SC_Process_RTP)
             {
                 SC_ProcessRtpCommand();
             }
         }
 
         SC_UpdateNextTime();
-        if ((SC_AppData.NextProcNumber == SC_NONE) ||
+        if ((SC_AppData.NextProcNumber == SC_Process_NONE) ||
             (SC_AppData.NextCmdTime[SC_AppData.NextProcNumber] > SC_AppData.CurrentTime))
         {
             SC_OperData.NumCmdsSec         = 0;

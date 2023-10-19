@@ -102,7 +102,7 @@ void SC_VerifyCmdLength_Test_Nominal(void)
     UT_SC_Dispatch_SetMsgSize(MsgSize);
 
     /* Execute the function being tested */
-    UtAssert_BOOL_TRUE(SC_VerifyCmdLength(&CmdPacket.CmdHeader.Msg, sizeof(CmdPacket)));
+    UtAssert_BOOL_TRUE(SC_VerifyCmdLength(&CmdPacket.CommandHeader.Msg, sizeof(CmdPacket)));
 
     /* Verify results */
     UtAssert_UINT32_EQ(SC_OperData.HkPacket.Payload.CmdErrCtr, 0);
@@ -122,7 +122,7 @@ void SC_VerifyCmdLength_Test_LenError(void)
     UT_SC_Dispatch_SetMsgSize(MsgSize);
 
     /* Execute the function being tested */
-    UtAssert_BOOL_FALSE(SC_VerifyCmdLength(&CmdPacket.CmdHeader.Msg, 999));
+    UtAssert_BOOL_FALSE(SC_VerifyCmdLength(&CmdPacket.CommandHeader.Msg, 999));
 
     /* Verify results */
     UtAssert_UINT32_EQ(SC_OperData.HkPacket.Payload.CmdCtr, 0);
@@ -144,7 +144,7 @@ void SC_VerifyCmdLength_Test_LenErrorNotMID(void)
     UT_SC_Dispatch_SetMsgSize(MsgSize);
 
     /* Execute the function being tested */
-    UtAssert_BOOL_FALSE(SC_VerifyCmdLength(&CmdPacket.CmdHeader.Msg, 999));
+    UtAssert_BOOL_FALSE(SC_VerifyCmdLength(&CmdPacket.CommandHeader.Msg, 999));
 
     /* Verify results */
     UtAssert_UINT32_EQ(SC_OperData.HkPacket.Payload.CmdCtr, 0);
@@ -217,10 +217,10 @@ void SC_ProcessRequest_Test_SendHkCmdInvalidLength(void)
 void SC_ProcessRequest_Test_OneHzWakeupNominal(void)
 {
     /**
-     **  Test case: SC_1HZ_WAKEUP_MID
+     **  Test case: SC_ONEHZ_WAKEUP_MID
      **/
 
-    CFE_SB_MsgId_t TestMsgId = CFE_SB_ValueToMsgId(SC_1HZ_WAKEUP_MID);
+    CFE_SB_MsgId_t TestMsgId = CFE_SB_ValueToMsgId(SC_ONEHZ_WAKEUP_MID);
 
     UT_SC_Dispatch_SetMsgId(TestMsgId);
     UT_SC_Dispatch_SetFcnCode(0);
@@ -237,10 +237,10 @@ void SC_ProcessRequest_Test_OneHzWakeupNominal(void)
 void SC_ProcessRequest_Test_OneHzWakeupCmdInvalidLength(void)
 {
     /**
-     **  Test case: SC_1HZ_WAKEUP_MID
+     **  Test case: SC_ONEHZ_WAKEUP_MID
      **/
 
-    CFE_SB_MsgId_t TestMsgId = CFE_SB_ValueToMsgId(SC_1HZ_WAKEUP_MID);
+    CFE_SB_MsgId_t TestMsgId = CFE_SB_ValueToMsgId(SC_ONEHZ_WAKEUP_MID);
 
     UT_SC_Dispatch_SetMsgId(TestMsgId);
     UT_SC_Dispatch_SetFcnCode(0);

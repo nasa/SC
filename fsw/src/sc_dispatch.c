@@ -109,7 +109,7 @@ void SC_ProcessRequest(const CFE_SB_Buffer_t *BufPtr)
             }
             break;
 
-        case SC_1HZ_WAKEUP_MID:
+        case SC_ONEHZ_WAKEUP_MID:
             if (SC_VerifyCmdLength(&BufPtr->Msg, sizeof(SC_OneHzWakeupCmd_t)))
             {
                 SC_OneHzWakeupCmd((const SC_OneHzWakeupCmd_t *)BufPtr);
