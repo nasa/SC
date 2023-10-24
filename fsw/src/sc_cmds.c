@@ -105,7 +105,7 @@ void SC_ProcessAtpCmd(void)
                 if (!SC_AppData.EnableHeaderUpdate)
                 {
                     /* If header update is NOT enabled, confirm this table entry has a valid checksum already */
-                    CFE_MSG_ValidateChecksum(&EntryPtr->Msg, &ChecksumValid);
+                    CFE_MSG_ValidateChecksum(CFE_MSG_PTR(EntryPtr->Msg), &ChecksumValid);
                 }
                 if (ChecksumValid)
                 {
@@ -127,8 +127,8 @@ void SC_ProcessAtpCmd(void)
                      **  SC immediately executes the switch command.
                      */
 
-                    CFE_MSG_GetMsgId(&EntryPtr->Msg, &MessageID);
-                    CFE_MSG_GetFcnCode(&EntryPtr->Msg, &CommandCode);
+                    CFE_MSG_GetMsgId(CFE_MSG_PTR(EntryPtr->Msg), &MessageID);
+                    CFE_MSG_GetFcnCode(CFE_MSG_PTR(EntryPtr->Msg), &CommandCode);
 
                     if (CommandCode == SC_SWITCH_ATS_CC && CFE_SB_MsgIdToValue(MessageID) == SC_CMD_MID)
                     {
@@ -156,7 +156,7 @@ void SC_ProcessAtpCmd(void)
                     }
                     else
                     {
-                        Result = CFE_SB_TransmitMsg(&EntryPtr->Msg, SC_AppData.EnableHeaderUpdate);
+                        Result = CFE_SB_TransmitMsg(CFE_MSG_PTR(EntryPtr->Msg), SC_AppData.EnableHeaderUpdate);
 
                         if (Result == CFE_SUCCESS)
                         {
@@ -338,7 +338,7 @@ void SC_ProcessRtpCommand(void)
         if (!SC_AppData.EnableHeaderUpdate)
         {
             /* If header update is NOT enabled, confirm this table entry has a valid checksum already */
-            CFE_MSG_ValidateChecksum(&EntryPtr->Msg, &ChecksumValid);
+            CFE_MSG_ValidateChecksum(CFE_MSG_PTR(EntryPtr->Msg), &ChecksumValid);
         }
         if (ChecksumValid)
         {
@@ -346,7 +346,7 @@ void SC_ProcessRtpCommand(void)
              ** Try Sending the command on the Software Bus
              */
 
-            Result = CFE_SB_TransmitMsg(&EntryPtr->Msg, SC_AppData.EnableHeaderUpdate);
+            Result = CFE_SB_TransmitMsg(CFE_MSG_PTR(EntryPtr->Msg), SC_AppData.EnableHeaderUpdate);
 
             if (Result == CFE_SUCCESS)
             {
@@ -473,8 +473,8 @@ void SC_SendHkPacket(void)
     } /* end for */
 
     /* send the status packet */
-    CFE_SB_TimeStampMsg(&SC_OperData.HkPacket.TlmHeader.Msg);
-    CFE_SB_TransmitMsg(&SC_OperData.HkPacket.TlmHeader.Msg, true);
+    CFE_SB_TimeStampMsg(CFE_MSG_PTR(SC_OperData.HkPacket));
+    CFE_SB_TransmitMsg(CFE_MSG_PTR(SC_OperData.HkPacket), true);
 }
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */

@@ -551,9 +551,9 @@ void SC_AutoStartRts(uint16 RtsNumber)
         /*
          ** Format the command packet to start the first RTS
          */
-        CFE_MSG_Init(&CmdPkt.CmdHeader.Msg, CFE_SB_ValueToMsgId(SC_CMD_MID), sizeof(CmdPkt));
+        CFE_MSG_Init(CFE_MSG_PTR(CmdPkt), CFE_SB_ValueToMsgId(SC_CMD_MID), sizeof(CmdPkt));
 
-        CFE_MSG_SetFcnCode(&CmdPkt.CmdHeader.Msg, SC_START_RTS_CC);
+        CFE_MSG_SetFcnCode(CFE_MSG_PTR(CmdPkt), SC_START_RTS_CC);
 
         /*
          ** Get the RTS ID to start.
@@ -563,7 +563,7 @@ void SC_AutoStartRts(uint16 RtsNumber)
         /*
          ** Now send the command back to SC
          */
-        CFE_SB_TransmitMsg(&CmdPkt.CmdHeader.Msg, true);
+        CFE_SB_TransmitMsg(CFE_MSG_PTR(CmdPkt), true);
     }
     else
     {

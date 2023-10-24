@@ -102,7 +102,7 @@ void SC_VerifyCmdLength_Test_Nominal(void)
     UT_SC_Dispatch_SetMsgSize(MsgSize);
 
     /* Execute the function being tested */
-    UtAssert_BOOL_TRUE(SC_VerifyCmdLength(&CmdPacket.CmdHeader.Msg, sizeof(CmdPacket)));
+    UtAssert_BOOL_TRUE(SC_VerifyCmdLength(CFE_MSG_PTR(CmdPacket), sizeof(CmdPacket)));
 
     /* Verify results */
     UtAssert_UINT32_EQ(SC_OperData.HkPacket.Payload.CmdErrCtr, 0);
@@ -122,7 +122,7 @@ void SC_VerifyCmdLength_Test_LenError(void)
     UT_SC_Dispatch_SetMsgSize(MsgSize);
 
     /* Execute the function being tested */
-    UtAssert_BOOL_FALSE(SC_VerifyCmdLength(&CmdPacket.CmdHeader.Msg, 999));
+    UtAssert_BOOL_FALSE(SC_VerifyCmdLength(CFE_MSG_PTR(CmdPacket), 999));
 
     /* Verify results */
     UtAssert_UINT32_EQ(SC_OperData.HkPacket.Payload.CmdCtr, 0);
@@ -144,7 +144,7 @@ void SC_VerifyCmdLength_Test_LenErrorNotMID(void)
     UT_SC_Dispatch_SetMsgSize(MsgSize);
 
     /* Execute the function being tested */
-    UtAssert_BOOL_FALSE(SC_VerifyCmdLength(&CmdPacket.CmdHeader.Msg, 999));
+    UtAssert_BOOL_FALSE(SC_VerifyCmdLength(CFE_MSG_PTR(CmdPacket), 999));
 
     /* Verify results */
     UtAssert_UINT32_EQ(SC_OperData.HkPacket.Payload.CmdCtr, 0);
