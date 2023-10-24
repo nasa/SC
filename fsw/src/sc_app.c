@@ -157,7 +157,8 @@ CFE_Status_t SC_AppInit(void)
     SC_AppData.NextCmdTime[SC_Process_RTP] = SC_MAX_TIME;
 
     /* Initialize the SC housekeeping packet */
-    CFE_MSG_Init(&SC_OperData.HkPacket.TelemetryHeader.Msg, CFE_SB_ValueToMsgId(SC_HK_TLM_MID), sizeof(SC_HkTlm_t));
+    CFE_MSG_Init(CFE_MSG_PTR(SC_OperData.HkPacket.TelemetryHeader), CFE_SB_ValueToMsgId(SC_HK_TLM_MID),
+                 sizeof(SC_HkTlm_t));
 
     /* Select auto-exec RTS to start during first HK request */
     if (CFE_ES_GetResetType(NULL) == CFE_PSP_RST_TYPE_POWERON)

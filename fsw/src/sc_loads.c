@@ -110,7 +110,7 @@ void SC_LoadAts(uint16 AtsIndex)
                      SC_OperData.AtsCmdStatusTblAddr[AtsIndex][SC_ATS_CMD_NUM_TO_INDEX(AtsCmdNum)] == SC_Status_EMPTY)
             {
                 /* get message size */
-                CFE_MSG_GetSize(&EntryPtr->Msg, &MessageSize);
+                CFE_MSG_GetSize(CFE_MSG_PTR(EntryPtr->Msg), &MessageSize);
 
                 /* if the length of the command is valid */
                 if (MessageSize >= SC_PACKET_MIN_SIZE && MessageSize <= SC_PACKET_MAX_SIZE)
@@ -404,12 +404,12 @@ bool SC_ParseRts(uint32 Buffer32[])
              */
             EntryPtr = (SC_RtsEntry_t *)&Buffer32[i];
 
-            CFE_MSG_GetSize(&EntryPtr->Msg, &CmdSize);
+            CFE_MSG_GetSize(CFE_MSG_PTR(EntryPtr->Msg), &CmdSize);
 
             /* Add header size, round up to boundary, convert to index delta  */
             IndexDelta = (CmdSize + SC_RTS_HEADER_SIZE + SC_ROUND_UP_BYTES) / sizeof(Buffer32[0]);
 
-            CFE_MSG_GetMsgId(&EntryPtr->Msg, &MessageID);
+            CFE_MSG_GetMsgId(CFE_MSG_PTR(EntryPtr->Msg), &MessageID);
 
             if (!CFE_SB_IsValidMsgId(MessageID))
             {
@@ -557,7 +557,7 @@ void SC_UpdateAppend(void)
             }
             else
             {
-                CFE_MSG_GetSize(&EntryPtr->Msg, &CommandBytes);
+                CFE_MSG_GetSize(CFE_MSG_PTR(EntryPtr->Msg), &CommandBytes);
                 CommandWords = (CommandBytes + SC_ROUND_UP_BYTES) / SC_BYTES_IN_WORD;
 
                 if ((CommandBytes < SC_PACKET_MIN_SIZE) || (CommandBytes > SC_PACKET_MAX_SIZE))
@@ -644,7 +644,7 @@ void SC_ProcessAppend(uint16 AtsIndex)
         SC_OperData.AtsCmdStatusTblAddr[AtsIndex][CmdIndex] = SC_Status_LOADED;
 
         /* update entry index to point to the next entry */
-        CFE_MSG_GetSize(&EntryPtr->Msg, &CommandBytes);
+        CFE_MSG_GetSize(CFE_MSG_PTR(EntryPtr->Msg), &CommandBytes);
         CommandWords = (CommandBytes + SC_ROUND_UP_BYTES) / SC_BYTES_IN_WORD;
         EntryIndex += (SC_ATS_HDR_NOPKT_WORDS + CommandWords);
     }
@@ -797,7 +797,7 @@ int32 SC_VerifyAtsEntry(uint32 *Buffer32, int32 EntryIndex, int32 BufferWords)
     else
     {
         /* Start with the byte length of the command packet */
-        CFE_MSG_GetSize(&EntryPtr->Msg, &CommandBytes);
+        CFE_MSG_GetSize(CFE_MSG_PTR(EntryPtr->Msg), &CommandBytes);
 
         /* Convert packet byte length to word length (round up odd bytes) */
         CommandWords = (CommandBytes + SC_ROUND_UP_BYTES) / SC_BYTES_IN_WORD;

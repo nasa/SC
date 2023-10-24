@@ -168,7 +168,7 @@ void SC_GetNextRtsCommand(void)
             CmdOffset = SC_OperData.RtsInfoTblAddr[RtsIndex].NextCommandPtr;
             EntryPtr  = (SC_RtsEntry_t *)&SC_OperData.RtsTblAddr[RtsIndex][CmdOffset];
 
-            CFE_MSG_GetSize(&EntryPtr->Msg, &CmdLength);
+            CFE_MSG_GetSize(CFE_MSG_PTR(EntryPtr->Msg), &CmdLength);
             CmdLength += SC_RTS_HEADER_SIZE;
 
             /*
@@ -196,7 +196,7 @@ void SC_GetNextRtsCommand(void)
                 /*
                  ** get the length of the new command
                  */
-                CFE_MSG_GetSize(&EntryPtr->Msg, &CmdLength);
+                CFE_MSG_GetSize(CFE_MSG_PTR(EntryPtr->Msg), &CmdLength);
                 CmdLength += SC_RTS_HEADER_SIZE;
 
                 /*
