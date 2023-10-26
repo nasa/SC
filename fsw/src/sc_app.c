@@ -33,6 +33,7 @@
 
 #include "cfe.h"
 #include "sc_app.h"
+#include "sc_utils.h"
 #include "sc_dispatch.h"
 #include "sc_loads.h"
 #include "sc_events.h"
@@ -150,6 +151,9 @@ CFE_Status_t SC_AppInit(void)
     SC_OperData.HkPacket.Payload.ContinueAtsOnFailureFlag = SC_CONT_ON_FAILURE_START;
 
     SC_AppData.EnableHeaderUpdate = SC_PLATFORM_ENABLE_HEADER_UPDATE;
+
+    /* assign the time ref accessor from the compile-time option */
+    SC_AppData.TimeRef = SC_LookupTimeAccessor(SC_TIME_TO_USE);
 
     /* Make sure nothing is running */
     SC_AppData.NextProcNumber      = SC_NONE;

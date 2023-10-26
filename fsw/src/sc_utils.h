@@ -109,4 +109,15 @@ bool SC_CompareAbsTime(SC_AbsTimeTag_t AbsTime1, SC_AbsTimeTag_t AbsTime2);
  */
 uint16 SC_ToggleAtsIndex(void);
 
+/**
+ * \brief Finds the time accessor object associated with the given time ref
+ *
+ * \par Description
+ *      Translates the enumeration value into a time accessor
+ *
+ * \param TimeRef Selected time reference enumeration value
+ * \returns Time accessor object
+ */
+SC_TimeAccessor_t SC_LookupTimeAccessor(SC_TimeRef_Enum_t TimeRef);
+
 #endif

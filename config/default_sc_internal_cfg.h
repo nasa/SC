@@ -345,8 +345,8 @@
  *       This parameter defines what type of time SC should use for sending uot its commands
  *
  *  \par Limits:
- *       Must be SC_USE_CFE_TIME, SC_USE_TAI, or SC_USE_UTC */
-#define SC_TIME_TO_USE SC_USE_CFE_TIME
+ *       Must be SC_TimeRef_USE_CFE_TIME, SC_TimeRef_USE_TAI, or SC_TimeRef_USE_UTC */
+#define SC_TIME_TO_USE SC_TimeRef_USE_CFE_TIME
 
 /**
  * \brief Autostart RTS ID after power on

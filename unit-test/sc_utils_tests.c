@@ -30,15 +30,38 @@
 
 /* sc_utils_tests globals */
 
+static CFE_TIME_SysTime_t UT_TimeRefFunc(void)
+{
+    return (CFE_TIME_SysTime_t) {1234, 5678};
+}
+
+void SC_LookupTimeAccessor_Test(void)
+{
+    union
+    {
+        SC_TimeAccessor_t Obj;
+        void *            Addr;
+    } Accessor;
+
+    Accessor.Addr = NULL;
+    Accessor.Obj  = SC_LookupTimeAccessor(SC_TimeRef_USE_TAI);
+    UtAssert_NOT_NULL(Accessor.Addr);
+
+    Accessor.Addr = NULL;
+    Accessor.Obj  = SC_LookupTimeAccessor(SC_TimeRef_MAX);
+    UtAssert_NOT_NULL(Accessor.Addr);
+}
+
 void SC_GetCurrentTime_Test(void)
 {
+    SC_AppData.TimeRef     = (SC_TimeAccessor_t) {UT_TimeRefFunc};
     SC_AppData.CurrentTime = 0;
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_GetCurrentTime());
 
     /* Verify results */
-    UtAssert_True(SC_AppData.CurrentTime != 0, "SC_AppData.CurrentTime != 0");
+    UtAssert_UINT32_EQ(SC_AppData.CurrentTime, 1234);
 }
 
 void SC_GetAtsEntryTime_Test(void)
@@ -95,6 +118,7 @@ void SC_ToggleAtsIndex_Test(void)
 
 void UtTest_Setup(void)
 {
+    UtTest_Add(SC_LookupTimeAccessor_Test, SC_Test_Setup, SC_Test_TearDown, "SC_LookupTimeAccessor_Test");
     UtTest_Add(SC_GetCurrentTime_Test, SC_Test_Setup, SC_Test_TearDown, "SC_GetCurrentTime_Test");
     UtTest_Add(SC_GetAtsEntryTime_Test, SC_Test_Setup, SC_Test_TearDown, "SC_GetAtsEntryTime_Test");
     UtTest_Add(SC_ComputeAbsTime_Test, SC_Test_Setup, SC_Test_TearDown, "SC_ComputeAbsTime_Test");

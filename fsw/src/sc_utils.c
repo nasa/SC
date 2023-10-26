@@ -42,6 +42,25 @@
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /*                                                                 */
+/* Look up the time accessor corresponding to the chosen reference */
+/*                                                                 */
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+SC_TimeAccessor_t SC_LookupTimeAccessor(SC_TimeRef_Enum_t TimeRef)
+{
+    static const SC_TimeAccessor_t TIMEREF_LOOKUP[SC_TimeRef_MAX] = {[SC_TimeRef_USE_CFE_TIME] = {CFE_TIME_GetTime},
+                                                                     [SC_TimeRef_USE_TAI]      = {CFE_TIME_GetTAI},
+                                                                     [SC_TimeRef_USE_UTC]      = {CFE_TIME_GetUTC}};
+
+    if (TimeRef >= SC_TimeRef_MAX)
+    {
+        TimeRef = SC_TimeRef_USE_CFE_TIME;
+    }
+
+    return TIMEREF_LOOKUP[TimeRef];
+}
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+/*                                                                 */
 /* Get the Current time from CFE TIME                              */
 /*                                                                 */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -49,15 +68,8 @@ void SC_GetCurrentTime(void)
 {
     CFE_TIME_SysTime_t TempTime;
 
-/* Use SC defined time */
-#if (SC_TIME_TO_USE == SC_USE_UTC)
-    TempTime = CFE_TIME_GetUTC();
-#elif (SC_TIME_TO_USE == SC_USE_TAI)
-    TempTime = CFE_TIME_GetTAI();
-#else
-    /* Use cFE configured time */
-    TempTime = CFE_TIME_GetTime();
-#endif
+    /* Use SC defined time */
+    TempTime = SC_AppData.TimeRef.GetTime();
 
     /* We don't care about subseconds */
     SC_AppData.CurrentTime = TempTime.Seconds;

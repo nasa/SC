@@ -76,13 +76,28 @@
 /**\}*/
 
 /**
- * \name constants for config parameters for which TIME to use
+ * Enumeration of config parameters for which time reference to use
+ */
+enum SC_TimeRef
+{
+    SC_TimeRef_USE_CFE_TIME, /**< \brief Use cFE configured time */
+    SC_TimeRef_USE_TAI,      /**< \brief Use TAI Time */
+    SC_TimeRef_USE_UTC,      /**< \brief USE UTC Time */
+    SC_TimeRef_MAX
+};
+
+typedef uint8 SC_TimeRef_Enum_t;
+
+#ifndef SC_OMIT_DEPRECATED
+/**
+ * \name Old-style constants for config parameters for which TIME to use
  * \{
  */
-#define SC_USE_CFE_TIME 0 /**< \brief Use cFE configured time */
-#define SC_USE_TAI      1 /**< \brief Use TAI Time */
-#define SC_USE_UTC      2 /**< \brief USE UTC Time */
+#define SC_USE_CFE_TIME SC_TimeRef_USE_CFE_TIME
+#define SC_USE_TAI      SC_TimeRef_USE_TAI
+#define SC_USE_UTC      SC_TimeRef_USE_UTC
 /**\}*/
+#endif
 
 #define SC_INVALID_RTS_NUMBER 0 /**< \brief Invalid RTS number */
 
