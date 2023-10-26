@@ -56,7 +56,7 @@
  */
 typedef struct
 {
-    CFE_MSG_TelemetryHeader_t TlmHeader;
+    CFE_MSG_TelemetryHeader_t TelemetryHeader;
     SC_HkTlm_Payload_t        Payload;
 } SC_HkTlm_t;
 
@@ -74,7 +74,7 @@ typedef struct
  */
 typedef struct
 {
-    CFE_MSG_CommandHeader_t  CmdHeader; /**< \brief Command Header */
+    CFE_MSG_CommandHeader_t  CommandHeader; /**< \brief Command Header */
     SC_StartAtsCmd_Payload_t Payload;
 } SC_StartAtsCmd_t;
 
@@ -85,7 +85,7 @@ typedef struct
  */
 typedef struct
 {
-    CFE_MSG_CommandHeader_t CmdHeader; /**< \brief Command Header */
+    CFE_MSG_CommandHeader_t CommandHeader; /**< \brief Command Header */
     SC_JumpAtsCmd_Payload_t Payload;
 } SC_JumpAtsCmd_t;
 
@@ -96,7 +96,7 @@ typedef struct
  */
 typedef struct
 {
-    CFE_MSG_CommandHeader_t                 CmdHeader; /**< \brief Command Header */
+    CFE_MSG_CommandHeader_t                 CommandHeader; /**< \brief Command Header */
     SC_SetContinueAtsOnFailureCmd_Payload_t Payload;
 } SC_SetContinueAtsOnFailureCmd_t;
 
@@ -107,7 +107,7 @@ typedef struct
  */
 typedef struct
 {
-    CFE_MSG_CommandHeader_t   CmdHeader; /**< \brief Command Header */
+    CFE_MSG_CommandHeader_t   CommandHeader; /**< \brief Command Header */
     SC_AppendAtsCmd_Payload_t Payload;
 } SC_AppendAtsCmd_t;
 
@@ -118,17 +118,17 @@ typedef struct
  */
 typedef struct
 {
-    CFE_MSG_CommandHeader_t CmdHeader; /**< \brief Command Header */
+    CFE_MSG_CommandHeader_t CommandHeader; /**< \brief Command Header */
 } SC_SendHkCmd_t;
 
 /**
  *  \brief 1Hz Wakeup Command
  *
- *  For command details see #SC_1HZ_WAKEUP_MID
+ *  For command details see #SC_ONEHZ_WAKEUP_MID
  */
 typedef struct
 {
-    CFE_MSG_CommandHeader_t CmdHeader; /**< \brief Command Header */
+    CFE_MSG_CommandHeader_t CommandHeader; /**< \brief Command Header */
 } SC_OneHzWakeupCmd_t;
 
 /**
@@ -138,7 +138,7 @@ typedef struct
  */
 typedef struct
 {
-    CFE_MSG_CommandHeader_t CmdHeader; /**< \brief Command Header */
+    CFE_MSG_CommandHeader_t CommandHeader; /**< \brief Command Header */
 } SC_NoopCmd_t;
 
 /**
@@ -148,7 +148,7 @@ typedef struct
  */
 typedef struct
 {
-    CFE_MSG_CommandHeader_t CmdHeader; /**< \brief Command Header */
+    CFE_MSG_CommandHeader_t CommandHeader; /**< \brief Command Header */
 } SC_ResetCountersCmd_t;
 
 /**
@@ -158,7 +158,7 @@ typedef struct
  */
 typedef struct
 {
-    CFE_MSG_CommandHeader_t CmdHeader; /**< \brief Command Header */
+    CFE_MSG_CommandHeader_t CommandHeader; /**< \brief Command Header */
 } SC_StopAtsCmd_t;
 
 /**
@@ -168,7 +168,7 @@ typedef struct
  */
 typedef struct
 {
-    CFE_MSG_CommandHeader_t CmdHeader; /**< \brief Command Header */
+    CFE_MSG_CommandHeader_t CommandHeader; /**< \brief Command Header */
 } SC_SwitchAtsCmd_t;
 
 /**
@@ -178,7 +178,7 @@ typedef struct
  */
 typedef struct
 {
-    CFE_MSG_CommandHeader_t CmdHeader; /**< \brief Command Header */
+    CFE_MSG_CommandHeader_t CommandHeader; /**< \brief Command Header */
     SC_RtsCmd_Payload_t     Payload;
 } SC_StartRtsCmd_t;
 
@@ -189,7 +189,7 @@ typedef struct
  */
 typedef struct
 {
-    CFE_MSG_CommandHeader_t CmdHeader; /**< \brief Command Header */
+    CFE_MSG_CommandHeader_t CommandHeader; /**< \brief Command Header */
     SC_RtsCmd_Payload_t     Payload;
 } SC_StopRtsCmd_t;
 
@@ -200,7 +200,7 @@ typedef struct
  */
 typedef struct
 {
-    CFE_MSG_CommandHeader_t CmdHeader; /**< \brief Command Header */
+    CFE_MSG_CommandHeader_t CommandHeader; /**< \brief Command Header */
     SC_RtsCmd_Payload_t     Payload;
 } SC_DisableRtsCmd_t;
 
@@ -211,7 +211,7 @@ typedef struct
  */
 typedef struct
 {
-    CFE_MSG_CommandHeader_t CmdHeader; /**< \brief Command Header */
+    CFE_MSG_CommandHeader_t CommandHeader; /**< \brief Command Header */
     SC_RtsCmd_Payload_t     Payload;
 } SC_EnableRtsCmd_t;
 
@@ -222,7 +222,7 @@ typedef struct
  */
 typedef struct
 {
-    CFE_MSG_CommandHeader_t                 CmdHeader; /**< \brief Command Header */
+    CFE_MSG_CommandHeader_t                 CommandHeader; /**< \brief Command Header */
     SC_SetContinueAtsOnFailureCmd_Payload_t Payload;
 } SC_ContinueAtsOnFailureCmd_t;
 
@@ -233,7 +233,7 @@ typedef struct
  */
 typedef struct
 {
-    CFE_MSG_CommandHeader_t     CmdHeader; /**< \brief Command Header */
+    CFE_MSG_CommandHeader_t     CommandHeader; /**< \brief Command Header */
     CFE_TBL_NotifyCmd_Payload_t Payload;
 } SC_ManageTableCmd_t;
 
@@ -244,7 +244,7 @@ typedef struct
  */
 typedef struct
 {
-    CFE_MSG_CommandHeader_t CmdHeader; /**< \brief Command Header */
+    CFE_MSG_CommandHeader_t CommandHeader; /**< \brief Command Header */
     SC_RtsGrpCmd_Payload_t  Payload;
 } SC_StartRtsGrpCmd_t;
 
@@ -255,7 +255,7 @@ typedef struct
  */
 typedef struct
 {
-    CFE_MSG_CommandHeader_t CmdHeader; /**< \brief Command Header */
+    CFE_MSG_CommandHeader_t CommandHeader; /**< \brief Command Header */
     SC_RtsGrpCmd_Payload_t  Payload;
 } SC_StopRtsGrpCmd_t;
 
@@ -266,7 +266,7 @@ typedef struct
  */
 typedef struct
 {
-    CFE_MSG_CommandHeader_t CmdHeader; /**< \brief Command Header */
+    CFE_MSG_CommandHeader_t CommandHeader; /**< \brief Command Header */
     SC_RtsGrpCmd_Payload_t  Payload;
 } SC_DisableRtsGrpCmd_t;
 
@@ -277,7 +277,7 @@ typedef struct
  */
 typedef struct
 {
-    CFE_MSG_CommandHeader_t CmdHeader; /**< \brief Command Header */
+    CFE_MSG_CommandHeader_t CommandHeader; /**< \brief Command Header */
     SC_RtsGrpCmd_Payload_t  Payload;
 } SC_EnableRtsGrpCmd_t;
 

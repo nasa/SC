@@ -72,7 +72,7 @@ void SC_GetNextRtsTime(void)
      */
     for (i = SC_NUMBER_OF_RTS - 1; i >= 0; i--)
     {
-        if (SC_OperData.RtsInfoTblAddr[i].RtsStatus == SC_EXECUTING)
+        if (SC_OperData.RtsInfoTblAddr[i].RtsStatus == SC_Status_EXECUTING)
         {
             if (SC_OperData.RtsInfoTblAddr[i].NextCommandTime <= NextTime)
             {
@@ -85,12 +85,12 @@ void SC_GetNextRtsTime(void)
     if (NextRts == SC_INVALID_RTS_INDEX)
     {
         SC_OperData.RtsCtrlBlckAddr->RtsNumber = SC_INVALID_RTS_NUMBER;
-        SC_AppData.NextCmdTime[SC_RTP]         = SC_MAX_TIME;
+        SC_AppData.NextCmdTime[SC_Process_RTP] = SC_MAX_TIME;
     }
     else
     {
         SC_OperData.RtsCtrlBlckAddr->RtsNumber = NextRts + 1;
-        SC_AppData.NextCmdTime[SC_RTP]         = NextTime;
+        SC_AppData.NextCmdTime[SC_Process_RTP] = NextTime;
     } /* end if */
 }
 
@@ -109,14 +109,14 @@ void SC_UpdateNextTime(void)
     /*
      ** Start out with a default, no processors need to run next
      */
-    SC_AppData.NextProcNumber = SC_NONE;
+    SC_AppData.NextProcNumber = SC_Process_NONE;
 
     /*
      ** Check to see if the ATP needs to schedule commands
      */
-    if (SC_OperData.AtsCtrlBlckAddr->AtpState == SC_EXECUTING)
+    if (SC_OperData.AtsCtrlBlckAddr->AtpState == SC_Status_EXECUTING)
     {
-        SC_AppData.NextProcNumber = SC_ATP;
+        SC_AppData.NextProcNumber = SC_Process_ATP;
     }
     /*
      ** Last, check to see if there is an RTS that needs to schedule commands
@@ -130,9 +130,9 @@ void SC_UpdateNextTime(void)
          ** the RTP time is less than the ATP time. Otherwise
          ** the ATP has priority
          */
-        if (SC_AppData.NextCmdTime[SC_RTP] < SC_AppData.NextCmdTime[SC_ATP])
+        if (SC_AppData.NextCmdTime[SC_Process_RTP] < SC_AppData.NextCmdTime[SC_Process_ATP])
         {
-            SC_AppData.NextProcNumber = SC_RTP;
+            SC_AppData.NextProcNumber = SC_Process_RTP;
         }
     } /* end if */
 }
@@ -160,7 +160,7 @@ void SC_GetNextRtsCommand(void)
         /*
          ** Find out if the RTS is EXECUTING or just STARTED
          */
-        if (SC_OperData.RtsInfoTblAddr[RtsIndex].RtsStatus == SC_EXECUTING)
+        if (SC_OperData.RtsInfoTblAddr[RtsIndex].RtsStatus == SC_Status_EXECUTING)
         {
             /*
              ** Get the information needed to find the next command
@@ -168,7 +168,7 @@ void SC_GetNextRtsCommand(void)
             CmdOffset = SC_OperData.RtsInfoTblAddr[RtsIndex].NextCommandPtr;
             EntryPtr  = (SC_RtsEntry_t *)&SC_OperData.RtsTblAddr[RtsIndex][CmdOffset];
 
-            CFE_MSG_GetSize(&EntryPtr->Msg, &CmdLength);
+            CFE_MSG_GetSize(CFE_MSG_PTR(EntryPtr->Msg), &CmdLength);
             CmdLength += SC_RTS_HEADER_SIZE;
 
             /*
@@ -196,7 +196,7 @@ void SC_GetNextRtsCommand(void)
                 /*
                  ** get the length of the new command
                  */
-                CFE_MSG_GetSize(&EntryPtr->Msg, &CmdLength);
+                CFE_MSG_GetSize(CFE_MSG_PTR(EntryPtr->Msg), &CmdLength);
                 CmdLength += SC_RTS_HEADER_SIZE;
 
                 /*
@@ -315,7 +315,7 @@ void SC_GetNextAtsCommand(void)
     uint16         CmdIndex;  /* ats command array index */
     SC_AtsEntry_t *EntryPtr;
 
-    if (SC_OperData.AtsCtrlBlckAddr->AtpState == SC_EXECUTING)
+    if (SC_OperData.AtsCtrlBlckAddr->AtpState == SC_Status_EXECUTING)
     {
         /*
          ** Get the information that is needed to find the next command
@@ -335,8 +335,8 @@ void SC_GetNextAtsCommand(void)
             /* update the next command time */
             CmdIndex =
                 SC_AppData.AtsCmdIndexBuffer[AtsIndex][SC_ATS_CMD_NUM_TO_INDEX(SC_OperData.AtsCtrlBlckAddr->CmdNumber)];
-            EntryPtr                       = (SC_AtsEntry_t *)&SC_OperData.AtsTblAddr[AtsIndex][CmdIndex];
-            SC_AppData.NextCmdTime[SC_ATP] = SC_GetAtsEntryTime(&EntryPtr->Header);
+            EntryPtr                               = (SC_AtsEntry_t *)&SC_OperData.AtsTblAddr[AtsIndex][CmdIndex];
+            SC_AppData.NextCmdTime[SC_Process_ATP] = SC_GetAtsEntryTime(&EntryPtr->Header);
         }
         else
         { /* the end is near... of the ATS buffer that is */
@@ -353,17 +353,17 @@ void SC_GetNextAtsCommand(void)
 
         } /* end if */
     }
-    else if (SC_OperData.AtsCtrlBlckAddr->AtpState == SC_STARTING)
+    else if (SC_OperData.AtsCtrlBlckAddr->AtpState == SC_Status_STARTING)
     {
         /*
-         ** The SC_STARTING state is entered when an ATS inline
+         ** The SC_Status_STARTING state is entered when an ATS inline
          ** switch has occurred and there are no commands to
          ** execute in the same second that the switch occurs.
-         ** The state is transitioned here to SC_EXECUTING to
+         ** The state is transitioned here to SC_Status_EXECUTING to
          ** commence execution of the new ATS on the next 1Hz
          ** command processing cycle.
          */
-        SC_OperData.AtsCtrlBlckAddr->AtpState = SC_EXECUTING;
+        SC_OperData.AtsCtrlBlckAddr->AtpState = SC_Status_EXECUTING;
 
     } /* end if ATS is EXECUTING*/
 }

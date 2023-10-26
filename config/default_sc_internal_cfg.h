@@ -327,16 +327,16 @@
 #define SC_ATS_CMD_STAT_TABLE_NAME "ATSCMD_TBL"
 
 /**
- * \brief Defnies default state of Continue-Ats-On-Checksum-Failure Flag
+ * \brief Defines default state of Continue-Ats-On-Checksum-Failure Flag
  *
  *  \par Description:
  *       This parameter specifies the default state to continue an ATS
  *       when a command in the ATS fails checksum validation
  *
  *  \par Limits:
- *       Must be true or false
+ *       Must be SC_AtsCont_TRUE or SC_AtsCont_FALSE
  */
-#define SC_CONT_ON_FAILURE_START true
+#define SC_CONT_ON_FAILURE_START SC_AtsCont_TRUE
 
 /**
  * \brief Defines the TIME SC should use for its commands

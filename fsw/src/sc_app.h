@@ -348,11 +348,11 @@ typedef struct
 
     bool EnableHeaderUpdate; /**< \brief whether to update headers in outgoing messages */
 
-    uint8           NextProcNumber;  /**< \brief the next command processor number */
-    SC_AbsTimeTag_t NextCmdTime[2];  /**< \brief The overall next command time  0 - ATP, 1- RTP*/
-    SC_AbsTimeTag_t CurrentTime;     /**< \brief this is the current time for SC */
-    uint16          AutoStartRTS;    /**< \brief Start selected auto-exec RTS after init */
-    uint16          AppendWordCount; /**< \brief Size of cmd entries in current Append ATS table */
+    SC_Process_Enum_t NextProcNumber;  /**< \brief the next command processor number */
+    SC_AbsTimeTag_t   NextCmdTime[2];  /**< \brief The overall next command time  0 - ATP, 1- RTP*/
+    SC_AbsTimeTag_t   CurrentTime;     /**< \brief this is the current time for SC */
+    uint16            AutoStartRTS;    /**< \brief Start selected auto-exec RTS after init */
+    uint16            AppendWordCount; /**< \brief Size of cmd entries in current Append ATS table */
 } SC_AppData_t;
 
 /************************************************************************

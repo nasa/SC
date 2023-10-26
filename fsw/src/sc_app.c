@@ -156,12 +156,13 @@ CFE_Status_t SC_AppInit(void)
     SC_AppData.TimeRef = SC_LookupTimeAccessor(SC_TIME_TO_USE);
 
     /* Make sure nothing is running */
-    SC_AppData.NextProcNumber      = SC_NONE;
-    SC_AppData.NextCmdTime[SC_ATP] = SC_MAX_TIME;
-    SC_AppData.NextCmdTime[SC_RTP] = SC_MAX_TIME;
+    SC_AppData.NextProcNumber              = SC_Process_NONE;
+    SC_AppData.NextCmdTime[SC_Process_ATP] = SC_MAX_TIME;
+    SC_AppData.NextCmdTime[SC_Process_RTP] = SC_MAX_TIME;
 
     /* Initialize the SC housekeeping packet */
-    CFE_MSG_Init(&SC_OperData.HkPacket.TlmHeader.Msg, CFE_SB_ValueToMsgId(SC_HK_TLM_MID), sizeof(SC_HkTlm_t));
+    CFE_MSG_Init(CFE_MSG_PTR(SC_OperData.HkPacket.TelemetryHeader), CFE_SB_ValueToMsgId(SC_HK_TLM_MID),
+                 sizeof(SC_HkTlm_t));
 
     /* Select auto-exec RTS to start during first HK request */
     if (CFE_ES_GetResetType(NULL) == CFE_PSP_RST_TYPE_POWERON)
@@ -200,10 +201,10 @@ CFE_Status_t SC_AppInit(void)
     }
 
     /* Must be able to subscribe to 1Hz wakeup command */
-    Result = CFE_SB_Subscribe(CFE_SB_ValueToMsgId(SC_1HZ_WAKEUP_MID), SC_OperData.CmdPipe);
+    Result = CFE_SB_Subscribe(CFE_SB_ValueToMsgId(SC_ONEHZ_WAKEUP_MID), SC_OperData.CmdPipe);
     if (Result != CFE_SUCCESS)
     {
-        CFE_EVS_SendEvent(SC_INIT_SB_SUBSCRIBE_1HZ_ERR_EID, CFE_EVS_EventType_ERROR,
+        CFE_EVS_SendEvent(SC_INIT_SB_SUBSCRIBE_ONEHZ_ERR_EID, CFE_EVS_EventType_ERROR,
                           "Software Bus subscribe to 1 Hz cycle returned: 0x%08X", (unsigned int)Result);
         return (Result);
     }
@@ -258,8 +259,8 @@ CFE_Status_t SC_InitTables(void)
     }
 
     /* ATP control block status table */
-    SC_OperData.AtsCtrlBlckAddr->AtpState  = SC_IDLE;
-    SC_OperData.AtsCtrlBlckAddr->AtsNumber = SC_NO_ATS;
+    SC_OperData.AtsCtrlBlckAddr->AtpState  = SC_Status_IDLE;
+    SC_OperData.AtsCtrlBlckAddr->AtsNumber = SC_AtsId_NO_ATS;
     SC_OperData.AtsCtrlBlckAddr->CmdNumber = SC_INVALID_CMD_NUMBER;
 
     /* RTP control block status table */
@@ -271,7 +272,7 @@ CFE_Status_t SC_InitTables(void)
     {
         for (j = 0; j < SC_MAX_ATS_CMDS; j++)
         {
-            SC_OperData.AtsCmdStatusTblAddr[i][j] = SC_EMPTY;
+            SC_OperData.AtsCmdStatusTblAddr[i][j] = SC_Status_EMPTY;
         }
     }
 
@@ -280,7 +281,7 @@ CFE_Status_t SC_InitTables(void)
     {
         SC_OperData.RtsInfoTblAddr[i].NextCommandTime = SC_MAX_TIME;
         SC_OperData.RtsInfoTblAddr[i].NextCommandPtr  = 0;
-        SC_OperData.RtsInfoTblAddr[i].RtsStatus       = SC_EMPTY;
+        SC_OperData.RtsInfoTblAddr[i].RtsStatus       = SC_Status_EMPTY;
         SC_OperData.RtsInfoTblAddr[i].DisabledFlag    = true;
     }
 

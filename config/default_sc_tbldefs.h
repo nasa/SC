@@ -87,8 +87,8 @@ typedef struct
  */
 typedef struct
 {
-    SC_AtsEntryHeader_t Header; /**< \brief ATS header */
-    CFE_MSG_Message_t   Msg;    /**< \brief MSG header */
+    SC_AtsEntryHeader_t     Header; /**< \brief ATS header */
+    CFE_MSG_CommandHeader_t Msg;    /**< \brief Command Message to be sent */
 } SC_AtsEntry_t;
 
 /**
@@ -110,8 +110,8 @@ typedef struct
  */
 typedef struct
 {
-    SC_RtsEntryHeader_t Header; /**< \brief RTS header */
-    CFE_MSG_Message_t   Msg;    /**< \brief MSG header */
+    SC_RtsEntryHeader_t     Header; /**< \brief RTS header */
+    CFE_MSG_CommandHeader_t Msg;    /**< \brief Command Message to be sent */
 } SC_RtsEntry_t;
 
 #endif
