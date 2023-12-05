@@ -167,11 +167,11 @@ CFE_Status_t SC_AppInit(void)
     /* Select auto-exec RTS to start during first HK request */
     if (CFE_ES_GetResetType(NULL) == CFE_PSP_RST_TYPE_POWERON)
     {
-        SC_AppData.AutoStartRTS = RTS_ID_AUTO_POWER_ON;
+        SC_AppData.AutoStartRTS = SC_RTS_NUM_C(RTS_ID_AUTO_POWER_ON);
     }
     else
     {
-        SC_AppData.AutoStartRTS = RTS_ID_AUTO_PROCESSOR;
+        SC_AppData.AutoStartRTS = SC_RTS_NUM_C(RTS_ID_AUTO_PROCESSOR);
     }
 
     /* Must be able to register for events */
@@ -240,9 +240,11 @@ CFE_Status_t SC_AppInit(void)
 
 CFE_Status_t SC_InitTables(void)
 {
-    CFE_Status_t Result;
-    int32        i;
-    int32        j;
+    CFE_Status_t            Result;
+    int32                   i;
+    int32                   j;
+    SC_RtsInfoEntry_t *     RtsInfoPtr;
+    SC_AtsCmdStatusEntry_t *StatusEntryPtr;
 
     /* Must be able to register all tables with cFE Table Services */
     Result = SC_RegisterAllTables();
@@ -259,30 +261,34 @@ CFE_Status_t SC_InitTables(void)
     }
 
     /* ATP control block status table */
-    SC_OperData.AtsCtrlBlckAddr->AtpState  = SC_Status_IDLE;
-    SC_OperData.AtsCtrlBlckAddr->AtsNumber = SC_AtsId_NO_ATS;
-    SC_OperData.AtsCtrlBlckAddr->CmdNumber = SC_INVALID_CMD_NUMBER;
+    SC_OperData.AtsCtrlBlckAddr->AtpState   = SC_Status_IDLE;
+    SC_OperData.AtsCtrlBlckAddr->CurrAtsNum = SC_ATS_NUM_NULL;
+    SC_OperData.AtsCtrlBlckAddr->CmdNumber  = SC_INVALID_CMD_NUMBER;
 
     /* RTP control block status table */
     SC_OperData.RtsCtrlBlckAddr->NumRtsActive = 0;
-    SC_OperData.RtsCtrlBlckAddr->RtsNumber    = SC_INVALID_RTS_NUMBER;
+    SC_OperData.RtsCtrlBlckAddr->CurrRtsNum   = SC_RTS_NUM_NULL;
 
     /* ATS command status table(s) */
     for (i = 0; i < SC_NUMBER_OF_ATS; i++)
     {
         for (j = 0; j < SC_MAX_ATS_CMDS; j++)
         {
-            SC_OperData.AtsCmdStatusTblAddr[i][j] = SC_Status_EMPTY;
+            StatusEntryPtr = SC_GetAtsStatusEntryForCommand(SC_ATS_IDX_C(i), SC_COMMAND_IDX_C(j));
+
+            StatusEntryPtr->Status = SC_Status_EMPTY;
         }
     }
 
     /* RTS information table */
     for (i = 0; i < SC_NUMBER_OF_RTS; i++)
     {
-        SC_OperData.RtsInfoTblAddr[i].NextCommandTime = SC_MAX_TIME;
-        SC_OperData.RtsInfoTblAddr[i].NextCommandPtr  = 0;
-        SC_OperData.RtsInfoTblAddr[i].RtsStatus       = SC_Status_EMPTY;
-        SC_OperData.RtsInfoTblAddr[i].DisabledFlag    = true;
+        RtsInfoPtr = SC_GetRtsInfoObject(SC_RTS_IDX_C(i));
+
+        RtsInfoPtr->NextCommandTime = SC_MAX_TIME;
+        RtsInfoPtr->NextCommandPtr  = SC_ENTRY_OFFSET_FIRST;
+        RtsInfoPtr->RtsStatus       = SC_Status_EMPTY;
+        RtsInfoPtr->DisabledFlag    = true;
     }
 
     /* Load default RTS tables */
@@ -516,7 +522,7 @@ CFE_Status_t SC_GetLoadTablePointers(void)
         /* Process new RTS table data */
         if (Result == CFE_TBL_INFO_UPDATED)
         {
-            SC_LoadRts(i);
+            SC_LoadRts(SC_RTS_IDX_C(i));
         }
     }
 

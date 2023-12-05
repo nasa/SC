@@ -27,6 +27,7 @@
 #define SC_LOADS_H
 
 #include "cfe.h"
+#include "sc_index_types.h"
 
 /**
  * \brief Parses an RTS to see if it is valid
@@ -61,7 +62,7 @@ bool SC_ParseRts(uint32 Buffer32[]);
  *
  *  \param [in]    AtsIndex        ATS array index
  */
-void SC_BuildTimeIndexTable(uint16 AtsIndex);
+void SC_BuildTimeIndexTable(SC_AtsIndex_t AtsIndex);
 
 /**
  * \brief Inserts an item in a sorted list
@@ -77,7 +78,7 @@ void SC_BuildTimeIndexTable(uint16 AtsIndex);
  *  \param [in]    NewCmdIndex     ATS command index for new list element
  *  \param [in]    ListLength      Number of elements currently in list
  */
-void SC_Insert(uint16 AtsIndex, uint32 NewCmdIndex, uint32 ListLength);
+void SC_Insert(SC_AtsIndex_t AtsIndex, SC_CommandIndex_t NewCmdIndex, uint32 ListLength);
 
 /**
  * \brief Initializes ATS tables before a load starts
@@ -91,7 +92,7 @@ void SC_Insert(uint16 AtsIndex, uint32 NewCmdIndex, uint32 ListLength);
  *
  *  \param [in]    AtsIndex        ATS array index
  */
-void SC_InitAtsTables(uint16 AtsIndex);
+void SC_InitAtsTables(SC_AtsIndex_t AtsIndex);
 
 /**
  * \brief Validation function for ATS or Append ATS table data
@@ -136,7 +137,7 @@ int32 SC_VerifyAtsEntry(uint32 *Buffer32, int32 EntryIndex, int32 BufferWords);
  *
  *  \param [in]    AtsIndex            ATS table array index (base zero)
  */
-void SC_LoadAts(uint16 AtsIndex);
+void SC_LoadAts(SC_AtsIndex_t AtsIndex);
 
 /**
  * \brief Validation function for an ATS
@@ -197,7 +198,7 @@ void SC_UpdateAppend(void);
  *
  *  \param [in]    AtsIndex            ATS table array index (base zero)
  */
-void SC_ProcessAppend(uint16 AtsIndex);
+void SC_ProcessAppend(SC_AtsIndex_t AtsIndex);
 
 /**
  * \brief Loads an RTS into the data structures in SC
@@ -210,7 +211,7 @@ void SC_ProcessAppend(uint16 AtsIndex);
  *
  *  \param [in]    RtsIndex            RTS table array index (base zero)
  */
-void SC_LoadRts(uint16 RtsIndex);
+void SC_LoadRts(SC_RtsIndex_t RtsIndex);
 
 /**
  * \brief Validation function for an RTS

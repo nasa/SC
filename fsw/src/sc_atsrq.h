@@ -27,6 +27,7 @@
 #define SC_ATSRQ_H
 
 #include "cfe.h"
+#include "sc_index_types.h"
 #include "sc_msg.h"
 
 /**
@@ -45,7 +46,7 @@
  *  \retval true  ATS was started
  *  \retval false ATS was NOT started
  */
-bool SC_BeginAts(uint16 AtsIndex, uint16 TimeOffset);
+bool SC_BeginAts(SC_AtsIndex_t AtsIndex, uint16 TimeOffset);
 
 /**
  * \brief  Start an ATS Command

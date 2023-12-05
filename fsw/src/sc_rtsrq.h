@@ -27,6 +27,7 @@
 #define SC_RTSRQ_H
 
 #include "common_types.h"
+#include "sc_index_types.h"
 #include "sc_msg.h"
 
 /**
@@ -160,7 +161,7 @@ void SC_EnableRtsGrpCmd(const SC_EnableRtsGrpCmd_t *Cmd);
  *
  *  \param [in]         RtsIndex       RTS index to kill (base zero)
  */
-void SC_KillRts(uint16 RtsIndex);
+void SC_KillRts(SC_RtsIndex_t RtsIndex);
 
 /**
  * \brief Automatically starts an RTS
@@ -172,8 +173,8 @@ void SC_KillRts(uint16 RtsIndex);
  *  \par Assumptions, External Events, and Notes:
  *        None
  *
- *  \param [in]         RtsNumber      RTS number to start (base one)
+ *  \param [in]         RtsNum      RTS number to start (base one)
  */
-void SC_AutoStartRts(uint16 RtsNumber);
+void SC_AutoStartRts(SC_RtsNum_t RtsNum);
 
 #endif

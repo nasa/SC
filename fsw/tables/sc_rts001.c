@@ -85,13 +85,13 @@ SC_RtsTable001_t SC_Rts001 = {
     .rts.hdr2.TimeTag = 5,
     .rts.cmd2.CommandHeader =
         CFE_MSG_CMD_HDR_INIT(SC_CMD_MID, SC_MEMBER_SIZE(cmd2), SC_ENABLE_RTS_CC, SC_ENABLE_RTS2_CKSUM),
-    .rts.cmd2.Payload.RtsId = 2,
+    .rts.cmd2.Payload.RtsNum = SC_RTS_NUM_INITIALIZER(2),
 
     /* 3 */
     .rts.hdr3.TimeTag = 5,
     .rts.cmd3.CommandHeader =
         CFE_MSG_CMD_HDR_INIT(SC_CMD_MID, SC_MEMBER_SIZE(cmd3), SC_START_RTS_CC, SC_START_RTS2_CKSUM),
-    .rts.cmd3.Payload.RtsId = 2};
+    .rts.cmd3.Payload.RtsNum = SC_RTS_NUM_INITIALIZER(2)};
 
 /* Macro for table structure */
 CFE_TBL_FILEDEF(SC_Rts001, SC.RTS_TBL001, SC Example RTS_TBL001, sc_rts001.tbl)

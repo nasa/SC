@@ -95,29 +95,29 @@ typedef union
 /* Used designated intializers to be verbose, modify as needed/desired */
 SC_AtsTable1_t SC_Ats1 = {
     /* 1 */
-    .ats.hdr1.CmdNumber     = 1,
+    .ats.hdr1.CmdNumber     = SC_COMMAND_NUM_INITIALIZER(1),
     .ats.hdr1.TimeTag_MS    = SC_CMD1_TIME >> 16,
     .ats.hdr1.TimeTag_LS    = SC_CMD1_TIME & 0xFFFF,
     .ats.cmd1.CommandHeader = CFE_MSG_CMD_HDR_INIT(SC_CMD_MID, SC_MEMBER_SIZE(cmd1), SC_NOOP_CC, SC_NOOP_CKSUM),
 
     /* 2 */
-    .ats.hdr2.CmdNumber  = 2,
+    .ats.hdr2.CmdNumber  = SC_COMMAND_NUM_INITIALIZER(2),
     .ats.hdr2.TimeTag_MS = SC_CMD2_TIME >> 16,
     .ats.hdr2.TimeTag_LS = SC_CMD2_TIME & 0xFFFF,
     .ats.cmd2.CommandHeader =
         CFE_MSG_CMD_HDR_INIT(SC_CMD_MID, SC_MEMBER_SIZE(cmd2), SC_ENABLE_RTS_CC, SC_ENABLE_RTS1_CKSUM),
-    .ats.cmd2.Payload.RtsId = 1,
+    .ats.cmd2.Payload.RtsNum = SC_RTS_NUM_INITIALIZER(1),
 
     /* 3 */
-    .ats.hdr3.CmdNumber  = 3,
+    .ats.hdr3.CmdNumber  = SC_COMMAND_NUM_INITIALIZER(3),
     .ats.hdr3.TimeTag_MS = SC_CMD3_TIME >> 16,
     .ats.hdr3.TimeTag_LS = SC_CMD3_TIME & 0xFFFF,
     .ats.cmd3.CommandHeader =
         CFE_MSG_CMD_HDR_INIT(SC_CMD_MID, SC_MEMBER_SIZE(cmd3), SC_START_RTS_CC, SC_START_RTS1_CKSUM),
-    .ats.cmd3.Payload.RtsId = 1,
+    .ats.cmd3.Payload.RtsNum = SC_RTS_NUM_INITIALIZER(1),
 
     /* 4 */
-    .ats.hdr4.CmdNumber  = 4,
+    .ats.hdr4.CmdNumber  = SC_COMMAND_NUM_INITIALIZER(4),
     .ats.hdr4.TimeTag_MS = SC_CMD4_TIME >> 16,
     .ats.hdr4.TimeTag_LS = SC_CMD4_TIME & 0xFFFF,
     .ats.cmd4.CommandHeader =

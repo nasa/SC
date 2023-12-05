@@ -43,11 +43,11 @@ void SC_AppendAtsCmd(const SC_AppendAtsCmd_t *Cmd)
  * Generated stub function for SC_BeginAts()
  * ----------------------------------------------------
  */
-bool SC_BeginAts(uint16 AtsIndex, uint16 TimeOffset)
+bool SC_BeginAts(SC_AtsIndex_t AtsIndex, uint16 TimeOffset)
 {
     UT_GenStub_SetupReturnBuffer(SC_BeginAts, bool);
 
-    UT_GenStub_AddParam(SC_BeginAts, uint16, AtsIndex);
+    UT_GenStub_AddParam(SC_BeginAts, SC_AtsIndex_t, AtsIndex);
     UT_GenStub_AddParam(SC_BeginAts, uint16, TimeOffset);
 
     UT_GenStub_Execute(SC_BeginAts, Basic, NULL);

@@ -31,9 +31,9 @@
  * Generated stub function for SC_BuildTimeIndexTable()
  * ----------------------------------------------------
  */
-void SC_BuildTimeIndexTable(uint16 AtsIndex)
+void SC_BuildTimeIndexTable(SC_AtsIndex_t AtsIndex)
 {
-    UT_GenStub_AddParam(SC_BuildTimeIndexTable, uint16, AtsIndex);
+    UT_GenStub_AddParam(SC_BuildTimeIndexTable, SC_AtsIndex_t, AtsIndex);
 
     UT_GenStub_Execute(SC_BuildTimeIndexTable, Basic, NULL);
 }
@@ -43,9 +43,9 @@ void SC_BuildTimeIndexTable(uint16 AtsIndex)
  * Generated stub function for SC_InitAtsTables()
  * ----------------------------------------------------
  */
-void SC_InitAtsTables(uint16 AtsIndex)
+void SC_InitAtsTables(SC_AtsIndex_t AtsIndex)
 {
-    UT_GenStub_AddParam(SC_InitAtsTables, uint16, AtsIndex);
+    UT_GenStub_AddParam(SC_InitAtsTables, SC_AtsIndex_t, AtsIndex);
 
     UT_GenStub_Execute(SC_InitAtsTables, Basic, NULL);
 }
@@ -55,10 +55,10 @@ void SC_InitAtsTables(uint16 AtsIndex)
  * Generated stub function for SC_Insert()
  * ----------------------------------------------------
  */
-void SC_Insert(uint16 AtsIndex, uint32 NewCmdIndex, uint32 ListLength)
+void SC_Insert(SC_AtsIndex_t AtsIndex, SC_CommandIndex_t NewCmdIndex, uint32 ListLength)
 {
-    UT_GenStub_AddParam(SC_Insert, uint16, AtsIndex);
-    UT_GenStub_AddParam(SC_Insert, uint32, NewCmdIndex);
+    UT_GenStub_AddParam(SC_Insert, SC_AtsIndex_t, AtsIndex);
+    UT_GenStub_AddParam(SC_Insert, SC_CommandIndex_t, NewCmdIndex);
     UT_GenStub_AddParam(SC_Insert, uint32, ListLength);
 
     UT_GenStub_Execute(SC_Insert, Basic, NULL);
@@ -69,9 +69,9 @@ void SC_Insert(uint16 AtsIndex, uint32 NewCmdIndex, uint32 ListLength)
  * Generated stub function for SC_LoadAts()
  * ----------------------------------------------------
  */
-void SC_LoadAts(uint16 AtsIndex)
+void SC_LoadAts(SC_AtsIndex_t AtsIndex)
 {
-    UT_GenStub_AddParam(SC_LoadAts, uint16, AtsIndex);
+    UT_GenStub_AddParam(SC_LoadAts, SC_AtsIndex_t, AtsIndex);
 
     UT_GenStub_Execute(SC_LoadAts, Basic, NULL);
 }
@@ -81,9 +81,9 @@ void SC_LoadAts(uint16 AtsIndex)
  * Generated stub function for SC_LoadRts()
  * ----------------------------------------------------
  */
-void SC_LoadRts(uint16 RtsIndex)
+void SC_LoadRts(SC_RtsIndex_t RtsIndex)
 {
-    UT_GenStub_AddParam(SC_LoadRts, uint16, RtsIndex);
+    UT_GenStub_AddParam(SC_LoadRts, SC_RtsIndex_t, RtsIndex);
 
     UT_GenStub_Execute(SC_LoadRts, Basic, NULL);
 }
@@ -107,9 +107,9 @@ bool SC_ParseRts(uint32 Buffer32[])
  * Generated stub function for SC_ProcessAppend()
  * ----------------------------------------------------
  */
-void SC_ProcessAppend(uint16 AtsIndex)
+void SC_ProcessAppend(SC_AtsIndex_t AtsIndex)
 {
-    UT_GenStub_AddParam(SC_ProcessAppend, uint16, AtsIndex);
+    UT_GenStub_AddParam(SC_ProcessAppend, SC_AtsIndex_t, AtsIndex);
 
     UT_GenStub_Execute(SC_ProcessAppend, Basic, NULL);
 }

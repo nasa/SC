@@ -50,32 +50,34 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 void SC_StartRtsCmd(const SC_StartRtsCmd_t *Cmd)
 {
-    uint16               RtsId;         /* rts ID */
-    uint16               RtsIndex;      /* rts array index */
+    SC_RtsNum_t          RtsNum;        /* rts number */
+    SC_RtsIndex_t        RtsIndex;      /* rts array index */
     SC_RtsEntryHeader_t *RtsEntryPtr;   /* pointer to an rts entry */
     CFE_MSG_Message_t *  RtsEntryCmd;   /* pointer to an rts command */
     CFE_MSG_Size_t       CmdLength = 0; /* the length of the 1st cmd */
+    SC_RtsInfoEntry_t *  RtsInfoPtr;
 
     /*
      ** Check start RTS parameters
      */
-    RtsId = Cmd->Payload.RtsId;
+    RtsNum = Cmd->Payload.RtsNum;
 
-    if ((RtsId > 0) && (RtsId <= SC_NUMBER_OF_RTS))
+    if (SC_RtsNumIsValid(RtsNum))
     {
         /* convert RTS ID to RTS array index */
-        RtsIndex = SC_RTS_ID_TO_INDEX(RtsId);
+        RtsIndex   = SC_RtsNumToIndex(RtsNum);
+        RtsInfoPtr = SC_GetRtsInfoObject(RtsIndex);
 
         /* make sure that RTS is not disabled */
-        if (SC_OperData.RtsInfoTblAddr[RtsIndex].DisabledFlag == false)
+        if (RtsInfoPtr->DisabledFlag == false)
         {
             /* the requested RTS is not being used and is not empty */
-            if (SC_OperData.RtsInfoTblAddr[RtsIndex].RtsStatus == SC_Status_LOADED)
+            if (RtsInfoPtr->RtsStatus == SC_Status_LOADED)
             {
                 /*
                  ** Check the command length
                  */
-                RtsEntryPtr = (SC_RtsEntryHeader_t *)SC_OperData.RtsTblAddr[RtsIndex];
+                RtsEntryPtr = &SC_GetRtsEntryAtOffset(RtsIndex, SC_ENTRY_OFFSET_FIRST)->Header;
                 RtsEntryCmd = (CFE_MSG_Message_t *)((uint8_t *)RtsEntryPtr + SC_RTS_HEADER_SIZE);
 
                 CFE_MSG_GetSize(RtsEntryCmd, &CmdLength);
@@ -86,18 +88,17 @@ void SC_StartRtsCmd(const SC_StartRtsCmd_t *Cmd)
                     /*
                      **  Initialize the RTS info table entry
                      */
-                    SC_OperData.RtsInfoTblAddr[RtsIndex].RtsStatus      = SC_Status_EXECUTING;
-                    SC_OperData.RtsInfoTblAddr[RtsIndex].CmdCtr         = 0;
-                    SC_OperData.RtsInfoTblAddr[RtsIndex].CmdErrCtr      = 0;
-                    SC_OperData.RtsInfoTblAddr[RtsIndex].NextCommandPtr = 0;
-                    SC_OperData.RtsInfoTblAddr[RtsIndex].UseCtr++;
+                    RtsInfoPtr->RtsStatus      = SC_Status_EXECUTING;
+                    RtsInfoPtr->CmdCtr         = 0;
+                    RtsInfoPtr->CmdErrCtr      = 0;
+                    RtsInfoPtr->NextCommandPtr = SC_ENTRY_OFFSET_FIRST;
+                    RtsInfoPtr->UseCtr++;
 
                     /*
                      ** Get the absolute time for the RTSs next_cmd_time
                      ** using the current time and the relative time tag.
                      */
-                    SC_OperData.RtsInfoTblAddr[RtsIndex].NextCommandTime =
-                        SC_ComputeAbsTime(((SC_RtsEntryHeader_t *)SC_OperData.RtsTblAddr[RtsIndex])->TimeTag);
+                    RtsInfoPtr->NextCommandTime = SC_ComputeAbsTime(RtsEntryPtr->TimeTag);
 
                     /*
                      ** Last, Increment some global counters associated with the
@@ -107,15 +108,15 @@ void SC_StartRtsCmd(const SC_StartRtsCmd_t *Cmd)
                     SC_OperData.HkPacket.Payload.RtsActiveCtr++;
                     SC_OperData.HkPacket.Payload.CmdCtr++;
 
-                    if (Cmd->Payload.RtsId <= SC_LAST_RTS_WITH_EVENTS)
+                    if (Cmd->Payload.RtsNum <= SC_LAST_RTS_WITH_EVENTS)
                     {
                         CFE_EVS_SendEvent(SC_RTS_START_INF_EID, CFE_EVS_EventType_INFORMATION,
-                                          "RTS Number %03d Started", RtsId);
+                                          "RTS Number %03d Started", RtsNum);
                     }
                     else
                     {
                         CFE_EVS_SendEvent(SC_STARTRTS_CMD_DBG_EID, CFE_EVS_EventType_DEBUG, "Start RTS #%d command",
-                                          RtsId);
+                                          RtsNum);
                     }
                 }
                 else
@@ -123,7 +124,7 @@ void SC_StartRtsCmd(const SC_StartRtsCmd_t *Cmd)
                     CFE_EVS_SendEvent(
                         SC_STARTRTS_CMD_INVLD_LEN_ERR_EID, CFE_EVS_EventType_ERROR,
                         "Start RTS %03d Rejected: Invld Len Field for 1st Cmd in Sequence. Invld Cmd Length = %d",
-                        RtsId, (int)CmdLength);
+                        RtsNum, (int)CmdLength);
 
                     SC_OperData.HkPacket.Payload.CmdErrCtr++;
                     SC_OperData.HkPacket.Payload.RtsActiveErrCtr++;
@@ -134,8 +135,8 @@ void SC_StartRtsCmd(const SC_StartRtsCmd_t *Cmd)
             { /* Cannot use the RTS now */
 
                 CFE_EVS_SendEvent(SC_STARTRTS_CMD_NOT_LDED_ERR_EID, CFE_EVS_EventType_ERROR,
-                                  "Start RTS %03d Rejected: RTS Not Loaded or In Use, Status: %d", Cmd->Payload.RtsId,
-                                  SC_OperData.RtsInfoTblAddr[RtsIndex].RtsStatus);
+                                  "Start RTS %03d Rejected: RTS Not Loaded or In Use, Status: %d", Cmd->Payload.RtsNum,
+                                  RtsInfoPtr->RtsStatus);
 
                 SC_OperData.HkPacket.Payload.CmdErrCtr++;
                 SC_OperData.HkPacket.Payload.RtsActiveErrCtr++;
@@ -145,7 +146,7 @@ void SC_StartRtsCmd(const SC_StartRtsCmd_t *Cmd)
         else
         { /* the RTS is disabled */
             CFE_EVS_SendEvent(SC_STARTRTS_CMD_DISABLED_ERR_EID, CFE_EVS_EventType_ERROR,
-                              "Start RTS %03d Rejected: RTS Disabled", RtsId);
+                              "Start RTS %03d Rejected: RTS Disabled", RtsNum);
 
             SC_OperData.HkPacket.Payload.CmdErrCtr++;
             SC_OperData.HkPacket.Payload.RtsActiveErrCtr++;
@@ -154,7 +155,7 @@ void SC_StartRtsCmd(const SC_StartRtsCmd_t *Cmd)
     else
     { /* the rts id is invalid */
         CFE_EVS_SendEvent(SC_STARTRTS_CMD_INVALID_ERR_EID, CFE_EVS_EventType_ERROR,
-                          "Start RTS %03d Rejected: Invalid RTS ID", RtsId);
+                          "Start RTS %03d Rejected: Invalid RTS ID", RtsNum);
 
         SC_OperData.HkPacket.Payload.CmdErrCtr++;
         SC_OperData.HkPacket.Payload.RtsActiveErrCtr++;
@@ -168,41 +169,43 @@ void SC_StartRtsCmd(const SC_StartRtsCmd_t *Cmd)
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 void SC_StartRtsGrpCmd(const SC_StartRtsGrpCmd_t *Cmd)
 {
-    uint16 FirstId;
-    uint16 LastId;
-    uint16 FirstIndex; /* RTS array index */
-    uint16 LastIndex;
-    uint16 RtsIndex;
-    int32  StartCount = 0;
+    SC_RtsNum_t        FirstRtsNum;
+    SC_RtsNum_t        LastRtsNum;
+    SC_RtsIndex_t      FirstIndex; /* RTS array index */
+    SC_RtsIndex_t      LastIndex;
+    SC_RtsIndex_t      RtsIndex;
+    int32              StartCount = 0;
+    SC_RtsInfoEntry_t *RtsInfoPtr;
 
-    FirstId = Cmd->Payload.FirstRtsId;
-    LastId  = Cmd->Payload.LastRtsId;
+    FirstRtsNum = Cmd->Payload.FirstRtsNum;
+    LastRtsNum  = Cmd->Payload.LastRtsNum;
 
     /* make sure the specified group is valid */
-    if ((FirstId > 0) && (LastId > 0) && (FirstId <= SC_NUMBER_OF_RTS) && (LastId <= SC_NUMBER_OF_RTS) &&
-        (FirstId <= LastId))
+    if (SC_RtsNumValidateRange(FirstRtsNum, LastRtsNum))
     {
         /* convert RTS ID to RTS array index */
-        FirstIndex = SC_RTS_ID_TO_INDEX(FirstId);
-        LastIndex  = SC_RTS_ID_TO_INDEX(LastId);
+        FirstIndex = SC_RtsNumToIndex(FirstRtsNum);
+        LastIndex  = SC_RtsNumToIndex(LastRtsNum);
 
-        for (RtsIndex = FirstIndex; RtsIndex <= LastIndex; RtsIndex++)
+        for (RtsIndex = FirstIndex; SC_IDX_LESS_OR_EQ(RtsIndex, LastIndex); SC_IDX_INCREMENT(RtsIndex))
         {
+            RtsInfoPtr = SC_GetRtsInfoObject(RtsIndex);
+
             /* make sure that RTS is not disabled, empty or executing */
-            if (SC_OperData.RtsInfoTblAddr[RtsIndex].DisabledFlag == false)
+            if (RtsInfoPtr->DisabledFlag == false)
             {
-                if (SC_OperData.RtsInfoTblAddr[RtsIndex].RtsStatus == SC_Status_LOADED)
+                if (RtsInfoPtr->RtsStatus == SC_Status_LOADED)
                 {
                     /* initialize the RTS info table entry */
-                    SC_OperData.RtsInfoTblAddr[RtsIndex].RtsStatus      = SC_Status_EXECUTING;
-                    SC_OperData.RtsInfoTblAddr[RtsIndex].CmdCtr         = 0;
-                    SC_OperData.RtsInfoTblAddr[RtsIndex].CmdErrCtr      = 0;
-                    SC_OperData.RtsInfoTblAddr[RtsIndex].NextCommandPtr = 0;
-                    SC_OperData.RtsInfoTblAddr[RtsIndex].UseCtr++;
+                    RtsInfoPtr->RtsStatus      = SC_Status_EXECUTING;
+                    RtsInfoPtr->CmdCtr         = 0;
+                    RtsInfoPtr->CmdErrCtr      = 0;
+                    RtsInfoPtr->NextCommandPtr = SC_ENTRY_OFFSET_FIRST;
+                    RtsInfoPtr->UseCtr++;
 
                     /* get absolute time for 1st cmd in the RTS */
-                    SC_OperData.RtsInfoTblAddr[RtsIndex].NextCommandTime =
-                        SC_ComputeAbsTime(((SC_RtsEntryHeader_t *)SC_OperData.RtsTblAddr[RtsIndex])->TimeTag);
+                    RtsInfoPtr->NextCommandTime =
+                        SC_ComputeAbsTime(SC_GetRtsEntryAtOffset(RtsIndex, SC_ENTRY_OFFSET_FIRST)->Header.TimeTag);
 
                     /* maintain counters associated with starting RTS */
                     SC_OperData.RtsCtrlBlckAddr->NumRtsActive++;
@@ -216,7 +219,7 @@ void SC_StartRtsGrpCmd(const SC_StartRtsGrpCmd_t *Cmd)
                     CFE_EVS_SendEvent(
                         SC_STARTRTSGRP_CMD_NOT_LDED_ERR_EID, CFE_EVS_EventType_ERROR,
                         "Start RTS group error: rejected RTS ID %03d, RTS Not Loaded or In Use, Status: %d",
-                        SC_RTS_INDEX_TO_ID(RtsIndex), SC_OperData.RtsInfoTblAddr[RtsIndex].RtsStatus);
+                        SC_RtsIndexToNum(RtsIndex), RtsInfoPtr->RtsStatus);
 
                     SC_OperData.HkPacket.Payload.RtsActiveErrCtr++;
 
@@ -226,7 +229,7 @@ void SC_StartRtsGrpCmd(const SC_StartRtsGrpCmd_t *Cmd)
             { /* the RTS is disabled */
                 CFE_EVS_SendEvent(SC_STARTRTSGRP_CMD_DISABLED_ERR_EID, CFE_EVS_EventType_ERROR,
                                   "Start RTS group error: rejected RTS ID %03d, RTS Disabled",
-                                  SC_RTS_INDEX_TO_ID(RtsIndex));
+                                  SC_RtsIndexToNum(RtsIndex));
 
                 SC_OperData.HkPacket.Payload.RtsActiveErrCtr++;
 
@@ -235,13 +238,14 @@ void SC_StartRtsGrpCmd(const SC_StartRtsGrpCmd_t *Cmd)
 
         /* success */
         CFE_EVS_SendEvent(SC_STARTRTSGRP_CMD_INF_EID, CFE_EVS_EventType_INFORMATION,
-                          "Start RTS group: FirstID=%d, LastID=%d, Modified=%d", FirstId, LastId, (int)StartCount);
+                          "Start RTS group: FirstID=%d, LastID=%d, Modified=%d", FirstRtsNum, LastRtsNum,
+                          (int)StartCount);
         SC_OperData.HkPacket.Payload.CmdCtr++;
     }
     else
     { /* error */
         CFE_EVS_SendEvent(SC_STARTRTSGRP_CMD_ERR_EID, CFE_EVS_EventType_ERROR,
-                          "Start RTS group error: FirstID=%d, LastID=%d", FirstId, LastId);
+                          "Start RTS group error: FirstID=%d, LastID=%d", FirstRtsNum, LastRtsNum);
         SC_OperData.HkPacket.Payload.CmdErrCtr++;
     }
 }
@@ -253,30 +257,30 @@ void SC_StartRtsGrpCmd(const SC_StartRtsGrpCmd_t *Cmd)
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 void SC_StopRtsCmd(const SC_StopRtsCmd_t *Cmd)
 {
-    uint16 RtsId;    /* RTS ID */
-    uint16 RtsIndex; /* RTS array index */
+    SC_RtsNum_t   RtsNum;   /* RTS number */
+    SC_RtsIndex_t RtsIndex; /* RTS array index */
 
-    RtsId = Cmd->Payload.RtsId;
+    RtsNum = Cmd->Payload.RtsNum;
 
     /* check the command parameter */
-    if (RtsId <= SC_NUMBER_OF_RTS)
+    if (SC_RtsNumIsValid(RtsNum))
     {
         /* convert RTS ID to RTS array index */
-        RtsIndex = SC_RTS_ID_TO_INDEX(RtsId);
+        RtsIndex = SC_RtsNumToIndex(RtsNum);
 
         /* stop the rts by calling a generic routine */
         SC_KillRts(RtsIndex);
 
         SC_OperData.HkPacket.Payload.CmdCtr++;
 
-        CFE_EVS_SendEvent(SC_STOPRTS_CMD_INF_EID, CFE_EVS_EventType_INFORMATION, "RTS %03d Aborted", RtsId);
+        CFE_EVS_SendEvent(SC_STOPRTS_CMD_INF_EID, CFE_EVS_EventType_INFORMATION, "RTS %03d Aborted", RtsNum);
     }
     else
     { /* the specified RTS is invalid */
 
         /* the rts id is invalid */
         CFE_EVS_SendEvent(SC_STOPRTS_CMD_ERR_EID, CFE_EVS_EventType_ERROR, "Stop RTS %03d rejected: Invalid RTS ID",
-                          RtsId);
+                          RtsNum);
 
         SC_OperData.HkPacket.Payload.CmdErrCtr++;
 
@@ -290,28 +294,30 @@ void SC_StopRtsCmd(const SC_StopRtsCmd_t *Cmd)
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 void SC_StopRtsGrpCmd(const SC_StopRtsGrpCmd_t *Cmd)
 {
-    uint16 FirstId;
-    uint16 LastId;
-    uint16 FirstIndex; /* RTS array index */
-    uint16 LastIndex;
-    uint16 RtsIndex;
-    int32  StopCount = 0;
+    SC_RtsNum_t        FirstRtsNum;
+    SC_RtsNum_t        LastRtsNum;
+    SC_RtsIndex_t      FirstIndex; /* RTS array index */
+    SC_RtsIndex_t      LastIndex;
+    SC_RtsIndex_t      RtsIndex;
+    int32              StopCount = 0;
+    SC_RtsInfoEntry_t *RtsInfoPtr;
 
-    FirstId = Cmd->Payload.FirstRtsId;
-    LastId  = Cmd->Payload.LastRtsId;
+    FirstRtsNum = Cmd->Payload.FirstRtsNum;
+    LastRtsNum  = Cmd->Payload.LastRtsNum;
 
     /* make sure the specified group is valid */
-    if ((FirstId > 0) && (LastId > 0) && (FirstId <= SC_NUMBER_OF_RTS) && (LastId <= SC_NUMBER_OF_RTS) &&
-        (FirstId <= LastId))
+    if (SC_RtsNumValidateRange(FirstRtsNum, LastRtsNum))
     {
         /* convert RTS ID to RTS array index */
-        FirstIndex = SC_RTS_ID_TO_INDEX(FirstId);
-        LastIndex  = SC_RTS_ID_TO_INDEX(LastId);
+        FirstIndex = SC_RtsNumToIndex(FirstRtsNum);
+        LastIndex  = SC_RtsNumToIndex(LastRtsNum);
 
-        for (RtsIndex = FirstIndex; RtsIndex <= LastIndex; RtsIndex++)
+        for (RtsIndex = FirstIndex; SC_IDX_LESS_OR_EQ(RtsIndex, LastIndex); SC_IDX_INCREMENT(RtsIndex))
         {
+            RtsInfoPtr = SC_GetRtsInfoObject(RtsIndex);
+
             /* count the entries that were actually stopped */
-            if (SC_OperData.RtsInfoTblAddr[RtsIndex].RtsStatus == SC_Status_EXECUTING)
+            if (RtsInfoPtr->RtsStatus == SC_Status_EXECUTING)
             {
                 SC_KillRts(RtsIndex);
                 StopCount++;
@@ -320,13 +326,14 @@ void SC_StopRtsGrpCmd(const SC_StopRtsGrpCmd_t *Cmd)
 
         /* success */
         CFE_EVS_SendEvent(SC_STOPRTSGRP_CMD_INF_EID, CFE_EVS_EventType_INFORMATION,
-                          "Stop RTS group: FirstID=%d, LastID=%d, Modified=%d", FirstId, LastId, (int)StopCount);
+                          "Stop RTS group: FirstID=%d, LastID=%d, Modified=%d", FirstRtsNum, LastRtsNum,
+                          (int)StopCount);
         SC_OperData.HkPacket.Payload.CmdCtr++;
     }
     else
     { /* error */
         CFE_EVS_SendEvent(SC_STOPRTSGRP_CMD_ERR_EID, CFE_EVS_EventType_ERROR,
-                          "Stop RTS group error: FirstID=%d, LastID=%d", FirstId, LastId);
+                          "Stop RTS group error: FirstID=%d, LastID=%d", FirstRtsNum, LastRtsNum);
         SC_OperData.HkPacket.Payload.CmdErrCtr++;
     }
 }
@@ -338,29 +345,31 @@ void SC_StopRtsGrpCmd(const SC_StopRtsGrpCmd_t *Cmd)
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 void SC_DisableRtsCmd(const SC_DisableRtsCmd_t *Cmd)
 {
-    uint16 RtsId;    /* RTS ID */
-    uint16 RtsIndex; /* RTS array index */
+    SC_RtsNum_t        RtsNum;   /* RTS number */
+    SC_RtsIndex_t      RtsIndex; /* RTS array index */
+    SC_RtsInfoEntry_t *RtsInfoPtr;
 
-    RtsId = Cmd->Payload.RtsId;
+    RtsNum = Cmd->Payload.RtsNum;
 
     /* make sure tha specified rts is valid */
-    if (RtsId <= SC_NUMBER_OF_RTS)
+    if (SC_RtsNumIsValid(RtsNum))
     {
         /* convert RTS ID to RTS array index */
-        RtsIndex = SC_RTS_ID_TO_INDEX(RtsId);
+        RtsIndex   = SC_RtsNumToIndex(RtsNum);
+        RtsInfoPtr = SC_GetRtsInfoObject(RtsIndex);
 
         /* disable the RTS */
-        SC_OperData.RtsInfoTblAddr[RtsIndex].DisabledFlag = true;
+        RtsInfoPtr->DisabledFlag = true;
 
         /* update the command status */
         SC_OperData.HkPacket.Payload.CmdCtr++;
 
-        CFE_EVS_SendEvent(SC_DISABLE_RTS_DEB_EID, CFE_EVS_EventType_DEBUG, "Disabled RTS %03d", RtsId);
+        CFE_EVS_SendEvent(SC_DISABLE_RTS_DEB_EID, CFE_EVS_EventType_DEBUG, "Disabled RTS %03d", RtsNum);
     }
     else
     { /* it is not a valid RTS id */
         CFE_EVS_SendEvent(SC_DISRTS_CMD_ERR_EID, CFE_EVS_EventType_ERROR, "Disable RTS %03d Rejected: Invalid RTS ID",
-                          RtsId);
+                          RtsNum);
 
         /* update the command error status */
         SC_OperData.HkPacket.Payload.CmdErrCtr++;
@@ -374,43 +383,46 @@ void SC_DisableRtsCmd(const SC_DisableRtsCmd_t *Cmd)
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 void SC_DisableRtsGrpCmd(const SC_DisableRtsGrpCmd_t *Cmd)
 {
-    uint16 FirstId;
-    uint16 LastId;
-    uint16 FirstIndex; /* RTS array index */
-    uint16 LastIndex;
-    uint16 RtsIndex;
-    int32  DisableCount = 0;
+    SC_RtsNum_t        FirstRtsNum;
+    SC_RtsNum_t        LastRtsNum;
+    SC_RtsIndex_t      FirstIndex; /* RTS array index */
+    SC_RtsIndex_t      LastIndex;
+    SC_RtsIndex_t      RtsIndex;
+    int32              DisableCount = 0;
+    SC_RtsInfoEntry_t *RtsInfoPtr;
 
-    FirstId = Cmd->Payload.FirstRtsId;
-    LastId  = Cmd->Payload.LastRtsId;
+    FirstRtsNum = Cmd->Payload.FirstRtsNum;
+    LastRtsNum  = Cmd->Payload.LastRtsNum;
 
     /* make sure the specified group is valid */
-    if ((FirstId > 0) && (LastId > 0) && (FirstId <= SC_NUMBER_OF_RTS) && (LastId <= SC_NUMBER_OF_RTS) &&
-        (FirstId <= LastId))
+    if (SC_RtsNumValidateRange(FirstRtsNum, LastRtsNum))
     {
         /* convert RTS ID to RTS array index */
-        FirstIndex = SC_RTS_ID_TO_INDEX(FirstId);
-        LastIndex  = SC_RTS_ID_TO_INDEX(LastId);
+        FirstIndex = SC_RtsNumToIndex(FirstRtsNum);
+        LastIndex  = SC_RtsNumToIndex(LastRtsNum);
 
-        for (RtsIndex = FirstIndex; RtsIndex <= LastIndex; RtsIndex++)
+        for (RtsIndex = FirstIndex; SC_IDX_LESS_OR_EQ(RtsIndex, LastIndex); SC_IDX_INCREMENT(RtsIndex))
         {
+            RtsInfoPtr = SC_GetRtsInfoObject(RtsIndex);
+
             /* count the entries that were actually disabled */
-            if (SC_OperData.RtsInfoTblAddr[RtsIndex].DisabledFlag == false)
+            if (RtsInfoPtr->DisabledFlag == false)
             {
                 DisableCount++;
-                SC_OperData.RtsInfoTblAddr[RtsIndex].DisabledFlag = true;
+                RtsInfoPtr->DisabledFlag = true;
             }
         }
 
         /* success */
         CFE_EVS_SendEvent(SC_DISRTSGRP_CMD_INF_EID, CFE_EVS_EventType_INFORMATION,
-                          "Disable RTS group: FirstID=%d, LastID=%d, Modified=%d", FirstId, LastId, (int)DisableCount);
+                          "Disable RTS group: FirstID=%d, LastID=%d, Modified=%d", FirstRtsNum, LastRtsNum,
+                          (int)DisableCount);
         SC_OperData.HkPacket.Payload.CmdCtr++;
     }
     else
     { /* error */
         CFE_EVS_SendEvent(SC_DISRTSGRP_CMD_ERR_EID, CFE_EVS_EventType_ERROR,
-                          "Disable RTS group error: FirstID=%d, LastID=%d", FirstId, LastId);
+                          "Disable RTS group error: FirstID=%d, LastID=%d", FirstRtsNum, LastRtsNum);
         SC_OperData.HkPacket.Payload.CmdErrCtr++;
     }
 }
@@ -422,29 +434,31 @@ void SC_DisableRtsGrpCmd(const SC_DisableRtsGrpCmd_t *Cmd)
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 void SC_EnableRtsCmd(const SC_EnableRtsCmd_t *Cmd)
 {
-    uint16 RtsId;    /* RTS ID */
-    uint16 RtsIndex; /* RTS array index */
+    SC_RtsNum_t        RtsNum;   /* RTS number */
+    SC_RtsIndex_t      RtsIndex; /* RTS array index */
+    SC_RtsInfoEntry_t *RtsInfoPtr;
 
-    RtsId = Cmd->Payload.RtsId;
+    RtsNum = Cmd->Payload.RtsNum;
 
     /* make sure the specified rts is valid */
-    if ((RtsId > 0) && (RtsId <= SC_NUMBER_OF_RTS))
+    if (SC_RtsNumIsValid(RtsNum))
     {
         /* convert RTS ID to RTS array index */
-        RtsIndex = SC_RTS_ID_TO_INDEX(RtsId);
+        RtsIndex   = SC_RtsNumToIndex(RtsNum);
+        RtsInfoPtr = SC_GetRtsInfoObject(RtsIndex);
 
         /* re-enable the RTS */
-        SC_OperData.RtsInfoTblAddr[RtsIndex].DisabledFlag = false;
+        RtsInfoPtr->DisabledFlag = false;
 
         /* update the command status */
         SC_OperData.HkPacket.Payload.CmdCtr++;
 
-        CFE_EVS_SendEvent(SC_ENABLE_RTS_DEB_EID, CFE_EVS_EventType_DEBUG, "Enabled RTS %03d", RtsId);
+        CFE_EVS_SendEvent(SC_ENABLE_RTS_DEB_EID, CFE_EVS_EventType_DEBUG, "Enabled RTS %03d", RtsNum);
     }
     else
     { /* it is not a valid RTS id */
         CFE_EVS_SendEvent(SC_ENARTS_CMD_ERR_EID, CFE_EVS_EventType_ERROR, "Enable RTS %03d Rejected: Invalid RTS ID",
-                          RtsId);
+                          RtsNum);
 
         /* update the command error status */
         SC_OperData.HkPacket.Payload.CmdErrCtr++;
@@ -459,43 +473,46 @@ void SC_EnableRtsCmd(const SC_EnableRtsCmd_t *Cmd)
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 void SC_EnableRtsGrpCmd(const SC_EnableRtsGrpCmd_t *Cmd)
 {
-    uint16 FirstId;
-    uint16 LastId;
-    uint16 FirstIndex; /* RTS array index */
-    uint16 LastIndex;
-    uint16 RtsIndex;
-    int32  EnableCount = 0;
+    SC_RtsNum_t        FirstRtsNum;
+    SC_RtsNum_t        LastRtsNum;
+    SC_RtsIndex_t      FirstIndex; /* RTS array index */
+    SC_RtsIndex_t      LastIndex;
+    SC_RtsIndex_t      RtsIndex;
+    int32              EnableCount = 0;
+    SC_RtsInfoEntry_t *RtsInfoPtr;
 
-    FirstId = Cmd->Payload.FirstRtsId;
-    LastId  = Cmd->Payload.LastRtsId;
+    FirstRtsNum = Cmd->Payload.FirstRtsNum;
+    LastRtsNum  = Cmd->Payload.LastRtsNum;
 
     /* make sure the specified group is valid */
-    if ((FirstId > 0) && (LastId > 0) && (FirstId <= SC_NUMBER_OF_RTS) && (LastId <= SC_NUMBER_OF_RTS) &&
-        (FirstId <= LastId))
+    if (SC_RtsNumValidateRange(FirstRtsNum, LastRtsNum))
     {
         /* convert RTS ID to RTS array index */
-        FirstIndex = SC_RTS_ID_TO_INDEX(FirstId);
-        LastIndex  = SC_RTS_ID_TO_INDEX(LastId);
+        FirstIndex = SC_RtsNumToIndex(FirstRtsNum);
+        LastIndex  = SC_RtsNumToIndex(LastRtsNum);
 
-        for (RtsIndex = FirstIndex; RtsIndex <= LastIndex; RtsIndex++)
+        for (RtsIndex = FirstIndex; SC_IDX_LESS_OR_EQ(RtsIndex, LastIndex); SC_IDX_INCREMENT(RtsIndex))
         {
+            RtsInfoPtr = SC_GetRtsInfoObject(RtsIndex);
+
             /* count the entries that were actually enabled */
-            if (SC_OperData.RtsInfoTblAddr[RtsIndex].DisabledFlag == true)
+            if (RtsInfoPtr->DisabledFlag == true)
             {
                 EnableCount++;
-                SC_OperData.RtsInfoTblAddr[RtsIndex].DisabledFlag = false;
+                RtsInfoPtr->DisabledFlag = false;
             }
         }
 
         /* success */
         CFE_EVS_SendEvent(SC_ENARTSGRP_CMD_INF_EID, CFE_EVS_EventType_INFORMATION,
-                          "Enable RTS group: FirstID=%d, LastID=%d, Modified=%d", FirstId, LastId, (int)EnableCount);
+                          "Enable RTS group: FirstID=%d, LastID=%d, Modified=%d", FirstRtsNum, LastRtsNum,
+                          (int)EnableCount);
         SC_OperData.HkPacket.Payload.CmdCtr++;
     }
     else
     { /* error */
         CFE_EVS_SendEvent(SC_ENARTSGRP_CMD_ERR_EID, CFE_EVS_EventType_ERROR,
-                          "Enable RTS group error: FirstID=%d, LastID=%d", FirstId, LastId);
+                          "Enable RTS group error: FirstID=%d, LastID=%d", FirstRtsNum, LastRtsNum);
         SC_OperData.HkPacket.Payload.CmdErrCtr++;
     }
 }
@@ -505,27 +522,31 @@ void SC_EnableRtsGrpCmd(const SC_EnableRtsGrpCmd_t *Cmd)
 /*  Kill an RTS and clear out its data                             */
 /*                                                                 */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-void SC_KillRts(uint16 RtsIndex)
+void SC_KillRts(SC_RtsIndex_t RtsIndex)
 {
+    SC_RtsInfoEntry_t *RtsInfoPtr;
+
+    RtsInfoPtr = SC_GetRtsInfoObject(RtsIndex);
+
     /* validate RTS array index */
-    if (RtsIndex >= SC_NUMBER_OF_RTS)
+    if (!SC_RtsIndexIsValid(RtsIndex))
     {
         CFE_EVS_SendEvent(SC_KILLRTS_INV_INDEX_ERR_EID, CFE_EVS_EventType_ERROR, "RTS kill error: invalid RTS index %d",
                           RtsIndex);
     }
-    else if (SC_OperData.RtsInfoTblAddr[RtsIndex].RtsStatus == SC_Status_EXECUTING)
+    else if (RtsInfoPtr->RtsStatus == SC_Status_EXECUTING)
     {
         /*
-         ** Stop the RTS from executing
-         */
-        SC_OperData.RtsInfoTblAddr[RtsIndex].RtsStatus       = SC_Status_LOADED;
-        SC_OperData.RtsInfoTblAddr[RtsIndex].NextCommandTime = SC_MAX_TIME;
+        ** Stop the RTS from executing
+        */
+        RtsInfoPtr->RtsStatus       = SC_Status_LOADED;
+        RtsInfoPtr->NextCommandTime = SC_MAX_TIME;
 
         /*
-         ** Note: the rest of the fields are left alone
-         ** to provide information on where the
-         ** rts stopped. They are cleared out when it is restarted.
-         */
+        ** Note: the rest of the fields are left alone
+        ** to provide information on where the
+        ** rts stopped. They are cleared out when it is restarted.
+        */
 
         if (SC_OperData.RtsCtrlBlckAddr->NumRtsActive > 0)
         {
@@ -539,14 +560,14 @@ void SC_KillRts(uint16 RtsIndex)
 /* Start an RTS on initilization                                   */
 /*                                                                 */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-void SC_AutoStartRts(uint16 RtsNumber)
+void SC_AutoStartRts(SC_RtsNum_t RtsNum)
 {
     SC_StartRtsCmd_t CmdPkt; /* the command packet to start an RTS */
 
     memset(&CmdPkt, 0, sizeof(CmdPkt));
 
     /* validate RTS ID */
-    if ((RtsNumber > 0) && (RtsNumber <= SC_NUMBER_OF_RTS))
+    if (SC_RtsNumIsValid(RtsNum))
     {
         /*
          ** Format the command packet to start the first RTS
@@ -558,7 +579,7 @@ void SC_AutoStartRts(uint16 RtsNumber)
         /*
          ** Get the RTS ID to start.
          */
-        CmdPkt.Payload.RtsId = RtsNumber;
+        CmdPkt.Payload.RtsNum = RtsNum;
 
         /*
          ** Now send the command back to SC
@@ -568,6 +589,6 @@ void SC_AutoStartRts(uint16 RtsNumber)
     else
     {
         CFE_EVS_SendEvent(SC_AUTOSTART_RTS_INV_ID_ERR_EID, CFE_EVS_EventType_ERROR,
-                          "RTS autostart error: invalid RTS ID %d", RtsNumber);
+                          "RTS autostart error: invalid RTS ID %d", RtsNum);
     }
 }

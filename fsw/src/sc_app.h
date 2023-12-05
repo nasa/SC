@@ -29,6 +29,7 @@
  *************************************************************************/
 
 #include "cfe.h"
+#include "sc_index_types.h"
 #include "sc_platform_cfg.h"
 #include "sc_tbldefs.h"
 #include "sc_msgdefs.h"
@@ -52,12 +53,12 @@ typedef struct SC_TimeAccessor
  */
 typedef struct
 {
-    uint8  AtpState;       /**< \brief execution state of the ATP */
-    uint8  AtsNumber;      /**< \brief current ATS running if any */
-    uint16 Padding;        /**< \brief Structure padding to align to 32-bit boundaries */
-    uint32 CmdNumber;      /**< \brief current cmd number to run if any */
-    uint16 TimeIndexPtr;   /**< \brief time index pointer for current cmd */
-    uint16 SwitchPendFlag; /**< \brief indicates that a buffer switch is waiting */
+    SC_Status_Enum_t AtpState;       /**< \brief execution state of the ATP */
+    SC_AtsNum_t      CurrAtsNum;     /**< \brief current ATS running if any */
+    uint16           Padding;        /**< \brief Structure padding to align to 32-bit boundaries */
+    SC_CommandNum_t  CmdNumber;      /**< \brief current cmd number to run if any */
+    SC_SeqIndex_t    TimeIndexPtr;   /**< \brief time index pointer for current cmd */
+    uint16           SwitchPendFlag; /**< \brief indicates that a buffer switch is waiting */
 } SC_AtpControlBlock_t;
 
 /**
@@ -79,8 +80,8 @@ typedef struct
  */
 typedef struct
 {
-    uint16 NumRtsActive; /**< \brief number of RTSs currently active */
-    uint16 RtsNumber;    /**< \brief next RTS number */
+    uint16      NumRtsActive; /**< \brief number of RTSs currently active */
+    SC_RtsNum_t CurrRtsNum;   /**< \brief next RTS number */
 } SC_RtpControlBlock_t;
 
 /**
@@ -88,13 +89,13 @@ typedef struct
  */
 typedef struct
 {
-    uint8           RtsStatus;       /**< \brief status of the RTS */
-    bool            DisabledFlag;    /**< \brief disabled/enabled flag */
-    uint8           CmdCtr;          /**< \brief Cmds executed in current rts */
-    uint8           CmdErrCtr;       /**< \brief errs in current RTS */
-    SC_AbsTimeTag_t NextCommandTime; /**< \brief next command time for RTS */
-    uint16          NextCommandPtr;  /**< \brief where next rts cmd is */
-    uint16          UseCtr;          /**< \brief how many times RTS is run */
+    SC_Status_Enum_t RtsStatus;       /**< \brief status of the RTS */
+    bool             DisabledFlag;    /**< \brief disabled/enabled flag */
+    uint8            CmdCtr;          /**< \brief Cmds executed in current rts */
+    uint8            CmdErrCtr;       /**< \brief errs in current RTS */
+    SC_AbsTimeTag_t  NextCommandTime; /**< \brief next command time for RTS */
+    SC_EntryOffset_t NextCommandPtr;  /**< \brief where next rts cmd is */
+    uint16           UseCtr;          /**< \brief how many times RTS is run */
 } SC_RtsInfoEntry_t;
 
 /**
@@ -269,21 +270,21 @@ void SC_RegisterManageCmds(void);
 
 #define SC_DUP_TEST_UNUSED -1 /**< \brief Unused marking for duplicate test */
 
-#define SC_INVALID_CMD_NUMBER 0xFFFF /**< \brief Invalid command number */
+#define SC_INVALID_CMD_NUMBER ((SC_CommandNum_t) {0}) /**< \brief Invalid command number */
 
 #define SC_ROUND_UP_BYTES 3 /**< \brief Round up to word length (in bytes) */
 
 #define SC_BYTES_IN_ATS_APPEND_ENTRY 2 /**< \brief Bytes in an ATS append table entry */
 
-#define SC_ATS_CMD_NUM_TO_INDEX(num)   ((num)-1)     /**< \brief Convert ATS command number to index */
-#define SC_ATS_CMD_INDEX_TO_NUM(index) ((index) + 1) /**< \brief Convert ATS command index to number */
-#define SC_ATS_NUM_TO_INDEX(num)       ((num)-1)     /**< \brief Convert ATS table number to index */
-#define SC_ATS_INDEX_TO_NUM(index)     ((index) + 1) /**< \brief Convert ATS table index to number */
-#define SC_ATS_ID_TO_INDEX(id)         ((id)-1)      /**< \brief Convert ATS ID to index */
-#define SC_RTS_NUM_TO_INDEX(num)       ((num)-1)     /**< \brief Convert RTS table number to index */
-#define SC_RTS_INDEX_TO_NUM(index)     ((index) + 1) /**< \brief Convert RTS table index to number */
-#define SC_RTS_ID_TO_INDEX(id)         ((id)-1)      /**< \brief Convert RTS ID to index */
-#define SC_RTS_INDEX_TO_ID(index)      ((index) + 1) /**< \brief Convert RTS table index to ID */
+/**
+ * @brief Entry definition for the command status table
+ *
+ * This table stores the status of commands executed in an ATS
+ */
+typedef struct SC_AtsCmdStatusEntry
+{
+    SC_Status_Enum_t Status;
+} SC_AtsCmdStatusEntry_t;
 
 /**
  *  \brief SC Operational Data Structure
@@ -316,8 +317,8 @@ typedef struct
     CFE_TBL_Handle_t      AtsCtrlBlckHandle; /**< \brief Table handle for the ATP ctrl block */
     SC_AtpControlBlock_t *AtsCtrlBlckAddr;   /**< \brief Table address for the ATP ctrl block*/
 
-    CFE_TBL_Handle_t AtsCmdStatusHandle[SC_NUMBER_OF_ATS];  /**< \brief ATS Cmd Status table handle     */
-    uint32 *         AtsCmdStatusTblAddr[SC_NUMBER_OF_ATS]; /**< \brief ATS Cmd Status table address    */
+    CFE_TBL_Handle_t        AtsCmdStatusHandle[SC_NUMBER_OF_ATS];  /**< \brief ATS Cmd Status table handle     */
+    SC_AtsCmdStatusEntry_t *AtsCmdStatusTblAddr[SC_NUMBER_OF_ATS]; /**< \brief ATS Cmd Status table address    */
 
     int32 AtsDupTestArray[SC_MAX_ATS_CMDS]; /**< \brief ATS test for duplicate cmd numbers  */
 
@@ -327,22 +328,41 @@ typedef struct
 } SC_OperData_t;
 
 /**
+ * @brief Entry definition for the command entry offset table
+ *
+ * This table stores the offset of commands within in an ATS
+ */
+typedef struct SC_AtsCmdEntryOffsetRecord
+{
+    SC_EntryOffset_t Offset;
+} SC_AtsCmdEntryOffsetRecord_t;
+
+/**
+ * @brief Entry definition for the command number table
+ *
+ * This table maps the sequence numbers to command numbers in an ATS
+ */
+typedef struct SC_AtsCmdNumRecord
+{
+    SC_CommandNum_t CmdNum;
+} SC_AtsCmdNumRecord_t;
+
+/**
  *  \brief SC Application Data Structure
  *  This structure is used by the application to process time ordered commands.
  */
 typedef struct
 {
-    uint16 AtsTimeIndexBuffer[SC_NUMBER_OF_ATS][SC_MAX_ATS_CMDS];
+    SC_AtsCmdNumRecord_t AtsTimeIndexBuffer[SC_NUMBER_OF_ATS][SC_MAX_ATS_CMDS];
     /**< \brief  This table is used to keep a time ordered listing
          of ATS command indexes (0 based). The first entry
          in this table holds the command index of the command that will execute
          first, the second entry has the index of the 2nd cmd, etc.. */
 
-    int32 AtsCmdIndexBuffer[SC_NUMBER_OF_ATS][SC_MAX_ATS_CMDS];
+    SC_AtsCmdEntryOffsetRecord_t AtsCmdIndexBuffer[SC_NUMBER_OF_ATS][SC_MAX_ATS_CMDS];
     /**< \brief  This table is used to keep a list of ATS table command offsets.
          These offsets correspond to the addresses of ATS commands located in the ATS table.
          The index used is the ATS command index with values from 0 to SC_MAX_ATS_CMDS-1 */
-
 
     SC_TimeAccessor_t TimeRef; /**< \brief Configured time reference */
 
@@ -351,7 +371,7 @@ typedef struct
     SC_Process_Enum_t NextProcNumber;  /**< \brief the next command processor number */
     SC_AbsTimeTag_t   NextCmdTime[2];  /**< \brief The overall next command time  0 - ATP, 1- RTP*/
     SC_AbsTimeTag_t   CurrentTime;     /**< \brief this is the current time for SC */
-    uint16            AutoStartRTS;    /**< \brief Start selected auto-exec RTS after init */
+    SC_RtsNum_t       AutoStartRTS;    /**< \brief Start selected auto-exec RTS after init */
     uint16            AppendWordCount; /**< \brief Size of cmd entries in current Append ATS table */
 } SC_AppData_t;
 
@@ -360,5 +380,93 @@ typedef struct
  ************************************************************************/
 extern SC_AppData_t  SC_AppData;
 extern SC_OperData_t SC_OperData;
+
+/**
+ * @brief Locates the Info object associated with the given RTS index
+ *
+ * @param RtsIndex The RTS index
+ * @returns The info object for the given RTS
+ */
+static inline SC_RtsInfoEntry_t *SC_GetRtsInfoObject(SC_RtsIndex_t RtsIndex)
+{
+    return &SC_OperData.RtsInfoTblAddr[SC_IDX_AS_UINT(RtsIndex)];
+}
+
+/**
+ * @brief Locates the Info object associated with the given ATS index
+ *
+ * @param AtsIndex The ATS index
+ * @returns The info object for the given ATS
+ */
+static inline SC_AtsInfoTable_t *SC_GetAtsInfoObject(SC_AtsIndex_t AtsIndex)
+{
+    return &SC_OperData.AtsInfoTblAddr[SC_IDX_AS_UINT(AtsIndex)];
+}
+
+/**
+ * @brief Locates a specific entry within an RTS
+ *
+ * The entry is specified via its offset (in words) from the start of the RTS
+ *
+ * @param RtsIndex The RTS index
+ * @param EntryOffset The offset from the start of the RTS, in words
+ * @returns Pointer to the entry within the RTS
+ */
+static inline SC_RtsEntry_t *SC_GetRtsEntryAtOffset(SC_RtsIndex_t RtsIndex, SC_EntryOffset_t EntryOffset)
+{
+    return (SC_RtsEntry_t *)&SC_OperData.RtsTblAddr[SC_IDX_AS_UINT(RtsIndex)][SC_IDX_AS_UINT(EntryOffset)];
+}
+
+/**
+ * @brief Locates a specific entry within an ATS
+ *
+ * The entry is specified via its offset (in words) from the start of the ATS
+ *
+ * @param AtsIndex The ATS index
+ * @param EntryOffset The offset from the start of the ATS, in words
+ * @returns Pointer to the entry within the ATS
+ */
+static inline SC_AtsEntry_t *SC_GetAtsEntryAtOffset(SC_AtsIndex_t AtsIndex, SC_EntryOffset_t EntryOffset)
+{
+    return (SC_AtsEntry_t *)&SC_OperData.AtsTblAddr[SC_IDX_AS_UINT(AtsIndex)][SC_IDX_AS_UINT(EntryOffset)];
+}
+
+/**
+ * @brief Locates the record that maps the command index to an ATS entry offset
+ *
+ * @param AtsIndex The ATS index
+ * @param CommandIndex The command index
+ * @returns Pointer to the SC_AtsCmdEntryOffsetRecord_t object
+ */
+static inline SC_AtsCmdEntryOffsetRecord_t *SC_GetAtsEntryOffsetForCmd(SC_AtsIndex_t     AtsIndex,
+                                                                       SC_CommandIndex_t CommandIndex)
+{
+    return &SC_AppData.AtsCmdIndexBuffer[SC_IDX_AS_UINT(AtsIndex)][SC_IDX_AS_UINT(CommandIndex)];
+}
+
+/**
+ * @brief Locates the record that maps the sequence index to an ATS command number
+ *
+ * @param AtsIndex The ATS index
+ * @param SeqIndex The sequence index
+ * @returns Pointer to the SC_AtsCmdNumRecord_t object
+ */
+static inline SC_AtsCmdNumRecord_t *SC_GetAtsCommandNumAtSeq(SC_AtsIndex_t AtsIndex, SC_SeqIndex_t SeqIndex)
+{
+    return &SC_AppData.AtsTimeIndexBuffer[SC_IDX_AS_UINT(AtsIndex)][SC_IDX_AS_UINT(SeqIndex)];
+}
+
+/**
+ * @brief Locates the record that holds the status of an ATS command
+ *
+ * @param AtsIndex The ATS index
+ * @param CommandIndex The command index
+ * @returns Pointer to the SC_AtsCmdStatusEntry_t object
+ */
+static inline SC_AtsCmdStatusEntry_t *SC_GetAtsStatusEntryForCommand(SC_AtsIndex_t     AtsIndex,
+                                                                     SC_CommandIndex_t CommandIndex)
+{
+    return &SC_OperData.AtsCmdStatusTblAddr[SC_IDX_AS_UINT(AtsIndex)][SC_IDX_AS_UINT(CommandIndex)];
+}
 
 #endif

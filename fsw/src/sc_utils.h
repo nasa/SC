@@ -107,7 +107,7 @@ bool SC_CompareAbsTime(SC_AbsTimeTag_t AbsTime1, SC_AbsTimeTag_t AbsTime2);
  *
  *  \sa #SC_LEN_ERR_EID
  */
-uint16 SC_ToggleAtsIndex(void);
+SC_AtsIndex_t SC_ToggleAtsIndex(void);
 
 /**
  * \brief Finds the time accessor object associated with the given time ref

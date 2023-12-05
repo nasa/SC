@@ -13,6 +13,7 @@ add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/docs/dox_src ${MISSION_BINARY_DIR}/do
 
 # The list of header files that control the SC configuration
 set(SC_MISSION_CONFIG_FILE_LIST
+  sc_extern_typedefs.h
   sc_fcncodes.h
   sc_interface_cfg.h
   sc_mission_cfg.h

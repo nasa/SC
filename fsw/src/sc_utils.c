@@ -154,9 +154,9 @@ bool SC_CompareAbsTime(SC_AbsTimeTag_t AbsTime1, SC_AbsTimeTag_t AbsTime2)
     return Status;
 }
 
-uint16 SC_ToggleAtsIndex(void)
+SC_AtsIndex_t SC_ToggleAtsIndex(void)
 {
-    uint16 CurrAtsIndex = SC_ATS_NUM_TO_INDEX(SC_OperData.AtsCtrlBlckAddr->AtsNumber);
+    SC_AtsIndex_t CurrAtsIndex = SC_AtsNumToIndex(SC_OperData.AtsCtrlBlckAddr->CurrAtsNum);
 
     return (1 - CurrAtsIndex);
 }
