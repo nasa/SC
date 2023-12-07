@@ -252,8 +252,8 @@ void SC_GetNextRtsCommand(void)
                              */
                             SC_KillRts(RtsIndex);
                             CFE_EVS_SendEvent(SC_RTS_LNGTH_ERR_EID, CFE_EVS_EventType_ERROR,
-                                              "Cmd Runs passed end of table, RTS %03d Aborted",
-                                              SC_OperData.RtsCtrlBlckAddr->CurrRtsNum);
+                                              "Cmd Runs passed end of table, RTS %03u Aborted",
+                                              SC_IDNUM_AS_UINT(SC_OperData.RtsCtrlBlckAddr->CurrRtsNum));
 
                         } /* end if the command runs off the end of the buffer */
                     }
@@ -269,8 +269,8 @@ void SC_GetNextRtsCommand(void)
                         /* Stop the RTS from executing */
                         SC_KillRts(RtsIndex);
                         CFE_EVS_SendEvent(SC_RTS_CMD_LNGTH_ERR_EID, CFE_EVS_EventType_ERROR,
-                                          "Invalid Length Field in RTS Command, RTS %03d Aborted. Length: %u, Max: %d",
-                                          SC_OperData.RtsCtrlBlckAddr->CurrRtsNum,
+                                          "Invalid Length Field in RTS Command, RTS %03u Aborted. Length: %u, Max: %d",
+                                          SC_IDNUM_AS_UINT(SC_OperData.RtsCtrlBlckAddr->CurrRtsNum),
                                           (unsigned int)(CmdLength - (uint16)SC_RTS_HEADER_SIZE), SC_PACKET_MAX_SIZE);
 
                     } /* end if the command length is invalid */
@@ -286,7 +286,8 @@ void SC_GetNextRtsCommand(void)
                     if (SC_RtsNumHasEvent(SC_OperData.RtsCtrlBlckAddr->CurrRtsNum))
                     {
                         CFE_EVS_SendEvent(SC_RTS_COMPL_INF_EID, CFE_EVS_EventType_INFORMATION,
-                                          "RTS %03d Execution Completed", SC_OperData.RtsCtrlBlckAddr->CurrRtsNum);
+                                          "RTS %03u Execution Completed",
+                                          SC_IDNUM_AS_UINT(SC_OperData.RtsCtrlBlckAddr->CurrRtsNum));
                     }
                 }
             }
@@ -297,7 +298,8 @@ void SC_GetNextRtsCommand(void)
                 if (SC_RtsNumHasEvent(SC_OperData.RtsCtrlBlckAddr->CurrRtsNum))
                 {
                     CFE_EVS_SendEvent(SC_RTS_COMPL_INF_EID, CFE_EVS_EventType_INFORMATION,
-                                      "RTS %03d Execution Completed", SC_OperData.RtsCtrlBlckAddr->CurrRtsNum);
+                                      "RTS %03u Execution Completed",
+                                      SC_IDNUM_AS_UINT(SC_OperData.RtsCtrlBlckAddr->CurrRtsNum));
                 }
 
             } /* end if */
@@ -357,7 +359,7 @@ void SC_GetNextAtsCommand(void)
             /* stop the ATS */
             SC_KillAts();
             CFE_EVS_SendEvent(SC_ATS_COMPL_INF_EID, CFE_EVS_EventType_INFORMATION, "ATS %c Execution Completed",
-                              (AtsIndex ? 'B' : 'A'));
+                              SC_IDX_AS_CHAR(AtsIndex));
 
             /* stop any switch that is pending */
             /* because we just ran out of commands and are stopping the ATS */
