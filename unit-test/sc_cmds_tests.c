@@ -988,12 +988,12 @@ void SC_SendHkPacket_Test(void)
                   "SC_OperData.HkPacket.Payload.AppendEntryCount == 14");
     UtAssert_True(SC_OperData.HkPacket.Payload.AppendLoadCount == 16,
                   "SC_OperData.HkPacket.Payload.AppendLoadCount == 16");
-    UtAssert_True(SC_OperData.HkPacket.Payload.AtpFreeBytes[0] ==
-                      (SC_ATS_BUFF_SIZE32 * SC_BYTES_IN_WORD) - (SC_GetAtsInfoObject(0)->AtsSize * SC_BYTES_IN_WORD),
-                  "SC_OperData.HkPacket.Payload.AtpFreeBytes[0] == (SC_ATS_BUFF_SIZE32 * SC_BYTES_IN_WORD)");
-    UtAssert_True(SC_OperData.HkPacket.Payload.AtpFreeBytes[1] ==
-                      (SC_ATS_BUFF_SIZE32 * SC_BYTES_IN_WORD) - (SC_GetAtsInfoObject(1)->AtsSize * SC_BYTES_IN_WORD),
-                  "SC_OperData.HkPacket.Payload.AtpFreeBytes[1] == (SC_ATS_BUFF_SIZE32 * SC_BYTES_IN_WORD)");
+
+    for (i = 0; i < SC_NUMBER_OF_ATS; i++)
+    {
+        UtAssert_UINT32_EQ(SC_OperData.HkPacket.Payload.AtpFreeBytes[i], SC_ATS_BUFF_SIZE32 * SC_BYTES_IN_WORD);
+    }
+
     UtAssert_UINT8_EQ(SC_OperData.HkPacket.Payload.CurrAtsId, 17);
     SC_Assert_CmdStatus(SC_OperData.HkPacket.Payload.AtpState, 18);
     UtAssert_UINT32_EQ(SC_OperData.HkPacket.Payload.AtpCmdNumber, 19);

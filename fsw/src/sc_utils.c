@@ -158,5 +158,11 @@ SC_AtsIndex_t SC_ToggleAtsIndex(void)
 {
     SC_AtsIndex_t CurrAtsIndex = SC_AtsNumToIndex(SC_OperData.AtsCtrlBlckAddr->CurrAtsNum);
 
-    return (1 - CurrAtsIndex);
+    SC_IDX_INCREMENT(CurrAtsIndex);
+    if (!SC_AtsIndexIsValid(CurrAtsIndex))
+    {
+        CurrAtsIndex = SC_ATS_IDX_C(0);
+    }
+
+    return CurrAtsIndex;
 }
