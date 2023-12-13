@@ -83,7 +83,7 @@ typedef union
 extern UT_CmdBuf_t UT_CmdBuf;
 
 /* Unit test ids */
-#define SC_UT_MID_1 CFE_SB_ValueToMsgId(CFE_PLATFORM_TLM_MID_BASE + 1)
+#define SC_UT_MID_1 CFE_SB_ValueToMsgId(1)
 
 /* SC-specific assert macros */
 #define SC_Assert_ID_EQ(actual, ref)                                                                      \
