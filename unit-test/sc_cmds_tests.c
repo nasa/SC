@@ -44,8 +44,8 @@
  * Function Definitions
  */
 
-CFE_TIME_Compare_t Ut_CFE_TIME_CompareHookAlessthanB(void *UserObj, int32 StubRetcode, uint32 CallCount,
-                                                     const UT_StubContext_t *Context)
+int32 Ut_CFE_TIME_CompareHookAlessthanB(void *UserObj, int32 StubRetcode, uint32 CallCount,
+                                        const UT_StubContext_t *Context)
 {
     return CFE_TIME_A_LT_B;
 }

@@ -43,15 +43,14 @@
  * Function Definitions
  */
 
-CFE_TIME_Compare_t UT_SC_StartAtsRq_CompareHookAgreaterthanB(void *UserObj, int32 StubRetcode, uint32 CallCount,
-                                                             const UT_StubContext_t *Context)
+int32 UT_SC_StartAtsRq_CompareHookAgreaterthanB(void *UserObj, int32 StubRetcode, uint32 CallCount,
+                                                const UT_StubContext_t *Context)
 {
     return CFE_TIME_A_GT_B;
 }
 
-uint8              UT_SC_StartAtsRq_CompareHookRunCount;
-CFE_TIME_Compare_t UT_SC_StartAtsRq_CompareHook3(void *UserObj, int32 StubRetcode, uint32 CallCount,
-                                                 const UT_StubContext_t *Context)
+uint8 UT_SC_StartAtsRq_CompareHookRunCount;
+int32 UT_SC_StartAtsRq_CompareHook3(void *UserObj, int32 StubRetcode, uint32 CallCount, const UT_StubContext_t *Context)
 {
     if (UT_SC_StartAtsRq_CompareHookRunCount == 0)
     {
