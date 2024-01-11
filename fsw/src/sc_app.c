@@ -566,7 +566,8 @@ void SC_LoadDefaultTables(void)
 
                 /* send an event for each failed load */
                 CFE_EVS_SendEvent(SC_RTS_LOAD_FAIL_DBG_EID, CFE_EVS_EventType_DEBUG,
-                                  "RTS table %d failed to load, returned: 0x%08X", (int)RtsIndex, Status);
+                                  "RTS table %d failed to load, returned: 0x%08lX", (int)RtsIndex,
+                                  (unsigned long)Status);
             }
         }
         else
@@ -575,7 +576,7 @@ void SC_LoadDefaultTables(void)
 
             /* send an event for each failed open */
             CFE_EVS_SendEvent(SC_RTS_OPEN_FAIL_DBG_EID, CFE_EVS_EventType_DEBUG,
-                              "RTS table %d file open failed, returned: 0x%08X", (int)RtsIndex, Status);
+                              "RTS table %d file open failed, returned: 0x%08lX", (int)RtsIndex, (unsigned long)Status);
         }
     }
 

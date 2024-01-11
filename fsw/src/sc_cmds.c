@@ -670,7 +670,7 @@ void SC_ManageRtsTable(int32 ArrayIndex)
     if (ArrayIndex >= SC_NUMBER_OF_RTS)
     {
         CFE_EVS_SendEvent(SC_TABLE_MANAGE_RTS_INV_INDEX_ERR_EID, CFE_EVS_EventType_ERROR,
-                          "RTS table manage error: invalid RTS index %d", ArrayIndex);
+                          "RTS table manage error: invalid RTS index %d", (int)ArrayIndex);
         return;
     }
 
@@ -689,7 +689,7 @@ void SC_ManageAtsTable(int32 ArrayIndex)
     if (ArrayIndex >= SC_NUMBER_OF_ATS)
     {
         CFE_EVS_SendEvent(SC_TABLE_MANAGE_ATS_INV_INDEX_ERR_EID, CFE_EVS_EventType_ERROR,
-                          "ATS table manage error: invalid ATS index %d", ArrayIndex);
+                          "ATS table manage error: invalid ATS index %d", (int)ArrayIndex);
         return;
     }
 
