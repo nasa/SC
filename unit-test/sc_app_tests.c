@@ -676,24 +676,17 @@ void SC_GetLoadTablePointers_Test_ErrorGetAddressLoadableRTS(void)
 
 void SC_LoadDefaultTables_Test(void)
 {
-    /* Set OS_open to return 1, in order to enter if-block "if (FileDesc >= 0)" */
-    UT_SetDeferredRetcode(UT_KEY(OS_OpenCreate), 1, OS_SUCCESS);
-
-    /* Cover branch for - Only try to load table files that can be opened */
+    /* Cover branch for failure of CFE_TBL_Load() */
     UT_SetDeferredRetcode(UT_KEY(CFE_TBL_Load), 1, -1);
-
-    /* Cover branch for - send an event for each failed open */
-    UT_SetDeferredRetcode(UT_KEY(OS_OpenCreate), 1, -1);
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_LoadDefaultTables());
 
     /* Verify results */
     UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_RTS_LOAD_FAIL_DBG_EID);
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[1].EventID, SC_RTS_OPEN_FAIL_DBG_EID);
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[2].EventID, SC_RTS_LOAD_FAIL_COUNT_INFO_EID);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[1].EventID, SC_RTS_LOAD_FAIL_COUNT_INFO_EID);
 
-    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 3);
+    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 2);
 }
 
 void UtTest_Setup(void)

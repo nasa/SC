@@ -537,11 +537,10 @@ CFE_Status_t SC_GetLoadTablePointers(void)
 
 void SC_LoadDefaultTables(void)
 {
-    char      TableName[OS_MAX_PATH_LEN];
-    osal_id_t FileDesc = OS_OBJECT_ID_UNDEFINED;
-    int32     RtsIndex;
-    int32     NotLoadedCount = 0;
-    int32     Status         = OS_SUCCESS;
+    char  TableName[OS_MAX_PATH_LEN];
+    int32 RtsIndex;
+    int32 NotLoadedCount = 0;
+    int32 Status;
 
     /*
     ** Currently, only RTS tables are loaded during initialization.
@@ -552,31 +551,15 @@ void SC_LoadDefaultTables(void)
     {
         /* Example filename: /cf/apps/sc_rts001.tbl */
         snprintf(TableName, sizeof(TableName), "%s%03d.tbl", SC_RTS_FILE_NAME, (int)(RtsIndex + 1));
-        Status = OS_OpenCreate(&FileDesc, TableName, OS_FILE_FLAG_NONE, OS_READ_ONLY);
 
-        if (Status == OS_SUCCESS)
-        {
-            OS_close(FileDesc);
-
-            /* Only try to load table files that can be opened */
-            Status = CFE_TBL_Load(SC_OperData.RtsTblHandle[RtsIndex], CFE_TBL_SRC_FILE, TableName);
-            if (Status != CFE_SUCCESS)
-            {
-                NotLoadedCount++;
-
-                /* send an event for each failed load */
-                CFE_EVS_SendEvent(SC_RTS_LOAD_FAIL_DBG_EID, CFE_EVS_EventType_DEBUG,
-                                  "RTS table %d failed to load, returned: 0x%08lX", (int)RtsIndex,
-                                  (unsigned long)Status);
-            }
-        }
-        else
+        Status = CFE_TBL_Load(SC_OperData.RtsTblHandle[RtsIndex], CFE_TBL_SRC_FILE, TableName);
+        if (Status != CFE_SUCCESS)
         {
             NotLoadedCount++;
 
-            /* send an event for each failed open */
-            CFE_EVS_SendEvent(SC_RTS_OPEN_FAIL_DBG_EID, CFE_EVS_EventType_DEBUG,
-                              "RTS table %d file open failed, returned: 0x%08lX", (int)RtsIndex, (unsigned long)Status);
+            /* send an event for each failed load */
+            CFE_EVS_SendEvent(SC_RTS_LOAD_FAIL_DBG_EID, CFE_EVS_EventType_DEBUG,
+                              "RTS table %d failed to load, returned: 0x%08lX", (int)RtsIndex, (unsigned long)Status);
         }
     }
 
