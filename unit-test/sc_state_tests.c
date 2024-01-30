@@ -468,7 +468,7 @@ void SC_GetNextRtsCommand_Test_ZeroCommandLength(void)
         SC_RTS_BUFF_SIZE32 - SC_RTS_HDR_WORDS - ((SC_PACKET_MIN_SIZE + SC_RTS_HEADER_SIZE + 3) / SC_BYTES_IN_WORD) - 1;
 
     /* Set to generate error message SC_RTS_LNGTH_ERR_EID */
-    CFE_MSG_Init((CFE_MSG_Message_t *)Entry, CFE_SB_ValueToMsgId(SC_CMD_MID), SC_LAST_RTS_WITH_EVENTS - 1);
+    CFE_MSG_Init((CFE_MSG_Message_t *)Entry, CFE_SB_ValueToMsgId(SC_CMD_MID), SC_PACKET_MIN_SIZE - 1);
     MsgSize1 = SC_PACKET_MIN_SIZE - 1;
     MsgSize2 = SC_PACKET_MIN_SIZE - 1;
 
@@ -500,38 +500,42 @@ void SC_GetNextRtsCommand_Test_ZeroCommandLengthLastRts(void)
     SC_RtsInfoEntry_t *  RtsInfoPtr;
     SC_AtsInfoTable_t *  AtsInfoPtr;
 
-    AtsInfoPtr = SC_GetAtsInfoObject(AtsIndex);
-    RtsInfoPtr = SC_GetRtsInfoObject(RtsIndex);
+    /* This test intended to test the first event suppressed RTS, skip if none are suppressed */
+    if (SC_LAST_RTS_WITH_EVENTS != SC_NUMBER_OF_RTS)
+    {
+        AtsInfoPtr = SC_GetAtsInfoObject(AtsIndex);
+        RtsInfoPtr = SC_GetRtsInfoObject(RtsIndex);
 
-    SC_AppData.NextCmdTime[SC_Process_RTP]  = 0;
-    SC_AppData.CurrentTime                  = 1;
-    SC_AppData.NextProcNumber               = SC_Process_RTP;
-    SC_OperData.RtsCtrlBlckAddr->CurrRtsNum = SC_RtsIndexToNum(RtsIndex);
-    RtsInfoPtr->RtsStatus                   = SC_Status_EXECUTING;
+        SC_AppData.NextCmdTime[SC_Process_RTP]  = 0;
+        SC_AppData.CurrentTime                  = 1;
+        SC_AppData.NextProcNumber               = SC_Process_RTP;
+        SC_OperData.RtsCtrlBlckAddr->CurrRtsNum = SC_RtsIndexToNum(RtsIndex);
+        RtsInfoPtr->RtsStatus                   = SC_Status_EXECUTING;
 
-    Entry = (SC_RtsEntryHeader_t *)SC_GetRtsEntryAtOffset(RtsIndex, SC_ENTRY_OFFSET_FIRST);
-    EntryOffsetVal =
-        SC_RTS_BUFF_SIZE32 - SC_RTS_HDR_WORDS - ((SC_PACKET_MIN_SIZE + SC_RTS_HEADER_SIZE + 3) / SC_BYTES_IN_WORD) - 1;
+        Entry = (SC_RtsEntryHeader_t *)SC_GetRtsEntryAtOffset(RtsIndex, SC_ENTRY_OFFSET_FIRST);
+        EntryOffsetVal =
+            SC_RTS_BUFF_SIZE32 - SC_RTS_HDR_WORDS - ((SC_PACKET_MIN_SIZE + SC_RTS_HEADER_SIZE + 3) / SC_BYTES_IN_WORD) - 1;
 
-    /* Set to generate error message SC_RTS_LNGTH_ERR_EID */
-    CFE_MSG_Init((CFE_MSG_Message_t *)Entry, CFE_SB_ValueToMsgId(SC_CMD_MID), SC_PACKET_MIN_SIZE - 1);
-    MsgSize1 = SC_PACKET_MIN_SIZE - 1;
-    MsgSize2 = SC_PACKET_MIN_SIZE - 1;
+        /* Set to generate error message SC_RTS_LNGTH_ERR_EID */
+        CFE_MSG_Init((CFE_MSG_Message_t *)Entry, CFE_SB_ValueToMsgId(SC_CMD_MID), SC_PACKET_MIN_SIZE - 1);
+        MsgSize1 = SC_PACKET_MIN_SIZE - 1;
+        MsgSize2 = SC_PACKET_MIN_SIZE - 1;
 
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &MsgSize1, sizeof(MsgSize1), false);
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &MsgSize2, sizeof(MsgSize2), false);
+        UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &MsgSize1, sizeof(MsgSize1), false);
+        UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &MsgSize2, sizeof(MsgSize2), false);
 
-    /* Set so checksum will pass in SC_ProcessRtpCommand */
-    UT_SetDeferredRetcode(UT_KEY(CFE_MSG_ValidateChecksum), 1, true);
+        /* Set so checksum will pass in SC_ProcessRtpCommand */
+        UT_SetDeferredRetcode(UT_KEY(CFE_MSG_ValidateChecksum), 1, true);
 
-    AtsInfoPtr->NumberOfCommands = 1;
-    RtsInfoPtr->NextCommandPtr   = SC_ENTRY_OFFSET_C(EntryOffsetVal);
+        AtsInfoPtr->NumberOfCommands = 1;
+        RtsInfoPtr->NextCommandPtr   = SC_ENTRY_OFFSET_C(EntryOffsetVal);
 
-    /* Execute the function being tested */
-    UtAssert_VOIDCALL(SC_GetNextRtsCommand());
+        /* Execute the function being tested */
+        UtAssert_VOIDCALL(SC_GetNextRtsCommand());
 
-    /* Verify results */
-    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
+        /* Verify results */
+        UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
+    }
 }
 
 void SC_GetNextRtsCommand_Test_EndOfBuffer(void)
@@ -587,36 +591,40 @@ void SC_GetNextRtsCommand_Test_EndOfBufferLastRts(void)
     SC_RtsInfoEntry_t *  RtsInfoPtr;
     SC_AtsInfoTable_t *  AtsInfoPtr;
 
-    AtsInfoPtr = SC_GetAtsInfoObject(AtsIndex);
-    RtsInfoPtr = SC_GetRtsInfoObject(RtsIndex);
+    /* This test intended to test the first event suppressed RTS, skip if none are suppressed */
+    if (SC_LAST_RTS_WITH_EVENTS != SC_NUMBER_OF_RTS)
+    {
+        AtsInfoPtr = SC_GetAtsInfoObject(AtsIndex);
+        RtsInfoPtr = SC_GetRtsInfoObject(RtsIndex);
 
-    SC_AppData.NextCmdTime[SC_Process_RTP]  = 0;
-    SC_AppData.CurrentTime                  = 1;
-    SC_AppData.NextProcNumber               = SC_Process_RTP;
-    SC_OperData.RtsCtrlBlckAddr->CurrRtsNum = SC_RtsIndexToNum(RtsIndex);
-    RtsInfoPtr->RtsStatus                   = SC_Status_EXECUTING;
+        SC_AppData.NextCmdTime[SC_Process_RTP]  = 0;
+        SC_AppData.CurrentTime                  = 1;
+        SC_AppData.NextProcNumber               = SC_Process_RTP;
+        SC_OperData.RtsCtrlBlckAddr->CurrRtsNum = SC_RtsIndexToNum(RtsIndex);
+        RtsInfoPtr->RtsStatus                   = SC_Status_EXECUTING;
 
-    Entry = (SC_RtsEntryHeader_t *)SC_GetRtsEntryAtOffset(RtsIndex, SC_ENTRY_OFFSET_FIRST);
-    EntryOffsetVal =
-        SC_RTS_BUFF_SIZE32 - SC_RTS_HDR_WORDS - ((SC_PACKET_MIN_SIZE + SC_RTS_HEADER_SIZE + 3) / SC_BYTES_IN_WORD) - 1;
+        Entry = (SC_RtsEntryHeader_t *)SC_GetRtsEntryAtOffset(RtsIndex, SC_ENTRY_OFFSET_FIRST);
+        EntryOffsetVal =
+            SC_RTS_BUFF_SIZE32 - SC_RTS_HDR_WORDS - ((SC_PACKET_MIN_SIZE + SC_RTS_HEADER_SIZE + 3) / SC_BYTES_IN_WORD) - 1;
 
-    /* Set to generate error message SC_RTS_LNGTH_ERR_EID */
-    CFE_MSG_Init((CFE_MSG_Message_t *)Entry, CFE_SB_ValueToMsgId(SC_CMD_MID), 2 * SC_RTS_BUFF_SIZE);
-    MsgSize = 2 * SC_RTS_BUFF_SIZE;
+        /* Set to generate error message SC_RTS_LNGTH_ERR_EID */
+        CFE_MSG_Init((CFE_MSG_Message_t *)Entry, CFE_SB_ValueToMsgId(SC_CMD_MID), 2 * SC_RTS_BUFF_SIZE);
+        MsgSize = 2 * SC_RTS_BUFF_SIZE;
 
-    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &MsgSize, sizeof(MsgSize), false);
+        UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &MsgSize, sizeof(MsgSize), false);
 
-    /* Set so checksum will pass in SC_ProcessRtpCommand */
-    UT_SetDeferredRetcode(UT_KEY(CFE_MSG_ValidateChecksum), 1, true);
+        /* Set so checksum will pass in SC_ProcessRtpCommand */
+        UT_SetDeferredRetcode(UT_KEY(CFE_MSG_ValidateChecksum), 1, true);
 
-    AtsInfoPtr->NumberOfCommands = 1;
-    RtsInfoPtr->NextCommandPtr   = SC_ENTRY_OFFSET_C(EntryOffsetVal);
+        AtsInfoPtr->NumberOfCommands = 1;
+        RtsInfoPtr->NextCommandPtr   = SC_ENTRY_OFFSET_C(EntryOffsetVal);
 
-    /* Execute the function being tested */
-    UtAssert_VOIDCALL(SC_GetNextRtsCommand());
+        /* Execute the function being tested */
+        UtAssert_VOIDCALL(SC_GetNextRtsCommand());
 
-    /* Verify results */
-    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
+        /* Verify results */
+        UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
+    }
 }
 
 void SC_GetNextAtsCommand_Test_Starting(void)
@@ -783,16 +791,10 @@ void UtTest_Setup(void)
                "SC_GetNextRtsCommand_Test_CommandLengthError");
     UtTest_Add(SC_GetNextRtsCommand_Test_ZeroCommandLength, SC_Test_Setup, SC_Test_TearDown,
                "SC_GetNextRtsCommand_Test_ZeroCommandLength");
-
-    /* Only run if SC_LAST_RTS_WITH_EVENTS < SC_NUMBER_OF_RTS */
-    if (SC_LAST_RTS_WITH_EVENTS < SC_NUMBER_OF_RTS)
-    {
-        UtTest_Add(SC_GetNextRtsCommand_Test_ZeroCommandLengthLastRts, SC_Test_Setup, SC_Test_TearDown,
-                   "SC_GetNextRtsCommand_Test_ZeroCommandLengthLastRts");
-        UtTest_Add(SC_GetNextRtsCommand_Test_EndOfBufferLastRts, SC_Test_Setup, SC_Test_TearDown,
-                   "SC_GetNextRtsCommand_Test_EndOfBufferLastRts");
-    }
-
+    UtTest_Add(SC_GetNextRtsCommand_Test_ZeroCommandLengthLastRts, SC_Test_Setup, SC_Test_TearDown,
+               "SC_GetNextRtsCommand_Test_ZeroCommandLengthLastRts");
+    UtTest_Add(SC_GetNextRtsCommand_Test_EndOfBufferLastRts, SC_Test_Setup, SC_Test_TearDown,
+               "SC_GetNextRtsCommand_Test_EndOfBufferLastRts");
     UtTest_Add(SC_GetNextRtsCommand_Test_EndOfBuffer, SC_Test_Setup, SC_Test_TearDown,
                "SC_GetNextRtsCommand_Test_EndOfBuffer");
     UtTest_Add(SC_GetNextAtsCommand_Test_Starting, SC_Test_Setup, SC_Test_TearDown,
