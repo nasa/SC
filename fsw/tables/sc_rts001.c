@@ -75,7 +75,7 @@ typedef union
 /* Helper macro to get size of structure elements */
 #define SC_MEMBER_SIZE(member) (sizeof(((SC_RtsStruct001_t *)0)->member))
 
-/* Used designated intializers to be verbose, modify as needed/desired */
+/* Used designated initializers to be verbose, modify as needed/desired */
 SC_RtsTable001_t SC_Rts001 = {
     /* 1 */
     .rts.hdr1.TimeTag       = 0,

@@ -258,7 +258,7 @@ void SC_ProcessAtpCmd(void)
             SC_OperData.HkPacket.Payload.LastAtsErrCmd = SC_OperData.AtsCtrlBlckAddr->CmdNumber;
 
             /* Do Not Mark this ATS for abortion. The command could be marked as EXECUTED
-               if we alerady jumped back in time */
+               if we already jumped back in time */
 
         } /* end if */
 

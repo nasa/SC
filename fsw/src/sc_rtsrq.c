@@ -563,7 +563,7 @@ void SC_KillRts(SC_RtsIndex_t RtsIndex)
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /*                                                                 */
-/* Start an RTS on initilization                                   */
+/* Start an RTS on initialization                                  */
 /*                                                                 */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 void SC_AutoStartRts(SC_RtsNum_t RtsNum)

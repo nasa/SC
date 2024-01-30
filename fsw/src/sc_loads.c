@@ -71,7 +71,7 @@ void SC_LoadAts(SC_AtsIndex_t AtsIndex)
     }
 
     /*
-     ** Initialize all structrures
+     ** Initialize all structures
      */
     SC_InitAtsTables(AtsIndex);
 

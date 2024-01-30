@@ -12,7 +12,7 @@ predetermined times. SC supports both Absolute Time tagged command Sequences
 (ATSs) and multiple Relative Time tagged command Sequences (RTSs). The 
 purpose of ATS commands is to be able to specify commands to be executed at a 
 specific time.  The purpose of Relative Time Sequence commands is to be able 
-to specify commands to be executed at a relative times.
+to specify commands to be executed at a relative time.
 
 The SC application is written in C and depends on the cFS Operating System 
 Abstraction Layer (OSAL) and cFE components. There is additional SC application 
