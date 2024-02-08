@@ -371,7 +371,7 @@ void SC_BeginAts_Test_AllCommandsSkipped(void)
     AtsCmdNumRec->CmdNum         = SC_COMMAND_NUM_C(1);
     AtsInfoPtr->NumberOfCommands = 1;
 
-    /* Set to cause all commnds to be skipped, to generate error message SC_ATS_SKP_ALL_ERR_EID */
+    /* Set to cause all commands to be skipped, to generate error message SC_ATS_SKP_ALL_ERR_EID */
     UT_SetHookFunction(UT_KEY(CFE_TIME_Compare), UT_SC_StartAtsRq_CompareHookAgreaterthanB, NULL);
 
     /* Execute the function being tested */
@@ -744,7 +744,7 @@ void SC_InlineSwitch_Test_AllCommandsSkipped(void)
 
     UT_SetDeferredRetcode(UT_KEY(SC_CompareAbsTime), 1, true);
 
-    /* Set to cause all commnds to be skipped, to reach block starting with comment "all of the commands in the new ats
+    /* Set to cause all commands to be skipped, to reach block starting with comment "all of the commands in the new ats
      * were skipped" */
     UT_SetHookFunction(UT_KEY(CFE_TIME_Compare), UT_SC_StartAtsRq_CompareHookAgreaterthanB, NULL);
 

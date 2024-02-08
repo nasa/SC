@@ -92,7 +92,7 @@ typedef union
 /* Helper macro to get size of structure elements */
 #define SC_MEMBER_SIZE(member) (sizeof(((SC_AtsStruct1_t *)0)->member))
 
-/* Used designated intializers to be verbose, modify as needed/desired */
+/* Used designated initializers to be verbose, modify as needed/desired */
 SC_AtsTable1_t SC_Ats1 = {
     /* 1 */
     .ats.hdr1.CmdNumber     = SC_COMMAND_NUM_INITIALIZER(1),
