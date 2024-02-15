@@ -1204,7 +1204,7 @@ void SC_ProcessCommand_Test_ResetCounters(void)
     UtAssert_True(SC_OperData.HkPacket.Payload.RtsActiveCtr == 0, "RtsActiveCtr == 0");
     UtAssert_True(SC_OperData.HkPacket.Payload.RtsActiveErrCtr == 0, "RtsActiveErrCtr == 0");
 
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_RESET_DEB_EID);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_RESET_INF_EID);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
 }
 

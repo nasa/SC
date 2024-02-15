@@ -518,7 +518,7 @@ void SC_SendHkCmd(const SC_SendHkCmd_t *Cmd)
 
 void SC_ResetCountersCmd(const SC_ResetCountersCmd_t *Cmd)
 {
-    CFE_EVS_SendEvent(SC_RESET_DEB_EID, CFE_EVS_EventType_DEBUG, "Reset counters command");
+    CFE_EVS_SendEvent(SC_RESET_INF_EID, CFE_EVS_EventType_DEBUG, "Reset counters command");
 
     SC_OperData.HkPacket.Payload.CmdCtr          = 0;
     SC_OperData.HkPacket.Payload.CmdErrCtr       = 0;
