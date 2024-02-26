@@ -119,7 +119,7 @@ SC_AbsTimeTag_t SC_ComputeAbsTime(SC_RelTimeTag_t RelTime)
     ResultTimeWSubs = CFE_TIME_Add(AbsoluteTimeWSubs, RelTimeWSubs);
 
     /* We don't need subseconds */
-    return (ResultTimeWSubs.Seconds);
+    return ResultTimeWSubs.Seconds;
 }
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */

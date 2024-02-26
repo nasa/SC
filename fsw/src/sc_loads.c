@@ -407,7 +407,7 @@ int32 SC_ValidateAts(void *TableData)
     /* Common ATS table verify function needs size of this table */
     Result = SC_VerifyAtsTable((uint32 *)TableData, SC_ATS_BUFF_SIZE32);
 
-    return (Result);
+    return Result;
 }
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -517,7 +517,7 @@ bool SC_ParseRts(uint32 Buffer32[])
      */
 
     /* If Error was true   , then SC_ParseRts must return false    */
-    return (!Error);
+    return !Error;
 }
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -542,7 +542,7 @@ int32 SC_ValidateRts(void *TableData)
         Result = SC_ERROR;
     }
 
-    return (Result);
+    return Result;
 }
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -557,7 +557,7 @@ int32 SC_ValidateAppend(void *TableData)
     /* Common ATS table verify function needs size of this table */
     Result = SC_VerifyAtsTable((uint32 *)TableData, SC_APPEND_BUFF_SIZE32);
 
-    return (Result);
+    return Result;
 }
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -773,7 +773,7 @@ int32 SC_VerifyAtsTable(uint32 *Buffer32, int32 BufferWords)
         }
     }
 
-    return (Result);
+    return Result;
 }
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -881,5 +881,5 @@ int32 SC_VerifyAtsEntry(uint32 *Buffer32, int32 EntryIndex, int32 BufferWords)
         }
     }
 
-    return (Result);
+    return Result;
 }
