@@ -1204,7 +1204,7 @@ void SC_ProcessCommand_Test_ResetCounters(void)
     UtAssert_True(SC_OperData.HkPacket.Payload.RtsActiveCtr == 0, "RtsActiveCtr == 0");
     UtAssert_True(SC_OperData.HkPacket.Payload.RtsActiveErrCtr == 0, "RtsActiveErrCtr == 0");
 
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_RESET_DEB_EID);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_RESET_INF_EID);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
 }
 
@@ -1306,7 +1306,9 @@ void SC_ProcessCommand_Test_TableManageAtsTableNominal(void)
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_ManageTableCmd(&UT_CmdBuf.ManageTableCmd));
 
-    /* This function is already verified to work correctly in another file, so no verifications here. */
+    /* Verify that no errors occured. */
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_TABLE_MANAGE_INF_EID);
+    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
 }
 
 void SC_ProcessCommand_Test_TableManageAtsTableGetAddressError(void)
@@ -1396,7 +1398,9 @@ void SC_ProcessCommand_Test_TableManageAtsTableGetAddressSuccess(void)
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_ManageTableCmd(&UT_CmdBuf.ManageTableCmd));
 
-    /* This function is already verified to work correctly in another file, so no verifications here. */
+    /* Verify that no errors occured. */
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_TABLE_MANAGE_INF_EID);
+    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
 }
 
 void SC_ProcessCommand_Test_TableManageAppendTableNominal(void)
@@ -1422,7 +1426,9 @@ void SC_ProcessCommand_Test_TableManageAppendTableNominal(void)
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_ManageTableCmd(&UT_CmdBuf.ManageTableCmd));
 
-    /* This function is already verified to work correctly in another file, so no verifications here. */
+    /* Verify that no errors occured. */
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_TABLE_MANAGE_INF_EID);
+    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
 }
 
 void SC_ProcessCommand_Test_TableManageAppendTableGetAddressError(void)
@@ -1487,7 +1493,9 @@ void SC_ProcessCommand_Test_TableManageAppendTableGetAddressSuccess(void)
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_ManageTableCmd(&UT_CmdBuf.ManageTableCmd));
 
-    /* This function is already verified to work correctly in another file, so no verifications here. */
+    /* Verify that no errors occured. */
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_TABLE_MANAGE_INF_EID);
+    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
 }
 
 void SC_ProcessCommand_Test_TableManageRtsTableNominal(void)
@@ -1500,7 +1508,9 @@ void SC_ProcessCommand_Test_TableManageRtsTableNominal(void)
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_ManageTableCmd(&UT_CmdBuf.ManageTableCmd));
 
-    /* This function is already verified to work correctly in another file, so no verifications here. */
+    /* Verify that no errors occured. */
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_TABLE_MANAGE_INF_EID);
+    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
 }
 
 void SC_ProcessCommand_Test_TableManageRtsTableGetAddressError(void)
@@ -1565,7 +1575,9 @@ void SC_ProcessCommand_Test_TableManageRtsTableGetAddressSuccess(void)
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_ManageTableCmd(&UT_CmdBuf.ManageTableCmd));
 
-    /* This function is already verified to work correctly in another file, so no verifications here. */
+    /* Verify that no errors occured. */
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_TABLE_MANAGE_INF_EID);
+    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
 }
 
 void SC_ProcessCommand_Test_TableManageRtsInfo(void)

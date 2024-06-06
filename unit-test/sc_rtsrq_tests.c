@@ -634,7 +634,8 @@ void SC_DisableRtsCmd_Test_Nominal(void)
     UtAssert_True(RtsInfoPtr->DisabledFlag == true, "RtsInfoPtr->DisabledFlag == true");
     UtAssert_True(SC_OperData.HkPacket.Payload.CmdCtr == 1, "SC_OperData.HkPacket.Payload.CmdCtr == 1");
 
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_DISABLE_RTS_DEB_EID);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID,
+                      SC_DISABLE_RTS_INF_EID);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
 }
 
@@ -802,7 +803,8 @@ void SC_EnableRtsCmd_Test_Nominal(void)
     UtAssert_True(RtsInfoPtr->DisabledFlag == false, "RtsInfoPtr->DisabledFlag == false");
     UtAssert_True(SC_OperData.HkPacket.Payload.CmdCtr == 1, "SC_OperData.HkPacket.Payload.CmdCtr == 1");
 
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_ENABLE_RTS_DEB_EID);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID,
+                      SC_ENABLE_RTS_INF_EID);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
 }
 

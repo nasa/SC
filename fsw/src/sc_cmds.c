@@ -59,12 +59,12 @@ void SC_ProcessAtpCmd(void)
     SC_CommandIndex_t             CmdIndex; /* ATS command index */
     CFE_Status_t                  Result;
     bool                          AbortATS = false;
-    SC_AtsEntry_t *               EntryPtr;
+    SC_AtsEntry_t                *EntryPtr;
     CFE_SB_MsgId_t                MessageID   = CFE_SB_INVALID_MSG_ID;
     CFE_MSG_FcnCode_t             CommandCode = 0;
     bool                          ChecksumValid;
     SC_AtsCmdEntryOffsetRecord_t *CmdOffsetRec; /* ATS entry location in table */
-    SC_AtsCmdStatusEntry_t *      StatusEntryPtr;
+    SC_AtsCmdStatusEntry_t       *StatusEntryPtr;
 
     /*
      ** The following conditions must be met before the ATS command will be
@@ -289,7 +289,7 @@ void SC_ProcessAtpCmd(void)
 
 void SC_ProcessRtpCommand(void)
 {
-    SC_RtsEntry_t *    EntryPtr;  /* a pointer to an RTS entry header */
+    SC_RtsEntry_t     *EntryPtr;  /* a pointer to an RTS entry header */
     SC_RtsIndex_t      RtsIndex;  /* the RTS index for the cmd */
     SC_EntryOffset_t   CmdOffset; /* the location of the cmd    */
     CFE_Status_t       Result;
@@ -518,7 +518,7 @@ void SC_SendHkCmd(const SC_SendHkCmd_t *Cmd)
 
 void SC_ResetCountersCmd(const SC_ResetCountersCmd_t *Cmd)
 {
-    CFE_EVS_SendEvent(SC_RESET_DEB_EID, CFE_EVS_EventType_DEBUG, "Reset counters command");
+    CFE_EVS_SendEvent(SC_RESET_INF_EID, CFE_EVS_EventType_INFORMATION, "Reset counters command");
 
     SC_OperData.HkPacket.Payload.CmdCtr          = 0;
     SC_OperData.HkPacket.Payload.CmdErrCtr       = 0;
@@ -606,55 +606,61 @@ void SC_NoopCmd(const SC_NoopCmd_t *Cmd)
 
 void SC_ManageTableCmd(const SC_ManageTableCmd_t *Cmd)
 {
-    int32 ArrayIndex;
-    int32 TableID = Cmd->Payload.Parameter;
+    int32        ArrayIndex;
+    int32        TableID = Cmd->Payload.Parameter;
+    CFE_Status_t Status  = SC_ERROR;
 
     /* Manage selected table as appropriate for each table type */
     if ((TableID >= SC_TBL_ID_ATS_0) && (TableID < (SC_TBL_ID_ATS_0 + SC_NUMBER_OF_ATS)))
     {
         ArrayIndex = TableID - SC_TBL_ID_ATS_0;
-        SC_ManageAtsTable(ArrayIndex);
+        Status     = SC_ManageAtsTable(ArrayIndex);
     }
     else if (TableID == SC_TBL_ID_APPEND)
     {
-        SC_ManageTable(APPEND, -1);
+        Status = SC_ManageTable(APPEND, -1);
     }
     else if ((TableID >= SC_TBL_ID_RTS_0) && (TableID < (SC_TBL_ID_RTS_0 + SC_NUMBER_OF_RTS)))
     {
         ArrayIndex = TableID - SC_TBL_ID_RTS_0;
-        SC_ManageRtsTable(ArrayIndex);
+        Status     = SC_ManageRtsTable(ArrayIndex);
     }
     else if (TableID == SC_TBL_ID_RTS_INFO)
     {
         /* No need to release dump only table pointer */
-        CFE_TBL_Manage(SC_OperData.RtsInfoHandle);
+        Status = CFE_TBL_Manage(SC_OperData.RtsInfoHandle);
     }
     else if (TableID == SC_TBL_ID_RTP_CTRL)
     {
         /* No need to release dump only table pointer */
-        CFE_TBL_Manage(SC_OperData.RtsCtrlBlckHandle);
+        Status = CFE_TBL_Manage(SC_OperData.RtsCtrlBlckHandle);
     }
     else if (TableID == SC_TBL_ID_ATS_INFO)
     {
         /* No need to release dump only table pointer */
-        CFE_TBL_Manage(SC_OperData.AtsInfoHandle);
+        Status = CFE_TBL_Manage(SC_OperData.AtsInfoHandle);
     }
     else if (TableID == SC_TBL_ID_ATP_CTRL)
     {
         /* No need to release dump only table pointer */
-        CFE_TBL_Manage(SC_OperData.AtsCtrlBlckHandle);
+        Status = CFE_TBL_Manage(SC_OperData.AtsCtrlBlckHandle);
     }
     else if ((TableID >= SC_TBL_ID_ATS_CMD_0) && (TableID < (SC_TBL_ID_ATS_CMD_0 + SC_NUMBER_OF_ATS)))
     {
         /* No need to release dump only table pointer */
         ArrayIndex = TableID - SC_TBL_ID_ATS_CMD_0;
-        CFE_TBL_Manage(SC_OperData.AtsCmdStatusHandle[ArrayIndex]);
+        Status     = CFE_TBL_Manage(SC_OperData.AtsCmdStatusHandle[ArrayIndex]);
     }
     else
     {
         /* Invalid table ID */
         CFE_EVS_SendEvent(SC_TABLE_MANAGE_ID_ERR_EID, CFE_EVS_EventType_ERROR,
                           "Table manage command packet error: table ID = %d", (int)TableID);
+    }
+
+    if (Status >= CFE_SUCCESS)
+    {
+        CFE_EVS_SendEvent(SC_TABLE_MANAGE_INF_EID, CFE_EVS_EventType_INFORMATION, "Table manage command.");
     }
 }
 
@@ -664,17 +670,22 @@ void SC_ManageTableCmd(const SC_ManageTableCmd_t *Cmd)
 /*                                                                 */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-void SC_ManageRtsTable(int32 ArrayIndex)
+CFE_Status_t SC_ManageRtsTable(int32 ArrayIndex)
 {
+    CFE_Status_t Status = SC_ERROR;
+
     /* validate array index */
     if (ArrayIndex >= SC_NUMBER_OF_RTS)
     {
         CFE_EVS_SendEvent(SC_TABLE_MANAGE_RTS_INV_INDEX_ERR_EID, CFE_EVS_EventType_ERROR,
                           "RTS table manage error: invalid RTS index %d", (int)ArrayIndex);
-        return;
+    }
+    else
+    {
+        Status = SC_ManageTable(RTS, ArrayIndex);
     }
 
-    SC_ManageTable(RTS, ArrayIndex);
+    return Status;
 }
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -683,17 +694,22 @@ void SC_ManageRtsTable(int32 ArrayIndex)
 /*                                                                 */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-void SC_ManageAtsTable(int32 ArrayIndex)
+CFE_Status_t SC_ManageAtsTable(int32 ArrayIndex)
 {
+    CFE_Status_t Status = SC_ERROR;
+
     /* validate array index */
     if (ArrayIndex >= SC_NUMBER_OF_ATS)
     {
         CFE_EVS_SendEvent(SC_TABLE_MANAGE_ATS_INV_INDEX_ERR_EID, CFE_EVS_EventType_ERROR,
                           "ATS table manage error: invalid ATS index %d", (int)ArrayIndex);
-        return;
+    }
+    else
+    {
+        Status = SC_ManageTable(ATS, ArrayIndex);
     }
 
-    SC_ManageTable(ATS, ArrayIndex);
+    return Status;
 }
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -702,12 +718,12 @@ void SC_ManageAtsTable(int32 ArrayIndex)
 /*                                                                 */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-void SC_ManageTable(SC_TableType type, int32 ArrayIndex)
+CFE_Status_t SC_ManageTable(SC_TableType type, int32 ArrayIndex)
 {
     CFE_Status_t     Result;
     CFE_TBL_Handle_t TblHandle;
-    uint32 **        TblAddr;
-    void *           TblPtrNew;
+    uint32         **TblAddr;
+    void            *TblPtrNew;
 
     switch (type)
     {
@@ -773,4 +789,5 @@ void SC_ManageTable(SC_TableType type, int32 ArrayIndex)
         }
     }
 
+    return Result;
 } /* End SC_ManageTable() */

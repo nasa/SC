@@ -69,9 +69,12 @@ void SC_ManageTableCmd(const SC_ManageTableCmd_t *Cmd);
  *
  *  \param [in]         ArrayIndex     index into array of RTS tables
  *
+ *  \return CFE_SUCCESS on success, a non-negative informational return
+ *          code (e.g. CFE_TBL_INFO_UPDATED) or a (negative) error code
+ *
  *  \sa #SC_ManageTableCmd
  */
-void SC_ManageRtsTable(int32 ArrayIndex);
+CFE_Status_t SC_ManageRtsTable(int32 ArrayIndex);
 
 /**
  * \brief Manage pending update to an ATS table
@@ -88,9 +91,12 @@ void SC_ManageRtsTable(int32 ArrayIndex);
  *
  *  \param [in]         ArrayIndex     index into array of ATS tables
  *
+ *  \return CFE_SUCCESS on success, a non-negative informational return
+ *          code (e.g. CFE_TBL_INFO_UPDATED) or a (negative) error code
+ *
  *  \sa #SC_ManageTableCmd
  */
-void SC_ManageAtsTable(int32 ArrayIndex);
+CFE_Status_t SC_ManageAtsTable(int32 ArrayIndex);
 
 /**
  * \brief Manage pending update to a table
@@ -105,9 +111,12 @@ void SC_ManageAtsTable(int32 ArrayIndex);
  *  \par Assumptions, External Events, and Notes:
  *        None
  *
+ *  \return CFE_SUCCESS on success, a non-negative informational return
+ *          code (e.g. CFE_TBL_INFO_UPDATED) or a (negative) error code
+ *
  *  \sa #SC_ManageTableCmd
  */
-void SC_ManageTable(SC_TableType type, int32 ArrayIndex);
+CFE_Status_t SC_ManageTable(SC_TableType type, int32 ArrayIndex);
 
 /**
  * \brief Sends out an Event message
