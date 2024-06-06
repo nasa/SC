@@ -59,12 +59,12 @@ void SC_ProcessAtpCmd(void)
     SC_CommandIndex_t             CmdIndex; /* ATS command index */
     CFE_Status_t                  Result;
     bool                          AbortATS = false;
-    SC_AtsEntry_t *               EntryPtr;
+    SC_AtsEntry_t                *EntryPtr;
     CFE_SB_MsgId_t                MessageID   = CFE_SB_INVALID_MSG_ID;
     CFE_MSG_FcnCode_t             CommandCode = 0;
     bool                          ChecksumValid;
     SC_AtsCmdEntryOffsetRecord_t *CmdOffsetRec; /* ATS entry location in table */
-    SC_AtsCmdStatusEntry_t *      StatusEntryPtr;
+    SC_AtsCmdStatusEntry_t       *StatusEntryPtr;
 
     /*
      ** The following conditions must be met before the ATS command will be
@@ -289,7 +289,7 @@ void SC_ProcessAtpCmd(void)
 
 void SC_ProcessRtpCommand(void)
 {
-    SC_RtsEntry_t *    EntryPtr;  /* a pointer to an RTS entry header */
+    SC_RtsEntry_t     *EntryPtr;  /* a pointer to an RTS entry header */
     SC_RtsIndex_t      RtsIndex;  /* the RTS index for the cmd */
     SC_EntryOffset_t   CmdOffset; /* the location of the cmd    */
     CFE_Status_t       Result;
@@ -518,7 +518,7 @@ void SC_SendHkCmd(const SC_SendHkCmd_t *Cmd)
 
 void SC_ResetCountersCmd(const SC_ResetCountersCmd_t *Cmd)
 {
-    CFE_EVS_SendEvent(SC_RESET_INF_EID, CFE_EVS_EventType_DEBUG, "Reset counters command");
+    CFE_EVS_SendEvent(SC_RESET_INF_EID, CFE_EVS_EventType_INFORMATION, "Reset counters command");
 
     SC_OperData.HkPacket.Payload.CmdCtr          = 0;
     SC_OperData.HkPacket.Payload.CmdErrCtr       = 0;
@@ -656,6 +656,8 @@ void SC_ManageTableCmd(const SC_ManageTableCmd_t *Cmd)
         CFE_EVS_SendEvent(SC_TABLE_MANAGE_ID_ERR_EID, CFE_EVS_EventType_ERROR,
                           "Table manage command packet error: table ID = %d", (int)TableID);
     }
+
+    // No success/informational event is sent for this command intentionally, to avoid the risk of flooding.
 }
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -706,8 +708,8 @@ void SC_ManageTable(SC_TableType type, int32 ArrayIndex)
 {
     CFE_Status_t     Result;
     CFE_TBL_Handle_t TblHandle;
-    uint32 **        TblAddr;
-    void *           TblPtrNew;
+    uint32         **TblAddr;
+    void            *TblPtrNew;
 
     switch (type)
     {
@@ -772,5 +774,4 @@ void SC_ManageTable(SC_TableType type, int32 ArrayIndex)
                               "ATS Append table manage process error: Result = 0x%X", (unsigned int)Result);
         }
     }
-
 } /* End SC_ManageTable() */

@@ -414,13 +414,13 @@
 /**
  * \brief SC Continue ATS On Failure Command Event ID
  *
- *  \par Type: DEBUG
+ *  \par Type: INFORMATIONAL
  *
  *  \par Cause:
  *  This event message is issued when the #SC_CONTINUE_ATS_ON_FAILURE_CC command was received and
  *  the state was changed successfully
  */
-#define SC_CONT_CMD_DEB_EID 43
+#define SC_CONT_CMD_INF_EID 43
 
 /**
  * \brief SC ATS Command Skipped Checksum Failed Event ID
@@ -503,10 +503,11 @@
 /**
  * \brief SC Reset Counters Command Event ID
  *
- *  \par Type: DEBUG
+ *  \par Type: INFORMATIONAL
  *
  *  \par Cause:
- *  This event message is issued when the #SC_RESET_COUNTERS_CC command was received
+ *  This event message is issued when the #SC_RESET_COUNTERS_CC command was
+ * received
  */
 #define SC_RESET_INF_EID 51
 
@@ -751,12 +752,13 @@
 /**
  * \brief SC Disable RTS Command Event ID
  *
- *  \par Type: DEBUG
+ *  \par Type: INFORMATIONAL
  *
  *  \par Cause:
- *  This event message is issued when a #SC_DISABLE_RTS_CC command was received, and executed successfully
+ *  This event message is issued when a #SC_DISABLE_RTS_CC command was received,
+ * and executed successfully
  */
-#define SC_DISABLE_RTS_DEB_EID 80
+#define SC_DISABLE_RTS_INF_EID 80
 
 /**
  * \brief SC Disable RTS Rejected RTS ID Invalid Event ID
@@ -772,12 +774,13 @@
 /**
  * \brief SC Enable RTS Command ID Event ID
  *
- *  \par Type: DEBUG
+ *  \par Type: INFORMATIONAL
  *
  *  \par Cause:
- *  This event message is issued when a #SC_ENABLE_RTS_CC command was received, and executed successfully
+ *  This event message is issued when a #SC_ENABLE_RTS_CC command was received,
+ * and executed successfully
  */
-#define SC_ENABLE_RTS_DEB_EID 82
+#define SC_ENABLE_RTS_INF_EID 82
 
 /**
  * \brief SC Enable RTS Rejected RTS ID Invalid Event ID
