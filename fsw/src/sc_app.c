@@ -156,8 +156,10 @@ CFE_Status_t SC_AppInit(void)
     SC_AppData.TimeRef = SC_LookupTimeAccessor(SC_TIME_TO_USE);
 
     /* Make sure nothing is running */
-    SC_AppData.NextProcNumber              = SC_Process_NONE;
+    SC_AppData.NextProcNumber = SC_Process_NONE;
+    /* SAD: SC_Process_ATP is 0, within the valid index range of NextCmdTime array, which has 2 elements */
     SC_AppData.NextCmdTime[SC_Process_ATP] = SC_MAX_TIME;
+    /* SAD: SC_Process_RTP is 1, within the valid index range of NextCmdTime array, which has 2 elements */
     SC_AppData.NextCmdTime[SC_Process_RTP] = SC_MAX_TIME;
 
     /* Initialize the SC housekeeping packet */
@@ -364,6 +366,8 @@ CFE_Status_t SC_RegisterDumpOnlyTables(void)
     /* Register dump only ATS command status tables */
     for (i = 0; i < SC_NUMBER_OF_ATS; i++)
     {
+        /* SAD: No need to check snprintf return value; TableName's buffer is large enough to safely hold
+         * SC_ATS_CMD_STAT_TABLE_NAME with the added index */
         snprintf(TableName, CFE_MISSION_TBL_MAX_NAME_LENGTH, "%s%d", SC_ATS_CMD_STAT_TABLE_NAME, i + 1);
         Result = CFE_TBL_Register(&SC_OperData.AtsCmdStatusHandle[i], TableName, SC_MAX_ATS_CMDS * sizeof(uint32),
                                   TableOptions, NULL);
@@ -401,6 +405,8 @@ CFE_Status_t SC_RegisterLoadableTables(void)
     {
         for (j = 0; j < NumTables[i]; j++)
         {
+            /* SAD: No need to check snprintf return value; TableName's buffer is large enough to safely hold
+             * CFE_MISSION_TBL_MAX_NAME_LENGTH with the added table identifiers */
             snprintf(TableName, CFE_MISSION_TBL_MAX_NAME_LENGTH, StrFormat[i], Name[i], j + 1);
             Result = CFE_TBL_Register(&TblHandlePtr[i][j], TableName, TableSize[i], TableOptions[i],
                                       TblValidationFuncPtr[i]);
