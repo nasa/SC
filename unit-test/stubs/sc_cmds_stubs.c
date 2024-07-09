@@ -31,11 +31,15 @@
  * Generated stub function for SC_ManageAtsTable()
  * ----------------------------------------------------
  */
-void SC_ManageAtsTable(int32 ArrayIndex)
+CFE_Status_t SC_ManageAtsTable(int32 ArrayIndex)
 {
+    UT_GenStub_SetupReturnBuffer(SC_ManageAtsTable, CFE_Status_t);
+
     UT_GenStub_AddParam(SC_ManageAtsTable, int32, ArrayIndex);
 
     UT_GenStub_Execute(SC_ManageAtsTable, Basic, NULL);
+
+    return UT_GenStub_GetReturnValue(SC_ManageAtsTable, CFE_Status_t);
 }
 
 /*
@@ -43,11 +47,15 @@ void SC_ManageAtsTable(int32 ArrayIndex)
  * Generated stub function for SC_ManageRtsTable()
  * ----------------------------------------------------
  */
-void SC_ManageRtsTable(int32 ArrayIndex)
+CFE_Status_t SC_ManageRtsTable(int32 ArrayIndex)
 {
+    UT_GenStub_SetupReturnBuffer(SC_ManageRtsTable, CFE_Status_t);
+
     UT_GenStub_AddParam(SC_ManageRtsTable, int32, ArrayIndex);
 
     UT_GenStub_Execute(SC_ManageRtsTable, Basic, NULL);
+
+    return UT_GenStub_GetReturnValue(SC_ManageRtsTable, CFE_Status_t);
 }
 
 /*
@@ -55,12 +63,16 @@ void SC_ManageRtsTable(int32 ArrayIndex)
  * Generated stub function for SC_ManageTable()
  * ----------------------------------------------------
  */
-void SC_ManageTable(SC_TableType type, int32 ArrayIndex)
+CFE_Status_t SC_ManageTable(SC_TableType type, int32 ArrayIndex)
 {
+    UT_GenStub_SetupReturnBuffer(SC_ManageTable, CFE_Status_t);
+
     UT_GenStub_AddParam(SC_ManageTable, SC_TableType, type);
     UT_GenStub_AddParam(SC_ManageTable, int32, ArrayIndex);
 
     UT_GenStub_Execute(SC_ManageTable, Basic, NULL);
+
+    return UT_GenStub_GetReturnValue(SC_ManageTable, CFE_Status_t);
 }
 
 /*
