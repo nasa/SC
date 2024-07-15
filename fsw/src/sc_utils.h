@@ -105,7 +105,7 @@ bool SC_CompareAbsTime(SC_AbsTimeTag_t AbsTime1, SC_AbsTimeTag_t AbsTime2);
  *  \retval 0 When current ATS index is 1
  *  \retval 1 When current ATS index is 0
  *
- *  \sa #SC_LEN_ERR_EID
+ *  \sa #SC_CMD_LEN_ERR_EID
  */
 SC_AtsIndex_t SC_ToggleAtsIndex(void);
 

@@ -46,7 +46,7 @@
  *  \retval true  Length matches expected
  *  \retval false Length does not match expected
  *
- *  \sa #SC_LEN_ERR_EID
+ *  \sa #SC_CMD_LEN_ERR_EID
  */
 bool SC_VerifyCmdLength(const CFE_MSG_Message_t *Msg, size_t ExpectedLength);
 
