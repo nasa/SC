@@ -238,7 +238,7 @@
  *       Successful execution of this command may be verified with
  *       the following telemetry:
  *       - #SC_HkTlm_Payload_t.CmdCtr will increment
- *       - The #SC_DISABLE_RTS_DEB_EID will be sent
+ *       - The #SC_DISABLE_RTS_INF_EID will be sent
  *
  *  \par Error Conditions
  *       This command may fail for the following reason(s):
@@ -269,7 +269,7 @@
  *       Successful execution of this command may be verified with
  *       the following telemetry:
  *       - #SC_HkTlm_Payload_t.CmdCtr will increment
- *       - The #SC_ENABLE_RTS_DEB_EID will be sent
+ *       - The #SC_ENABLE_RTS_INF_EID will be sent
  *
  *  \par Error Conditions
  *       This command may fail for the following reason(s):
@@ -362,7 +362,7 @@
  *       Successful execution of this command may be verified with
  *       the following telemetry:
  *       - #SC_HkTlm_Payload_t.CmdCtr will increment
- *       - The #SC_CONT_CMD_DEB_EID will be sent
+ *       - The #SC_CONT_CMD_INF_EID will be sent
  *
  *  \par Error Conditions
  *       This command may fail for the following reason(s):

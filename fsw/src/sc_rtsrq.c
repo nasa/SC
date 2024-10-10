@@ -367,8 +367,8 @@ void SC_DisableRtsCmd(const SC_DisableRtsCmd_t *Cmd)
         /* update the command status */
         SC_OperData.HkPacket.Payload.CmdCtr++;
 
-        CFE_EVS_SendEvent(SC_DISABLE_RTS_DEB_EID, CFE_EVS_EventType_DEBUG, "Disabled RTS %03u",
-                          SC_IDNUM_AS_UINT(RtsNum));
+        CFE_EVS_SendEvent(SC_DISABLE_RTS_INF_EID, CFE_EVS_EventType_INFORMATION,
+                          "Disabled RTS %03u", SC_IDNUM_AS_UINT(RtsNum));
     }
     else
     { /* it is not a valid RTS id */
@@ -458,7 +458,8 @@ void SC_EnableRtsCmd(const SC_EnableRtsCmd_t *Cmd)
         /* update the command status */
         SC_OperData.HkPacket.Payload.CmdCtr++;
 
-        CFE_EVS_SendEvent(SC_ENABLE_RTS_DEB_EID, CFE_EVS_EventType_DEBUG, "Enabled RTS %03u", SC_IDNUM_AS_UINT(RtsNum));
+        CFE_EVS_SendEvent(SC_ENABLE_RTS_INF_EID, CFE_EVS_EventType_INFORMATION,
+                          "Enabled RTS %03u", SC_IDNUM_AS_UINT(RtsNum));
     }
     else
     { /* it is not a valid RTS id */
