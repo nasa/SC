@@ -377,12 +377,12 @@ void SC_LoadRts(SC_RtsIndex_t RtsIndex)
         /* Clear out the RTS info table */
         RtsInfoPtr = SC_GetRtsInfoObject(RtsIndex);
 
-        RtsInfoPtr->RtsStatus       = SC_Status_LOADED;
-        RtsInfoPtr->UseCtr          = 0;
-        RtsInfoPtr->CmdCtr          = 0;
-        RtsInfoPtr->CmdErrCtr       = 0;
-        RtsInfoPtr->NextCommandTime = 0;
-        RtsInfoPtr->NextCommandPtr  = SC_ENTRY_OFFSET_FIRST;
+        RtsInfoPtr->RtsStatus            = SC_Status_LOADED;
+        RtsInfoPtr->UseCtr               = 0;
+        RtsInfoPtr->CmdCtr               = 0;
+        RtsInfoPtr->CmdErrCtr            = 0;
+        RtsInfoPtr->NextCommandTgtWakeup = 0;
+        RtsInfoPtr->NextCommandPtr       = SC_ENTRY_OFFSET_FIRST;
 
         /* Make sure the RTS is disabled */
         RtsInfoPtr->DisabledFlag = true;
@@ -449,7 +449,7 @@ bool SC_ParseRts(uint32 Buffer32[])
 
             if (!CFE_SB_IsValidMsgId(MessageID))
             {
-                if (EntryPtr->Header.TimeTag == 0)
+                if (EntryPtr->Header.WakeupCount == 0)
                 {
                     Done = true; /* assumed end of file */
                 }

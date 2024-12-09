@@ -29,9 +29,9 @@
  * This source file creates a sample RTS table that contains only
  * the following commands that are scheduled as follows:
  *
- * SC NOOP command, execution time relative to start of RTS = 0
- * SC Enable RTS #2 command, execution time relative to prev cmd = 5
- * SC Start RTS #2 command, execution time relative to prev cmd = 5
+ * SC NOOP command, execution wakeup count relative to start of RTS = 0
+ * SC Enable RTS #2 command, execution wakeup count relative to prev cmd = 5
+ * SC Start RTS #2 command, execution wakeup count relative to prev cmd = 5
  */
 
 #include "cfe.h"
@@ -78,17 +78,17 @@ typedef union
 /* Used designated initializers to be verbose, modify as needed/desired */
 SC_RtsTable001_t SC_Rts001 = {
     /* 1 */
-    .rts.hdr1.TimeTag       = 0,
+    .rts.hdr1.WakeupCount = 0,
     .rts.cmd1.CommandHeader = CFE_MSG_CMD_HDR_INIT(SC_CMD_MID, SC_MEMBER_SIZE(cmd1), SC_NOOP_CC, SC_NOOP_CKSUM),
 
     /* 2 */
-    .rts.hdr2.TimeTag = 5,
+    .rts.hdr2.WakeupCount = 5,
     .rts.cmd2.CommandHeader =
         CFE_MSG_CMD_HDR_INIT(SC_CMD_MID, SC_MEMBER_SIZE(cmd2), SC_ENABLE_RTS_CC, SC_ENABLE_RTS2_CKSUM),
     .rts.cmd2.Payload.RtsNum = SC_RTS_NUM_INITIALIZER(2),
 
     /* 3 */
-    .rts.hdr3.TimeTag = 5,
+    .rts.hdr3.WakeupCount = 5,
     .rts.cmd3.CommandHeader =
         CFE_MSG_CMD_HDR_INIT(SC_CMD_MID, SC_MEMBER_SIZE(cmd3), SC_START_RTS_CC, SC_START_RTS2_CKSUM),
     .rts.cmd3.Payload.RtsNum = SC_RTS_NUM_INITIALIZER(2)};

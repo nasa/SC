@@ -101,6 +101,7 @@ typedef uint8 SC_Process_Enum_t;
 #endif
 
 #define SC_MAX_TIME 0xFFFFFFFF /**< \brief Maximum time in SC */
+#define SC_MAX_WAKEUP_CNT 0xFFFFFFFF /**< \brief Maximum wakeup count in SC */
 
 /**
  * Enumeration for ATS identifiers
@@ -216,7 +217,7 @@ typedef struct
     uint16      AppendLoadCount;  /**< \brief Total number of Append ATS table loads */
     uint32      AtpCmdNumber;     /**< \brief Current command number */
     uint32      AtpFreeBytes[SC_NUMBER_OF_ATS]; /**< \brief Free Bytes in each ATS  */
-    uint32      NextRtsTime;                    /**< \brief Next RTS cmd Absolute Time */
+    uint32      NextRtsWakeupCnt;               /**< \brief Next RTS Command Absolute Wakeup Count */
     uint32      NextAtsTime;                    /**< \brief Next ATS Command Time (seconds) */
 
     uint16 RtsExecutingStatus[(SC_NUMBER_OF_RTS + (SC_NUMBER_OF_RTS_IN_UINT16 - 1)) / SC_NUMBER_OF_RTS_IN_UINT16];

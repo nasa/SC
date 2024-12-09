@@ -71,6 +71,23 @@ SC_AbsTimeTag_t SC_GetAtsEntryTime(SC_AtsEntryHeader_t *Entry);
 SC_AbsTimeTag_t SC_ComputeAbsTime(SC_RelTimeTag_t RelTime);
 
 /**
+ * \brief Computes an absolute wakeup count from a relative wakeup count
+ *
+ *  \par Description
+ *       This function computes an absolute wakeup count based on the
+ *       current wakeup count and the relative wakeup count passed into
+ *       the function
+ *
+ *  \par Assumptions, External Events, and Notes:
+ *        None
+ *
+ *  \param [in]        RelWakeup        The relative wakeup count to compute from
+ *
+ *  \return The absolute wakeup count
+ */
+uint32 SC_ComputeAbsWakeup(uint32 RelWakeup);
+
+/**
  * \brief Compares absolute time
  *
  *  \par Description

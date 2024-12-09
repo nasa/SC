@@ -107,12 +107,12 @@
 /**
   \page cfsscovr CFS Stored Command Overview
 
-  The CFS Stored Command appliaction allows the spacecraft to be commanded
+  The CFS Stored Command application allows the spacecraft to be commanded
   using sequences of commands that are loaded from the ground. Each
-  command has a time tag associated with it, permitting the command to be
-  released for distribution at predetermined times. SC supports both Absolute
-  Time tagged command Sequences (ATSs) and multiple Relative Time tagged
-  command Sequences (RTSs).
+  command has a time tag or wakeup count associated with it, permitting the command to be
+  released for distribution at predetermined times or wakeup counts. SC supports both Absolute
+  Time tagged command Sequences (ATSs) and multiple Relative Time tagged command Sequences (RTSs),
+  where RTSs use wakeup counts instead of time tags.
 
   \section SC Design Overview
 
@@ -243,7 +243,7 @@
   <H2>Relative Time Processor (RTP)</H2>
 
   When the sequence is started, the RTP reads the delay of the first command.
-  After the amount of seconds listed in the delay, the RTP will fetch the
+  After the amount of wakeup counts listed in the delay, the RTP will fetch the
   command, check the checksum of the command, and send the command out to the
   data system. The RTP will then fetch the next command in the sequence and
   determine when this command needs to execute.
@@ -273,12 +273,12 @@
   a priority associated with it. The priority is assigned by the buffer number.
   In other words, RTS buffer 1 has the highest priority and the last RTS buffer
   has the lowest priority. This priority only comes into play when there is more
-  than one RTS that has commands to be executed in the SAME SECOND. For example,
-  if RTS 1 has a command to go out at 12:00:01 and RTS 50 has 8 commands to go
-  out at 12:00:00, all 8 commands from RTS 50 will be executed before RTS 1
-  executes it's command. However, if the 8 commands from RTS 50 are scheduled to
-  go out at 12:00:01, then the command from RTS 1 will be sent first, followed
-  by 7 commands from RTS 50. At 12:00:02, the 8th command from RTS 50 will be
+  than one RTS that has commands to be executed on the same wakeup count. For example,
+  if RTS 1 has a command to go out on the 103rd wakeup of SC and RTS 50 has 8 commands to go
+  out on the 102nd wakeup, all 8 commands from RTS 50 will be executed before RTS 1
+  executes its command. However, if the 8 commands from RTS 50 are scheduled to
+  go out on the 103rd wakeup, then the command from RTS 1 will be sent first, followed
+  by 7 commands from RTS 50. On the 104th wakeup, the 8th command from RTS 50 will be
   sent.
 
   <H2>RTP Error Handling</H2>
@@ -305,7 +305,7 @@
   \page cfsscdg CFS Stored Command Deployment Guide
 
   While the SC application does not require a great deal of work for platform
-  deployment, the following are some general guidlines.
+  deployment, the following are some general guidelines.
 
   CFS Stored Command requires that two message ID's be put in the CFS Scheduler
   table for proper operation. Those message ID's are #SC_SEND_HK_MID, which
@@ -427,18 +427,19 @@
   two hours. If SC is conifured to use TAI time, and the ATS is started, and the
   leap seconds are changed, SC time will not be affected.
 
-  The effect of adjusting time on Relative Time Sequences is a little more
-  complicated. As mentioned in the Scheduling section, the next RTS command for
-  each sequence actually has an absolute time associated with it. With this
-  absolute time, it is possible for SC to know when to send out each RTS
-  command. From the Absolute time a delay time is computed, which is used to
-  tell SC how long to delay. When time is adjusted on an RTS, the command that
-  is currently waiting to execute gets "thrown off". Depending on the time
-  adjustment, the command could go out sooner or later than expected. Once the
-  "current" command is out, however, the remaining commands in the sequence will
-  execute as scheduled because they are relative to the previous command.
+  RTSs, on the other hand, use wakeup counts instead of time tags, meaning
+  commands are scheduled based on the number of wakeups since the previous
+  command. Each command in an RTS is associated with a relative wakeup count,
+  and this value determines when the command will execute relative to the last
+  executed command. For example, if a command is scheduled to execute after 2
+  wakeups, the system will calculate the absolute wakeup count by adding 2 to
+  the current absolute wakeup count. The command will execute at that absolute
+  wakeup count, regardless of any adjustments to the system time. This means
+  that time shifts are not expected to affect the time at which the commands
+  are executed, since they are based on wakeup counts rather than specific
+  time values.
 
-  The point of this discussion is that SC will not react well to time changes.
+  Despite this, time adjustments can introduce risks or unintended behaviors.
   It is recommended that SC be idle during large time adjustments (1 second or
   greater). Small adjustments can be tolerated if there is not an exact second
   tolerance for every command being executed.
@@ -446,12 +447,10 @@
   <H2>Over-scheduling the Stored Command Application</H2>
 
   Another way to stress SC is to send out many commands in one second from many
-  sequences. The time tags for both ATS commands and RTS commands have one
-  second resolution. However, there is a way to send multiple commands in one
-  second. For ATS commands, set the time tags to the same second. For RTS
-  commands, set the delays to zero. As noted earlier, SC will send out the
-  commands as fast as possible up to a certain number of commands per second.
-  With this in mind, it is possible to pack the ATSs and a few RTSs with
+  sequences. For ATS commands, set the time tags to the same second. For RTS
+  commands, set the relative wakeup counts to zero. As noted earlier, SC will
+  send out the commands as fast as possible up to a certain number of commands
+  per second. With this in mind, it is possible to pack the ATSs and a few RTSs with
   commands that want to go out in the same second. When all of these sequences
   are run, SC will get behind in sending out the commands. SC will keep going
   until all of the commands are executed, but do not expect "to the second"

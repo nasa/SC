@@ -148,7 +148,7 @@ void SC_AppInit_Test_NominalPowerOnReset(void)
 
     Expected_SC_AppData.NextProcNumber              = SC_Process_NONE;
     Expected_SC_AppData.NextCmdTime[SC_Process_ATP] = SC_MAX_TIME;
-    Expected_SC_AppData.NextCmdTime[SC_Process_RTP] = SC_MAX_TIME;
+    Expected_SC_AppData.NextCmdTime[SC_Process_RTP] = SC_MAX_WAKEUP_CNT;
     Expected_SC_AppData.AutoStartRTS                = SC_RTS_NUM_C(RTS_ID_AUTO_POWER_ON);
 
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
@@ -212,7 +212,7 @@ void SC_AppInit_Test_Nominal(void)
 
     Expected_SC_AppData.NextProcNumber              = SC_Process_NONE;
     Expected_SC_AppData.NextCmdTime[SC_Process_ATP] = SC_MAX_TIME;
-    Expected_SC_AppData.NextCmdTime[SC_Process_RTP] = SC_MAX_TIME;
+    Expected_SC_AppData.NextCmdTime[SC_Process_RTP] = SC_MAX_WAKEUP_CNT;
     Expected_SC_AppData.AutoStartRTS                = SC_RTS_NUM_C(RTS_ID_AUTO_PROCESSOR);
 
     Expected_SC_OperData.HkPacket.Payload.ContinueAtsOnFailureFlag = SC_AtsCont_TRUE;

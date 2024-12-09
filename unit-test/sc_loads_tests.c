@@ -130,13 +130,13 @@ SC_AtsEntryHeader_t *UT_SC_AppendSingleAtsEntry(void **TailPtr, uint16 CmdNumber
     return Entry;
 }
 
-SC_RtsEntryHeader_t *UT_SC_AppendSingleRtsEntry(void **TailPtr, SC_RelTimeTag_t TimeTag, size_t MsgSize)
+SC_RtsEntryHeader_t *UT_SC_AppendSingleRtsEntry(void **TailPtr, SC_RelWakeupCount_t WakeupCount, size_t MsgSize)
 {
     SC_RtsEntryHeader_t *Entry = (SC_RtsEntryHeader_t *)(*TailPtr);
 
     UT_SC_AdvanceTailPtr(TailPtr, SC_RTS_HEADER_SIZE, MsgSize);
 
-    Entry->TimeTag = TimeTag;
+    Entry->WakeupCount = WakeupCount;
 
     return Entry;
 }
@@ -150,7 +150,7 @@ SC_AtsEntryHeader_t *UT_SC_SetupSingleAtsEntry(SC_AtsIndex_t AtsIndex, uint16 Cm
     return UT_SC_AppendSingleAtsEntry(&TailPtr, CmdNumber, MsgSize);
 }
 
-SC_RtsEntryHeader_t *UT_SC_SetupSingleRtsEntry(SC_RtsIndex_t RtsIndex, CFE_SB_MsgId_t MsgId, SC_RelTimeTag_t TimeTag,
+SC_RtsEntryHeader_t *UT_SC_SetupSingleRtsEntry(SC_RtsIndex_t RtsIndex, CFE_SB_MsgId_t MsgId, SC_RelWakeupCount_t WakeupCount,
                                                size_t MsgSize)
 {
     void *TailPtr;
@@ -158,7 +158,7 @@ SC_RtsEntryHeader_t *UT_SC_SetupSingleRtsEntry(SC_RtsIndex_t RtsIndex, CFE_SB_Ms
     UT_SC_SetMsgId(MsgId);
     TailPtr = UT_SC_GetRtsTable(RtsIndex);
 
-    return UT_SC_AppendSingleRtsEntry(&TailPtr, TimeTag, MsgSize);
+    return UT_SC_AppendSingleRtsEntry(&TailPtr, WakeupCount, MsgSize);
 }
 
 uint32 UT_SC_GetEntryWordCount(size_t HdrSize, size_t MsgSize)
@@ -259,7 +259,7 @@ void UT_SC_RtsEntryInit(void *EntryPtr, size_t Idx, size_t MsgSize)
 {
     SC_RtsEntryHeader_t *Entry = EntryPtr;
 
-    Entry->TimeTag = 1;
+    Entry->WakeupCount = 1;
 }
 
 SC_RtsEntryHeader_t *UT_SC_SetupRtsTable(SC_RtsIndex_t RtsIndex, CFE_SB_MsgId_t MsgId, size_t MsgSize,

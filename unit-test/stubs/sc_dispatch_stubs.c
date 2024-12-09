@@ -20,7 +20,8 @@
 /**
  * @file
  *
- * Auto-Generated stub implementations for functions defined in sc_dispatch header
+ * Auto-Generated stub implementations for functions defined in sc_dispatch
+ * header
  */
 
 #include "sc_dispatch.h"
@@ -31,11 +32,10 @@
  * Generated stub function for SC_ProcessCommand()
  * ----------------------------------------------------
  */
-void SC_ProcessCommand(const CFE_SB_Buffer_t *BufPtr)
-{
-    UT_GenStub_AddParam(SC_ProcessCommand, const CFE_SB_Buffer_t *, BufPtr);
+void SC_ProcessCommand(const CFE_SB_Buffer_t *BufPtr) {
+  UT_GenStub_AddParam(SC_ProcessCommand, const CFE_SB_Buffer_t *, BufPtr);
 
-    UT_GenStub_Execute(SC_ProcessCommand, Basic, NULL);
+  UT_GenStub_Execute(SC_ProcessCommand, Basic, NULL);
 }
 
 /*
@@ -43,11 +43,10 @@ void SC_ProcessCommand(const CFE_SB_Buffer_t *BufPtr)
  * Generated stub function for SC_ProcessRequest()
  * ----------------------------------------------------
  */
-void SC_ProcessRequest(const CFE_SB_Buffer_t *BufPtr)
-{
-    UT_GenStub_AddParam(SC_ProcessRequest, const CFE_SB_Buffer_t *, BufPtr);
+void SC_ProcessRequest(const CFE_SB_Buffer_t *BufPtr) {
+  UT_GenStub_AddParam(SC_ProcessRequest, const CFE_SB_Buffer_t *, BufPtr);
 
-    UT_GenStub_Execute(SC_ProcessRequest, Basic, NULL);
+  UT_GenStub_Execute(SC_ProcessRequest, Basic, NULL);
 }
 
 /*
@@ -55,14 +54,13 @@ void SC_ProcessRequest(const CFE_SB_Buffer_t *BufPtr)
  * Generated stub function for SC_VerifyCmdLength()
  * ----------------------------------------------------
  */
-bool SC_VerifyCmdLength(const CFE_MSG_Message_t *Msg, size_t ExpectedLength)
-{
-    UT_GenStub_SetupReturnBuffer(SC_VerifyCmdLength, bool);
+bool SC_VerifyCmdLength(const CFE_MSG_Message_t *Msg, size_t ExpectedLength) {
+  UT_GenStub_SetupReturnBuffer(SC_VerifyCmdLength, bool);
 
-    UT_GenStub_AddParam(SC_VerifyCmdLength, const CFE_MSG_Message_t *, Msg);
-    UT_GenStub_AddParam(SC_VerifyCmdLength, size_t, ExpectedLength);
+  UT_GenStub_AddParam(SC_VerifyCmdLength, const CFE_MSG_Message_t *, Msg);
+  UT_GenStub_AddParam(SC_VerifyCmdLength, size_t, ExpectedLength);
 
-    UT_GenStub_Execute(SC_VerifyCmdLength, Basic, NULL);
+  UT_GenStub_Execute(SC_VerifyCmdLength, Basic, NULL);
 
-    return UT_GenStub_GetReturnValue(SC_VerifyCmdLength, bool);
+  return UT_GenStub_GetReturnValue(SC_VerifyCmdLength, bool);
 }

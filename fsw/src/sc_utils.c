@@ -100,7 +100,7 @@ SC_AbsTimeTag_t SC_GetAtsEntryTime(SC_AtsEntryHeader_t *Entry)
 /* Compute Absolute time from relative time                       */
 /*                                                                 */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-SC_AbsTimeTag_t SC_ComputeAbsTime(SC_RelTimeTag_t RelTime)
+SC_AbsTimeTag_t SC_ComputeAbsTime(uint32 RelTime)
 {
     CFE_TIME_SysTime_t AbsoluteTimeWSubs;
     CFE_TIME_SysTime_t RelTimeWSubs;
@@ -120,6 +120,16 @@ SC_AbsTimeTag_t SC_ComputeAbsTime(SC_RelTimeTag_t RelTime)
 
     /* We don't need subseconds */
     return ResultTimeWSubs.Seconds;
+}
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+/*                                                                 */
+/* Compute absolute wakeup count from relative wakeup count        */
+/*                                                                 */
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+uint32 SC_ComputeAbsWakeup(uint32 RelWakeup)
+{
+    return SC_AppData.CurrentWakeupCount + RelWakeup;
 }
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */

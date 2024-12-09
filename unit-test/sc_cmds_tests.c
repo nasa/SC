@@ -936,8 +936,8 @@ void SC_SendHkPacket_Test(void)
     SC_OperData.AtsCtrlBlckAddr->AtpState                 = (SC_Status_Enum_t)18;
     SC_OperData.AtsCtrlBlckAddr->CmdNumber                = SC_COMMAND_NUM_C(19);
     SC_OperData.AtsCtrlBlckAddr->SwitchPendFlag           = 0;
-    SC_AppData.NextCmdTime[0]                             = 0;
-    SC_AppData.NextCmdTime[1]                             = 0;
+    SC_AppData.NextCmdTime[SC_Process_ATP]                = 0;
+    SC_AppData.NextCmdTime[SC_Process_RTP]                = 0;
     SC_OperData.RtsCtrlBlckAddr->NumRtsActive             = 20;
     SC_OperData.RtsCtrlBlckAddr->CurrRtsNum               = SC_RTS_NUM_C(21);
     SC_OperData.HkPacket.Payload.ContinueAtsOnFailureFlag = SC_AtsCont_TRUE;
@@ -1001,7 +1001,7 @@ void SC_SendHkPacket_Test(void)
     UtAssert_True(SC_OperData.HkPacket.Payload.NextAtsTime == 0, "SC_OperData.HkPacket.Payload.NextAtsTime == 0");
     UtAssert_True(SC_OperData.HkPacket.Payload.NumRtsActive == 20, "SC_OperData.HkPacket.Payload.NumRtsActive == 20");
     SC_Assert_ID_VALUE(SC_OperData.HkPacket.Payload.RtsNum, 21);
-    UtAssert_True(SC_OperData.HkPacket.Payload.NextRtsTime == 0, "SC_OperData.HkPacket.Payload.NextRtsTime == 0");
+    UtAssert_True(SC_OperData.HkPacket.Payload.NextRtsWakeupCnt == 0, "SC_OperData.HkPacket.Payload.NextRtsWakeupCnt == 0");
     UtAssert_BOOL_TRUE(SC_OperData.HkPacket.Payload.ContinueAtsOnFailureFlag);
 
     /* Check first element */
@@ -1078,6 +1078,22 @@ void SC_ProcessRequest_Test_OneHzWakeupNONE(void)
     SC_AppData.NextProcNumber                   = SC_Process_NONE;
     SC_AppData.NextCmdTime[SC_Process_ATP]      = 0;
     SC_AppData.CurrentTime                      = 0;
+
+    /* Execute the function being tested */
+    UtAssert_VOIDCALL(SC_OneHzWakeupCmd(&UT_CmdBuf.OneHzWakeupCmd));
+
+    /* Verify results */
+    UtAssert_UINT32_EQ(SC_OperData.NumCmdsSec, 0);
+
+    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
+}
+
+void SC_ProcessRequest_Test_OneHzWakeupRtpNotExecutionTime(void)
+{
+    SC_OperData.AtsCtrlBlckAddr->SwitchPendFlag = false;
+    SC_AppData.NextProcNumber                   = SC_Process_RTP;
+    SC_AppData.NextCmdTime[SC_Process_RTP]      = 2;
+    SC_AppData.CurrentWakeupCount               = 0;
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_OneHzWakeupCmd(&UT_CmdBuf.OneHzWakeupCmd));
@@ -1715,6 +1731,8 @@ void UtTest_Setup(void)
                "SC_ProcessRequest_Test_HkMIDAutoStartRtsLoaded");
     UtTest_Add(SC_ProcessRequest_Test_OneHzWakeupNONE, SC_Test_Setup, SC_Test_TearDown,
                "SC_ProcessRequest_Test_OneHzWakeupNONE");
+    UtTest_Add(SC_ProcessRequest_Test_OneHzWakeupRtpNotExecutionTime, SC_Test_Setup, SC_Test_TearDown,
+               "SC_ProcessRequest_Test_OneHzWakeupRtpNotExecutionTime");
     UtTest_Add(SC_ProcessRequest_Test_OneHzWakeupNoSwitchPending, SC_Test_Setup, SC_Test_TearDown,
                "SC_ProcessRequest_Test_OneHzWakeupNoSwitchPending");
     UtTest_Add(SC_ProcessRequest_Test_OneHzWakeupAtpNotExecutionTime, SC_Test_Setup, SC_Test_TearDown,

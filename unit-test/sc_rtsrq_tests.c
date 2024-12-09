@@ -53,7 +53,7 @@ void SC_StartRtsCmd_Test_Nominal(void)
     RtsInfoPtr = SC_GetRtsInfoObject(RtsIndex);
 
     Entry          = (SC_RtsEntryHeader_t *)SC_GetRtsEntryAtOffset(RtsIndex, SC_ENTRY_OFFSET_FIRST);
-    Entry->TimeTag = 0;
+    Entry->WakeupCount = 0;
 
     UT_CmdBuf.StartRtsCmd.Payload.RtsNum = SC_RtsIndexToNum(RtsIndex);
 
@@ -97,7 +97,7 @@ void SC_StartRtsCmd_Test_StartRtsNoEvents(void)
     RtsInfoPtr = SC_GetRtsInfoObject(RtsIndex);
 
     Entry          = (SC_RtsEntryHeader_t *)SC_GetRtsEntryAtOffset(RtsIndex, SC_ENTRY_OFFSET_FIRST);
-    Entry->TimeTag = 0;
+    Entry->WakeupCount = 0;
 
     RtsInfoPtr->DisabledFlag = false;
     RtsInfoPtr->RtsStatus    = SC_Status_LOADED;
@@ -146,7 +146,7 @@ void SC_StartRtsCmd_Test_InvalidCommandLength1(void)
     RtsInfoPtr = SC_GetRtsInfoObject(RtsIndex);
 
     Entry          = (SC_RtsEntryHeader_t *)SC_GetRtsEntryAtOffset(RtsIndex, SC_ENTRY_OFFSET_FIRST);
-    Entry->TimeTag = 0;
+    Entry->WakeupCount = 0;
 
     UT_CmdBuf.StartRtsCmd.Payload.RtsNum = SC_RtsIndexToNum(RtsIndex);
 
@@ -177,7 +177,7 @@ void SC_StartRtsCmd_Test_InvalidCommandLength2(void)
     RtsInfoPtr = SC_GetRtsInfoObject(RtsIndex);
 
     Entry          = (SC_RtsEntryHeader_t *)SC_GetRtsEntryAtOffset(RtsIndex, SC_ENTRY_OFFSET_FIRST);
-    Entry->TimeTag = 0;
+    Entry->WakeupCount = 0;
 
     UT_CmdBuf.StartRtsCmd.Payload.RtsNum = SC_RtsIndexToNum(RtsIndex);
 
@@ -207,7 +207,7 @@ void SC_StartRtsCmd_Test_RtsNotLoadedOrInUse(void)
     RtsInfoPtr = SC_GetRtsInfoObject(RtsIndex);
 
     Entry          = (SC_RtsEntryHeader_t *)SC_GetRtsEntryAtOffset(RtsIndex, SC_ENTRY_OFFSET_FIRST);
-    Entry->TimeTag = 0;
+    Entry->WakeupCount = 0;
 
     UT_CmdBuf.StartRtsCmd.Payload.RtsNum = SC_RtsIndexToNum(RtsIndex);
 
@@ -231,7 +231,7 @@ void SC_StartRtsCmd_Test_RtsDisabled(void)
     RtsInfoPtr = SC_GetRtsInfoObject(RtsIndex);
 
     Entry          = (SC_RtsEntryHeader_t *)SC_GetRtsEntryAtOffset(RtsIndex, SC_ENTRY_OFFSET_FIRST);
-    Entry->TimeTag = 0;
+    Entry->WakeupCount = 0;
 
     UT_CmdBuf.StartRtsCmd.Payload.RtsNum = SC_RtsIndexToNum(RtsIndex);
 
@@ -988,7 +988,7 @@ void SC_KillRts_Test(void)
 
     /* Verify results */
     UtAssert_True(RtsInfoPtr->RtsStatus == SC_Status_LOADED, "RtsInfoPtr->RtsStatus == SC_Status_LOADED");
-    UtAssert_True(RtsInfoPtr->NextCommandTime == SC_MAX_TIME, "RtsInfoPtr->NextCommandTime == SC_MAX_TIME");
+    UtAssert_True(RtsInfoPtr->NextCommandTgtWakeup == SC_MAX_WAKEUP_CNT, "RtsInfoPtr->NextCommandTgtWakeup == SC_MAX_WAKEUP_CNT");
     UtAssert_True(SC_OperData.RtsCtrlBlckAddr->NumRtsActive == 0, "SC_OperData.RtsCtrlBlckAddr->NumRtsActive == 0");
 
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
@@ -1009,7 +1009,7 @@ void SC_KillRts_Test_NoActiveRts(void)
 
     /* Verify results */
     UtAssert_True(RtsInfoPtr->RtsStatus == SC_Status_LOADED, "RtsInfoPtr->RtsStatus == SC_Status_LOADED");
-    UtAssert_True(RtsInfoPtr->NextCommandTime == SC_MAX_TIME, "RtsInfoPtr->NextCommandTime == SC_MAX_TIME");
+    UtAssert_True(RtsInfoPtr->NextCommandTgtWakeup == SC_MAX_WAKEUP_CNT, "RtsInfoPtr->NextCommandTgtWakeup == SC_MAX_WAKEUP_CNT");
     UtAssert_True(SC_OperData.RtsCtrlBlckAddr->NumRtsActive == 0, "SC_OperData.RtsCtrlBlckAddr->NumRtsActive == 0");
 
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);

@@ -160,7 +160,7 @@ CFE_Status_t SC_AppInit(void)
     /* SAD: SC_Process_ATP is 0, within the valid index range of NextCmdTime array, which has 2 elements */
     SC_AppData.NextCmdTime[SC_Process_ATP] = SC_MAX_TIME;
     /* SAD: SC_Process_RTP is 1, within the valid index range of NextCmdTime array, which has 2 elements */
-    SC_AppData.NextCmdTime[SC_Process_RTP] = SC_MAX_TIME;
+    SC_AppData.NextCmdTime[SC_Process_RTP] = SC_MAX_WAKEUP_CNT;
 
     /* Initialize the SC housekeeping packet */
     CFE_MSG_Init(CFE_MSG_PTR(SC_OperData.HkPacket.TelemetryHeader), CFE_SB_ValueToMsgId(SC_HK_TLM_MID),
@@ -287,7 +287,7 @@ CFE_Status_t SC_InitTables(void)
     {
         RtsInfoPtr = SC_GetRtsInfoObject(SC_RTS_IDX_C(i));
 
-        RtsInfoPtr->NextCommandTime = SC_MAX_TIME;
+        RtsInfoPtr->NextCommandTgtWakeup = SC_MAX_WAKEUP_CNT;
         RtsInfoPtr->NextCommandPtr  = SC_ENTRY_OFFSET_FIRST;
         RtsInfoPtr->RtsStatus       = SC_Status_EMPTY;
         RtsInfoPtr->DisabledFlag    = true;

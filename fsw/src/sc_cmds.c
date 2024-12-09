@@ -298,7 +298,7 @@ void SC_ProcessRtpCommand(void)
 
     /*
      ** The following conditions must be met before a RTS command is executed:
-     ** 1.) The next command time must be <= the current time
+     ** 1.) The next command wakeup count must be <= the current wakeup count
      ** 2.) The next processor number must be SC_Process_RTP
      ** 3.) The RTS number in the RTP control block must be valid and
      ** 4.) the RTS must be EXECUTING
@@ -312,8 +312,8 @@ void SC_ProcessRtpCommand(void)
 
     RtsInfoPtr = SC_GetRtsInfoObject(RtsIndex);
 
-    if ((SC_AppData.NextCmdTime[SC_AppData.NextProcNumber] <= SC_AppData.CurrentTime) &&
-        (SC_AppData.NextProcNumber == SC_Process_RTP) && (RtsInfoPtr->RtsStatus == SC_Status_EXECUTING))
+    if ((SC_AppData.NextProcNumber == SC_Process_RTP) && 
+        (SC_AppData.NextCmdTime[SC_Process_RTP] <= SC_AppData.CurrentWakeupCount) && (RtsInfoPtr->RtsStatus == SC_Status_EXECUTING))
     {
         /*
          ** Count the command for the rate limiter
@@ -443,9 +443,9 @@ void SC_SendHkPacket(void)
      ** Fill out the RTP control block information
      */
 
-    SC_OperData.HkPacket.Payload.NumRtsActive = SC_OperData.RtsCtrlBlckAddr->NumRtsActive;
-    SC_OperData.HkPacket.Payload.RtsNum       = SC_OperData.RtsCtrlBlckAddr->CurrRtsNum;
-    SC_OperData.HkPacket.Payload.NextRtsTime  = SC_AppData.NextCmdTime[SC_Process_RTP];
+    SC_OperData.HkPacket.Payload.NumRtsActive      = SC_OperData.RtsCtrlBlckAddr->NumRtsActive;
+    SC_OperData.HkPacket.Payload.RtsNum            = SC_OperData.RtsCtrlBlckAddr->CurrRtsNum;
+    SC_OperData.HkPacket.Payload.NextRtsWakeupCnt  = SC_AppData.NextCmdTime[SC_Process_RTP];
 
     /*
      ** Fill out the RTS status bit mask
@@ -538,6 +538,7 @@ void SC_ResetCountersCmd(const SC_ResetCountersCmd_t *Cmd)
 void SC_OneHzWakeupCmd(const SC_OneHzWakeupCmd_t *Cmd)
 {
     bool IsThereAnotherCommandToExecute = false;
+    SC_AppData.CurrentWakeupCount++;
 
     /*
      * Time to execute a command in the SC memory
@@ -565,8 +566,10 @@ void SC_OneHzWakeupCmd(const SC_OneHzWakeupCmd_t *Cmd)
         }
 
         SC_UpdateNextTime();
+
         if ((SC_AppData.NextProcNumber == SC_Process_NONE) ||
-            (SC_AppData.NextCmdTime[SC_AppData.NextProcNumber] > SC_AppData.CurrentTime))
+            ((SC_AppData.NextProcNumber == SC_Process_ATP) && (SC_AppData.NextCmdTime[SC_Process_ATP] > SC_AppData.CurrentTime)) ||
+            ((SC_AppData.NextProcNumber == SC_Process_RTP) && (SC_AppData.NextCmdTime[SC_Process_RTP] > SC_AppData.CurrentWakeupCount)))
         {
             SC_OperData.NumCmdsSec         = 0;
             IsThereAnotherCommandToExecute = false;

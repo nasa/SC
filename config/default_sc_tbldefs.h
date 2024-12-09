@@ -60,9 +60,9 @@
 typedef uint32 SC_AbsTimeTag_t;
 
 /**
- *  \brief Relative time tag for RTC's
+ *  \brief Relative wakeup count
  */
-typedef uint32 SC_RelTimeTag_t;
+typedef uint32 SC_RelWakeupCount_t;
 
 /**
  *  \brief ATS Table Entry Header Type
@@ -97,12 +97,12 @@ typedef struct
  */
 typedef struct
 {
-    SC_RelTimeTag_t TimeTag; /**< \brief Relative time tag */
+    SC_RelWakeupCount_t WakeupCount; /**< \brief Relative wakeup count */
 
     /*
      * Note: the command packet data is variable length,
      *       the command packet header (not shown here),
-     *       comes directly after Time tag.
+     *       comes directly after WakeupCount.
      */
 } SC_RtsEntryHeader_t;
 

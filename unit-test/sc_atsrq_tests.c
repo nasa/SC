@@ -824,7 +824,7 @@ void SC_JumpAtsCmd_Test_SkipOneCmd(void)
     SC_Assert_ID_EQ(SC_OperData.AtsCtrlBlckAddr->CmdNumber,
                     SC_GetAtsCommandNumAtSeq(AtsIndex, SC_SEQUENCE_IDX_C(1))->CmdNum);
     SC_Assert_IDX_VALUE(SC_OperData.AtsCtrlBlckAddr->TimeIndexPtr, 1);
-    UtAssert_True(SC_AppData.NextCmdTime[0] == 0, "SC_AppData.NextCmdTime[0] == 0");
+    UtAssert_True(SC_AppData.NextCmdTime[SC_Process_ATP] == 0, "SC_AppData.NextCmdTime[SC_Process_ATP] == 0");
     UtAssert_True(SC_OperData.HkPacket.Payload.CmdCtr == 1, "SC_OperData.HkPacket.Payload.CmdCtr == 1");
 
     UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[1].EventID, SC_JUMP_ATS_INF_EID);
@@ -928,7 +928,7 @@ void SC_JumpAtsCmd_Test_AtsNotLoaded(void)
     SC_Assert_ID_EQ(SC_OperData.AtsCtrlBlckAddr->CmdNumber,
                     SC_GetAtsCommandNumAtSeq(AtsIndex, SC_SEQUENCE_IDX_C(1))->CmdNum);
     SC_Assert_IDX_VALUE(SC_OperData.AtsCtrlBlckAddr->TimeIndexPtr, 1);
-    UtAssert_True(SC_AppData.NextCmdTime[0] == 0, "SC_AppData.NextCmdTime[0] == 0");
+    UtAssert_True(SC_AppData.NextCmdTime[SC_Process_ATP] == 0, "SC_AppData.NextCmdTime[SC_Process_ATP] == 0");
     UtAssert_True(SC_OperData.HkPacket.Payload.CmdCtr == 1, "SC_OperData.HkPacket.Payload.CmdCtr == 1");
 
     UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[1].EventID, SC_JUMP_ATS_INF_EID);

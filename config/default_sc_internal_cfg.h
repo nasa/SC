@@ -342,7 +342,7 @@
  * \brief Defines the TIME SC should use for its commands
  *
  *  \par Description:
- *       This parameter defines what type of time SC should use for sending uot its commands
+ *       This parameter defines what type of time SC should use for sending out its commands
  *
  *  \par Limits:
  *       Must be SC_TimeRef_USE_CFE_TIME, SC_TimeRef_USE_TAI, or SC_TimeRef_USE_UTC */

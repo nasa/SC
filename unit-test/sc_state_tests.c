@@ -62,14 +62,14 @@ void SC_GetNextRtsTime_Test_Nominal(void)
     RtsInfoPtr = SC_GetRtsInfoObject(RtsIndex);
 
     RtsInfoPtr->RtsStatus       = SC_Status_EXECUTING;
-    RtsInfoPtr->NextCommandTime = SC_MAX_TIME;
+    RtsInfoPtr->NextCommandTgtWakeup = SC_MAX_WAKEUP_CNT;
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_GetNextRtsTime());
 
     /* Verify results */
     SC_Assert_ID_VALUE(SC_OperData.RtsCtrlBlckAddr->CurrRtsNum, 1);
-    UtAssert_True(SC_AppData.NextCmdTime[1] == SC_MAX_TIME, "SC_AppData.NextCmdTime[1] == SC_MAX_TIME");
+    UtAssert_True(SC_AppData.NextCmdTime[SC_Process_RTP] == SC_MAX_WAKEUP_CNT, "SC_AppData.NextCmdTime[SC_Process_RTP] == SC_MAX_WAKEUP_CNT");
 
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
 }
@@ -91,8 +91,8 @@ void SC_GetNextRtsTime_Test_InvalidRtsNum(void)
 
     /* Verify results */
     SC_Assert_ID_EQ(SC_OperData.RtsCtrlBlckAddr->CurrRtsNum, SC_RTS_NUM_NULL);
-    UtAssert_True(SC_AppData.NextCmdTime[SC_Process_RTP] == SC_MAX_TIME,
-                  "SC_AppData.NextCmdTime[SC_Process_RTP] == SC_MAX_TIME");
+    UtAssert_True(SC_AppData.NextCmdTime[SC_Process_RTP] == SC_MAX_WAKEUP_CNT,
+                  "SC_AppData.NextCmdTime[SC_Process_RTP] == SC_MAX_WAKEUP_CNT");
 
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
 }
@@ -106,17 +106,17 @@ void SC_GetNextRtsTime_Test_RtsPriority(void)
     RtsInfoPtr1 = SC_GetRtsInfoObject(SC_RTS_IDX_C(1));
 
     RtsInfoPtr0->RtsStatus       = SC_Status_EXECUTING;
-    RtsInfoPtr0->NextCommandTime = SC_MAX_TIME;
+    RtsInfoPtr0->NextCommandTgtWakeup = SC_MAX_WAKEUP_CNT;
 
     RtsInfoPtr1->RtsStatus       = SC_Status_EXECUTING;
-    RtsInfoPtr1->NextCommandTime = SC_MAX_TIME - 1;
+    RtsInfoPtr1->NextCommandTgtWakeup = SC_MAX_WAKEUP_CNT - 1;
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_GetNextRtsTime());
 
     /* Verify results */
     SC_Assert_ID_VALUE(SC_OperData.RtsCtrlBlckAddr->CurrRtsNum, 2);
-    UtAssert_True(SC_AppData.NextCmdTime[1] == SC_MAX_TIME - 1, "SC_AppData.NextCmdTime[1] == SC_MAX_TIME - 1");
+    UtAssert_True(SC_AppData.NextCmdTime[SC_Process_RTP] == SC_MAX_WAKEUP_CNT - 1, "SC_AppData.NextCmdTime[SC_Process_RTP] == SC_MAX_WAKEUP_CNT - 1");
 
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
 }
@@ -162,7 +162,7 @@ void SC_UpdateNextTime_Test_Rtp(void)
     SC_AppData.NextCmdTime[SC_Process_ATP]  = 10;
 
     RtsInfoPtr->RtsStatus       = SC_Status_EXECUTING;
-    RtsInfoPtr->NextCommandTime = 1;
+    RtsInfoPtr->NextCommandTgtWakeup = 1;
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_UpdateNextTime());
@@ -178,6 +178,7 @@ void SC_UpdateNextTime_Test_RtpAtpPriority(void)
     SC_RtsIndex_t      RtsIndex = SC_RTS_IDX_C(SC_NUMBER_OF_RTS - 1);
     SC_RtsInfoEntry_t *RtsInfoPtr;
 
+    SC_OperData.AtsCtrlBlckAddr->AtpState   = SC_Status_EXECUTING;
     RtsInfoPtr = SC_GetRtsInfoObject(RtsIndex);
 
     SC_OperData.RtsCtrlBlckAddr->CurrRtsNum = SC_RtsIndexToNum(RtsIndex);
@@ -185,7 +186,7 @@ void SC_UpdateNextTime_Test_RtpAtpPriority(void)
     SC_AppData.NextCmdTime[SC_Process_ATP]  = 0;
 
     RtsInfoPtr->RtsStatus       = SC_Status_EXECUTING;
-    RtsInfoPtr->NextCommandTime = 1;
+    RtsInfoPtr->NextCommandTgtWakeup = 1;
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_UpdateNextTime());
