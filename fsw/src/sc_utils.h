@@ -68,7 +68,7 @@ SC_AbsTimeTag_t SC_GetAtsEntryTime(SC_AtsEntryHeader_t *Entry);
  *
  *  \return The absolute time tag
  */
-SC_AbsTimeTag_t SC_ComputeAbsTime(SC_RelTimeTag_t RelTime);
+SC_AbsTimeTag_t SC_ComputeAbsTime(uint32 RelTime);
 
 /**
  * \brief Computes an absolute wakeup count from a relative wakeup count

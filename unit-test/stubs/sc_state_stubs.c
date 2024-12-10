@@ -31,8 +31,8 @@
  * Generated stub function for SC_GetNextAtsCommand()
  * ----------------------------------------------------
  */
-void SC_GetNextAtsCommand(void) {
-
+void SC_GetNextAtsCommand(void)
+{
   UT_GenStub_Execute(SC_GetNextAtsCommand, Basic, NULL);
 }
 
@@ -41,8 +41,8 @@ void SC_GetNextAtsCommand(void) {
  * Generated stub function for SC_GetNextRtsCommand()
  * ----------------------------------------------------
  */
-void SC_GetNextRtsCommand(void) {
-
+void SC_GetNextRtsCommand(void)
+{
   UT_GenStub_Execute(SC_GetNextRtsCommand, Basic, NULL);
 }
 
@@ -51,8 +51,8 @@ void SC_GetNextRtsCommand(void) {
  * Generated stub function for SC_GetNextRtsTime()
  * ----------------------------------------------------
  */
-void SC_GetNextRtsTime(void) {
-
+void SC_GetNextRtsTime(void)
+{
   UT_GenStub_Execute(SC_GetNextRtsTime, Basic, NULL);
 }
 
@@ -61,7 +61,7 @@ void SC_GetNextRtsTime(void) {
  * Generated stub function for SC_UpdateNextTime()
  * ----------------------------------------------------
  */
-void SC_UpdateNextTime(void) {
-
+void SC_UpdateNextTime(void)
+{
   UT_GenStub_Execute(SC_UpdateNextTime, Basic, NULL);
 }

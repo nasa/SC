@@ -31,7 +31,8 @@
  * Generated stub function for SC_ManageAtsTable()
  * ----------------------------------------------------
  */
-void SC_ManageAtsTable(int32 ArrayIndex) {
+void SC_ManageAtsTable(int32 ArrayIndex)
+{
   UT_GenStub_AddParam(SC_ManageAtsTable, int32, ArrayIndex);
 
   UT_GenStub_Execute(SC_ManageAtsTable, Basic, NULL);
@@ -42,7 +43,8 @@ void SC_ManageAtsTable(int32 ArrayIndex) {
  * Generated stub function for SC_ManageRtsTable()
  * ----------------------------------------------------
  */
-void SC_ManageRtsTable(int32 ArrayIndex) {
+void SC_ManageRtsTable(int32 ArrayIndex)
+{
   UT_GenStub_AddParam(SC_ManageRtsTable, int32, ArrayIndex);
 
   UT_GenStub_Execute(SC_ManageRtsTable, Basic, NULL);
@@ -53,7 +55,8 @@ void SC_ManageRtsTable(int32 ArrayIndex) {
  * Generated stub function for SC_ManageTable()
  * ----------------------------------------------------
  */
-void SC_ManageTable(SC_TableType type, int32 ArrayIndex) {
+void SC_ManageTable(SC_TableType type, int32 ArrayIndex)
+{
   UT_GenStub_AddParam(SC_ManageTable, SC_TableType, type);
   UT_GenStub_AddParam(SC_ManageTable, int32, ArrayIndex);
 
@@ -65,7 +68,8 @@ void SC_ManageTable(SC_TableType type, int32 ArrayIndex) {
  * Generated stub function for SC_ManageTableCmd()
  * ----------------------------------------------------
  */
-void SC_ManageTableCmd(const SC_ManageTableCmd_t *Cmd) {
+void SC_ManageTableCmd(const SC_ManageTableCmd_t *Cmd)
+{
   UT_GenStub_AddParam(SC_ManageTableCmd, const SC_ManageTableCmd_t *, Cmd);
 
   UT_GenStub_Execute(SC_ManageTableCmd, Basic, NULL);
@@ -76,7 +80,8 @@ void SC_ManageTableCmd(const SC_ManageTableCmd_t *Cmd) {
  * Generated stub function for SC_NoopCmd()
  * ----------------------------------------------------
  */
-void SC_NoopCmd(const SC_NoopCmd_t *Cmd) {
+void SC_NoopCmd(const SC_NoopCmd_t *Cmd)
+{
   UT_GenStub_AddParam(SC_NoopCmd, const SC_NoopCmd_t *, Cmd);
 
   UT_GenStub_Execute(SC_NoopCmd, Basic, NULL);
@@ -87,7 +92,8 @@ void SC_NoopCmd(const SC_NoopCmd_t *Cmd) {
  * Generated stub function for SC_OneHzWakeupCmd()
  * ----------------------------------------------------
  */
-void SC_OneHzWakeupCmd(const SC_OneHzWakeupCmd_t *Cmd) {
+void SC_OneHzWakeupCmd(const SC_OneHzWakeupCmd_t *Cmd)
+{
   UT_GenStub_AddParam(SC_OneHzWakeupCmd, const SC_OneHzWakeupCmd_t *, Cmd);
 
   UT_GenStub_Execute(SC_OneHzWakeupCmd, Basic, NULL);
@@ -98,8 +104,8 @@ void SC_OneHzWakeupCmd(const SC_OneHzWakeupCmd_t *Cmd) {
  * Generated stub function for SC_ProcessAtpCmd()
  * ----------------------------------------------------
  */
-void SC_ProcessAtpCmd(void) {
-
+void SC_ProcessAtpCmd(void)
+{
   UT_GenStub_Execute(SC_ProcessAtpCmd, Basic, NULL);
 }
 
@@ -108,8 +114,8 @@ void SC_ProcessAtpCmd(void) {
  * Generated stub function for SC_ProcessRtpCommand()
  * ----------------------------------------------------
  */
-void SC_ProcessRtpCommand(void) {
-
+void SC_ProcessRtpCommand(void)
+{
   UT_GenStub_Execute(SC_ProcessRtpCommand, Basic, NULL);
 }
 
@@ -118,7 +124,8 @@ void SC_ProcessRtpCommand(void) {
  * Generated stub function for SC_ResetCountersCmd()
  * ----------------------------------------------------
  */
-void SC_ResetCountersCmd(const SC_ResetCountersCmd_t *Cmd) {
+void SC_ResetCountersCmd(const SC_ResetCountersCmd_t *Cmd)
+{
   UT_GenStub_AddParam(SC_ResetCountersCmd, const SC_ResetCountersCmd_t *, Cmd);
 
   UT_GenStub_Execute(SC_ResetCountersCmd, Basic, NULL);
@@ -129,7 +136,8 @@ void SC_ResetCountersCmd(const SC_ResetCountersCmd_t *Cmd) {
  * Generated stub function for SC_SendHkCmd()
  * ----------------------------------------------------
  */
-void SC_SendHkCmd(const SC_SendHkCmd_t *Cmd) {
+void SC_SendHkCmd(const SC_SendHkCmd_t *Cmd)
+{
   UT_GenStub_AddParam(SC_SendHkCmd, const SC_SendHkCmd_t *, Cmd);
 
   UT_GenStub_Execute(SC_SendHkCmd, Basic, NULL);
@@ -140,4 +148,7 @@ void SC_SendHkCmd(const SC_SendHkCmd_t *Cmd) {
  * Generated stub function for SC_SendHkPacket()
  * ----------------------------------------------------
  */
-void SC_SendHkPacket(void) { UT_GenStub_Execute(SC_SendHkPacket, Basic, NULL); }
+void SC_SendHkPacket(void)
+{
+  UT_GenStub_Execute(SC_SendHkPacket, Basic, NULL);
+}

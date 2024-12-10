@@ -31,7 +31,8 @@
  * Generated stub function for SC_CompareAbsTime()
  * ----------------------------------------------------
  */
-bool SC_CompareAbsTime(SC_AbsTimeTag_t AbsTime1, SC_AbsTimeTag_t AbsTime2) {
+bool SC_CompareAbsTime(SC_AbsTimeTag_t AbsTime1, SC_AbsTimeTag_t AbsTime2)
+{
   UT_GenStub_SetupReturnBuffer(SC_CompareAbsTime, bool);
 
   UT_GenStub_AddParam(SC_CompareAbsTime, SC_AbsTimeTag_t, AbsTime1);
@@ -47,10 +48,11 @@ bool SC_CompareAbsTime(SC_AbsTimeTag_t AbsTime1, SC_AbsTimeTag_t AbsTime2) {
  * Generated stub function for SC_ComputeAbsTime()
  * ----------------------------------------------------
  */
-SC_AbsTimeTag_t SC_ComputeAbsTime(SC_RelTimeTag_t RelTime) {
+SC_AbsTimeTag_t SC_ComputeAbsTime(uint32 RelTime)
+{
   UT_GenStub_SetupReturnBuffer(SC_ComputeAbsTime, SC_AbsTimeTag_t);
 
-  UT_GenStub_AddParam(SC_ComputeAbsTime, SC_RelTimeTag_t, RelTime);
+  UT_GenStub_AddParam(SC_ComputeAbsTime, uint32, RelTime);
 
   UT_GenStub_Execute(SC_ComputeAbsTime, Basic, NULL);
 
@@ -62,7 +64,8 @@ SC_AbsTimeTag_t SC_ComputeAbsTime(SC_RelTimeTag_t RelTime) {
  * Generated stub function for SC_ComputeAbsWakeup()
  * ----------------------------------------------------
  */
-uint32 SC_ComputeAbsWakeup(uint32 RelWakeup) {
+uint32 SC_ComputeAbsWakeup(uint32 RelWakeup)
+{
   UT_GenStub_SetupReturnBuffer(SC_ComputeAbsWakeup, uint32);
 
   UT_GenStub_AddParam(SC_ComputeAbsWakeup, uint32, RelWakeup);
@@ -77,7 +80,8 @@ uint32 SC_ComputeAbsWakeup(uint32 RelWakeup) {
  * Generated stub function for SC_GetAtsEntryTime()
  * ----------------------------------------------------
  */
-SC_AbsTimeTag_t SC_GetAtsEntryTime(SC_AtsEntryHeader_t *Entry) {
+SC_AbsTimeTag_t SC_GetAtsEntryTime(SC_AtsEntryHeader_t *Entry)
+{
   UT_GenStub_SetupReturnBuffer(SC_GetAtsEntryTime, SC_AbsTimeTag_t);
 
   UT_GenStub_AddParam(SC_GetAtsEntryTime, SC_AtsEntryHeader_t *, Entry);
@@ -92,8 +96,8 @@ SC_AbsTimeTag_t SC_GetAtsEntryTime(SC_AtsEntryHeader_t *Entry) {
  * Generated stub function for SC_GetCurrentTime()
  * ----------------------------------------------------
  */
-void SC_GetCurrentTime(void) {
-
+void SC_GetCurrentTime(void)
+{
   UT_GenStub_Execute(SC_GetCurrentTime, Basic, NULL);
 }
 
@@ -102,7 +106,8 @@ void SC_GetCurrentTime(void) {
  * Generated stub function for SC_LookupTimeAccessor()
  * ----------------------------------------------------
  */
-SC_TimeAccessor_t SC_LookupTimeAccessor(SC_TimeRef_Enum_t TimeRef) {
+SC_TimeAccessor_t SC_LookupTimeAccessor(SC_TimeRef_Enum_t TimeRef)
+{
   UT_GenStub_SetupReturnBuffer(SC_LookupTimeAccessor, SC_TimeAccessor_t);
 
   UT_GenStub_AddParam(SC_LookupTimeAccessor, SC_TimeRef_Enum_t, TimeRef);
@@ -117,7 +122,8 @@ SC_TimeAccessor_t SC_LookupTimeAccessor(SC_TimeRef_Enum_t TimeRef) {
  * Generated stub function for SC_ToggleAtsIndex()
  * ----------------------------------------------------
  */
-SC_AtsIndex_t SC_ToggleAtsIndex(void) {
+SC_AtsIndex_t SC_ToggleAtsIndex(void)
+{
   UT_GenStub_SetupReturnBuffer(SC_ToggleAtsIndex, SC_AtsIndex_t);
 
   UT_GenStub_Execute(SC_ToggleAtsIndex, Basic, NULL);

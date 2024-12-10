@@ -31,7 +31,8 @@
  * Generated stub function for SC_AppendAtsCmd()
  * ----------------------------------------------------
  */
-void SC_AppendAtsCmd(const SC_AppendAtsCmd_t *Cmd) {
+void SC_AppendAtsCmd(const SC_AppendAtsCmd_t *Cmd)
+{
   UT_GenStub_AddParam(SC_AppendAtsCmd, const SC_AppendAtsCmd_t *, Cmd);
 
   UT_GenStub_Execute(SC_AppendAtsCmd, Basic, NULL);
@@ -42,7 +43,8 @@ void SC_AppendAtsCmd(const SC_AppendAtsCmd_t *Cmd) {
  * Generated stub function for SC_BeginAts()
  * ----------------------------------------------------
  */
-bool SC_BeginAts(SC_AtsIndex_t AtsIndex, uint16 TimeOffset) {
+bool SC_BeginAts(SC_AtsIndex_t AtsIndex, uint16 TimeOffset)
+{
   UT_GenStub_SetupReturnBuffer(SC_BeginAts, bool);
 
   UT_GenStub_AddParam(SC_BeginAts, SC_AtsIndex_t, AtsIndex);
@@ -58,7 +60,8 @@ bool SC_BeginAts(SC_AtsIndex_t AtsIndex, uint16 TimeOffset) {
  * Generated stub function for SC_ContinueAtsOnFailureCmd()
  * ----------------------------------------------------
  */
-void SC_ContinueAtsOnFailureCmd(const SC_ContinueAtsOnFailureCmd_t *Cmd) {
+void SC_ContinueAtsOnFailureCmd(const SC_ContinueAtsOnFailureCmd_t *Cmd)
+{
   UT_GenStub_AddParam(SC_ContinueAtsOnFailureCmd,
                       const SC_ContinueAtsOnFailureCmd_t *, Cmd);
 
@@ -70,7 +73,8 @@ void SC_ContinueAtsOnFailureCmd(const SC_ContinueAtsOnFailureCmd_t *Cmd) {
  * Generated stub function for SC_InlineSwitch()
  * ----------------------------------------------------
  */
-bool SC_InlineSwitch(void) {
+bool SC_InlineSwitch(void)
+{
   UT_GenStub_SetupReturnBuffer(SC_InlineSwitch, bool);
 
   UT_GenStub_Execute(SC_InlineSwitch, Basic, NULL);
@@ -83,7 +87,8 @@ bool SC_InlineSwitch(void) {
  * Generated stub function for SC_JumpAtsCmd()
  * ----------------------------------------------------
  */
-void SC_JumpAtsCmd(const SC_JumpAtsCmd_t *Cmd) {
+void SC_JumpAtsCmd(const SC_JumpAtsCmd_t *Cmd)
+{
   UT_GenStub_AddParam(SC_JumpAtsCmd, const SC_JumpAtsCmd_t *, Cmd);
 
   UT_GenStub_Execute(SC_JumpAtsCmd, Basic, NULL);
@@ -94,15 +99,18 @@ void SC_JumpAtsCmd(const SC_JumpAtsCmd_t *Cmd) {
  * Generated stub function for SC_KillAts()
  * ----------------------------------------------------
  */
-void SC_KillAts(void) { UT_GenStub_Execute(SC_KillAts, Basic, NULL); }
+void SC_KillAts(void)
+{
+  UT_GenStub_Execute(SC_KillAts, Basic, NULL);
+}
 
 /*
  * ----------------------------------------------------
  * Generated stub function for SC_ServiceSwitchPend()
  * ----------------------------------------------------
  */
-void SC_ServiceSwitchPend(void) {
-
+void SC_ServiceSwitchPend(void)
+{
   UT_GenStub_Execute(SC_ServiceSwitchPend, Basic, NULL);
 }
 
@@ -111,7 +119,8 @@ void SC_ServiceSwitchPend(void) {
  * Generated stub function for SC_StartAtsCmd()
  * ----------------------------------------------------
  */
-void SC_StartAtsCmd(const SC_StartAtsCmd_t *Cmd) {
+void SC_StartAtsCmd(const SC_StartAtsCmd_t *Cmd)
+{
   UT_GenStub_AddParam(SC_StartAtsCmd, const SC_StartAtsCmd_t *, Cmd);
 
   UT_GenStub_Execute(SC_StartAtsCmd, Basic, NULL);
@@ -122,7 +131,8 @@ void SC_StartAtsCmd(const SC_StartAtsCmd_t *Cmd) {
  * Generated stub function for SC_StopAtsCmd()
  * ----------------------------------------------------
  */
-void SC_StopAtsCmd(const SC_StopAtsCmd_t *Cmd) {
+void SC_StopAtsCmd(const SC_StopAtsCmd_t *Cmd)
+{
   UT_GenStub_AddParam(SC_StopAtsCmd, const SC_StopAtsCmd_t *, Cmd);
 
   UT_GenStub_Execute(SC_StopAtsCmd, Basic, NULL);
@@ -133,7 +143,8 @@ void SC_StopAtsCmd(const SC_StopAtsCmd_t *Cmd) {
  * Generated stub function for SC_SwitchAtsCmd()
  * ----------------------------------------------------
  */
-void SC_SwitchAtsCmd(const SC_SwitchAtsCmd_t *Cmd) {
+void SC_SwitchAtsCmd(const SC_SwitchAtsCmd_t *Cmd)
+{
   UT_GenStub_AddParam(SC_SwitchAtsCmd, const SC_SwitchAtsCmd_t *, Cmd);
 
   UT_GenStub_Execute(SC_SwitchAtsCmd, Basic, NULL);

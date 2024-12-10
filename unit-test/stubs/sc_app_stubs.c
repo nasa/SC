@@ -31,7 +31,8 @@
  * Generated stub function for SC_AppInit()
  * ----------------------------------------------------
  */
-CFE_Status_t SC_AppInit(void) {
+CFE_Status_t SC_AppInit(void)
+{
   UT_GenStub_SetupReturnBuffer(SC_AppInit, CFE_Status_t);
 
   UT_GenStub_Execute(SC_AppInit, Basic, NULL);
@@ -44,14 +45,18 @@ CFE_Status_t SC_AppInit(void) {
  * Generated stub function for SC_AppMain()
  * ----------------------------------------------------
  */
-void SC_AppMain(void) { UT_GenStub_Execute(SC_AppMain, Basic, NULL); }
+void SC_AppMain(void)
+{
+  UT_GenStub_Execute(SC_AppMain, Basic, NULL); 
+}
 
 /*
  * ----------------------------------------------------
  * Generated stub function for SC_GetDumpTablePointers()
  * ----------------------------------------------------
  */
-CFE_Status_t SC_GetDumpTablePointers(void) {
+CFE_Status_t SC_GetDumpTablePointers(void)
+{
   UT_GenStub_SetupReturnBuffer(SC_GetDumpTablePointers, CFE_Status_t);
 
   UT_GenStub_Execute(SC_GetDumpTablePointers, Basic, NULL);
@@ -64,7 +69,8 @@ CFE_Status_t SC_GetDumpTablePointers(void) {
  * Generated stub function for SC_GetLoadTablePointers()
  * ----------------------------------------------------
  */
-CFE_Status_t SC_GetLoadTablePointers(void) {
+CFE_Status_t SC_GetLoadTablePointers(void)
+{
   UT_GenStub_SetupReturnBuffer(SC_GetLoadTablePointers, CFE_Status_t);
 
   UT_GenStub_Execute(SC_GetLoadTablePointers, Basic, NULL);
@@ -77,7 +83,8 @@ CFE_Status_t SC_GetLoadTablePointers(void) {
  * Generated stub function for SC_InitTables()
  * ----------------------------------------------------
  */
-CFE_Status_t SC_InitTables(void) {
+CFE_Status_t SC_InitTables(void)
+{
   UT_GenStub_SetupReturnBuffer(SC_InitTables, CFE_Status_t);
 
   UT_GenStub_Execute(SC_InitTables, Basic, NULL);
@@ -90,8 +97,8 @@ CFE_Status_t SC_InitTables(void) {
  * Generated stub function for SC_LoadDefaultTables()
  * ----------------------------------------------------
  */
-void SC_LoadDefaultTables(void) {
-
+void SC_LoadDefaultTables(void)
+{
   UT_GenStub_Execute(SC_LoadDefaultTables, Basic, NULL);
 }
 
@@ -100,7 +107,8 @@ void SC_LoadDefaultTables(void) {
  * Generated stub function for SC_RegisterAllTables()
  * ----------------------------------------------------
  */
-CFE_Status_t SC_RegisterAllTables(void) {
+CFE_Status_t SC_RegisterAllTables(void)
+{
   UT_GenStub_SetupReturnBuffer(SC_RegisterAllTables, CFE_Status_t);
 
   UT_GenStub_Execute(SC_RegisterAllTables, Basic, NULL);
@@ -113,7 +121,8 @@ CFE_Status_t SC_RegisterAllTables(void) {
  * Generated stub function for SC_RegisterDumpOnlyTables()
  * ----------------------------------------------------
  */
-CFE_Status_t SC_RegisterDumpOnlyTables(void) {
+CFE_Status_t SC_RegisterDumpOnlyTables(void)
+{
   UT_GenStub_SetupReturnBuffer(SC_RegisterDumpOnlyTables, CFE_Status_t);
 
   UT_GenStub_Execute(SC_RegisterDumpOnlyTables, Basic, NULL);
@@ -126,7 +135,8 @@ CFE_Status_t SC_RegisterDumpOnlyTables(void) {
  * Generated stub function for SC_RegisterLoadableTables()
  * ----------------------------------------------------
  */
-CFE_Status_t SC_RegisterLoadableTables(void) {
+CFE_Status_t SC_RegisterLoadableTables(void)
+{
   UT_GenStub_SetupReturnBuffer(SC_RegisterLoadableTables, CFE_Status_t);
 
   UT_GenStub_Execute(SC_RegisterLoadableTables, Basic, NULL);
@@ -139,7 +149,7 @@ CFE_Status_t SC_RegisterLoadableTables(void) {
  * Generated stub function for SC_RegisterManageCmds()
  * ----------------------------------------------------
  */
-void SC_RegisterManageCmds(void) {
-
+void SC_RegisterManageCmds(void)
+{
   UT_GenStub_Execute(SC_RegisterManageCmds, Basic, NULL);
 }
