@@ -29,16 +29,16 @@ b)       Invalid command lengths
 c)       Commands that run off of the end of the table
 d)       Command number",SC application needs to validate the table to ensure gross errors are caught.  cFE Table Services handles the ground interface to tables. 
 SC2002,SC2002,SC shall allocate <PLATFORM_DEFINED> Relative Time-tagged Sequences (RTSs) with each capable of storing <PLATFORM_DEFINED>  bytes of stored command data.,Specifies the limits for table sizing purposes.
-SC2002.1,SC2002.1,SC shall resolve time to a wakeup count for Relative Time Command Sequences (RTS).,To address the bug where RTS commands could be delayed when the 1 Hz wakeup occurs near a second rollover.
+SC2002.1,SC2002.1,SC shall track a wakeup count for Relative Time Command Sequences (RTS).,
 SC2002.2,SC2002.2,SC shall accept variable length packed RTS commands within the <PLATFORM_DEFINED> byte relative time-tagged sequences.,
 SC2002.3,SC2002.3,"Each individual command within the sequence shall consist of:
 a)       A relative wakeup count
-b)       A variable length command, with a maximum length of <PLATFORM_DEFINED> bytes",Each command within an RTS needs to contain a wakeup count.
+b)       A variable length command",
 SC2003,SC2003,"Upon receipt of a table update indication for an RTS Table, SC shall set the RTS status to DISABLED.","Since the RTS definition table does not include a default state, safer to assume disabled."
 SC2004,SC2004,"SC shall execute commands in the ATS table in ascending order, based upon the time-tag of the commands, regardless of the order in which the commands are stored in the ATS table.","Allows flexibility in ground system tools and load generation (command location within an ATS doesn’t matter; Time matters)."
-SC2005,SC2005,SC shall execute no more than <PLATFORM_DEFINED> commands per second from all currently executing RTS tables and/or ATS tables.,Provides bounds on SC processing.
-SC2005.1,SC2005.1,"SC shall defer execution of pending RTS commands, when the combined execution count, of ATS and RTS, exceeds the command per second limit.",
-SC2005.2,SC2005.2,SC shall allow up to the maximum number of defined RTSs to be active concurrently.,RTSs can run concurrently. The limitation is the number of commands that can be sent in one second.
+SC2005,SC2005,SC shall execute no more than <PLATFORM_DEFINED> commands per wakeup cycle from all currently executing RTS tables and/or ATS tables.,Provides bounds on SC processing.
+SC2005.1,SC2005.1,"SC shall defer execution of pending RTS commands, when the combined execution count, of ATS and RTS, exceeds the command per wakeup limit.",
+SC2005.2,SC2005.2,SC shall allow up to the maximum number of defined RTSs to be active concurrently.,RTSs can run concurrently. The limitation is the number of commands that can be sent in one wakeup cycle.
 SC2006,SC2006,SC shall execute the RTSs in priority order based on the RTS number where RTS #1 has the highest priority.,"Provides a known order to the processing of RTSs so that missions can organize the RTSs appropriately.
 "
 SC2007,SC2007,SC shall define <PLATFORM_DEFINED> bytes of storage for an ATS Append Table.,
@@ -73,7 +73,7 @@ a)       Stop processing the currently executing ATS
 b)       Set the state of that ATS to IDLE",Note that the Stop ATS can be contained in the ATS.
 SC3001.1,SC3001.1,"If no ATS is executing, SC shall increment the Valid Command Counter.",
 SC3002,SC3002,"Upon receipt of a Switch ATS Command, SC shall
-a )       Terminate the processing of the current ATS table after processing all of the commands within the current second
+a)       Terminate the processing of the current ATS table after processing all of the commands within the current second
 b)       Start processing of the alternate ATS table",Allows the ground to chain ATS tables.
 SC3002.1,SC3002.1,SC shall begin processing the first ATS command after the next 1 second occurs containing a time which is greater-than-or-equal-to the current time.,Allows ATS tables to overlap each other so that the ground can switch at anytime. Need to wait until the next second occurs to ensure that the overlapping in ATSs doesn’t cause the same commands to be executed twice.
 SC3002.2,SC3002.2,SC shall mark all ATS commands with time less-than the current time as SKIPPED and an event message shall be generated.,Provides the ground knowledge of which commands were not processed (skipped).
@@ -95,7 +95,7 @@ c) The RTS, or range of RTS, table(s) has been Loaded",Method for starting an RT
 SC4000.1,SC4000.1,"If the conditions are met, SC shall issue an event message indicating the RTS started if the RTS number is less than <PLATFORM_DEFINED> RTS number.","Provides the ground an indication that an RTS started.
 Having a config parameter allows a range of RTSs to be specified such that no event message is sent."
 SC4000.2,SC4000.2,"If the conditions are not met, SC shall reject the command and send an event message.",Ground needs to know if an RTS was not executed.
-SC4001,SC4001,"SC shall dispatch commands within the RTS table, in position order, as the relative wakeup count specified in the RTS command expires.",RTS contain relative wakeup counts between commands.
+SC4001,SC4001,"SC shall dispatch commands within the RTS table, in position order, as the relative wakeup count specified in the RTS command elapses.",RTS contain relative wakeup counts between commands.
 SC4001.1,SC4001.1,The wakeup count shall be interpreted as the number of wakeup events to delay relative to the previous RTS command dispatched from that RTS table.,
 SC4001.2,SC4001.2,"For the first command in an RTS table, the delay shall be relative to the receipt of the RTS Start Command.",Provides the ability to delay the executing of the first command.
 SC4001.3,SC4001.3,"Prior to the dispatch of each individual RTS command, SC shall verify the validity of the following command parameters:
@@ -135,7 +135,7 @@ p)       RTS table activation count
 q)       RTS table activation error count
 r)        Number of active RTSs
 s)       Identifier of the next RTS table to dispatch a command
-t)        Wakeup count the next RTS command is due to be dispatched
+t)        Wakeup count delay after which the next RTS command is due to be dispatched
 u)       Execution status for each RTS table
 v)       Enable status for each RTS table
 w)      Identifier of the RTS table for which the most recent RTS command dispatch error occurred
@@ -164,7 +164,7 @@ p)       RTS table activation count
 q)       RTS table activation error count
 r)        Number of active RTSs
 s)       Identifier of the next RTS table to dispatch a command
-t)        Wakup count the next RTS command is due to be dispatched
+t)        Wakeup count delay after which the next RTS command is due to be dispatched
 u)       Execution status for each RTS table - IDLE
 v)       Status for each RTS table - DISABLED
 w)      Identifier of the RTS table for which the most recent RTS command dispatch error occurred

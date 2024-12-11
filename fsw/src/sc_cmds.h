@@ -153,7 +153,7 @@ void SC_ResetCountersCmd(const SC_ResetCountersCmd_t *Cmd);
 void SC_SendHkPacket(void);
 
 void SC_SendHkCmd(const SC_SendHkCmd_t *Cmd);
-void SC_OneHzWakeupCmd(const SC_OneHzWakeupCmd_t *Cmd);
+void SC_WakeupCmd(const SC_WakeupCmd_t *Cmd);
 
 /**
  * \brief Process an ATS Command

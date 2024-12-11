@@ -532,19 +532,23 @@ void SC_ResetCountersCmd(const SC_ResetCountersCmd_t *Cmd)
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /*                                                                 */
-/* 1Hz Wakeup Command                                              */
+/* Wakeup Command                                                  */
 /*                                                                 */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-void SC_OneHzWakeupCmd(const SC_OneHzWakeupCmd_t *Cmd)
+void SC_WakeupCmd(const SC_WakeupCmd_t *Cmd)
 {
-    bool IsThereAnotherCommandToExecute = false;
+    uint32 CurrentNumCmds;
     SC_AppData.CurrentWakeupCount++;
 
     /*
      * Time to execute a command in the SC memory
      */
-    do
+    while (SC_OperData.NumCmdsSec < SC_MAX_CMDS_PER_WAKEUP)
     {
+        SC_UpdateNextTime();
+
+        CurrentNumCmds = SC_OperData.NumCmdsSec;
+
         /*
          *  Check to see if there is an ATS switch Pending, if so service it.
          */
@@ -553,40 +557,19 @@ void SC_OneHzWakeupCmd(const SC_OneHzWakeupCmd_t *Cmd)
             SC_ServiceSwitchPend();
         }
 
-        if (SC_AppData.NextProcNumber == SC_Process_ATP)
-        {
-            SC_ProcessAtpCmd();
-        }
-        else
-        {
-            if (SC_AppData.NextProcNumber == SC_Process_RTP)
-            {
-                SC_ProcessRtpCommand();
-            }
-        }
+        SC_ProcessAtpCmd();
 
-        SC_UpdateNextTime();
+        SC_ProcessRtpCommand();
 
-        if ((SC_AppData.NextProcNumber == SC_Process_NONE) ||
-            ((SC_AppData.NextProcNumber == SC_Process_ATP) && (SC_AppData.NextCmdTime[SC_Process_ATP] > SC_AppData.CurrentTime)) ||
-            ((SC_AppData.NextProcNumber == SC_Process_RTP) && (SC_AppData.NextCmdTime[SC_Process_RTP] > SC_AppData.CurrentWakeupCount)))
-        {
-            SC_OperData.NumCmdsSec         = 0;
-            IsThereAnotherCommandToExecute = false;
+        /* 
+         * No commands could be processed
+         */
+        if (CurrentNumCmds == SC_OperData.NumCmdsSec) {
+            break;
         }
-        else /* Command needs to run immediately */
-        {
-            if (SC_OperData.NumCmdsSec >= SC_MAX_CMDS_PER_SEC)
-            {
-                SC_OperData.NumCmdsSec         = 0;
-                IsThereAnotherCommandToExecute = false;
-            }
-            else
-            {
-                IsThereAnotherCommandToExecute = true;
-            }
-        }
-    } while (IsThereAnotherCommandToExecute);
+    }
+
+    SC_OperData.NumCmdsSec = 0;
 }
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */

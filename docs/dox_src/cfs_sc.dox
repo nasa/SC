@@ -116,11 +116,11 @@
 
   \section SC Design Overview
 
-  The CFS Stored Command application is driven off of the 1Hz packet from the
-  Scheduler Application. When the 1Hz is received, SC looks to see if there are
+  The CFS Stored Command application is driven off of the wakeup command packet from the
+  Scheduler Application. When the wakeup command is received, SC looks to see if there are
   stored commands to execute (in the ATS and the RTS's). If there are commands
-  to be executed in this second, SC will execute them up until
-  #SC_MAX_CMDS_PER_SEC commands are executed. SC is also driven off of the
+  to be executed in this wakeup, SC will execute them up until
+  #SC_MAX_CMDS_PER_WAKEUP commands are executed. SC is also driven off of the
   housekeeping request packet from the Scheduler Application. When SC receives
   the HK request, it processes the request, sends out the housekeeping packet,
   and looks for table updates to the load/dump tables that SC maintains. SC is
@@ -310,7 +310,7 @@
   CFS Stored Command requires that two message ID's be put in the CFS Scheduler
   table for proper operation. Those message ID's are #SC_SEND_HK_MID, which
   should be sent out at the housekeeping request interval, and
-  #SC_ONEHZ_WAKEUP_MID, which needs to be sent out every second.
+  #SC_WAKEUP_MID.
 
   CFS Stored Command generates telemetry when it receives the housekeeping
   request. Its telemetry message ID is #SC_HK_TLM_MID.
@@ -446,15 +446,15 @@
 
   <H2>Over-scheduling the Stored Command Application</H2>
 
-  Another way to stress SC is to send out many commands in one second from many
-  sequences. For ATS commands, set the time tags to the same second. For RTS
-  commands, set the relative wakeup counts to zero. As noted earlier, SC will
-  send out the commands as fast as possible up to a certain number of commands
-  per second. With this in mind, it is possible to pack the ATSs and a few RTSs with
-  commands that want to go out in the same second. When all of these sequences
-  are run, SC will get behind in sending out the commands. SC will keep going
-  until all of the commands are executed, but do not expect "to the second"
-  execution accuracy.
+  Another way to stress SC is to send out many commands in one wakeup cycle
+  from many sequences. For ATS commands, set the time tags to the same second.
+  For RTS commands, set the relative wakeup counts to zero. As noted earlier,
+  SC will send out the commands as fast as possible up to a certain number of
+  commands per wakeup. With this in mind, it is possible to pack the ATSs and
+  a few RTSs with commands that want to go out in the same wakeup. When all of
+  these sequences are run, SC will get behind in sending out the commands. SC
+  will keep going until all of the commands are executed, but do not expect
+  "to the second" execution accuracy.
 
   <H2>Unsorted ATS Loads</H2>
 
@@ -476,30 +476,31 @@
   the switch command could be sent. Figure 4.6 shows the overlapping buffer
   concept with the ATSs. As mentioned earlier, the ATP can execute commands
   with the same time tag. Because the resolution of the time tag only goes
-  down to one second, in order to execute more than one command in one second,
-  the commands should have the same time tag. Now suppose that the ATP receives
-  the command to Switch ATSs while one ATS is in the middle of sending 8
-  commands out with the same time tag, and only 5 of these commands were
-  sent out before the buffer is switched (assuming a switch command coming
-  from the ground, not the internal switch command). At first glance this
-  seems to work because the other ATS buffer has an overlap with the same 8
-  commands that want to go out in one second. This is where a problem occurs:
-  when the new ATS is started, the ATP will walk down the list of commands
-  until it finds a command with a time tag that is greater than or equal to
-  the current time tag. Because the resolution of the time tags only goes
-  down to a second, the ATP will execute all 8 commands in that one second,
-  causing 5 of the eight commands to be sent out twice. In order to solve the
-  problem of the ATS Switch sending out duplicate commands, the Switch ATS
-  command received from the ground causes a wait condition until it is "safe"
-  to switch the ATS buffer. So, when the Switch ATS command is received by the
-  ATP, the command is validated and then a SWITCH_PEND flag is set. When it
-  becomes safe for the ATS to switch (i.e. at a 1 second boundary in UTC Time),
-  the switch will be serviced. This method assures that sending the Switch ATS
-  command from the ground will not cause any duplicate commands to be sent
-  out to the data system, nor any missed commands. Note that all of this
-  switch logic only comes into use when there are multiple commands per second.
-  The safe switch will wait until all commands during the current second have
-  been sent out, then it will switch. If there are no commands with the same
+  down to one second, in order to have more than one command go out in the
+  same second, the commands should have the same time tag. Now suppose that
+  the ATP receives the command to Switch ATSs while one ATS is in the middle
+  of sending 8 commands out with the same time tag, and only 5 of these
+  commands were sent out before the buffer is switched (assuming a switch
+  command coming from the ground, not the internal switch command). At first
+  glance this seems to work because the other ATS buffer has an overlap with
+  the same 8 commands that want to go out in one second. This is where a
+  problem occurs: when the new ATS is started, the ATP will walk down the
+  list of commands until it finds a command with a time tag that is greater
+  than or equal to the current time tag. Because the resolution of the time
+  tags only goes down to a second, the ATP will execute all 8 commands in
+  that one second, causing 5 of the eight commands to be sent out twice.
+  In order to solve the problem of the ATS Switch sending out duplicate
+  commands, the Switch ATS command received from the ground causes a wait
+  condition until it is "safe" to switch the ATS buffer. So, when the
+  Switch ATS command is received by the ATP, the command is validated and
+  then a SWITCH_PEND flag is set. When it becomes safe for the ATS to
+  switch (i.e. at a 1 second boundary in UTC Time), the switch will be
+  serviced. This method assures that sending the Switch ATS command from
+  the ground will not cause any duplicate commands to be sent out to the
+  data system, nor any missed commands. Note that all of this switch logic
+  only comes into use when there are multiple commands per second. The safe
+  switch will wait until all commands during the current second have been
+  sent out, then it will switch. If there are no commands with the same
   time tag in the overlap region (including the switch command) this logic
   does not get used. In either case, the switch can be performed without
   sending any duplicate commands to be sent out. There are certain conditions

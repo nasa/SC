@@ -36,12 +36,12 @@
  * Macro Definitions
  *************************************************************************/
 
-#ifndef SC_MAX_CMDS_PER_SEC
-#error SC_MAX_CMDS_PER_SEC must be defined!
-#elif (SC_MAX_CMDS_PER_SEC > 65535)
-#error SC_MAX_CMDS_PER_SEC cannot be greater than 65535!
-#elif (SC_MAX_CMDS_PER_SEC < 1)
-#error SC_MAX_CMDS_PER_SEC cannot be less than 1!
+#ifndef SC_MAX_CMDS_PER_WAKEUP
+#error SC_MAX_CMDS_PER_WAKEUP must be defined!
+#elif (SC_MAX_CMDS_PER_WAKEUP > 65535)
+#error SC_MAX_CMDS_PER_WAKEUP cannot be greater than 65535!
+#elif (SC_MAX_CMDS_PER_WAKEUP < 1)
+#error SC_MAX_CMDS_PER_WAKEUP cannot be less than 1!
 #endif
 
 #ifndef SC_NUMBER_OF_RTS

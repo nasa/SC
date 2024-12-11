@@ -214,33 +214,33 @@ void SC_ProcessRequest_Test_SendHkCmdInvalidLength(void)
     UtAssert_STUB_COUNT(SC_SendHkCmd, 0);
 }
 
-void SC_ProcessRequest_Test_OneHzWakeupNominal(void)
+void SC_ProcessRequest_Test_WakeupNominal(void)
 {
     /**
-     **  Test case: SC_ONEHZ_WAKEUP_MID
+     **  Test case: SC_WAKEUP_MID
      **/
 
-    CFE_SB_MsgId_t TestMsgId = CFE_SB_ValueToMsgId(SC_ONEHZ_WAKEUP_MID);
+    CFE_SB_MsgId_t TestMsgId = CFE_SB_ValueToMsgId(SC_WAKEUP_MID);
 
     UT_SC_Dispatch_SetMsgId(TestMsgId);
     UT_SC_Dispatch_SetFcnCode(0);
-    UT_SC_Dispatch_SetMsgSize(sizeof(SC_OneHzWakeupCmd_t));
+    UT_SC_Dispatch_SetMsgSize(sizeof(SC_WakeupCmd_t));
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_ProcessRequest(&UT_CmdBuf.Buf));
 
     /* Verify results */
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
-    UtAssert_STUB_COUNT(SC_OneHzWakeupCmd, 1);
+    UtAssert_STUB_COUNT(SC_WakeupCmd, 1);
 }
 
-void SC_ProcessRequest_Test_OneHzWakeupCmdInvalidLength(void)
+void SC_ProcessRequest_Test_WakeupCmdInvalidLength(void)
 {
     /**
-     **  Test case: SC_ONEHZ_WAKEUP_MID
+     **  Test case: SC_WAKEUP_MID
      **/
 
-    CFE_SB_MsgId_t TestMsgId = CFE_SB_ValueToMsgId(SC_ONEHZ_WAKEUP_MID);
+    CFE_SB_MsgId_t TestMsgId = CFE_SB_ValueToMsgId(SC_WAKEUP_MID);
 
     UT_SC_Dispatch_SetMsgId(TestMsgId);
     UT_SC_Dispatch_SetFcnCode(0);
@@ -252,7 +252,7 @@ void SC_ProcessRequest_Test_OneHzWakeupCmdInvalidLength(void)
     /* Verify results */
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
     UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_CMD_LEN_ERR_EID);
-    UtAssert_STUB_COUNT(SC_OneHzWakeupCmd, 0);
+    UtAssert_STUB_COUNT(SC_WakeupCmd, 0);
 }
 
 void SC_ProcessRequest_Test_MIDError(void)
@@ -932,26 +932,26 @@ void UtTest_Setup(void)
                "SC_ProcessRequest_Test_SendHkNominal");
     UtTest_Add(SC_ProcessRequest_Test_SendHkCmdInvalidLength, SC_Test_Setup, SC_Test_TearDown,
                "SC_ProcessRequest_Test_SendHkCmdInvalidLength");
-    UtTest_Add(SC_ProcessRequest_Test_OneHzWakeupCmdInvalidLength, SC_Test_Setup, SC_Test_TearDown,
-               "SC_ProcessRequest_Test_OneHzWakeupCmdInvalidLength");
-    UtTest_Add(SC_ProcessRequest_Test_OneHzWakeupNominal, SC_Test_Setup, SC_Test_TearDown,
-               "SC_ProcessRequest_Test_OneHzWakeupNominal");
+    UtTest_Add(SC_ProcessRequest_Test_WakeupCmdInvalidLength, SC_Test_Setup, SC_Test_TearDown,
+               "SC_ProcessRequest_Test_WakeupCmdInvalidLength");
+    UtTest_Add(SC_ProcessRequest_Test_WakeupNominal, SC_Test_Setup, SC_Test_TearDown,
+               "SC_ProcessRequest_Test_WakeupNominal");
     UtTest_Add(SC_ProcessRequest_Test_MIDError, SC_Test_Setup, SC_Test_TearDown, "SC_ProcessRequest_Test_MIDError");
 #ifdef jphfix
     UtTest_Add(SC_ProcessRequest_Test_HkMIDAutoStartRts, SC_Test_Setup, SC_Test_TearDown,
                "SC_ProcessRequest_Test_HkMIDAutoStartRts");
     UtTest_Add(SC_ProcessRequest_Test_HkMIDAutoStartRtsLoaded, SC_Test_Setup, SC_Test_TearDown,
                "SC_ProcessRequest_Test_HkMIDAutoStartRtsLoaded");
-    UtTest_Add(SC_ProcessRequest_Test_OneHzWakeupNONE, SC_Test_Setup, SC_Test_TearDown,
-               "SC_ProcessRequest_Test_OneHzWakeupNONE");
-    UtTest_Add(SC_ProcessRequest_Test_OneHzWakeupNoSwitchPending, SC_Test_Setup, SC_Test_TearDown,
-               "SC_ProcessRequest_Test_OneHzWakeupNoSwitchPending");
-    UtTest_Add(SC_ProcessRequest_Test_OneHzWakeupAtpNotExecutionTime, SC_Test_Setup, SC_Test_TearDown,
-               "SC_ProcessRequest_Test_OneHzWakeupAtpNotExecutionTime");
-    UtTest_Add(SC_ProcessRequest_Test_OneHzWakeupRtpExecutionTime, SC_Test_Setup, SC_Test_TearDown,
-               "SC_ProcessRequest_Test_OneHzWakeupRtpExecutionTime");
-    UtTest_Add(SC_ProcessRequest_Test_OneHzWakeupRtpExecutionTimeTooManyCmds, SC_Test_Setup, SC_Test_TearDown,
-               "SC_ProcessRequest_Test_OneHzWakeupRtpExecutionTimeTooManyCmds");
+    UtTest_Add(SC_ProcessRequest_Test_WakeupNONE, SC_Test_Setup, SC_Test_TearDown,
+               "SC_ProcessRequest_Test_WakeupNONE");
+    UtTest_Add(SC_ProcessRequest_Test_WakeupNoSwitchPending, SC_Test_Setup, SC_Test_TearDown,
+               "SC_ProcessRequest_Test_WakeupNoSwitchPending");
+    UtTest_Add(SC_ProcessRequest_Test_WakeupAtpNotExecutionTime, SC_Test_Setup, SC_Test_TearDown,
+               "SC_ProcessRequest_Test_WakeupAtpNotExecutionTime");
+    UtTest_Add(SC_ProcessRequest_Test_WakeupRtpExecutionTime, SC_Test_Setup, SC_Test_TearDown,
+               "SC_ProcessRequest_Test_WakeupRtpExecutionTime");
+    UtTest_Add(SC_ProcessRequest_Test_WakeupRtpExecutionTimeTooManyCmds, SC_Test_Setup, SC_Test_TearDown,
+               "SC_ProcessRequest_Test_WakeupRtpExecutionTimeTooManyCmds");
 #endif
 
     UtTest_Add(SC_ProcessCommand_Test_NoopCmdNominal, SC_Test_Setup, SC_Test_TearDown,

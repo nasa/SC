@@ -422,7 +422,7 @@ void SC_KillAts_Test(void)
 void SC_SwitchAtsCmd_Test_Nominal(void)
 {
     SC_AtsIndex_t      AtsIndex  = SC_ATS_IDX_C(1);
-    CFE_SB_MsgId_t     TestMsgId = CFE_SB_ValueToMsgId(SC_ONEHZ_WAKEUP_MID);
+    CFE_SB_MsgId_t     TestMsgId = CFE_SB_ValueToMsgId(SC_WAKEUP_MID);
     SC_AtsInfoTable_t *AtsInfoPtr;
 
     AtsInfoPtr = SC_GetAtsInfoObject(AtsIndex);
@@ -464,7 +464,7 @@ void SC_SwitchAtsCmd_Test_BadId(void)
 void SC_SwitchAtsCmd_Test_DestinationAtsNotLoaded(void)
 {
     SC_AtsIndex_t      AtsIndex  = SC_ATS_IDX_C(1);
-    CFE_SB_MsgId_t     TestMsgId = CFE_SB_ValueToMsgId(SC_ONEHZ_WAKEUP_MID);
+    CFE_SB_MsgId_t     TestMsgId = CFE_SB_ValueToMsgId(SC_WAKEUP_MID);
     SC_AtsInfoTable_t *AtsInfoPtr;
 
     AtsInfoPtr = SC_GetAtsInfoObject(AtsIndex);
@@ -489,7 +489,7 @@ void SC_SwitchAtsCmd_Test_DestinationAtsNotLoaded(void)
 
 void SC_SwitchAtsCmd_Test_AtpIdle(void)
 {
-    CFE_SB_MsgId_t TestMsgId = CFE_SB_ValueToMsgId(SC_ONEHZ_WAKEUP_MID);
+    CFE_SB_MsgId_t TestMsgId = CFE_SB_ValueToMsgId(SC_WAKEUP_MID);
 
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
 

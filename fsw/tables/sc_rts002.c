@@ -30,8 +30,8 @@
  * the following commands that are scheduled as follows:
  *
  * SC NOOP command, execution wakeup count relative to start of RTS = 0
- * SC NOOP command, execution wakeup count relative to prev cmd = 1
- * SC NOOP command, execution wakeup count relative to prev cmd = 1
+ * SC NOOP command, execution wakeup count relative to prev cmd = 5
+ * SC NOOP command, execution wakeup count relative to prev cmd = 5
  */
 
 #include "cfe.h"

@@ -33,14 +33,14 @@
  */
 bool SC_CompareAbsTime(SC_AbsTimeTag_t AbsTime1, SC_AbsTimeTag_t AbsTime2)
 {
-  UT_GenStub_SetupReturnBuffer(SC_CompareAbsTime, bool);
+    UT_GenStub_SetupReturnBuffer(SC_CompareAbsTime, bool);
 
-  UT_GenStub_AddParam(SC_CompareAbsTime, SC_AbsTimeTag_t, AbsTime1);
-  UT_GenStub_AddParam(SC_CompareAbsTime, SC_AbsTimeTag_t, AbsTime2);
+    UT_GenStub_AddParam(SC_CompareAbsTime, SC_AbsTimeTag_t, AbsTime1);
+    UT_GenStub_AddParam(SC_CompareAbsTime, SC_AbsTimeTag_t, AbsTime2);
 
-  UT_GenStub_Execute(SC_CompareAbsTime, Basic, NULL);
+    UT_GenStub_Execute(SC_CompareAbsTime, Basic, NULL);
 
-  return UT_GenStub_GetReturnValue(SC_CompareAbsTime, bool);
+    return UT_GenStub_GetReturnValue(SC_CompareAbsTime, bool);
 }
 
 /*
@@ -50,13 +50,13 @@ bool SC_CompareAbsTime(SC_AbsTimeTag_t AbsTime1, SC_AbsTimeTag_t AbsTime2)
  */
 SC_AbsTimeTag_t SC_ComputeAbsTime(uint32 RelTime)
 {
-  UT_GenStub_SetupReturnBuffer(SC_ComputeAbsTime, SC_AbsTimeTag_t);
+    UT_GenStub_SetupReturnBuffer(SC_ComputeAbsTime, SC_AbsTimeTag_t);
 
-  UT_GenStub_AddParam(SC_ComputeAbsTime, uint32, RelTime);
+    UT_GenStub_AddParam(SC_ComputeAbsTime, uint32, RelTime);
 
-  UT_GenStub_Execute(SC_ComputeAbsTime, Basic, NULL);
+    UT_GenStub_Execute(SC_ComputeAbsTime, Basic, NULL);
 
-  return UT_GenStub_GetReturnValue(SC_ComputeAbsTime, SC_AbsTimeTag_t);
+    return UT_GenStub_GetReturnValue(SC_ComputeAbsTime, SC_AbsTimeTag_t);
 }
 
 /*
@@ -66,13 +66,13 @@ SC_AbsTimeTag_t SC_ComputeAbsTime(uint32 RelTime)
  */
 uint32 SC_ComputeAbsWakeup(uint32 RelWakeup)
 {
-  UT_GenStub_SetupReturnBuffer(SC_ComputeAbsWakeup, uint32);
+    UT_GenStub_SetupReturnBuffer(SC_ComputeAbsWakeup, uint32);
 
-  UT_GenStub_AddParam(SC_ComputeAbsWakeup, uint32, RelWakeup);
+    UT_GenStub_AddParam(SC_ComputeAbsWakeup, uint32, RelWakeup);
 
-  UT_GenStub_Execute(SC_ComputeAbsWakeup, Basic, NULL);
+    UT_GenStub_Execute(SC_ComputeAbsWakeup, Basic, NULL);
 
-  return UT_GenStub_GetReturnValue(SC_ComputeAbsWakeup, uint32);
+    return UT_GenStub_GetReturnValue(SC_ComputeAbsWakeup, uint32);
 }
 
 /*
@@ -82,13 +82,13 @@ uint32 SC_ComputeAbsWakeup(uint32 RelWakeup)
  */
 SC_AbsTimeTag_t SC_GetAtsEntryTime(SC_AtsEntryHeader_t *Entry)
 {
-  UT_GenStub_SetupReturnBuffer(SC_GetAtsEntryTime, SC_AbsTimeTag_t);
+    UT_GenStub_SetupReturnBuffer(SC_GetAtsEntryTime, SC_AbsTimeTag_t);
 
-  UT_GenStub_AddParam(SC_GetAtsEntryTime, SC_AtsEntryHeader_t *, Entry);
+    UT_GenStub_AddParam(SC_GetAtsEntryTime, SC_AtsEntryHeader_t *, Entry);
 
-  UT_GenStub_Execute(SC_GetAtsEntryTime, Basic, NULL);
+    UT_GenStub_Execute(SC_GetAtsEntryTime, Basic, NULL);
 
-  return UT_GenStub_GetReturnValue(SC_GetAtsEntryTime, SC_AbsTimeTag_t);
+    return UT_GenStub_GetReturnValue(SC_GetAtsEntryTime, SC_AbsTimeTag_t);
 }
 
 /*
@@ -98,7 +98,7 @@ SC_AbsTimeTag_t SC_GetAtsEntryTime(SC_AtsEntryHeader_t *Entry)
  */
 void SC_GetCurrentTime(void)
 {
-  UT_GenStub_Execute(SC_GetCurrentTime, Basic, NULL);
+    UT_GenStub_Execute(SC_GetCurrentTime, Basic, NULL);
 }
 
 /*
@@ -108,13 +108,13 @@ void SC_GetCurrentTime(void)
  */
 SC_TimeAccessor_t SC_LookupTimeAccessor(SC_TimeRef_Enum_t TimeRef)
 {
-  UT_GenStub_SetupReturnBuffer(SC_LookupTimeAccessor, SC_TimeAccessor_t);
+    UT_GenStub_SetupReturnBuffer(SC_LookupTimeAccessor, SC_TimeAccessor_t);
 
-  UT_GenStub_AddParam(SC_LookupTimeAccessor, SC_TimeRef_Enum_t, TimeRef);
+    UT_GenStub_AddParam(SC_LookupTimeAccessor, SC_TimeRef_Enum_t, TimeRef);
 
-  UT_GenStub_Execute(SC_LookupTimeAccessor, Basic, NULL);
+    UT_GenStub_Execute(SC_LookupTimeAccessor, Basic, NULL);
 
-  return UT_GenStub_GetReturnValue(SC_LookupTimeAccessor, SC_TimeAccessor_t);
+    return UT_GenStub_GetReturnValue(SC_LookupTimeAccessor, SC_TimeAccessor_t);
 }
 
 /*
@@ -124,9 +124,9 @@ SC_TimeAccessor_t SC_LookupTimeAccessor(SC_TimeRef_Enum_t TimeRef)
  */
 SC_AtsIndex_t SC_ToggleAtsIndex(void)
 {
-  UT_GenStub_SetupReturnBuffer(SC_ToggleAtsIndex, SC_AtsIndex_t);
+    UT_GenStub_SetupReturnBuffer(SC_ToggleAtsIndex, SC_AtsIndex_t);
 
-  UT_GenStub_Execute(SC_ToggleAtsIndex, Basic, NULL);
+    UT_GenStub_Execute(SC_ToggleAtsIndex, Basic, NULL);
 
-  return UT_GenStub_GetReturnValue(SC_ToggleAtsIndex, SC_AtsIndex_t);
+    return UT_GenStub_GetReturnValue(SC_ToggleAtsIndex, SC_AtsIndex_t);
 }

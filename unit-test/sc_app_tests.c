@@ -296,17 +296,17 @@ void SC_AppInit_Test_SBSubscribeHKError(void)
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
 }
 
-void SC_AppInit_Test_SubscribeTo1HzError(void)
+void SC_AppInit_Test_SubscribeToWakeupError(void)
 {
     /* Set CFE_SB_Subscribe to return -1 on the 2nd call in order to generate error message
-     * SC_INIT_SB_SUBSCRIBE_ONEHZ_ERR_EID */
+     * SC_INIT_SB_SUBSCRIBE_ERR_EID */
     UT_SetDeferredRetcode(UT_KEY(CFE_SB_Subscribe), 2, -1);
 
     /* Execute the function being tested */
     UtAssert_INT32_EQ(SC_AppInit(), -1);
 
     /* Verify results */
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_INIT_SB_SUBSCRIBE_ONEHZ_ERR_EID);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_INIT_SB_SUBSCRIBE_ERR_EID);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
 }
 
@@ -703,8 +703,8 @@ void UtTest_Setup(void)
                "SC_AppInit_Test_SBSubscribeHKError");
     UtTest_Add(SC_AppInit_Test_SBSubscribeToCmdError, SC_Test_Setup, SC_Test_TearDown,
                "SC_AppInit_Test_SBSubscribeToCmdError");
-    UtTest_Add(SC_AppInit_Test_SubscribeTo1HzError, SC_Test_Setup, SC_Test_TearDown,
-               "SC_AppInit_Test_SubscribeTo1HzError");
+    UtTest_Add(SC_AppInit_Test_SubscribeToWakeupError, SC_Test_Setup, SC_Test_TearDown,
+               "SC_AppInit_Test_SubscribeToWakeupError");
     UtTest_Add(SC_AppInit_Test_InitTablesError, SC_Test_Setup, SC_Test_TearDown, "SC_AppInit_Test_InitTablesError");
     UtTest_Add(SC_InitTables_Test_Nominal, SC_Test_Setup, SC_Test_TearDown, "SC_InitTables_Test_Nominal");
     UtTest_Add(SC_InitTables_Test_ErrorRegisterAllTables, SC_Test_Setup, SC_Test_TearDown,

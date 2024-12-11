@@ -33,9 +33,9 @@
  */
 void SC_AutoStartRts(SC_RtsNum_t RtsNum)
 {
-  UT_GenStub_AddParam(SC_AutoStartRts, SC_RtsNum_t, RtsNum);
+    UT_GenStub_AddParam(SC_AutoStartRts, SC_RtsNum_t, RtsNum);
 
-  UT_GenStub_Execute(SC_AutoStartRts, Basic, NULL);
+    UT_GenStub_Execute(SC_AutoStartRts, Basic, NULL);
 }
 
 /*
@@ -45,9 +45,9 @@ void SC_AutoStartRts(SC_RtsNum_t RtsNum)
  */
 void SC_DisableRtsCmd(const SC_DisableRtsCmd_t *Cmd)
 {
-  UT_GenStub_AddParam(SC_DisableRtsCmd, const SC_DisableRtsCmd_t *, Cmd);
+    UT_GenStub_AddParam(SC_DisableRtsCmd, const SC_DisableRtsCmd_t *, Cmd);
 
-  UT_GenStub_Execute(SC_DisableRtsCmd, Basic, NULL);
+    UT_GenStub_Execute(SC_DisableRtsCmd, Basic, NULL);
 }
 
 /*
@@ -57,9 +57,9 @@ void SC_DisableRtsCmd(const SC_DisableRtsCmd_t *Cmd)
  */
 void SC_DisableRtsGrpCmd(const SC_DisableRtsGrpCmd_t *Cmd)
 {
-  UT_GenStub_AddParam(SC_DisableRtsGrpCmd, const SC_DisableRtsGrpCmd_t *, Cmd);
+    UT_GenStub_AddParam(SC_DisableRtsGrpCmd, const SC_DisableRtsGrpCmd_t *, Cmd);
 
-  UT_GenStub_Execute(SC_DisableRtsGrpCmd, Basic, NULL);
+    UT_GenStub_Execute(SC_DisableRtsGrpCmd, Basic, NULL);
 }
 
 /*
@@ -69,9 +69,9 @@ void SC_DisableRtsGrpCmd(const SC_DisableRtsGrpCmd_t *Cmd)
  */
 void SC_EnableRtsCmd(const SC_EnableRtsCmd_t *Cmd)
 {
-  UT_GenStub_AddParam(SC_EnableRtsCmd, const SC_EnableRtsCmd_t *, Cmd);
+    UT_GenStub_AddParam(SC_EnableRtsCmd, const SC_EnableRtsCmd_t *, Cmd);
 
-  UT_GenStub_Execute(SC_EnableRtsCmd, Basic, NULL);
+    UT_GenStub_Execute(SC_EnableRtsCmd, Basic, NULL);
 }
 
 /*
@@ -81,9 +81,9 @@ void SC_EnableRtsCmd(const SC_EnableRtsCmd_t *Cmd)
  */
 void SC_EnableRtsGrpCmd(const SC_EnableRtsGrpCmd_t *Cmd)
 {
-  UT_GenStub_AddParam(SC_EnableRtsGrpCmd, const SC_EnableRtsGrpCmd_t *, Cmd);
+    UT_GenStub_AddParam(SC_EnableRtsGrpCmd, const SC_EnableRtsGrpCmd_t *, Cmd);
 
-  UT_GenStub_Execute(SC_EnableRtsGrpCmd, Basic, NULL);
+    UT_GenStub_Execute(SC_EnableRtsGrpCmd, Basic, NULL);
 }
 
 /*
@@ -93,9 +93,9 @@ void SC_EnableRtsGrpCmd(const SC_EnableRtsGrpCmd_t *Cmd)
  */
 void SC_KillRts(SC_RtsIndex_t RtsIndex)
 {
-  UT_GenStub_AddParam(SC_KillRts, SC_RtsIndex_t, RtsIndex);
+    UT_GenStub_AddParam(SC_KillRts, SC_RtsIndex_t, RtsIndex);
 
-  UT_GenStub_Execute(SC_KillRts, Basic, NULL);
+    UT_GenStub_Execute(SC_KillRts, Basic, NULL);
 }
 
 /*
@@ -105,9 +105,9 @@ void SC_KillRts(SC_RtsIndex_t RtsIndex)
  */
 void SC_StartRtsCmd(const SC_StartRtsCmd_t *Cmd)
 {
-  UT_GenStub_AddParam(SC_StartRtsCmd, const SC_StartRtsCmd_t *, Cmd);
+    UT_GenStub_AddParam(SC_StartRtsCmd, const SC_StartRtsCmd_t *, Cmd);
 
-  UT_GenStub_Execute(SC_StartRtsCmd, Basic, NULL);
+    UT_GenStub_Execute(SC_StartRtsCmd, Basic, NULL);
 }
 
 /*
@@ -117,9 +117,9 @@ void SC_StartRtsCmd(const SC_StartRtsCmd_t *Cmd)
  */
 void SC_StartRtsGrpCmd(const SC_StartRtsGrpCmd_t *Cmd)
 {
-  UT_GenStub_AddParam(SC_StartRtsGrpCmd, const SC_StartRtsGrpCmd_t *, Cmd);
+    UT_GenStub_AddParam(SC_StartRtsGrpCmd, const SC_StartRtsGrpCmd_t *, Cmd);
 
-  UT_GenStub_Execute(SC_StartRtsGrpCmd, Basic, NULL);
+    UT_GenStub_Execute(SC_StartRtsGrpCmd, Basic, NULL);
 }
 
 /*
@@ -129,9 +129,9 @@ void SC_StartRtsGrpCmd(const SC_StartRtsGrpCmd_t *Cmd)
  */
 void SC_StopRtsCmd(const SC_StopRtsCmd_t *Cmd)
 {
-  UT_GenStub_AddParam(SC_StopRtsCmd, const SC_StopRtsCmd_t *, Cmd);
+    UT_GenStub_AddParam(SC_StopRtsCmd, const SC_StopRtsCmd_t *, Cmd);
 
-  UT_GenStub_Execute(SC_StopRtsCmd, Basic, NULL);
+    UT_GenStub_Execute(SC_StopRtsCmd, Basic, NULL);
 }
 
 /*
@@ -141,7 +141,7 @@ void SC_StopRtsCmd(const SC_StopRtsCmd_t *Cmd)
  */
 void SC_StopRtsGrpCmd(const SC_StopRtsGrpCmd_t *Cmd)
 {
-  UT_GenStub_AddParam(SC_StopRtsGrpCmd, const SC_StopRtsGrpCmd_t *, Cmd);
+    UT_GenStub_AddParam(SC_StopRtsGrpCmd, const SC_StopRtsGrpCmd_t *, Cmd);
 
-  UT_GenStub_Execute(SC_StopRtsGrpCmd, Basic, NULL);
+    UT_GenStub_Execute(SC_StopRtsGrpCmd, Basic, NULL);
 }

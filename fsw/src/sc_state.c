@@ -375,7 +375,7 @@ void SC_GetNextAtsCommand(void)
          ** switch has occurred and there are no commands to
          ** execute in the same second that the switch occurs.
          ** The state is transitioned here to SC_Status_EXECUTING to
-         ** commence execution of the new ATS on the next 1Hz
+         ** commence execution of the new ATS on the next wakeup
          ** command processing cycle.
          */
         SC_OperData.AtsCtrlBlckAddr->AtpState = SC_Status_EXECUTING;

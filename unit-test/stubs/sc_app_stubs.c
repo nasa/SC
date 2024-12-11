@@ -33,11 +33,11 @@
  */
 CFE_Status_t SC_AppInit(void)
 {
-  UT_GenStub_SetupReturnBuffer(SC_AppInit, CFE_Status_t);
+    UT_GenStub_SetupReturnBuffer(SC_AppInit, CFE_Status_t);
 
-  UT_GenStub_Execute(SC_AppInit, Basic, NULL);
+    UT_GenStub_Execute(SC_AppInit, Basic, NULL);
 
-  return UT_GenStub_GetReturnValue(SC_AppInit, CFE_Status_t);
+    return UT_GenStub_GetReturnValue(SC_AppInit, CFE_Status_t);
 }
 
 /*
@@ -47,7 +47,7 @@ CFE_Status_t SC_AppInit(void)
  */
 void SC_AppMain(void)
 {
-  UT_GenStub_Execute(SC_AppMain, Basic, NULL); 
+    UT_GenStub_Execute(SC_AppMain, Basic, NULL);
 }
 
 /*
@@ -57,11 +57,11 @@ void SC_AppMain(void)
  */
 CFE_Status_t SC_GetDumpTablePointers(void)
 {
-  UT_GenStub_SetupReturnBuffer(SC_GetDumpTablePointers, CFE_Status_t);
+    UT_GenStub_SetupReturnBuffer(SC_GetDumpTablePointers, CFE_Status_t);
 
-  UT_GenStub_Execute(SC_GetDumpTablePointers, Basic, NULL);
+    UT_GenStub_Execute(SC_GetDumpTablePointers, Basic, NULL);
 
-  return UT_GenStub_GetReturnValue(SC_GetDumpTablePointers, CFE_Status_t);
+    return UT_GenStub_GetReturnValue(SC_GetDumpTablePointers, CFE_Status_t);
 }
 
 /*
@@ -71,11 +71,11 @@ CFE_Status_t SC_GetDumpTablePointers(void)
  */
 CFE_Status_t SC_GetLoadTablePointers(void)
 {
-  UT_GenStub_SetupReturnBuffer(SC_GetLoadTablePointers, CFE_Status_t);
+    UT_GenStub_SetupReturnBuffer(SC_GetLoadTablePointers, CFE_Status_t);
 
-  UT_GenStub_Execute(SC_GetLoadTablePointers, Basic, NULL);
+    UT_GenStub_Execute(SC_GetLoadTablePointers, Basic, NULL);
 
-  return UT_GenStub_GetReturnValue(SC_GetLoadTablePointers, CFE_Status_t);
+    return UT_GenStub_GetReturnValue(SC_GetLoadTablePointers, CFE_Status_t);
 }
 
 /*
@@ -85,11 +85,11 @@ CFE_Status_t SC_GetLoadTablePointers(void)
  */
 CFE_Status_t SC_InitTables(void)
 {
-  UT_GenStub_SetupReturnBuffer(SC_InitTables, CFE_Status_t);
+    UT_GenStub_SetupReturnBuffer(SC_InitTables, CFE_Status_t);
 
-  UT_GenStub_Execute(SC_InitTables, Basic, NULL);
+    UT_GenStub_Execute(SC_InitTables, Basic, NULL);
 
-  return UT_GenStub_GetReturnValue(SC_InitTables, CFE_Status_t);
+    return UT_GenStub_GetReturnValue(SC_InitTables, CFE_Status_t);
 }
 
 /*
@@ -99,7 +99,7 @@ CFE_Status_t SC_InitTables(void)
  */
 void SC_LoadDefaultTables(void)
 {
-  UT_GenStub_Execute(SC_LoadDefaultTables, Basic, NULL);
+    UT_GenStub_Execute(SC_LoadDefaultTables, Basic, NULL);
 }
 
 /*
@@ -109,11 +109,11 @@ void SC_LoadDefaultTables(void)
  */
 CFE_Status_t SC_RegisterAllTables(void)
 {
-  UT_GenStub_SetupReturnBuffer(SC_RegisterAllTables, CFE_Status_t);
+    UT_GenStub_SetupReturnBuffer(SC_RegisterAllTables, CFE_Status_t);
 
-  UT_GenStub_Execute(SC_RegisterAllTables, Basic, NULL);
+    UT_GenStub_Execute(SC_RegisterAllTables, Basic, NULL);
 
-  return UT_GenStub_GetReturnValue(SC_RegisterAllTables, CFE_Status_t);
+    return UT_GenStub_GetReturnValue(SC_RegisterAllTables, CFE_Status_t);
 }
 
 /*
@@ -123,11 +123,11 @@ CFE_Status_t SC_RegisterAllTables(void)
  */
 CFE_Status_t SC_RegisterDumpOnlyTables(void)
 {
-  UT_GenStub_SetupReturnBuffer(SC_RegisterDumpOnlyTables, CFE_Status_t);
+    UT_GenStub_SetupReturnBuffer(SC_RegisterDumpOnlyTables, CFE_Status_t);
 
-  UT_GenStub_Execute(SC_RegisterDumpOnlyTables, Basic, NULL);
+    UT_GenStub_Execute(SC_RegisterDumpOnlyTables, Basic, NULL);
 
-  return UT_GenStub_GetReturnValue(SC_RegisterDumpOnlyTables, CFE_Status_t);
+    return UT_GenStub_GetReturnValue(SC_RegisterDumpOnlyTables, CFE_Status_t);
 }
 
 /*
@@ -137,11 +137,11 @@ CFE_Status_t SC_RegisterDumpOnlyTables(void)
  */
 CFE_Status_t SC_RegisterLoadableTables(void)
 {
-  UT_GenStub_SetupReturnBuffer(SC_RegisterLoadableTables, CFE_Status_t);
+    UT_GenStub_SetupReturnBuffer(SC_RegisterLoadableTables, CFE_Status_t);
 
-  UT_GenStub_Execute(SC_RegisterLoadableTables, Basic, NULL);
+    UT_GenStub_Execute(SC_RegisterLoadableTables, Basic, NULL);
 
-  return UT_GenStub_GetReturnValue(SC_RegisterLoadableTables, CFE_Status_t);
+    return UT_GenStub_GetReturnValue(SC_RegisterLoadableTables, CFE_Status_t);
 }
 
 /*
@@ -151,5 +151,5 @@ CFE_Status_t SC_RegisterLoadableTables(void)
  */
 void SC_RegisterManageCmds(void)
 {
-  UT_GenStub_Execute(SC_RegisterManageCmds, Basic, NULL);
+    UT_GenStub_Execute(SC_RegisterManageCmds, Basic, NULL);
 }

@@ -202,12 +202,12 @@ CFE_Status_t SC_AppInit(void)
         return Result;
     }
 
-    /* Must be able to subscribe to 1Hz wakeup command */
-    Result = CFE_SB_Subscribe(CFE_SB_ValueToMsgId(SC_ONEHZ_WAKEUP_MID), SC_OperData.CmdPipe);
+    /* Must be able to subscribe to wakeup command */
+    Result = CFE_SB_Subscribe(CFE_SB_ValueToMsgId(SC_WAKEUP_MID), SC_OperData.CmdPipe);
     if (Result != CFE_SUCCESS)
     {
-        CFE_EVS_SendEvent(SC_INIT_SB_SUBSCRIBE_ONEHZ_ERR_EID, CFE_EVS_EventType_ERROR,
-                          "Software Bus subscribe to 1 Hz cycle returned: 0x%08X", (unsigned int)Result);
+        CFE_EVS_SendEvent(SC_INIT_SB_SUBSCRIBE_ERR_EID, CFE_EVS_EventType_ERROR,
+                          "Software Bus subscribe to wakeup cycle returned: 0x%08X", (unsigned int)Result);
         return Result;
     }
 

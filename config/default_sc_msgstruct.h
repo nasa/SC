@@ -122,14 +122,14 @@ typedef struct
 } SC_SendHkCmd_t;
 
 /**
- *  \brief 1Hz Wakeup Command
+ *  \brief Wakeup Command
  *
- *  For command details see #SC_ONEHZ_WAKEUP_MID
+ *  For command details see #SC_WAKEUP_MID
  */
 typedef struct
 {
     CFE_MSG_CommandHeader_t CommandHeader; /**< \brief Command Header */
-} SC_OneHzWakeupCmd_t;
+} SC_WakeupCmd_t;
 
 /**
  *  \brief No operation Command

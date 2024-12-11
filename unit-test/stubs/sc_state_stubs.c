@@ -33,7 +33,7 @@
  */
 void SC_GetNextAtsCommand(void)
 {
-  UT_GenStub_Execute(SC_GetNextAtsCommand, Basic, NULL);
+    UT_GenStub_Execute(SC_GetNextAtsCommand, Basic, NULL);
 }
 
 /*
@@ -43,7 +43,7 @@ void SC_GetNextAtsCommand(void)
  */
 void SC_GetNextRtsCommand(void)
 {
-  UT_GenStub_Execute(SC_GetNextRtsCommand, Basic, NULL);
+    UT_GenStub_Execute(SC_GetNextRtsCommand, Basic, NULL);
 }
 
 /*
@@ -53,7 +53,7 @@ void SC_GetNextRtsCommand(void)
  */
 void SC_GetNextRtsTime(void)
 {
-  UT_GenStub_Execute(SC_GetNextRtsTime, Basic, NULL);
+    UT_GenStub_Execute(SC_GetNextRtsTime, Basic, NULL);
 }
 
 /*
@@ -63,5 +63,5 @@ void SC_GetNextRtsTime(void)
  */
 void SC_UpdateNextTime(void)
 {
-  UT_GenStub_Execute(SC_UpdateNextTime, Basic, NULL);
+    UT_GenStub_Execute(SC_UpdateNextTime, Basic, NULL);
 }

@@ -1072,7 +1072,7 @@ void SC_ProcessRequest_Test_HkMIDAutoStartRtsLoaded(void)
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
 }
 
-void SC_ProcessRequest_Test_OneHzWakeupNONE(void)
+void SC_ProcessRequest_Test_WakeupNONE(void)
 {
     SC_OperData.AtsCtrlBlckAddr->SwitchPendFlag = true;
     SC_AppData.NextProcNumber                   = SC_Process_NONE;
@@ -1080,7 +1080,7 @@ void SC_ProcessRequest_Test_OneHzWakeupNONE(void)
     SC_AppData.CurrentTime                      = 0;
 
     /* Execute the function being tested */
-    UtAssert_VOIDCALL(SC_OneHzWakeupCmd(&UT_CmdBuf.OneHzWakeupCmd));
+    UtAssert_VOIDCALL(SC_WakeupCmd(&UT_CmdBuf.WakeupCmd));
 
     /* Verify results */
     UtAssert_UINT32_EQ(SC_OperData.NumCmdsSec, 0);
@@ -1088,7 +1088,7 @@ void SC_ProcessRequest_Test_OneHzWakeupNONE(void)
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
 }
 
-void SC_ProcessRequest_Test_OneHzWakeupRtpNotExecutionTime(void)
+void SC_ProcessRequest_Test_WakeupRtpNotExecutionTime(void)
 {
     SC_OperData.AtsCtrlBlckAddr->SwitchPendFlag = false;
     SC_AppData.NextProcNumber                   = SC_Process_RTP;
@@ -1096,7 +1096,7 @@ void SC_ProcessRequest_Test_OneHzWakeupRtpNotExecutionTime(void)
     SC_AppData.CurrentWakeupCount               = 0;
 
     /* Execute the function being tested */
-    UtAssert_VOIDCALL(SC_OneHzWakeupCmd(&UT_CmdBuf.OneHzWakeupCmd));
+    UtAssert_VOIDCALL(SC_WakeupCmd(&UT_CmdBuf.WakeupCmd));
 
     /* Verify results */
     UtAssert_UINT32_EQ(SC_OperData.NumCmdsSec, 0);
@@ -1104,7 +1104,7 @@ void SC_ProcessRequest_Test_OneHzWakeupRtpNotExecutionTime(void)
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
 }
 
-void SC_ProcessRequest_Test_OneHzWakeupNoSwitchPending(void)
+void SC_ProcessRequest_Test_WakeupNoSwitchPending(void)
 {
     SC_OperData.AtsCtrlBlckAddr->SwitchPendFlag = false;
     SC_AppData.NextProcNumber                   = SC_Process_NONE;
@@ -1112,7 +1112,7 @@ void SC_ProcessRequest_Test_OneHzWakeupNoSwitchPending(void)
     SC_AppData.CurrentTime                      = 0;
 
     /* Execute the function being tested */
-    UtAssert_VOIDCALL(SC_OneHzWakeupCmd(&UT_CmdBuf.OneHzWakeupCmd));
+    UtAssert_VOIDCALL(SC_WakeupCmd(&UT_CmdBuf.WakeupCmd));
 
     /* Verify results */
     UtAssert_UINT32_EQ(SC_OperData.NumCmdsSec, 0);
@@ -1120,14 +1120,14 @@ void SC_ProcessRequest_Test_OneHzWakeupNoSwitchPending(void)
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
 }
 
-void SC_ProcessRequest_Test_OneHzWakeupAtpNotExecutionTime(void)
+void SC_ProcessRequest_Test_WakeupAtpNotExecutionTime(void)
 {
     SC_OperData.AtsCtrlBlckAddr->SwitchPendFlag = true;
     SC_AppData.NextProcNumber                   = SC_Process_ATP;
     SC_AppData.NextCmdTime[SC_Process_ATP]      = 1000;
 
     /* Execute the function being tested */
-    UtAssert_VOIDCALL(SC_OneHzWakeupCmd(&UT_CmdBuf.OneHzWakeupCmd));
+    UtAssert_VOIDCALL(SC_WakeupCmd(&UT_CmdBuf.WakeupCmd));
 
     /* Verify results */
     UtAssert_UINT32_EQ(SC_OperData.NumCmdsSec, 0);
@@ -1135,45 +1135,29 @@ void SC_ProcessRequest_Test_OneHzWakeupAtpNotExecutionTime(void)
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
 }
 
-void SC_ProcessRequest_Test_OneHzWakeupRtpExecutionTime(void)
+void SC_ProcessRequest_Test_WakeupRtpExecutionTime(void)
 {
-    SC_AtsEntryHeader_t *         Entry;
-    SC_AtsIndex_t                 AtsIndex = SC_ATS_IDX_C(0);
-    SC_AtsCmdStatusEntry_t *      StatusEntryPtr;
-    SC_AtsCmdEntryOffsetRecord_t *CmdOffsetRec;
+    SC_RtsIndex_t      RtsIndex = SC_RTS_IDX_C(0);
+    SC_RtsInfoEntry_t *RtsInfoPtr;
 
-    CmdOffsetRec = SC_GetAtsEntryOffsetForCmd(AtsIndex, SC_COMMAND_IDX_C(0));
+    RtsInfoPtr = SC_GetRtsInfoObject(RtsIndex);
 
-    StatusEntryPtr = SC_GetAtsStatusEntryForCommand(AtsIndex, SC_COMMAND_IDX_C(0));
+    SC_AppData.NextCmdTime[SC_Process_RTP]  = 0;
+    SC_AppData.CurrentWakeupCount           = 1;
+    SC_AppData.NextProcNumber               = SC_Process_RTP;
+    SC_OperData.RtsCtrlBlckAddr->CurrRtsNum = SC_RtsIndexToNum(RtsIndex);
+    RtsInfoPtr->RtsStatus                   = SC_Status_EXECUTING;
 
-    /* required to exit processing loop after 2 iterations */
-    /* second iteration tests "IsThereAnotherCommandToExecute" */
-
-    SC_CMDS_TEST_SC_UpdateNextTimeHook_RunCount = 0;
-    UT_SetHookFunction(UT_KEY(SC_UpdateNextTime), Ut_SC_UpdateNextTimeHook, NULL);
-
-    Entry            = (SC_AtsEntryHeader_t *)SC_GetAtsEntryAtOffset(AtsIndex, SC_ENTRY_OFFSET_FIRST);
-    Entry->CmdNumber = SC_COMMAND_NUM_C(1);
-
-    SC_AppData.NextProcNumber              = SC_Process_RTP;
-    SC_OperData.AtsCtrlBlckAddr->AtpState  = SC_Status_EXECUTING; /* Causes switch to ATP */
-    SC_AppData.NextCmdTime[SC_Process_ATP] = 0;
-    SC_OperData.NumCmdsSec                 = 3;
-
-    SC_OperData.AtsCtrlBlckAddr->CurrAtsNum = SC_AtsIndexToNum(AtsIndex);
-    SC_OperData.AtsCtrlBlckAddr->CmdNumber  = SC_COMMAND_NUM_C(1);
-
-    StatusEntryPtr->Status = SC_Status_LOADED;
-    CmdOffsetRec->Offset   = SC_ENTRY_OFFSET_FIRST;
+    SC_AppData.EnableHeaderUpdate = true;
 
     /* Execute the function being tested */
-    UtAssert_VOIDCALL(SC_OneHzWakeupCmd(&UT_CmdBuf.OneHzWakeupCmd));
+    UtAssert_VOIDCALL(SC_WakeupCmd(&UT_CmdBuf.WakeupCmd));
 
     /* Verify results */
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
 }
 
-void SC_ProcessRequest_Test_OneHzWakeupRtpExecutionTimeTooManyCmds(void)
+void SC_ProcessRequest_Test_WakeupRtpExecutionTimeTooManyCmds(void)
 {
     SC_AppData.EnableHeaderUpdate = true;
 
@@ -1184,7 +1168,24 @@ void SC_ProcessRequest_Test_OneHzWakeupRtpExecutionTimeTooManyCmds(void)
     SC_OperData.AtsCtrlBlckAddr->AtpState  = SC_Status_EXECUTING;
 
     /* Execute the function being tested */
-    UtAssert_VOIDCALL(SC_OneHzWakeupCmd(&UT_CmdBuf.OneHzWakeupCmd));
+    UtAssert_VOIDCALL(SC_WakeupCmd(&UT_CmdBuf.WakeupCmd));
+
+    /* Verify results */
+    UtAssert_UINT32_EQ(SC_OperData.NumCmdsSec, 0);
+
+    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
+}
+
+void SC_ProcessRequest_Test_WakeupAtpExecutionTimeTooManyCmds(void)
+{
+    SC_AppData.NextProcNumber              = SC_Process_ATP;
+    SC_AppData.NextCmdTime[SC_Process_ATP] = 10;
+    SC_AppData.CurrentTime                 = 100;
+    SC_OperData.NumCmdsSec                 = 1000;
+    SC_OperData.AtsCtrlBlckAddr->AtpState  = SC_Status_IDLE;
+
+    /* Execute the function being tested */
+    UtAssert_VOIDCALL(SC_WakeupCmd(&UT_CmdBuf.WakeupCmd));
 
     /* Verify results */
     UtAssert_UINT32_EQ(SC_OperData.NumCmdsSec, 0);
@@ -1729,18 +1730,20 @@ void UtTest_Setup(void)
                "SC_ProcessRequest_Test_HkMIDAutoStartRts");
     UtTest_Add(SC_ProcessRequest_Test_HkMIDAutoStartRtsLoaded, SC_Test_Setup, SC_Test_TearDown,
                "SC_ProcessRequest_Test_HkMIDAutoStartRtsLoaded");
-    UtTest_Add(SC_ProcessRequest_Test_OneHzWakeupNONE, SC_Test_Setup, SC_Test_TearDown,
-               "SC_ProcessRequest_Test_OneHzWakeupNONE");
-    UtTest_Add(SC_ProcessRequest_Test_OneHzWakeupRtpNotExecutionTime, SC_Test_Setup, SC_Test_TearDown,
-               "SC_ProcessRequest_Test_OneHzWakeupRtpNotExecutionTime");
-    UtTest_Add(SC_ProcessRequest_Test_OneHzWakeupNoSwitchPending, SC_Test_Setup, SC_Test_TearDown,
-               "SC_ProcessRequest_Test_OneHzWakeupNoSwitchPending");
-    UtTest_Add(SC_ProcessRequest_Test_OneHzWakeupAtpNotExecutionTime, SC_Test_Setup, SC_Test_TearDown,
-               "SC_ProcessRequest_Test_OneHzWakeupAtpNotExecutionTime");
-    UtTest_Add(SC_ProcessRequest_Test_OneHzWakeupRtpExecutionTime, SC_Test_Setup, SC_Test_TearDown,
-               "SC_ProcessRequest_Test_OneHzWakeupRtpExecutionTime");
-    UtTest_Add(SC_ProcessRequest_Test_OneHzWakeupRtpExecutionTimeTooManyCmds, SC_Test_Setup, SC_Test_TearDown,
-               "SC_ProcessRequest_Test_OneHzWakeupRtpExecutionTimeTooManyCmds");
+    UtTest_Add(SC_ProcessRequest_Test_WakeupNONE, SC_Test_Setup, SC_Test_TearDown,
+               "SC_ProcessRequest_Test_WakeupNONE");
+    UtTest_Add(SC_ProcessRequest_Test_WakeupRtpNotExecutionTime, SC_Test_Setup, SC_Test_TearDown,
+               "SC_ProcessRequest_Test_WakeupRtpNotExecutionTime");
+    UtTest_Add(SC_ProcessRequest_Test_WakeupNoSwitchPending, SC_Test_Setup, SC_Test_TearDown,
+               "SC_ProcessRequest_Test_WakeupNoSwitchPending");
+    UtTest_Add(SC_ProcessRequest_Test_WakeupAtpNotExecutionTime, SC_Test_Setup, SC_Test_TearDown,
+               "SC_ProcessRequest_Test_WakeupAtpNotExecutionTime");
+    UtTest_Add(SC_ProcessRequest_Test_WakeupRtpExecutionTime, SC_Test_Setup, SC_Test_TearDown,
+               "SC_ProcessRequest_Test_WakeupRtpExecutionTime");
+    UtTest_Add(SC_ProcessRequest_Test_WakeupRtpExecutionTimeTooManyCmds, SC_Test_Setup, SC_Test_TearDown,
+               "SC_ProcessRequest_Test_WakeupRtpExecutionTimeTooManyCmds");
+    UtTest_Add(SC_ProcessRequest_Test_WakeupAtpExecutionTimeTooManyCmds, SC_Test_Setup, SC_Test_TearDown,
+               "SC_ProcessRequest_Test_WakeupAtpExecutionTimeTooManyCmds");
     UtTest_Add(SC_ProcessCommand_Test_NoOp, SC_Test_Setup, SC_Test_TearDown, "SC_ProcessCommand_Test_NoOp");
     UtTest_Add(SC_ProcessCommand_Test_ResetCounters, SC_Test_Setup, SC_Test_TearDown,
                "SC_ProcessCommand_Test_ResetCounters");
