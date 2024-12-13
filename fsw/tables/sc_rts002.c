@@ -81,8 +81,7 @@ SC_RtsTable002_t SC_Rts002 = {
 
     /* 3 */
     .rts.hdr3.WakeupCount       = 5,
-    .rts.cmd3.CommandHeader = CFE_MSG_CMD_HDR_INIT(SC_CMD_MID, SC_MEMBER_SIZE(cmd3), SC_NOOP_CC, SC_NOOP_CKSUM)
-    };
+    .rts.cmd3.CommandHeader = CFE_MSG_CMD_HDR_INIT(SC_CMD_MID, SC_MEMBER_SIZE(cmd3), SC_NOOP_CC, SC_NOOP_CKSUM)};
 
 /* Macro for table structure */
 CFE_TBL_FILEDEF(SC_Rts002, SC.RTS_TBL002, SC Example RTS_TBL002, sc_rts002.tbl)

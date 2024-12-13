@@ -75,7 +75,6 @@ void SC_ProcessAtpCmd(void)
      */
 
     if ((SC_OperData.AtsCtrlBlckAddr->AtpState == SC_Status_EXECUTING) &&
-        (SC_AppData.NextProcNumber == SC_Process_ATP) &&
         (!SC_CompareAbsTime(SC_AppData.NextCmdTime[SC_Process_ATP], SC_AppData.CurrentTime)))
     {
         /*
@@ -113,7 +112,7 @@ void SC_ProcessAtpCmd(void)
                     /*
                      ** Count the command for the rate limiter
                      */
-                    SC_OperData.NumCmdsSec++;
+                    SC_OperData.NumCmdsWakeup++;
 
                     /*
                      **  First check to see if the command is a switch command,
@@ -312,14 +311,13 @@ void SC_ProcessRtpCommand(void)
 
     RtsInfoPtr = SC_GetRtsInfoObject(RtsIndex);
 
-    if ((SC_AppData.NextProcNumber == SC_Process_RTP) && 
-        (SC_AppData.NextCmdTime[SC_Process_RTP] <= SC_AppData.CurrentWakeupCount) && (RtsInfoPtr->RtsStatus == SC_Status_EXECUTING))
+    if ((SC_AppData.NextCmdTime[SC_Process_RTP] <= SC_AppData.CurrentWakeupCount) && (RtsInfoPtr->RtsStatus == SC_Status_EXECUTING))
     {
         /*
          ** Count the command for the rate limiter
          ** even if the command fails
          */
-        SC_OperData.NumCmdsSec++;
+        SC_OperData.NumCmdsWakeup++;
 
         /*
          ** Get the Command offset within the RTS
@@ -543,11 +541,11 @@ void SC_WakeupCmd(const SC_WakeupCmd_t *Cmd)
     /*
      * Time to execute a command in the SC memory
      */
-    while (SC_OperData.NumCmdsSec < SC_MAX_CMDS_PER_WAKEUP)
+    while (SC_OperData.NumCmdsWakeup < SC_MAX_CMDS_PER_WAKEUP)
     {
-        SC_UpdateNextTime();
+        SC_GetNextRtsTime();
 
-        CurrentNumCmds = SC_OperData.NumCmdsSec;
+        CurrentNumCmds = SC_OperData.NumCmdsWakeup;
 
         /*
          *  Check to see if there is an ATS switch Pending, if so service it.
@@ -559,17 +557,21 @@ void SC_WakeupCmd(const SC_WakeupCmd_t *Cmd)
 
         SC_ProcessAtpCmd();
 
-        SC_ProcessRtpCommand();
-
+        if (CurrentNumCmds == SC_OperData.NumCmdsWakeup)
+        {
+            SC_ProcessRtpCommand();
+        }
+        
         /* 
          * No commands could be processed
          */
-        if (CurrentNumCmds == SC_OperData.NumCmdsSec) {
+        if (CurrentNumCmds == SC_OperData.NumCmdsWakeup)
+        {
             break;
         }
     }
 
-    SC_OperData.NumCmdsSec = 0;
+    SC_OperData.NumCmdsWakeup = 0;
 }
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */

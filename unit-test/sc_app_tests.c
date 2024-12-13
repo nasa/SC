@@ -146,7 +146,6 @@ void SC_AppInit_Test_NominalPowerOnReset(void)
     memset(&Expected_SC_OperData, 0, sizeof(Expected_SC_OperData));
     memset(&Expected_SC_AppData, 0, sizeof(Expected_SC_AppData));
 
-    Expected_SC_AppData.NextProcNumber              = SC_Process_NONE;
     Expected_SC_AppData.NextCmdTime[SC_Process_ATP] = SC_MAX_TIME;
     Expected_SC_AppData.NextCmdTime[SC_Process_RTP] = SC_MAX_WAKEUP_CNT;
     Expected_SC_AppData.AutoStartRTS                = SC_RTS_NUM_C(RTS_ID_AUTO_POWER_ON);
@@ -183,7 +182,7 @@ void SC_AppInit_Test_NominalPowerOnReset(void)
                     sizeof(Expected_SC_OperData.AtsCmdStatusHandle), "AtsCmdStatusHandle");
     UtAssert_MemCmp(&SC_OperData.AtsDupTestArray, &Expected_SC_OperData.AtsDupTestArray,
                     sizeof(Expected_SC_OperData.AtsDupTestArray), "21");
-    UtAssert_MemCmp(&SC_OperData.NumCmdsSec, &Expected_SC_OperData.NumCmdsSec, sizeof(Expected_SC_OperData.NumCmdsSec),
+    UtAssert_MemCmp(&SC_OperData.NumCmdsWakeup, &Expected_SC_OperData.NumCmdsWakeup, sizeof(Expected_SC_OperData.NumCmdsWakeup),
                     "22");
     UtAssert_MemCmp(&SC_OperData.HkPacket, &Expected_SC_OperData.HkPacket, sizeof(Expected_SC_OperData.HkPacket), "23");
 
@@ -210,7 +209,6 @@ void SC_AppInit_Test_Nominal(void)
     memset(&Expected_SC_OperData, 0, sizeof(Expected_SC_OperData));
     memset(&Expected_SC_AppData, 0, sizeof(Expected_SC_AppData));
 
-    Expected_SC_AppData.NextProcNumber              = SC_Process_NONE;
     Expected_SC_AppData.NextCmdTime[SC_Process_ATP] = SC_MAX_TIME;
     Expected_SC_AppData.NextCmdTime[SC_Process_RTP] = SC_MAX_WAKEUP_CNT;
     Expected_SC_AppData.AutoStartRTS                = SC_RTS_NUM_C(RTS_ID_AUTO_PROCESSOR);
@@ -247,7 +245,7 @@ void SC_AppInit_Test_Nominal(void)
                     sizeof(Expected_SC_OperData.AtsCmdStatusHandle), "AtsCmdStatusHandle");
     UtAssert_MemCmp(&SC_OperData.AtsDupTestArray, &Expected_SC_OperData.AtsDupTestArray,
                     sizeof(Expected_SC_OperData.AtsDupTestArray), "21");
-    UtAssert_MemCmp(&SC_OperData.NumCmdsSec, &Expected_SC_OperData.NumCmdsSec, sizeof(Expected_SC_OperData.NumCmdsSec),
+    UtAssert_MemCmp(&SC_OperData.NumCmdsWakeup, &Expected_SC_OperData.NumCmdsWakeup, sizeof(Expected_SC_OperData.NumCmdsWakeup),
                     "22");
     UtAssert_MemCmp(&SC_OperData.HkPacket, &Expected_SC_OperData.HkPacket, sizeof(Expected_SC_OperData.HkPacket), "23");
 

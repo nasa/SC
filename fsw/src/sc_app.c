@@ -145,7 +145,7 @@ CFE_Status_t SC_AppInit(void)
     memset(&SC_AppData, 0, sizeof(SC_AppData));
 
     /* Number of ATS and RTS commands already executed this second */
-    SC_OperData.NumCmdsSec = 0;
+    SC_OperData.NumCmdsWakeup = 0;
 
     /* Continue ATS execution if ATS command checksum fails */
     SC_OperData.HkPacket.Payload.ContinueAtsOnFailureFlag = SC_CONT_ON_FAILURE_START;
@@ -155,8 +155,6 @@ CFE_Status_t SC_AppInit(void)
     /* assign the time ref accessor from the compile-time option */
     SC_AppData.TimeRef = SC_LookupTimeAccessor(SC_TIME_TO_USE);
 
-    /* Make sure nothing is running */
-    SC_AppData.NextProcNumber = SC_Process_NONE;
     /* SAD: SC_Process_ATP is 0, within the valid index range of NextCmdTime array, which has 2 elements */
     SC_AppData.NextCmdTime[SC_Process_ATP] = SC_MAX_TIME;
     /* SAD: SC_Process_RTP is 1, within the valid index range of NextCmdTime array, which has 2 elements */

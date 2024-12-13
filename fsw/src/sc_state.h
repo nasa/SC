@@ -43,18 +43,6 @@
 void SC_GetNextRtsTime(void);
 
 /**
- * \brief Decides whether the ATS or RTS runs next
- *
- *  \par Description
- *         This function compares the next command times for the RTS
- *         and the ATS and decides which one to schedule next.
- *
- *  \par Assumptions, External Events, and Notes:
- *        None
- */
-void SC_UpdateNextTime(void);
-
-/**
  * \brief Gets the next RTS command to run
  *
  *  \par Description

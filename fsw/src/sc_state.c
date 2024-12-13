@@ -98,49 +98,6 @@ void SC_GetNextRtsTime(void)
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /*                                                                 */
-/* Decides whether an RTS or ATS command gets scheduled next       */
-/*                                                                 */
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-void SC_UpdateNextTime(void)
-{
-    /*
-     ** First, find out which RTS needs to run next
-     */
-    SC_GetNextRtsTime();
-
-    /*
-     ** Start out with a default, no processors need to run next
-     */
-    SC_AppData.NextProcNumber = SC_Process_NONE;
-
-    /*
-     ** Check to see if the ATP needs to schedule commands
-     */
-    if (SC_OperData.AtsCtrlBlckAddr->AtpState == SC_Status_EXECUTING)
-    {
-        SC_AppData.NextProcNumber = SC_Process_ATP;
-    }
-    /*
-     ** Last, check to see if there is an RTS that needs to schedule commands
-     ** This is determined by the RTS number in the RTP control block
-     ** If it is zero, there is no RTS that needs to run
-     */
-    if (SC_RtsNumIsValid(SC_OperData.RtsCtrlBlckAddr->CurrRtsNum))
-    {
-        /*
-         ** If the RTP needs to send commands, only send them if
-         ** the ATP doesn't - the ATP has priority
-         */
-
-        if (SC_AppData.NextProcNumber != SC_Process_ATP) 
-        {
-            SC_AppData.NextProcNumber = SC_Process_RTP;
-        }
-    } /* end if */
-}
-
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-/*                                                                 */
 /* Gets the next RTS Command                                       */
 /*                                                                 */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */

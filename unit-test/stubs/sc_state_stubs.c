@@ -55,13 +55,3 @@ void SC_GetNextRtsTime(void)
 {
     UT_GenStub_Execute(SC_GetNextRtsTime, Basic, NULL);
 }
-
-/*
- * ----------------------------------------------------
- * Generated stub function for SC_UpdateNextTime()
- * ----------------------------------------------------
- */
-void SC_UpdateNextTime(void)
-{
-    UT_GenStub_Execute(SC_UpdateNextTime, Basic, NULL);
-}
