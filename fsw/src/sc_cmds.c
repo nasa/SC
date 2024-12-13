@@ -543,8 +543,6 @@ void SC_WakeupCmd(const SC_WakeupCmd_t *Cmd)
      */
     while (SC_OperData.NumCmdsWakeup < SC_MAX_CMDS_PER_WAKEUP)
     {
-        SC_GetNextRtsTime();
-
         CurrentNumCmds = SC_OperData.NumCmdsWakeup;
 
         /*
@@ -559,6 +557,8 @@ void SC_WakeupCmd(const SC_WakeupCmd_t *Cmd)
 
         if (CurrentNumCmds == SC_OperData.NumCmdsWakeup)
         {
+            SC_GetNextRtsTime();
+            
             SC_ProcessRtpCommand();
         }
         
