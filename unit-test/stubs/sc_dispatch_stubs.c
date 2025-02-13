@@ -20,7 +20,8 @@
 /**
  * @file
  *
- * Auto-Generated stub implementations for functions defined in sc_dispatch header
+ * Auto-Generated stub implementations for functions defined in sc_dispatch
+ * header
  */
 
 #include "sc_dispatch.h"

@@ -3,16 +3,17 @@
 ## Introduction
 
 The Stored Command application (SC) is a core Flight System (cFS) application 
-that is a plug in to the Core Flight Executive (cFE) component of the cFS.  
-  
+that is a plug in to the Core Flight Executive (cFE) component of the cFS.
+
 The SC application allows a system to be autonomously commanded
-using sequences of commands that are loaded to SC. Each command has a time tag 
-associated with it, permitting the command to be released for distribution at 
-predetermined times. SC supports both Absolute Time tagged command Sequences 
-(ATSs) and multiple Relative Time tagged command Sequences (RTSs). The 
-purpose of ATS commands is to be able to specify commands to be executed at a 
-specific time.  The purpose of Relative Time Sequence commands is to be able 
-to specify commands to be executed at a relative time.
+using sequences of commands that are loaded into SC. Each command has a time tag
+or wakeup count associated with it, permitting the command to be released for
+distribution at predetermined times or wakeup counts. SC supports both
+Absolute Time tagged command Sequences (ATSs) and multiple Relative Time tagged
+command Sequences (RTSs). The purpose of ATS commands is to be able to specify
+commands to be executed at a specific time. The purpose of Relative Time
+Sequence commands is to be able to specify commands to be executed at a
+relative wakeup count.
 
 The SC application is written in C and depends on the cFS Operating System 
 Abstraction Layer (OSAL) and cFE components. There is additional SC application 

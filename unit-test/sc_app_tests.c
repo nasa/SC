@@ -146,9 +146,8 @@ void SC_AppInit_Test_NominalPowerOnReset(void)
     memset(&Expected_SC_OperData, 0, sizeof(Expected_SC_OperData));
     memset(&Expected_SC_AppData, 0, sizeof(Expected_SC_AppData));
 
-    Expected_SC_AppData.NextProcNumber              = SC_Process_NONE;
     Expected_SC_AppData.NextCmdTime[SC_Process_ATP] = SC_MAX_TIME;
-    Expected_SC_AppData.NextCmdTime[SC_Process_RTP] = SC_MAX_TIME;
+    Expected_SC_AppData.NextCmdTime[SC_Process_RTP] = SC_MAX_WAKEUP_CNT;
     Expected_SC_AppData.AutoStartRTS                = SC_RTS_NUM_C(RTS_ID_AUTO_POWER_ON);
 
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
@@ -183,7 +182,7 @@ void SC_AppInit_Test_NominalPowerOnReset(void)
                     sizeof(Expected_SC_OperData.AtsCmdStatusHandle), "AtsCmdStatusHandle");
     UtAssert_MemCmp(&SC_OperData.AtsDupTestArray, &Expected_SC_OperData.AtsDupTestArray,
                     sizeof(Expected_SC_OperData.AtsDupTestArray), "21");
-    UtAssert_MemCmp(&SC_OperData.NumCmdsSec, &Expected_SC_OperData.NumCmdsSec, sizeof(Expected_SC_OperData.NumCmdsSec),
+    UtAssert_MemCmp(&SC_OperData.NumCmdsWakeup, &Expected_SC_OperData.NumCmdsWakeup, sizeof(Expected_SC_OperData.NumCmdsWakeup),
                     "22");
     UtAssert_MemCmp(&SC_OperData.HkPacket, &Expected_SC_OperData.HkPacket, sizeof(Expected_SC_OperData.HkPacket), "23");
 
@@ -210,9 +209,8 @@ void SC_AppInit_Test_Nominal(void)
     memset(&Expected_SC_OperData, 0, sizeof(Expected_SC_OperData));
     memset(&Expected_SC_AppData, 0, sizeof(Expected_SC_AppData));
 
-    Expected_SC_AppData.NextProcNumber              = SC_Process_NONE;
     Expected_SC_AppData.NextCmdTime[SC_Process_ATP] = SC_MAX_TIME;
-    Expected_SC_AppData.NextCmdTime[SC_Process_RTP] = SC_MAX_TIME;
+    Expected_SC_AppData.NextCmdTime[SC_Process_RTP] = SC_MAX_WAKEUP_CNT;
     Expected_SC_AppData.AutoStartRTS                = SC_RTS_NUM_C(RTS_ID_AUTO_PROCESSOR);
 
     Expected_SC_OperData.HkPacket.Payload.ContinueAtsOnFailureFlag = SC_AtsCont_TRUE;
@@ -247,7 +245,7 @@ void SC_AppInit_Test_Nominal(void)
                     sizeof(Expected_SC_OperData.AtsCmdStatusHandle), "AtsCmdStatusHandle");
     UtAssert_MemCmp(&SC_OperData.AtsDupTestArray, &Expected_SC_OperData.AtsDupTestArray,
                     sizeof(Expected_SC_OperData.AtsDupTestArray), "21");
-    UtAssert_MemCmp(&SC_OperData.NumCmdsSec, &Expected_SC_OperData.NumCmdsSec, sizeof(Expected_SC_OperData.NumCmdsSec),
+    UtAssert_MemCmp(&SC_OperData.NumCmdsWakeup, &Expected_SC_OperData.NumCmdsWakeup, sizeof(Expected_SC_OperData.NumCmdsWakeup),
                     "22");
     UtAssert_MemCmp(&SC_OperData.HkPacket, &Expected_SC_OperData.HkPacket, sizeof(Expected_SC_OperData.HkPacket), "23");
 
@@ -296,17 +294,17 @@ void SC_AppInit_Test_SBSubscribeHKError(void)
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
 }
 
-void SC_AppInit_Test_SubscribeTo1HzError(void)
+void SC_AppInit_Test_SubscribeToWakeupError(void)
 {
     /* Set CFE_SB_Subscribe to return -1 on the 2nd call in order to generate error message
-     * SC_INIT_SB_SUBSCRIBE_ONEHZ_ERR_EID */
+     * SC_INIT_SB_SUBSCRIBE_ERR_EID */
     UT_SetDeferredRetcode(UT_KEY(CFE_SB_Subscribe), 2, -1);
 
     /* Execute the function being tested */
     UtAssert_INT32_EQ(SC_AppInit(), -1);
 
     /* Verify results */
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_INIT_SB_SUBSCRIBE_ONEHZ_ERR_EID);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_INIT_SB_SUBSCRIBE_ERR_EID);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
 }
 
@@ -703,8 +701,8 @@ void UtTest_Setup(void)
                "SC_AppInit_Test_SBSubscribeHKError");
     UtTest_Add(SC_AppInit_Test_SBSubscribeToCmdError, SC_Test_Setup, SC_Test_TearDown,
                "SC_AppInit_Test_SBSubscribeToCmdError");
-    UtTest_Add(SC_AppInit_Test_SubscribeTo1HzError, SC_Test_Setup, SC_Test_TearDown,
-               "SC_AppInit_Test_SubscribeTo1HzError");
+    UtTest_Add(SC_AppInit_Test_SubscribeToWakeupError, SC_Test_Setup, SC_Test_TearDown,
+               "SC_AppInit_Test_SubscribeToWakeupError");
     UtTest_Add(SC_AppInit_Test_InitTablesError, SC_Test_Setup, SC_Test_TearDown, "SC_AppInit_Test_InitTablesError");
     UtTest_Add(SC_InitTables_Test_Nominal, SC_Test_Setup, SC_Test_TearDown, "SC_InitTables_Test_Nominal");
     UtTest_Add(SC_InitTables_Test_ErrorRegisterAllTables, SC_Test_Setup, SC_Test_TearDown,

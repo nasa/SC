@@ -83,6 +83,14 @@ void SC_ComputeAbsTime_Test(void)
     UtAssert_UINT32_EQ(SC_ComputeAbsTime(0), 1);
 }
 
+void SC_ComputeAbsWakeup_Test(void)
+{
+    SC_AppData.CurrentWakeupCount = 0;
+
+    /* Execute the function being tested */
+    UtAssert_UINT32_EQ(SC_ComputeAbsWakeup(1), 1);
+}
+
 void SC_CompareAbsTime_Test_True(void)
 {
     SC_AbsTimeTag_t AbsTimeTag1 = {0};
@@ -122,6 +130,7 @@ void UtTest_Setup(void)
     UtTest_Add(SC_GetCurrentTime_Test, SC_Test_Setup, SC_Test_TearDown, "SC_GetCurrentTime_Test");
     UtTest_Add(SC_GetAtsEntryTime_Test, SC_Test_Setup, SC_Test_TearDown, "SC_GetAtsEntryTime_Test");
     UtTest_Add(SC_ComputeAbsTime_Test, SC_Test_Setup, SC_Test_TearDown, "SC_ComputeAbsTime_Test");
+    UtTest_Add(SC_ComputeAbsWakeup_Test, SC_Test_Setup, SC_Test_TearDown, "SC_ComputeAbsWakeup_Test");
     UtTest_Add(SC_CompareAbsTime_Test_True, SC_Test_Setup, SC_Test_TearDown, "SC_CompareAbsTime_Test_True");
     UtTest_Add(SC_CompareAbsTime_Test_False, SC_Test_Setup, SC_Test_TearDown, "SC_CompareAbsTime_Test_False");
     UtTest_Add(SC_ToggleAtsIndex_Test, SC_Test_Setup, SC_Test_TearDown, "SC_ToggleAtsIndex_Test");

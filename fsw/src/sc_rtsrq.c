@@ -95,10 +95,10 @@ void SC_StartRtsCmd(const SC_StartRtsCmd_t *Cmd)
                     RtsInfoPtr->UseCtr++;
 
                     /*
-                     ** Get the absolute time for the RTSs next_cmd_time
-                     ** using the current time and the relative time tag.
+                     ** Get the absolute wakeup count for the RTS's next_command_tgt_wakeup
+                     ** using the current wakeup count and the relative wakeup count.
                      */
-                    RtsInfoPtr->NextCommandTime = SC_ComputeAbsTime(RtsEntryPtr->TimeTag);
+                    RtsInfoPtr->NextCommandTgtWakeup = SC_ComputeAbsWakeup(RtsEntryPtr->WakeupCount);
 
                     /*
                      ** Last, Increment some global counters associated with the
@@ -203,9 +203,9 @@ void SC_StartRtsGrpCmd(const SC_StartRtsGrpCmd_t *Cmd)
                     RtsInfoPtr->NextCommandPtr = SC_ENTRY_OFFSET_FIRST;
                     RtsInfoPtr->UseCtr++;
 
-                    /* get absolute time for 1st cmd in the RTS */
-                    RtsInfoPtr->NextCommandTime =
-                        SC_ComputeAbsTime(SC_GetRtsEntryAtOffset(RtsIndex, SC_ENTRY_OFFSET_FIRST)->Header.TimeTag);
+                    /* get absolute wakeup count for 1st cmd in the RTS */
+                    RtsInfoPtr->NextCommandTgtWakeup =
+                        SC_ComputeAbsWakeup(SC_GetRtsEntryAtOffset(RtsIndex, SC_ENTRY_OFFSET_FIRST)->Header.WakeupCount);
 
                     /* maintain counters associated with starting RTS */
                     SC_OperData.RtsCtrlBlckAddr->NumRtsActive++;
@@ -547,7 +547,7 @@ void SC_KillRts(SC_RtsIndex_t RtsIndex)
         ** Stop the RTS from executing
         */
         RtsInfoPtr->RtsStatus       = SC_Status_LOADED;
-        RtsInfoPtr->NextCommandTime = SC_MAX_TIME;
+        RtsInfoPtr->NextCommandTgtWakeup = SC_MAX_WAKEUP_CNT;
 
         /*
         ** Note: the rest of the fields are left alone

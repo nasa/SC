@@ -100,7 +100,6 @@ void SC_JumpAtsCmd(const SC_JumpAtsCmd_t *Cmd)
  */
 void SC_KillAts(void)
 {
-
     UT_GenStub_Execute(SC_KillAts, Basic, NULL);
 }
 
@@ -111,7 +110,6 @@ void SC_KillAts(void)
  */
 void SC_ServiceSwitchPend(void)
 {
-
     UT_GenStub_Execute(SC_ServiceSwitchPend, Basic, NULL);
 }
 

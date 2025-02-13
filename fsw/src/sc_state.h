@@ -19,39 +19,28 @@
 
 /**
  * @file
- *   This file contains functions to handle getting the next time of
- *   commands for the ATP and RTP  as well as updating the time for
- *   Stored Command.
+ *   This file contains functions to handle getting the next time
+ *   or wakeup count of commands for the ATP and RTP, as well as
+ *   updating the time for Stored Command.
  */
+
 #ifndef SC_STATE_H
 #define SC_STATE_H
 
 #include "cfe.h"
 
 /**
- * \brief Gets the next time for an RTS command to run
+ * \brief Gets the next wakeup count for an RTS command to run
  *
  *  \par Description
  *         This function searches the RTS info table to find
- *         the next RTS that needs to run based on the time that the
- *         rts needs to run and it's priority.
+ *         the next RTS that needs to run based on the wakeup
+ *         count that the RTS needs to run and it's priority.
  *
  *  \par Assumptions, External Events, and Notes:
  *        None
  */
 void SC_GetNextRtsTime(void);
-
-/**
- * \brief Decides whether the ATS or RTS runs next
- *
- *  \par Description
- *         This function compares the next command times for the RTS
- *         and the ATS and decides which one to schedule next.
- *
- *  \par Assumptions, External Events, and Notes:
- *        None
- */
-void SC_UpdateNextTime(void);
 
 /**
  * \brief Gets the next RTS command to run

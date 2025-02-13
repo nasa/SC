@@ -60,7 +60,7 @@ typedef union
 {
     CFE_SB_Buffer_t              Buf;
     SC_SendHkCmd_t               SendHkCmd;
-    SC_OneHzWakeupCmd_t          OneHzWakeupCmd;
+    SC_WakeupCmd_t               WakeupCmd;
     SC_NoopCmd_t                 NoopCmd;
     SC_ResetCountersCmd_t        ResetCountersCmd;
     SC_StopAtsCmd_t              StopAtsCmd;

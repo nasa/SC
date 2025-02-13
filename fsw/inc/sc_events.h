@@ -75,15 +75,15 @@
 #define SC_INIT_SB_SUBSCRIBE_HK_ERR_EID 4
 
 /**
- * \brief SC 1Hz Cycle Message Subscribe Failed Event ID
+ * \brief SC Wakeup Cycle Message Subscribe Failed Event ID
  *
  *  \par Type: ERROR
  *
  *  \par Cause:
- *  This event message is issued when #CFE_SB_Subscribe to the 1 Hz
- *  Request packet fails
+ *  This event message is issued when #CFE_SB_Subscribe to the wakeup
+ *  request packet fails
  */
-#define SC_INIT_SB_SUBSCRIBE_ONEHZ_ERR_EID 5
+#define SC_INIT_SB_SUBSCRIBE_ERR_EID 5
 
 /**
  * \brief HS Command Message Subscribe Failed Event ID

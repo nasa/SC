@@ -89,14 +89,14 @@ void SC_NoopCmd(const SC_NoopCmd_t *Cmd)
 
 /*
  * ----------------------------------------------------
- * Generated stub function for SC_OneHzWakeupCmd()
+ * Generated stub function for SC_WakeupCmd()
  * ----------------------------------------------------
  */
-void SC_OneHzWakeupCmd(const SC_OneHzWakeupCmd_t *Cmd)
+void SC_WakeupCmd(const SC_WakeupCmd_t *Cmd)
 {
-    UT_GenStub_AddParam(SC_OneHzWakeupCmd, const SC_OneHzWakeupCmd_t *, Cmd);
+    UT_GenStub_AddParam(SC_WakeupCmd, const SC_WakeupCmd_t *, Cmd);
 
-    UT_GenStub_Execute(SC_OneHzWakeupCmd, Basic, NULL);
+    UT_GenStub_Execute(SC_WakeupCmd, Basic, NULL);
 }
 
 /*
@@ -106,7 +106,6 @@ void SC_OneHzWakeupCmd(const SC_OneHzWakeupCmd_t *Cmd)
  */
 void SC_ProcessAtpCmd(void)
 {
-
     UT_GenStub_Execute(SC_ProcessAtpCmd, Basic, NULL);
 }
 
@@ -117,7 +116,6 @@ void SC_ProcessAtpCmd(void)
  */
 void SC_ProcessRtpCommand(void)
 {
-
     UT_GenStub_Execute(SC_ProcessRtpCommand, Basic, NULL);
 }
 
@@ -152,6 +150,5 @@ void SC_SendHkCmd(const SC_SendHkCmd_t *Cmd)
  */
 void SC_SendHkPacket(void)
 {
-
     UT_GenStub_Execute(SC_SendHkPacket, Basic, NULL);
 }

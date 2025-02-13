@@ -89,13 +89,13 @@ typedef struct
  */
 typedef struct
 {
-    SC_Status_Enum_t RtsStatus;       /**< \brief status of the RTS */
-    bool             DisabledFlag;    /**< \brief disabled/enabled flag */
-    uint8            CmdCtr;          /**< \brief Cmds executed in current rts */
-    uint8            CmdErrCtr;       /**< \brief errs in current RTS */
-    SC_AbsTimeTag_t  NextCommandTime; /**< \brief next command time for RTS */
-    SC_EntryOffset_t NextCommandPtr;  /**< \brief where next rts cmd is */
-    uint16           UseCtr;          /**< \brief how many times RTS is run */
+    SC_Status_Enum_t RtsStatus;            /**< \brief status of the RTS */
+    bool             DisabledFlag;         /**< \brief disabled/enabled flag */
+    uint8            CmdCtr;               /**< \brief Cmds executed in current rts */
+    uint8            CmdErrCtr;            /**< \brief errs in current RTS */
+    uint32           NextCommandTgtWakeup; /**< \brief target wakeup count for next RTS command */
+    SC_EntryOffset_t NextCommandPtr;       /**< \brief where next rts cmd is */
+    uint16           UseCtr;               /**< \brief how many times RTS is run */
 } SC_RtsInfoEntry_t;
 
 /**
@@ -322,7 +322,7 @@ typedef struct
 
     int32 AtsDupTestArray[SC_MAX_ATS_CMDS]; /**< \brief ATS test for duplicate cmd numbers  */
 
-    uint16 NumCmdsSec; /**< \brief the num of cmds that have gone out in a one second period */
+    uint16 NumCmdsWakeup; /**< \brief the num of cmds that have gone out in this wakeup cycle */
 
     SC_HkTlm_t HkPacket; /**< \brief SC Housekeeping structure */
 } SC_OperData_t;
@@ -368,11 +368,11 @@ typedef struct
 
     bool EnableHeaderUpdate; /**< \brief whether to update headers in outgoing messages */
 
-    SC_Process_Enum_t NextProcNumber;  /**< \brief the next command processor number */
-    SC_AbsTimeTag_t   NextCmdTime[2];  /**< \brief The overall next command time  0 - ATP, 1- RTP*/
-    SC_AbsTimeTag_t   CurrentTime;     /**< \brief this is the current time for SC */
-    SC_RtsNum_t       AutoStartRTS;    /**< \brief Start selected auto-exec RTS after init */
-    uint16            AppendWordCount; /**< \brief Size of cmd entries in current Append ATS table */
+    uint32            NextCmdTime[2];     /**< \brief The overall next command time for ATP (0) and command wakeup count for RTP (1) */
+    SC_AbsTimeTag_t   CurrentTime;        /**< \brief this is the current time for SC */
+    uint32            CurrentWakeupCount; /**< \brief this is the current wakeup count for SC */
+    SC_RtsNum_t       AutoStartRTS;       /**< \brief Start selected auto-exec RTS after init */
+    uint16            AppendWordCount;    /**< \brief Size of cmd entries in current Append ATS table */
 } SC_AppData_t;
 
 /************************************************************************

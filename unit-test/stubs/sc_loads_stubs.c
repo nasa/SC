@@ -121,7 +121,6 @@ void SC_ProcessAppend(SC_AtsIndex_t AtsIndex)
  */
 void SC_UpdateAppend(void)
 {
-
     UT_GenStub_Execute(SC_UpdateAppend, Basic, NULL);
 }
 

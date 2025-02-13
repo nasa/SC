@@ -19,9 +19,9 @@
 
 /**
  * @file
- *   This file contains functions to handle getting the next time of
- *   commands for the ATP and RTP  as well as updating the time for
- *   Stored Command.
+ *   This file contains functions to handle getting the next time
+ *   or wakeup count of commands for the ATP and RTP, as well as
+ *   updating the time for Stored Command.
  */
 
 /**************************************************************************
@@ -52,33 +52,33 @@
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /*                                                                 */
-/*  Gets the time of the next RTS command                          */
+/*  Gets the wakeup count of the next RTS command                  */
 /*                                                                 */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 void SC_GetNextRtsTime(void)
 {
-    int16              i;        /* loop counter MUST be SIGNED !*/
-    SC_RtsIndex_t      NextRts;  /* the next rts to schedule */
-    SC_AbsTimeTag_t    NextTime; /* the next time for the RTS */
+    int16              i;             /* loop counter MUST be SIGNED !*/
+    SC_RtsIndex_t      NextRts;       /* the next rts to schedule */
+    uint32             NextWakeupCnt; /* the next wakeup count for the RTS */
     SC_RtsInfoEntry_t *RtsInfoPtr;
 
     NextRts  = SC_INVALID_RTS_INDEX;
-    NextTime = SC_MAX_TIME;
+    NextWakeupCnt = SC_MAX_WAKEUP_CNT;
 
     /*
      ** Go through the table backwards to account for the RTS priority
      ** Lower number RTSs get higher priority
      ** Backward processing ensures selection of the lowest RTS number
-     ** when multiple RTSs have the same next command time
+     ** when multiple RTSs have the same next command wakeup count
      */
     for (i = SC_NUMBER_OF_RTS - 1; i >= 0; i--)
     {
         RtsInfoPtr = SC_GetRtsInfoObject(SC_RTS_IDX_C(i));
         if (RtsInfoPtr->RtsStatus == SC_Status_EXECUTING)
         {
-            if (RtsInfoPtr->NextCommandTime <= NextTime)
+            if (RtsInfoPtr->NextCommandTgtWakeup <= NextWakeupCnt)
             {
-                NextTime = RtsInfoPtr->NextCommandTime;
+                NextWakeupCnt = RtsInfoPtr->NextCommandTgtWakeup;
                 NextRts  = SC_RTS_IDX_C(i);
             } /* end if */
         }     /* end if */
@@ -87,55 +87,12 @@ void SC_GetNextRtsTime(void)
     if (!SC_RtsIndexIsValid(NextRts))
     {
         SC_OperData.RtsCtrlBlckAddr->CurrRtsNum = SC_RTS_NUM_NULL;
-        SC_AppData.NextCmdTime[SC_Process_RTP]  = SC_MAX_TIME;
+        SC_AppData.NextCmdTime[SC_Process_RTP]  = SC_MAX_WAKEUP_CNT;
     }
     else
     {
         SC_OperData.RtsCtrlBlckAddr->CurrRtsNum = SC_RtsIndexToNum(NextRts);
-        SC_AppData.NextCmdTime[SC_Process_RTP]  = NextTime;
-    } /* end if */
-}
-
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-/*                                                                 */
-/* Decides whether an RTS or ATS command gets scheduled next       */
-/*                                                                 */
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-void SC_UpdateNextTime(void)
-{
-    /*
-     ** First, find out which RTS needs to run next
-     */
-    SC_GetNextRtsTime();
-
-    /*
-     ** Start out with a default, no processors need to run next
-     */
-    SC_AppData.NextProcNumber = SC_Process_NONE;
-
-    /*
-     ** Check to see if the ATP needs to schedule commands
-     */
-    if (SC_OperData.AtsCtrlBlckAddr->AtpState == SC_Status_EXECUTING)
-    {
-        SC_AppData.NextProcNumber = SC_Process_ATP;
-    }
-    /*
-     ** Last, check to see if there is an RTS that needs to schedule commands
-     ** This is determined by the RTS number in the RTP control block
-     ** If it is zero, there is no RTS that needs to run
-     */
-    if (SC_RtsNumIsValid(SC_OperData.RtsCtrlBlckAddr->CurrRtsNum))
-    {
-        /*
-         ** If the RTP needs to send commands, only send them if
-         ** the RTP time is less than the ATP time. Otherwise
-         ** the ATP has priority
-         */
-        if (SC_AppData.NextCmdTime[SC_Process_RTP] < SC_AppData.NextCmdTime[SC_Process_ATP])
-        {
-            SC_AppData.NextProcNumber = SC_Process_RTP;
-        }
+        SC_AppData.NextCmdTime[SC_Process_RTP]  = NextWakeupCnt;
     } /* end if */
 }
 
@@ -226,9 +183,9 @@ void SC_GetNextRtsCommand(void)
                         {
                             /*
                              ** Everything passed!
-                             ** Update the proper next command time for that RTS
+                             ** Update the proper next command wakeup count for that RTS
                              */
-                            RtsInfoPtr->NextCommandTime = SC_ComputeAbsTime(EntryPtr->Header.TimeTag);
+                            RtsInfoPtr->NextCommandTgtWakeup = SC_ComputeAbsWakeup(EntryPtr->Header.WakeupCount);
 
                             /*
                              ** Update the appropriate RTS info table current command pointer
@@ -375,7 +332,7 @@ void SC_GetNextAtsCommand(void)
          ** switch has occurred and there are no commands to
          ** execute in the same second that the switch occurs.
          ** The state is transitioned here to SC_Status_EXECUTING to
-         ** commence execution of the new ATS on the next 1Hz
+         ** commence execution of the new ATS on the next wakeup
          ** command processing cycle.
          */
         SC_OperData.AtsCtrlBlckAddr->AtpState = SC_Status_EXECUTING;

@@ -31,7 +31,7 @@
 
 #define SC_CMD_MID          (0x18A9) /**< \brief Msg ID for cmds to SC   */
 #define SC_SEND_HK_MID      (0x18AA) /**< \brief Msg ID to request SC HK */
-#define SC_ONEHZ_WAKEUP_MID (0x18AB) /**< \brief Msg ID to receive the 1Hz */
+#define SC_WAKEUP_MID       (0x18AB) /**< \brief Msg ID to receive the wakeup command */
 
 /**\}*/
 
@@ -46,7 +46,8 @@
 
 /* Compatibility identifiers - in case existing SCH table(s) use the old wakeup MID define */
 #ifndef SC_OMIT_DEPRECATED
-#define SC_1HZ_WAKEUP_MID SC_ONEHZ_WAKEUP_MID
+#define SC_1HZ_WAKEUP_MID SC_WAKEUP_MID
+#define SC_ONEHZ_WAKEUP_MID SC_WAKEUP_MID
 #endif
 
 #endif

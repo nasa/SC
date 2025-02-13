@@ -75,7 +75,6 @@ void SC_ProcessAtpCmd(void)
      */
 
     if ((SC_OperData.AtsCtrlBlckAddr->AtpState == SC_Status_EXECUTING) &&
-        (SC_AppData.NextProcNumber == SC_Process_ATP) &&
         (!SC_CompareAbsTime(SC_AppData.NextCmdTime[SC_Process_ATP], SC_AppData.CurrentTime)))
     {
         /*
@@ -113,7 +112,7 @@ void SC_ProcessAtpCmd(void)
                     /*
                      ** Count the command for the rate limiter
                      */
-                    SC_OperData.NumCmdsSec++;
+                    SC_OperData.NumCmdsWakeup++;
 
                     /*
                      **  First check to see if the command is a switch command,
@@ -298,7 +297,7 @@ void SC_ProcessRtpCommand(void)
 
     /*
      ** The following conditions must be met before a RTS command is executed:
-     ** 1.) The next command time must be <= the current time
+     ** 1.) The next command wakeup count must be <= the current wakeup count
      ** 2.) The next processor number must be SC_Process_RTP
      ** 3.) The RTS number in the RTP control block must be valid and
      ** 4.) the RTS must be EXECUTING
@@ -312,14 +311,13 @@ void SC_ProcessRtpCommand(void)
 
     RtsInfoPtr = SC_GetRtsInfoObject(RtsIndex);
 
-    if ((SC_AppData.NextCmdTime[SC_AppData.NextProcNumber] <= SC_AppData.CurrentTime) &&
-        (SC_AppData.NextProcNumber == SC_Process_RTP) && (RtsInfoPtr->RtsStatus == SC_Status_EXECUTING))
+    if ((SC_AppData.NextCmdTime[SC_Process_RTP] <= SC_AppData.CurrentWakeupCount) && (RtsInfoPtr->RtsStatus == SC_Status_EXECUTING))
     {
         /*
          ** Count the command for the rate limiter
          ** even if the command fails
          */
-        SC_OperData.NumCmdsSec++;
+        SC_OperData.NumCmdsWakeup++;
 
         /*
          ** Get the Command offset within the RTS
@@ -443,9 +441,9 @@ void SC_SendHkPacket(void)
      ** Fill out the RTP control block information
      */
 
-    SC_OperData.HkPacket.Payload.NumRtsActive = SC_OperData.RtsCtrlBlckAddr->NumRtsActive;
-    SC_OperData.HkPacket.Payload.RtsNum       = SC_OperData.RtsCtrlBlckAddr->CurrRtsNum;
-    SC_OperData.HkPacket.Payload.NextRtsTime  = SC_AppData.NextCmdTime[SC_Process_RTP];
+    SC_OperData.HkPacket.Payload.NumRtsActive      = SC_OperData.RtsCtrlBlckAddr->NumRtsActive;
+    SC_OperData.HkPacket.Payload.RtsNum            = SC_OperData.RtsCtrlBlckAddr->CurrRtsNum;
+    SC_OperData.HkPacket.Payload.NextRtsWakeupCnt  = SC_AppData.NextCmdTime[SC_Process_RTP];
 
     /*
      ** Fill out the RTS status bit mask
@@ -532,18 +530,21 @@ void SC_ResetCountersCmd(const SC_ResetCountersCmd_t *Cmd)
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /*                                                                 */
-/* 1Hz Wakeup Command                                              */
+/* Wakeup Command                                                  */
 /*                                                                 */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-void SC_OneHzWakeupCmd(const SC_OneHzWakeupCmd_t *Cmd)
+void SC_WakeupCmd(const SC_WakeupCmd_t *Cmd)
 {
-    bool IsThereAnotherCommandToExecute = false;
+    uint32 CurrentNumCmds;
+    SC_AppData.CurrentWakeupCount++;
 
     /*
      * Time to execute a command in the SC memory
      */
-    do
+    while (SC_OperData.NumCmdsWakeup < SC_MAX_CMDS_PER_WAKEUP)
     {
+        CurrentNumCmds = SC_OperData.NumCmdsWakeup;
+
         /*
          *  Check to see if there is an ATS switch Pending, if so service it.
          */
@@ -552,38 +553,25 @@ void SC_OneHzWakeupCmd(const SC_OneHzWakeupCmd_t *Cmd)
             SC_ServiceSwitchPend();
         }
 
-        if (SC_AppData.NextProcNumber == SC_Process_ATP)
-        {
-            SC_ProcessAtpCmd();
-        }
-        else
-        {
-            if (SC_AppData.NextProcNumber == SC_Process_RTP)
-            {
-                SC_ProcessRtpCommand();
-            }
-        }
+        SC_ProcessAtpCmd();
 
-        SC_UpdateNextTime();
-        if ((SC_AppData.NextProcNumber == SC_Process_NONE) ||
-            (SC_AppData.NextCmdTime[SC_AppData.NextProcNumber] > SC_AppData.CurrentTime))
+        if (CurrentNumCmds == SC_OperData.NumCmdsWakeup)
         {
-            SC_OperData.NumCmdsSec         = 0;
-            IsThereAnotherCommandToExecute = false;
+            SC_GetNextRtsTime();
+            
+            SC_ProcessRtpCommand();
         }
-        else /* Command needs to run immediately */
+        
+        /* 
+         * No commands could be processed
+         */
+        if (CurrentNumCmds == SC_OperData.NumCmdsWakeup)
         {
-            if (SC_OperData.NumCmdsSec >= SC_MAX_CMDS_PER_SEC)
-            {
-                SC_OperData.NumCmdsSec         = 0;
-                IsThereAnotherCommandToExecute = false;
-            }
-            else
-            {
-                IsThereAnotherCommandToExecute = true;
-            }
+            break;
         }
-    } while (IsThereAnotherCommandToExecute);
+    }
+
+    SC_OperData.NumCmdsWakeup = 0;
 }
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */

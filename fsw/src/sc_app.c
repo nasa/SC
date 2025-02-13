@@ -145,7 +145,7 @@ CFE_Status_t SC_AppInit(void)
     memset(&SC_AppData, 0, sizeof(SC_AppData));
 
     /* Number of ATS and RTS commands already executed this second */
-    SC_OperData.NumCmdsSec = 0;
+    SC_OperData.NumCmdsWakeup = 0;
 
     /* Continue ATS execution if ATS command checksum fails */
     SC_OperData.HkPacket.Payload.ContinueAtsOnFailureFlag = SC_CONT_ON_FAILURE_START;
@@ -155,12 +155,10 @@ CFE_Status_t SC_AppInit(void)
     /* assign the time ref accessor from the compile-time option */
     SC_AppData.TimeRef = SC_LookupTimeAccessor(SC_TIME_TO_USE);
 
-    /* Make sure nothing is running */
-    SC_AppData.NextProcNumber = SC_Process_NONE;
     /* SAD: SC_Process_ATP is 0, within the valid index range of NextCmdTime array, which has 2 elements */
     SC_AppData.NextCmdTime[SC_Process_ATP] = SC_MAX_TIME;
     /* SAD: SC_Process_RTP is 1, within the valid index range of NextCmdTime array, which has 2 elements */
-    SC_AppData.NextCmdTime[SC_Process_RTP] = SC_MAX_TIME;
+    SC_AppData.NextCmdTime[SC_Process_RTP] = SC_MAX_WAKEUP_CNT;
 
     /* Initialize the SC housekeeping packet */
     CFE_MSG_Init(CFE_MSG_PTR(SC_OperData.HkPacket.TelemetryHeader), CFE_SB_ValueToMsgId(SC_HK_TLM_MID),
@@ -202,12 +200,12 @@ CFE_Status_t SC_AppInit(void)
         return Result;
     }
 
-    /* Must be able to subscribe to 1Hz wakeup command */
-    Result = CFE_SB_Subscribe(CFE_SB_ValueToMsgId(SC_ONEHZ_WAKEUP_MID), SC_OperData.CmdPipe);
+    /* Must be able to subscribe to wakeup command */
+    Result = CFE_SB_Subscribe(CFE_SB_ValueToMsgId(SC_WAKEUP_MID), SC_OperData.CmdPipe);
     if (Result != CFE_SUCCESS)
     {
-        CFE_EVS_SendEvent(SC_INIT_SB_SUBSCRIBE_ONEHZ_ERR_EID, CFE_EVS_EventType_ERROR,
-                          "Software Bus subscribe to 1 Hz cycle returned: 0x%08X", (unsigned int)Result);
+        CFE_EVS_SendEvent(SC_INIT_SB_SUBSCRIBE_ERR_EID, CFE_EVS_EventType_ERROR,
+                          "Software Bus subscribe to wakeup cycle returned: 0x%08X", (unsigned int)Result);
         return Result;
     }
 
@@ -287,7 +285,7 @@ CFE_Status_t SC_InitTables(void)
     {
         RtsInfoPtr = SC_GetRtsInfoObject(SC_RTS_IDX_C(i));
 
-        RtsInfoPtr->NextCommandTime = SC_MAX_TIME;
+        RtsInfoPtr->NextCommandTgtWakeup = SC_MAX_WAKEUP_CNT;
         RtsInfoPtr->NextCommandPtr  = SC_ENTRY_OFFSET_FIRST;
         RtsInfoPtr->RtsStatus       = SC_Status_EMPTY;
         RtsInfoPtr->DisabledFlag    = true;

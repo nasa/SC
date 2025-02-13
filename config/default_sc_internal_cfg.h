@@ -71,19 +71,19 @@
 #define SC_PLATFORM_ENABLE_HEADER_UPDATE false
 
 /**
- * \brief  Max number of commands per second
+ * \brief  Max number of commands per wakeup
  *
  *  \par Description:
  *       Maximum number of commands that can be sent out by SC
- *       in any given second.
+ *       in any given wakeup cycle.
  *
  *  \par Limits:
  *       This parameter can't be larger than an unsigned 16 bit
- *       integer (65535), but should be kepoot relatively small to
+ *       integer (65535), but should be kept relatively small to
  *       avoid SC hogging the CPU
  *
  */
-#define SC_MAX_CMDS_PER_SEC 8
+#define SC_MAX_CMDS_PER_WAKEUP 8
 
 /**
  * \brief Max buffer size for an ATS in uint16s
@@ -342,7 +342,7 @@
  * \brief Defines the TIME SC should use for its commands
  *
  *  \par Description:
- *       This parameter defines what type of time SC should use for sending uot its commands
+ *       This parameter defines what type of time SC should use for sending out its commands
  *
  *  \par Limits:
  *       Must be SC_TimeRef_USE_CFE_TIME, SC_TimeRef_USE_TAI, or SC_TimeRef_USE_UTC */
