@@ -413,7 +413,7 @@ void SC_LoadAts_Test_AtsEntryOverflow(void)
 {
     SC_AtsEntryHeader_t *Entry;
     SC_AtsInfoTable_t    AtsInfoTbl;
-    uint32               AtsTable[SC_ATS_BUFF_SIZE32];
+    uint32               Big_AtsTable[SC_ATS_BUFF_SIZE32 * 2];
     uint8                AtsIndex = 0;
     size_t               MsgSize1;
     size_t               MsgSize2;
@@ -423,12 +423,12 @@ void SC_LoadAts_Test_AtsEntryOverflow(void)
     int                  j;
 
     memset(&AtsInfoTbl, 0, sizeof(AtsInfoTbl));
-    memset(&AtsTable, 0, sizeof(AtsTable));
+    memset(&Big_AtsTable, 0, sizeof(Big_AtsTable));
 
     SC_InitTables();
 
     SC_OperData.AtsCmdStatusTblAddr[AtsIndex] = &SC_APP_TEST_GlobalAtsCmdStatusTbl[0];
-    SC_OperData.AtsTblAddr[AtsIndex]          = &AtsTable[0];
+    SC_OperData.AtsTblAddr[AtsIndex]          = &Big_AtsTable[0];
     SC_OperData.AtsInfoTblAddr                = &AtsInfoTbl;
 
     MsgSize1      = SC_PACKET_MAX_SIZE;
