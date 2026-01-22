@@ -1,8 +1,7 @@
 /************************************************************************
- * NASA Docket No. GSC-18,924-1, and identified as “Core Flight
- * System (cFS) Stored Command Application version 3.1.1”
+ * NASA Docket No. GSC-19,200-1, and identified as "cFS Draco"
  *
- * Copyright (c) 2021 United States Government as represented by the
+ * Copyright (c) 2023 United States Government as represented by the
  * Administrator of the National Aeronautics and Space Administration.
  * All Rights Reserved.
  *
@@ -33,6 +32,8 @@
 #ifndef SC_INTERFACE_CFG_H
 #define SC_INTERFACE_CFG_H
 
+#include "sc_interface_cfg_values.h"
+
 /**
  * \brief Minimum Packet Size
  *
@@ -42,7 +43,8 @@
  *       This parameter must be greater than or equal to CFE_SB_CMD_HDR_SIZE and
  *       less than or equal to CFE_MISSION_SB_MAX_SB_MSG_SIZE.
  */
-#define SC_PACKET_MIN_SIZE 8
+#define SC_PACKET_MIN_SIZE                   SC_INTERFACE_CFGVAL(PACKET_MIN_SIZE)
+#define DEFAULT_SC_INTERFACE_PACKET_MIN_SIZE 8
 
 /**
  * \brief Maximum Packet Size
@@ -53,9 +55,11 @@
  *       This parameter must be greater than or equal to SC_PACKET_MIN_SIZE and
  *       less than or equal to CFE_MISSION_SB_MAX_SB_MSG_SIZE.
  */
-#define SC_PACKET_MAX_SIZE 256
+#define SC_PACKET_MAX_SIZE                   SC_INTERFACE_CFGVAL(PACKET_MAX_SIZE)
+#define DEFAULT_SC_INTERFACE_PACKET_MAX_SIZE 256
 
-#define SC_NUMBER_OF_ATS 2 /**< \brief the number of Absolute Time Sequences */
+#define SC_NUMBER_OF_ATS                   SC_INTERFACE_CFGVAL(NUMBER_OF_ATS)
+#define DEFAULT_SC_INTERFACE_NUMBER_OF_ATS 2 /**< \brief the number of Absolute Time Sequences */
 
 /**
  * \brief  Number of RTS's
@@ -67,6 +71,55 @@
  *       This parameter can't be larger than 999.This parameter will dicate the size of
  *       The RTS Info Table.
  */
-#define SC_NUMBER_OF_RTS 64
+#define SC_NUMBER_OF_RTS                   SC_INTERFACE_CFGVAL(NUMBER_OF_RTS)
+#define DEFAULT_SC_INTERFACE_NUMBER_OF_RTS 4
+
+/**
+ * \brief Max number of commands in each ATS
+ *
+ *  \par Description:
+ *       The maximum number of commands that are allowed in each ATS
+ *
+ *  \par Limits:
+ *       This parameter can't be larger than an unsigned 16 bit
+ *       integer (65535).
+ */
+#define SC_MAX_ATS_CMDS                   SC_INTERFACE_CFGVAL(MAX_ATS_CMDS)
+#define DEFAULT_SC_INTERFACE_MAX_ATS_CMDS 1000
+
+/**
+ * \brief Max buffer size for an ATS in uint16s
+ *
+ *  \par Description:
+ *       The max sizeof an ATS buffer in words (not bytes)
+ *  \par Limits:
+ *       This parameter can't be larger than an unsigned 16 bit
+ *       integer (65535).
+ */
+#define SC_ATS_BUFF_SIZE                   SC_INTERFACE_CFGVAL(ATS_BUFF_SIZE)
+#define DEFAULT_SC_INTERFACE_ATS_BUFF_SIZE 8000
+
+/**
+ * \brief Max buffer size for an Append ATS in uint16s
+ *
+ *  \par Description:
+ *       The max sizeof an Append ATS buffer in words (not bytes)
+ *  \par Limits:
+ *       This parameter cannot be larger than SC_ATS_BUFF_SIZE.
+ */
+#define SC_APPEND_BUFF_SIZE                   SC_INTERFACE_CFGVAL(APPEND_BUFF_SIZE)
+#define DEFAULT_SC_INTERFACE_APPEND_BUFF_SIZE 4000 /* Half of ATS_BUFF_SIZE */
+
+/**
+ * \brief Max buffer size for an RTS in uint16s
+ *
+ *  \par Description:
+ *       The max size of an RTS buffer in WORDS (not bytes)
+ *  \par Limits:
+ *       This parameter can't be larger than an unsigned 16 bit
+ *       integer (65535).
+ */
+#define SC_RTS_BUFF_SIZE                   SC_INTERFACE_CFGVAL(RTS_BUFF_SIZE)
+#define DEFAULT_SC_INTERFACE_RTS_BUFF_SIZE 150
 
 #endif

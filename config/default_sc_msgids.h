@@ -1,8 +1,7 @@
 /************************************************************************
- * NASA Docket No. GSC-18,924-1, and identified as “Core Flight
- * System (cFS) Stored Command Application version 3.1.1”
+ * NASA Docket No. GSC-19,200-1, and identified as "cFS Draco"
  *
- * Copyright (c) 2021 United States Government as represented by the
+ * Copyright (c) 2023 United States Government as represented by the
  * Administrator of the National Aeronautics and Space Administration.
  * All Rights Reserved.
  *
@@ -21,17 +20,19 @@
  * @file
  *   CFS Stored Command (SC) Application Message IDs
  */
-#ifndef SC_MSGIDS_H
-#define SC_MSGIDS_H
+#ifndef DEFAULT_SC_MSGIDS_H
+#define DEFAULT_SC_MSGIDS_H
+
+#include "sc_msgid_values.h"
 
 /**
  * \defgroup cfssccmdmid CFS Stored Command Command Message IDs
  * \{
  */
 
-#define SC_CMD_MID          (0x18A9) /**< \brief Msg ID for cmds to SC   */
-#define SC_SEND_HK_MID      (0x18AA) /**< \brief Msg ID to request SC HK */
-#define SC_WAKEUP_MID       (0x18AB) /**< \brief Msg ID to receive the wakeup command */
+#define SC_CMD_MID     CFE_PLATFORM_SC_CMD_MIDVAL(CMD)
+#define SC_SEND_HK_MID CFE_PLATFORM_SC_CMD_MIDVAL(SEND_HK)
+#define SC_WAKEUP_MID  CFE_PLATFORM_SC_CMD_MIDVAL(WAKEUP)
 
 /**\}*/
 
@@ -40,14 +41,13 @@
  * \{
  */
 
-#define SC_HK_TLM_MID (0x08AA) /**< \brief Msg ID to send telemtry down on */
+#define SC_HK_TLM_MID CFE_PLATFORM_SC_TLM_MIDVAL(HK_TLM) /**< \brief SC Hk Telemetry Message ID ****/
 
 /**\}*/
 
 /* Compatibility identifiers - in case existing SCH table(s) use the old wakeup MID define */
 #ifndef SC_OMIT_DEPRECATED
 #define SC_1HZ_WAKEUP_MID SC_WAKEUP_MID
-#define SC_ONEHZ_WAKEUP_MID SC_WAKEUP_MID
 #endif
 
 #endif

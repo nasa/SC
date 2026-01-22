@@ -1,8 +1,7 @@
 /************************************************************************
- * NASA Docket No. GSC-18,924-1, and identified as “Core Flight
- * System (cFS) Stored Command Application version 3.1.1”
+ * NASA Docket No. GSC-19,200-1, and identified as "cFS Draco"
  *
- * Copyright (c) 2021 United States Government as represented by the
+ * Copyright (c) 2023 United States Government as represented by the
  * Administrator of the National Aeronautics and Space Administration.
  * All Rights Reserved.
  *
@@ -27,6 +26,7 @@
 
 #include "common_types.h"
 #include "sc_msg.h"
+#include "cfe_error.h"
 
 typedef enum
 {
@@ -34,6 +34,24 @@ typedef enum
     RTS,
     APPEND
 } SC_TableType;
+
+#define SC_HKTLM_MEMBER_SIZE(x) sizeof(((SC_HkTlm_Payload_t *)0)->x)
+
+/* Macro to set/clear bits in the HK TLM bitmask for RTS status */
+enum
+{
+    SC_BITS_PER_HKTLM_OCTET = SC_NUMBER_OF_RTS / SC_HKTLM_MEMBER_SIZE(RtsDisabledStatus),
+    SC_BITS_PER_HKTLM_WORD  = SC_HKTLM_MEMBER_SIZE(RtsDisabledStatus[0]) * SC_BITS_PER_HKTLM_OCTET,
+};
+
+#define SC_SET_HKTLM_RTS_MASK(f, s, v)                                             \
+    do                                                                             \
+    {                                                                              \
+        if (v)                                                                     \
+            f[s / SC_BITS_PER_HKTLM_WORD] |= (1 << (s % SC_BITS_PER_HKTLM_WORD));  \
+        else                                                                       \
+            f[s / SC_BITS_PER_HKTLM_WORD] &= ~(1 << (s % SC_BITS_PER_HKTLM_WORD)); \
+    } while (0)
 
 /**
  * \brief Table manage request command handler
@@ -52,7 +70,7 @@ typedef enum
  *
  *  \sa #SC_MANAGE_TABLE_CC
  */
-void SC_ManageTableCmd(const SC_ManageTableCmd_t *Cmd);
+CFE_Status_t SC_ManageTableCmd(const SC_ManageTableCmd_t *Cmd);
 
 /**
  * \brief Manage pending update to an RTS table
@@ -122,7 +140,7 @@ void SC_ManageTable(SC_TableType type, int32 ArrayIndex);
  *
  *  \sa #SC_NOOP_CC
  */
-void SC_NoopCmd(const SC_NoopCmd_t *Cmd);
+CFE_Status_t SC_NoopCmd(const SC_NoopCmd_t *Cmd);
 
 /**
  * \brief Reset Counters Command
@@ -137,7 +155,7 @@ void SC_NoopCmd(const SC_NoopCmd_t *Cmd);
  *
  *  \sa #SC_RESET_COUNTERS_CC
  */
-void SC_ResetCountersCmd(const SC_ResetCountersCmd_t *Cmd);
+CFE_Status_t SC_ResetCountersCmd(const SC_ResetCountersCmd_t *Cmd);
 
 /**
  * \brief Send Hk Packet to the ground
@@ -152,8 +170,8 @@ void SC_ResetCountersCmd(const SC_ResetCountersCmd_t *Cmd);
  */
 void SC_SendHkPacket(void);
 
-void SC_SendHkCmd(const SC_SendHkCmd_t *Cmd);
-void SC_WakeupCmd(const SC_WakeupCmd_t *Cmd);
+CFE_Status_t SC_SendHkCmd(const SC_SendHkCmd_t *Cmd);
+CFE_Status_t SC_WakeupCmd(const SC_WakeupCmd_t *Cmd);
 
 /**
  * \brief Process an ATS Command

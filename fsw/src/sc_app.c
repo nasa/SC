@@ -1,8 +1,7 @@
 /************************************************************************
- * NASA Docket No. GSC-18,924-1, and identified as “Core Flight
- * System (cFS) Stored Command Application version 3.1.1”
+ * NASA Docket No. GSC-19,200-1, and identified as "cFS Draco"
  *
- * Copyright (c) 2021 United States Government as represented by the
+ * Copyright (c) 2023 United States Government as represented by the
  * Administrator of the National Aeronautics and Space Administration.
  * All Rights Reserved.
  *
@@ -98,6 +97,11 @@ void SC_AppMain(void)
         /* Check for Software Bus error */
         if (Result == CFE_SUCCESS)
         {
+            /*
+            ** Get the current system time in the global SC_AppData.CurrentTime
+            */
+            SC_GetCurrentTime();
+
             /* Invoke command handlers */
             SC_ProcessRequest(BufPtr);
         }
@@ -186,8 +190,8 @@ CFE_Status_t SC_AppInit(void)
     Result = CFE_SB_CreatePipe(&SC_OperData.CmdPipe, SC_PIPE_DEPTH, SC_CMD_PIPE_NAME);
     if (Result != CFE_SUCCESS)
     {
-        CFE_EVS_SendEvent(SC_CR_PIPE_ERR_EID, CFE_EVS_EventType_ERROR,
-                          "Software Bus Create Pipe returned: 0x%08X", (unsigned int)Result);
+        CFE_EVS_SendEvent(SC_CR_PIPE_ERR_EID, CFE_EVS_EventType_ERROR, "Software Bus Create Pipe returned: 0x%08X",
+                          (unsigned int)Result);
         return Result;
     }
 
@@ -286,9 +290,9 @@ CFE_Status_t SC_InitTables(void)
         RtsInfoPtr = SC_GetRtsInfoObject(SC_RTS_IDX_C(i));
 
         RtsInfoPtr->NextCommandTgtWakeup = SC_MAX_WAKEUP_CNT;
-        RtsInfoPtr->NextCommandPtr  = SC_ENTRY_OFFSET_FIRST;
-        RtsInfoPtr->RtsStatus       = SC_Status_EMPTY;
-        RtsInfoPtr->DisabledFlag    = true;
+        RtsInfoPtr->NextCommandPtr       = SC_ENTRY_OFFSET_FIRST;
+        RtsInfoPtr->RtsStatus            = SC_Status_EMPTY;
+        RtsInfoPtr->DisabledFlag         = true;
     }
 
     /* Load default RTS tables */

@@ -1,8 +1,7 @@
 /************************************************************************
- * NASA Docket No. GSC-18,924-1, and identified as “Core Flight
- * System (cFS) Stored Command Application version 3.1.1”
+ * NASA Docket No. GSC-19,200-1, and identified as "cFS Draco"
  *
- * Copyright (c) 2021 United States Government as represented by the
+ * Copyright (c) 2023 United States Government as represented by the
  * Administrator of the National Aeronautics and Space Administration.
  * All Rights Reserved.
  *
@@ -32,6 +31,8 @@
  */
 #ifndef SC_INTERNAL_CFG_H
 #define SC_INTERNAL_CFG_H
+
+#include "sc_internal_cfg_values.h"
 
 /**
  * \defgroup cfsscplatformcfg CFS Stored Command Platform Configuration
@@ -68,7 +69,8 @@
  *  \par Limits:
  *       Must be true or false
  */
-#define SC_PLATFORM_ENABLE_HEADER_UPDATE false
+#define SC_PLATFORM_ENABLE_HEADER_UPDATE                  SC_INTERNAL_CFGVAL(PLATFORM_ENABLE_HEADER_UPDATE)
+#define DEFAULT_SC_INTERNAL_PLATFORM_ENABLE_HEADER_UPDATE false
 
 /**
  * \brief  Max number of commands per wakeup
@@ -83,51 +85,8 @@
  *       avoid SC hogging the CPU
  *
  */
-#define SC_MAX_CMDS_PER_WAKEUP 8
-
-/**
- * \brief Max buffer size for an ATS in uint16s
- *
- *  \par Description:
- *       The max sizeof an ATS buffer in words (not bytes)
- *  \par Limits:
- *       This parameter can't be larger than an unsigned 16 bit
- *       integer (65535).
- */
-#define SC_ATS_BUFF_SIZE 8000
-
-/**
- * \brief Max buffer size for an Append ATS in uint16s
- *
- *  \par Description:
- *       The max sizeof an Append ATS buffer in words (not bytes)
- *  \par Limits:
- *       This parameter cannot be larger than SC_ATS_BUFF_SIZE.
- */
-#define SC_APPEND_BUFF_SIZE (SC_ATS_BUFF_SIZE / 2)
-
-/**
- * \brief Max buffer size for an RTS in uint16s
- *
- *  \par Description:
- *       The max size of an RTS buffer in WORDS (not bytes)
- *  \par Limits:
- *       This parameter can't be larger than an unsigned 16 bit
- *       integer (65535).
- */
-#define SC_RTS_BUFF_SIZE 150
-
-/**
- * \brief Max number of commands in each ATS
- *
- *  \par Description:
- *       The maximum number of commands that are allowed in each ATS
- *
- *  \par Limits:
- *       This parameter can't be larger than an unsigned 16 bit
- *       integer (65535).
- */
-#define SC_MAX_ATS_CMDS 1000
+#define SC_MAX_CMDS_PER_WAKEUP                  SC_INTERNAL_CFGVAL(MAX_CMDS_PER_WAKEUP)
+#define DEFAULT_SC_INTERNAL_MAX_CMDS_PER_WAKEUP 8
 
 /**
  * \brief The last RTS that will be sent with an #SC_RTS_START_INF_EID event message
@@ -139,7 +98,8 @@
  *  \par Limits:
  *       This parameter needs to be less than or equal to SC_NUMBER_OF_RTS
  */
-#define SC_LAST_RTS_WITH_EVENTS 20
+#define SC_LAST_RTS_WITH_EVENTS                  SC_INTERNAL_CFGVAL(LAST_RTS_WITH_EVENTS)
+#define DEFAULT_SC_INTERNAL_LAST_RTS_WITH_EVENTS 3
 
 /**
  * \brief Command Pipe Depth
@@ -153,7 +113,8 @@
  *       This parameter must be greater than zero and less than or equal to
  *       OS_QUEUE_MAX_DEPTH.
  */
-#define SC_PIPE_DEPTH 12
+#define SC_PIPE_DEPTH                  SC_INTERNAL_CFGVAL(PIPE_DEPTH)
+#define DEFAULT_SC_INTERNAL_PIPE_DEPTH 12
 
 /**
  * \brief ATS Table Filenames
@@ -172,7 +133,8 @@
  *       at run time, or the table fails validation, then the table load
  *       will fail.  Refer to #OS_MAX_PATH_LEN for filename length limits.
  */
-#define SC_ATS_FILE_NAME "/cf/sc_ats"
+#define SC_ATS_FILE_NAME                  SC_INTERNAL_CFGVAL(ATS_FILE_NAME)
+#define DEFAULT_SC_INTERNAL_ATS_FILE_NAME "/cf/sc_ats"
 
 /**
  * \brief Append ATS Table Filename
@@ -189,7 +151,8 @@
  *       at run time, or the table fails validation, then the table load
  *       will fail.  Refer to #OS_MAX_PATH_LEN for filename length limits.
  */
-#define SC_APPEND_FILE_NAME "/cf/sc_append.tbl"
+#define SC_APPEND_FILE_NAME                  SC_INTERNAL_CFGVAL(APPEND_FILE_NAME)
+#define DEFAULT_SC_INTERNAL_APPEND_FILE_NAME "/cf/sc_append.tbl"
 
 /**
  * \brief RTS Table Filenames
@@ -208,7 +171,8 @@
  *       at run time, or the table fails validation, then the table load
  *       will fail.  Refer to #OS_MAX_PATH_LEN for filename length limits.
  */
-#define SC_RTS_FILE_NAME "/cf/sc_rts"
+#define SC_RTS_FILE_NAME                  SC_INTERNAL_CFGVAL(RTS_FILE_NAME)
+#define DEFAULT_SC_INTERNAL_RTS_FILE_NAME "/cf/sc_rts"
 
 /**
  * \brief ATS Table Object Names
@@ -227,7 +191,8 @@
  *       limits on the definition.  Refer to #CFE_MISSION_TBL_MAX_NAME_LENGTH for
  *       specific information on limits related to table object names.
  */
-#define SC_ATS_TABLE_NAME "ATS_TBL"
+#define SC_ATS_TABLE_NAME                  SC_INTERNAL_CFGVAL(ATS_TABLE_NAME)
+#define DEFAULT_SC_INTERNAL_ATS_TABLE_NAME "ATS_TBL"
 
 /**
  * \brief Append ATS Table Object Names
@@ -242,7 +207,8 @@
  *       limits on the definition.  Refer to #CFE_MISSION_TBL_MAX_NAME_LENGTH for
  *       specific information on limits related to table object names.
  */
-#define SC_APPEND_TABLE_NAME "APPEND_TBL"
+#define SC_APPEND_TABLE_NAME                  SC_INTERNAL_CFGVAL(APPEND_TABLE_NAME)
+#define DEFAULT_SC_INTERNAL_APPEND_TABLE_NAME "APPEND_TBL"
 
 /**
  * \brief RTS Table Object Names
@@ -261,7 +227,8 @@
  *       limits on the definition.  Refer to #CFE_MISSION_TBL_MAX_NAME_LENGTH for
  *       specific information on limits related to table object names.
  */
-#define SC_RTS_TABLE_NAME "RTS_TBL"
+#define SC_RTS_TABLE_NAME                  SC_INTERNAL_CFGVAL(RTS_TABLE_NAME)
+#define DEFAULT_SC_INTERNAL_RTS_TABLE_NAME "RTS_TBL"
 
 /**
  * \brief Name of the RTS Infomation Table
@@ -271,7 +238,8 @@
  *  \par Limits:
  *       Must be less than #CFE_MISSION_TBL_MAX_NAME_LENGTH
  */
-#define SC_RTSINFO_TABLE_NAME "RTSINF_TBL"
+#define SC_RTSINFO_TABLE_NAME                  SC_INTERNAL_CFGVAL(RTSINFO_TABLE_NAME)
+#define DEFAULT_SC_INTERNAL_RTSINFO_TABLE_NAME "RTSINF_TBL"
 
 /**
  * \brief Name of the RTP Control block table
@@ -281,7 +249,8 @@
  *  \par Limits:
  *       Must be less than #CFE_MISSION_TBL_MAX_NAME_LENGTH
  */
-#define SC_RTP_CTRL_TABLE_NAME "RTPCTR_TBL"
+#define SC_RTP_CTRL_TABLE_NAME                  SC_INTERNAL_CFGVAL(RTP_CTRL_TABLE_NAME)
+#define DEFAULT_SC_INTERNAL_RTP_CTRL_TABLE_NAME "RTPCTR_TBL"
 
 /**
  * \brief Name of the ATS Infomation Table
@@ -291,7 +260,8 @@
  *  \par Limits:
  *       Must be less than #CFE_MISSION_TBL_MAX_NAME_LENGTH
  */
-#define SC_ATSINFO_TABLE_NAME "ATSINF_TBL"
+#define SC_ATSINFO_TABLE_NAME                  SC_INTERNAL_CFGVAL(ATSINFO_TABLE_NAME)
+#define DEFAULT_SC_INTERNAL_ATSINFO_TABLE_NAME "ATSINF_TBL"
 
 /**
  * \brief Name of the Append ATS Infomation Table
@@ -301,7 +271,8 @@
  *  \par Limits:
  *       Must be less than #CFE_MISSION_TBL_MAX_NAME_LENGTH
  */
-#define SC_APPENDINFO_TABLE_NAME "APPINF_TBL"
+#define SC_APPENDINFO_TABLE_NAME                  SC_INTERNAL_CFGVAL(APPENDINFO_TABLE_NAME)
+#define DEFAULT_SC_INTERNAL_APPENDINFO_TABLE_NAME "APPINF_TBL"
 
 /**
  * \brief Name of the ATP Control block table
@@ -311,7 +282,8 @@
  *  \par Limits:
  *       Must be less than #CFE_MISSION_TBL_MAX_NAME_LENGTH
  */
-#define SC_ATS_CTRL_TABLE_NAME "ATPCTR_TBL"
+#define SC_ATS_CTRL_TABLE_NAME                  SC_INTERNAL_CFGVAL(ATS_CTRL_TABLE_NAME)
+#define DEFAULT_SC_INTERNAL_ATS_CTRL_TABLE_NAME "ATPCTR_TBL"
 
 /**
  * \brief Name Prefix of ATS Cmd Status Table
@@ -324,7 +296,8 @@
  *  \par Limits:
  *       Total length must be less than #CFE_MISSION_TBL_MAX_NAME_LENGTH
  */
-#define SC_ATS_CMD_STAT_TABLE_NAME "ATSCMD_TBL"
+#define SC_ATS_CMD_STAT_TABLE_NAME                  SC_INTERNAL_CFGVAL(ATS_CMD_STAT_TABLE_NAME)
+#define DEFAULT_SC_INTERNAL_ATS_CMD_STAT_TABLE_NAME "ATSCMD_TBL"
 
 /**
  * \brief Defines default state of Continue-Ats-On-Checksum-Failure Flag
@@ -336,7 +309,8 @@
  *  \par Limits:
  *       Must be SC_AtsCont_TRUE or SC_AtsCont_FALSE
  */
-#define SC_CONT_ON_FAILURE_START SC_AtsCont_TRUE
+#define SC_CONT_ON_FAILURE_START                  SC_INTERNAL_CFGVAL(CONT_ON_FAILURE_START)
+#define DEFAULT_SC_INTERNAL_CONT_ON_FAILURE_START SC_AtsCont_TRUE
 
 /**
  * \brief Defines the TIME SC should use for its commands
@@ -346,7 +320,8 @@
  *
  *  \par Limits:
  *       Must be SC_TimeRef_USE_CFE_TIME, SC_TimeRef_USE_TAI, or SC_TimeRef_USE_UTC */
-#define SC_TIME_TO_USE SC_TimeRef_USE_CFE_TIME
+#define SC_TIME_TO_USE                  SC_INTERNAL_CFGVAL(TIME_TO_USE)
+#define DEFAULT_SC_INTERNAL_TIME_TO_USE SC_TimeRef_USE_CFE_TIME
 
 /**
  * \brief Autostart RTS ID after power on
@@ -363,7 +338,7 @@
 /**
  * \brief Autostart RTS ID after processor reset
  *
- * \par Description:
+ *  \par Description:
  *      The specified RTS will be automatically invoked after a processor reset
  *      May be configured as 0 to disable
  *
@@ -386,7 +361,8 @@
  *       Must be defined as a numeric value that is greater than
  *       or equal to zero.
  */
-#define SC_MISSION_REV 0
+#define SC_MISSION_REV                  SC_INTERNAL_CFGVAL(MISSION_REV)
+#define DEFAULT_SC_INTERNAL_MISSION_REV 0
 
 /**\}*/
 

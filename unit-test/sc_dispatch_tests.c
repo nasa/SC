@@ -1,8 +1,7 @@
 /************************************************************************
- * NASA Docket No. GSC-18,924-1, and identified as “Core Flight
- * System (cFS) Stored Command Application version 3.1.1”
+ * NASA Docket No. GSC-19,200-1, and identified as "cFS Draco"
  *
- * Copyright (c) 2021 United States Government as represented by the
+ * Copyright (c) 2023 United States Government as represented by the
  * Administrator of the National Aeronautics and Space Administration.
  * All Rights Reserved.
  *
@@ -937,22 +936,6 @@ void UtTest_Setup(void)
     UtTest_Add(SC_ProcessRequest_Test_WakeupNominal, SC_Test_Setup, SC_Test_TearDown,
                "SC_ProcessRequest_Test_WakeupNominal");
     UtTest_Add(SC_ProcessRequest_Test_MIDError, SC_Test_Setup, SC_Test_TearDown, "SC_ProcessRequest_Test_MIDError");
-#ifdef jphfix
-    UtTest_Add(SC_ProcessRequest_Test_HkMIDAutoStartRts, SC_Test_Setup, SC_Test_TearDown,
-               "SC_ProcessRequest_Test_HkMIDAutoStartRts");
-    UtTest_Add(SC_ProcessRequest_Test_HkMIDAutoStartRtsLoaded, SC_Test_Setup, SC_Test_TearDown,
-               "SC_ProcessRequest_Test_HkMIDAutoStartRtsLoaded");
-    UtTest_Add(SC_ProcessRequest_Test_WakeupNONE, SC_Test_Setup, SC_Test_TearDown,
-               "SC_ProcessRequest_Test_WakeupNONE");
-    UtTest_Add(SC_ProcessRequest_Test_WakeupNoSwitchPending, SC_Test_Setup, SC_Test_TearDown,
-               "SC_ProcessRequest_Test_WakeupNoSwitchPending");
-    UtTest_Add(SC_ProcessRequest_Test_WakeupAtpNotExecutionTime, SC_Test_Setup, SC_Test_TearDown,
-               "SC_ProcessRequest_Test_WakeupAtpNotExecutionTime");
-    UtTest_Add(SC_ProcessRequest_Test_WakeupRtpExecutionTime, SC_Test_Setup, SC_Test_TearDown,
-               "SC_ProcessRequest_Test_WakeupRtpExecutionTime");
-    UtTest_Add(SC_ProcessRequest_Test_WakeupRtpExecutionTimeTooManyCmds, SC_Test_Setup, SC_Test_TearDown,
-               "SC_ProcessRequest_Test_WakeupRtpExecutionTimeTooManyCmds");
-#endif
 
     UtTest_Add(SC_ProcessCommand_Test_NoopCmdNominal, SC_Test_Setup, SC_Test_TearDown,
                "SC_ProcessCommand_Test_NoopCmdNominal");

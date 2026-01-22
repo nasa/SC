@@ -1,8 +1,7 @@
 /************************************************************************
- * NASA Docket No. GSC-18,924-1, and identified as “Core Flight
- * System (cFS) Stored Command Application version 3.1.1”
+ * NASA Docket No. GSC-19,200-1, and identified as "cFS Draco"
  *
- * Copyright (c) 2021 United States Government as represented by the
+ * Copyright (c) 2023 United States Government as represented by the
  * Administrator of the National Aeronautics and Space Administration.
  * All Rights Reserved.
  *
@@ -43,6 +42,16 @@
  ** Local #defines
  **
  **************************************************************************/
+
+static inline int32 SC_GetAtsDupTest(SC_CommandNum_t CmdId)
+{
+    return SC_OperData.AtsDupTestArray[SC_IDX_AS_UINT(SC_CommandNumToIndex(CmdId))];
+}
+
+static inline void SC_SetAtsDupTest(SC_CommandNum_t CmdId, int32 Val)
+{
+    SC_OperData.AtsDupTestArray[SC_IDX_AS_UINT(SC_CommandNumToIndex(CmdId))] = Val;
+}
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /*                                                                 */
@@ -108,8 +117,7 @@ void SC_LoadAts(SC_AtsIndex_t AtsIndex)
             }
 
             /* make sure the CmdPtr can fit in a whole Ats Cmd Header at the very least */
-            if (!SC_IDX_WITHIN_LIMIT(AtsEntryIndex,
-                                     1 + (SC_ATS_BUFF_SIZE32 - SC_ATS_HDR_WORDS))) /* jphfix - revisit? */
+            if (!SC_IDX_WITHIN_LIMIT(AtsEntryIndex, 1 + (SC_ATS_BUFF_SIZE32 - SC_ATS_HDR_WORDS)))
             {
                 /* even the smallest command will not fit in the buffer */
                 Result = SC_ERROR;
@@ -729,7 +737,7 @@ int32 SC_VerifyAtsTable(uint32 *Buffer32, int32 BufferWords)
     /* Initialize all command numbers as unused */
     for (i = 0; i < SC_MAX_ATS_CMDS; i++)
     {
-        SC_OperData.AtsDupTestArray[i] = SC_DUP_TEST_UNUSED;
+        SC_SetAtsDupTest(SC_CommandIndexToNum(SC_COMMAND_IDX_C(i)), SC_DUP_TEST_UNUSED);
     }
 
     while (StillProcessing)
@@ -861,7 +869,7 @@ int32 SC_VerifyAtsEntry(uint32 *Buffer32, int32 EntryIndex, int32 BufferWords)
                               "Verify ATS Table error: buffer overflow: buf index = %d, cmd num = %u, pkt len = %d",
                               (int)EntryIndex, SC_IDNUM_AS_UINT(EntryPtr->Header.CmdNumber), (int)CommandBytes);
         }
-        else if (SC_OperData.AtsDupTestArray[SC_CommandNumToIndex(EntryPtr->Header.CmdNumber)] != SC_DUP_TEST_UNUSED)
+        else if (SC_GetAtsDupTest(EntryPtr->Header.CmdNumber) != SC_DUP_TEST_UNUSED)
         {
             /* Entry with duplicate command number is invalid */
             Result = SC_ERROR;
@@ -869,7 +877,7 @@ int32 SC_VerifyAtsEntry(uint32 *Buffer32, int32 EntryIndex, int32 BufferWords)
             CFE_EVS_SendEvent(SC_VERIFY_ATS_DUP_ERR_EID, CFE_EVS_EventType_ERROR,
                               "Verify ATS Table error: dup cmd number: buf index = %d, cmd num = %u, dup index = %d",
                               (int)EntryIndex, SC_IDNUM_AS_UINT(EntryPtr->Header.CmdNumber),
-                              (int)SC_OperData.AtsDupTestArray[SC_CommandNumToIndex(EntryPtr->Header.CmdNumber)]);
+                              (int)SC_GetAtsDupTest(EntryPtr->Header.CmdNumber));
         }
         else
         {
@@ -877,7 +885,7 @@ int32 SC_VerifyAtsEntry(uint32 *Buffer32, int32 EntryIndex, int32 BufferWords)
             Result = SC_ATS_HDR_NOPKT_WORDS + CommandWords;
 
             /* Mark this ATS command ID as in use at this table index */
-            SC_OperData.AtsDupTestArray[SC_CommandNumToIndex(EntryPtr->Header.CmdNumber)] = EntryIndex;
+            SC_SetAtsDupTest(EntryPtr->Header.CmdNumber, EntryIndex);
         }
     }
 

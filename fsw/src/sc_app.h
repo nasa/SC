@@ -1,8 +1,7 @@
 /************************************************************************
- * NASA Docket No. GSC-18,924-1, and identified as “Core Flight
- * System (cFS) Stored Command Application version 3.1.1”
+ * NASA Docket No. GSC-19,200-1, and identified as "cFS Draco"
  *
- * Copyright (c) 2021 United States Government as represented by the
+ * Copyright (c) 2023 United States Government as represented by the
  * Administrator of the National Aeronautics and Space Administration.
  * All Rights Reserved.
  *
@@ -31,9 +30,8 @@
 #include "cfe.h"
 #include "sc_index_types.h"
 #include "sc_platform_cfg.h"
-#include "sc_tbldefs.h"
-#include "sc_msgdefs.h"
 #include "sc_msg.h"
+#include "sc_tbl.h"
 
 /**
  * SC time accessor object
@@ -47,56 +45,6 @@ typedef struct SC_TimeAccessor
 {
     CFE_TIME_SysTime_t (*GetTime)(void);
 } SC_TimeAccessor_t;
-
-/**
- *  \brief ATP Control Block Type
- */
-typedef struct
-{
-    SC_Status_Enum_t AtpState;       /**< \brief execution state of the ATP */
-    SC_AtsNum_t      CurrAtsNum;     /**< \brief current ATS running if any */
-    uint16           Padding;        /**< \brief Structure padding to align to 32-bit boundaries */
-    SC_CommandNum_t  CmdNumber;      /**< \brief current cmd number to run if any */
-    SC_SeqIndex_t    TimeIndexPtr;   /**< \brief time index pointer for current cmd */
-    uint16           SwitchPendFlag; /**< \brief indicates that a buffer switch is waiting */
-} SC_AtpControlBlock_t;
-
-/**
- *  \brief ATS Info Table Type - One of these records are kept for each ATS
- */
-typedef struct
-{
-    uint16 AtsUseCtr;        /**< \brief How many times it has been used */
-    uint16 NumberOfCommands; /**< \brief number of commands in the ATS */
-    uint32 AtsSize;          /**< \brief size of the ATS */
-} SC_AtsInfoTable_t;
-
-/**
- *  \brief RTP Control Block Type
- *
- *  \note Now there is only really one RTP
- *  This structure contains overall info for the next relative time
- *  processor.
- */
-typedef struct
-{
-    uint16      NumRtsActive; /**< \brief number of RTSs currently active */
-    SC_RtsNum_t CurrRtsNum;   /**< \brief next RTS number */
-} SC_RtpControlBlock_t;
-
-/**
- *  \brief RTS info table entry type -One of these records is kept for each RTS
- */
-typedef struct
-{
-    SC_Status_Enum_t RtsStatus;            /**< \brief status of the RTS */
-    bool             DisabledFlag;         /**< \brief disabled/enabled flag */
-    uint8            CmdCtr;               /**< \brief Cmds executed in current rts */
-    uint8            CmdErrCtr;            /**< \brief errs in current RTS */
-    uint32           NextCommandTgtWakeup; /**< \brief target wakeup count for next RTS command */
-    SC_EntryOffset_t NextCommandPtr;       /**< \brief where next rts cmd is */
-    uint16           UseCtr;               /**< \brief how many times RTS is run */
-} SC_RtsInfoEntry_t;
 
 /**
  * \brief Wakeup for SC
@@ -368,11 +316,11 @@ typedef struct
 
     bool EnableHeaderUpdate; /**< \brief whether to update headers in outgoing messages */
 
-    uint32            NextCmdTime[2];     /**< \brief The overall next command time for ATP (0) and command wakeup count for RTP (1) */
-    SC_AbsTimeTag_t   CurrentTime;        /**< \brief this is the current time for SC */
-    uint32            CurrentWakeupCount; /**< \brief this is the current wakeup count for SC */
-    SC_RtsNum_t       AutoStartRTS;       /**< \brief Start selected auto-exec RTS after init */
-    uint16            AppendWordCount;    /**< \brief Size of cmd entries in current Append ATS table */
+    uint32 NextCmdTime[2]; /**< \brief The overall next command time for ATP (0) and command wakeup count for RTP (1) */
+    SC_AbsTimeTag_t CurrentTime;        /**< \brief this is the current time for SC */
+    uint32          CurrentWakeupCount; /**< \brief this is the current wakeup count for SC */
+    SC_RtsNum_t     AutoStartRTS;       /**< \brief Start selected auto-exec RTS after init */
+    uint16          AppendWordCount;    /**< \brief Size of cmd entries in current Append ATS table */
 } SC_AppData_t;
 
 /************************************************************************

@@ -1,8 +1,7 @@
 /************************************************************************
- * NASA Docket No. GSC-18,924-1, and identified as “Core Flight
- * System (cFS) Stored Command Application version 3.1.1”
+ * NASA Docket No. GSC-19,200-1, and identified as "cFS Draco"
  *
- * Copyright (c) 2021 United States Government as represented by the
+ * Copyright (c) 2023 United States Government as represented by the
  * Administrator of the National Aeronautics and Space Administration.
  * All Rights Reserved.
  *
@@ -29,11 +28,15 @@
  * either by overriding this header or by generating definitions from a command/data
  * dictionary tool.
  */
-#ifndef SC_MSG_H
-#define SC_MSG_H
+#ifndef DEFAULT_SC_MSG_H
+#define DEFAULT_SC_MSG_H
 
 #include "sc_interface_cfg.h"
+#include "sc_fcncodes.h"
 #include "sc_msgdefs.h"
 #include "sc_msgstruct.h"
+
+#define SC_MAX_TIME       0xFFFFFFFF /**< \brief Maximum time in SC */
+#define SC_MAX_WAKEUP_CNT 0xFFFFFFFF /**< \brief Maximum wakeup count in SC */
 
 #endif

@@ -1,8 +1,7 @@
 /************************************************************************
- * NASA Docket No. GSC-18,924-1, and identified as “Core Flight
- * System (cFS) Stored Command Application version 3.1.1”
+ * NASA Docket No. GSC-19,200-1, and identified as "cFS Draco"
  *
- * Copyright (c) 2021 United States Government as represented by the
+ * Copyright (c) 2023 United States Government as represented by the
  * Administrator of the National Aeronautics and Space Administration.
  * All Rights Reserved.
  *
@@ -29,6 +28,7 @@
 #include "common_types.h"
 #include "sc_index_types.h"
 #include "sc_msg.h"
+#include "cfe_error.h"
 
 /**
  * \brief Start an RTS Command
@@ -43,7 +43,7 @@
  *
  *  \sa #SC_START_RTS_CC
  */
-void SC_StartRtsCmd(const SC_StartRtsCmd_t *Cmd);
+CFE_Status_t SC_StartRtsCmd(const SC_StartRtsCmd_t *Cmd);
 
 /**
  * \brief Start a group of RTS Command
@@ -58,7 +58,7 @@ void SC_StartRtsCmd(const SC_StartRtsCmd_t *Cmd);
  *
  *  \sa #SC_START_RTS_GRP_CC
  */
-void SC_StartRtsGrpCmd(const SC_StartRtsGrpCmd_t *Cmd);
+CFE_Status_t SC_StartRtsGrpCmd(const SC_StartRtsGrpCmd_t *Cmd);
 
 /**
  * \brief  Stop an RTS from executing Command
@@ -73,7 +73,7 @@ void SC_StartRtsGrpCmd(const SC_StartRtsGrpCmd_t *Cmd);
  *
  *  \sa #SC_STOP_RTS_CC
  */
-void SC_StopRtsCmd(const SC_StopRtsCmd_t *Cmd);
+CFE_Status_t SC_StopRtsCmd(const SC_StopRtsCmd_t *Cmd);
 
 /**
  * \brief  Stop a group of RTS from executing Command
@@ -88,7 +88,7 @@ void SC_StopRtsCmd(const SC_StopRtsCmd_t *Cmd);
  *
  *  \sa #SC_STOP_RTS_CC
  */
-void SC_StopRtsGrpCmd(const SC_StopRtsGrpCmd_t *Cmd);
+CFE_Status_t SC_StopRtsGrpCmd(const SC_StopRtsGrpCmd_t *Cmd);
 
 /**
  * \brief Disable an RTS Command
@@ -103,7 +103,7 @@ void SC_StopRtsGrpCmd(const SC_StopRtsGrpCmd_t *Cmd);
  *
  *  \sa #SC_DISABLE_RTS_CC
  */
-void SC_DisableRtsCmd(const SC_DisableRtsCmd_t *Cmd);
+CFE_Status_t SC_DisableRtsCmd(const SC_DisableRtsCmd_t *Cmd);
 
 /**
  * \brief Disable a group of RTS Command
@@ -118,7 +118,7 @@ void SC_DisableRtsCmd(const SC_DisableRtsCmd_t *Cmd);
  *
  *  \sa #SC_DISABLE_RTS_CC
  */
-void SC_DisableRtsGrpCmd(const SC_DisableRtsGrpCmd_t *Cmd);
+CFE_Status_t SC_DisableRtsGrpCmd(const SC_DisableRtsGrpCmd_t *Cmd);
 
 /**
  * \brief Enable an RTS Command
@@ -133,7 +133,7 @@ void SC_DisableRtsGrpCmd(const SC_DisableRtsGrpCmd_t *Cmd);
  *
  *  \sa #SC_ENABLE_RTS_CC
  */
-void SC_EnableRtsCmd(const SC_EnableRtsCmd_t *Cmd);
+CFE_Status_t SC_EnableRtsCmd(const SC_EnableRtsCmd_t *Cmd);
 
 /**
  * \brief Enable a group of RTS Command
@@ -148,7 +148,7 @@ void SC_EnableRtsCmd(const SC_EnableRtsCmd_t *Cmd);
  *
  *  \sa #SC_ENABLE_RTS_GRP_CC
  */
-void SC_EnableRtsGrpCmd(const SC_EnableRtsGrpCmd_t *Cmd);
+CFE_Status_t SC_EnableRtsGrpCmd(const SC_EnableRtsGrpCmd_t *Cmd);
 
 /**
  * \brief Stops an RTS & clears out data

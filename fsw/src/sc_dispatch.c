@@ -1,8 +1,7 @@
 /************************************************************************
- * NASA Docket No. GSC-18,924-1, and identified as “Core Flight
- * System (cFS) Stored Command Application version 3.1.1”
+ * NASA Docket No. GSC-19,200-1, and identified as "cFS Draco"
  *
- * Copyright (c) 2021 United States Government as represented by the
+ * Copyright (c) 2023 United States Government as represented by the
  * Administrator of the National Aeronautics and Space Administration.
  * All Rights Reserved.
  *
@@ -85,44 +84,48 @@ bool SC_VerifyCmdLength(const CFE_MSG_Message_t *Msg, size_t ExpectedLength)
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 void SC_ProcessRequest(const CFE_SB_Buffer_t *BufPtr)
 {
+    static CFE_SB_MsgId_t CMD_MID     = CFE_SB_MSGID_RESERVED;
+    static CFE_SB_MsgId_t SEND_HK_MID = CFE_SB_MSGID_RESERVED;
+    static CFE_SB_MsgId_t WAKEUP_MID  = CFE_SB_MSGID_RESERVED;
+
     CFE_SB_MsgId_t MessageID = CFE_SB_INVALID_MSG_ID;
 
-    /* cast the packet header pointer on the packet buffer */
+    /* cache the local MID Values here, this avoids repeat lookups */
+    if (!CFE_SB_IsValidMsgId(CMD_MID))
+    {
+        CMD_MID     = CFE_SB_ValueToMsgId(SC_CMD_MID);
+        SEND_HK_MID = CFE_SB_ValueToMsgId(SC_SEND_HK_MID);
+        WAKEUP_MID  = CFE_SB_ValueToMsgId(SC_WAKEUP_MID);
+    }
+
     CFE_MSG_GetMsgId(&BufPtr->Msg, &MessageID);
 
-    /*
-     ** Get the current system time in the global SC_AppData.CurrentTime
-     */
-    SC_GetCurrentTime();
-
-    switch (CFE_SB_MsgIdToValue(MessageID))
+    if (CFE_SB_MsgId_Equal(MessageID, WAKEUP_MID))
     {
-        case SC_CMD_MID:
-            /* request from the ground */
-            SC_ProcessCommand(BufPtr);
-            break;
+        if (SC_VerifyCmdLength(&BufPtr->Msg, sizeof(SC_WakeupCmd_t)))
+        {
+            SC_WakeupCmd((const SC_WakeupCmd_t *)BufPtr);
+        }
+    }
+    else if (CFE_SB_MsgId_Equal(MessageID, SEND_HK_MID))
+    {
+        if (SC_VerifyCmdLength(&BufPtr->Msg, sizeof(SC_SendHkCmd_t)))
+        {
+            SC_SendHkCmd((const SC_SendHkCmd_t *)BufPtr);
+        }
+    }
+    else if (CFE_SB_MsgId_Equal(MessageID, CMD_MID))
+    {
+        /* request from the ground */
+        SC_ProcessCommand(BufPtr);
+    }
+    else
+    {
+        CFE_EVS_SendEvent(SC_MID_ERR_EID, CFE_EVS_EventType_ERROR, "Invalid command pipe message ID: 0x%08lX",
+                          (unsigned long)CFE_SB_MsgIdToValue(MessageID));
 
-        case SC_SEND_HK_MID:
-            if (SC_VerifyCmdLength(&BufPtr->Msg, sizeof(SC_SendHkCmd_t)))
-            {
-                SC_SendHkCmd((const SC_SendHkCmd_t *)BufPtr);
-            }
-            break;
-
-        case SC_WAKEUP_MID:
-            if (SC_VerifyCmdLength(&BufPtr->Msg, sizeof(SC_WakeupCmd_t)))
-            {
-                SC_WakeupCmd((const SC_WakeupCmd_t *)BufPtr);
-            }
-            break;
-
-        default:
-            CFE_EVS_SendEvent(SC_MID_ERR_EID, CFE_EVS_EventType_ERROR, "Invalid command pipe message ID: 0x%08lX",
-                              (unsigned long)CFE_SB_MsgIdToValue(MessageID));
-
-            SC_OperData.HkPacket.Payload.CmdErrCtr++;
-            break;
-    } /* end switch */
+        SC_OperData.HkPacket.Payload.CmdErrCtr++;
+    }
 }
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */

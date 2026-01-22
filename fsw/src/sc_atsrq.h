@@ -1,8 +1,7 @@
 /************************************************************************
- * NASA Docket No. GSC-18,924-1, and identified as “Core Flight
- * System (cFS) Stored Command Application version 3.1.1”
+ * NASA Docket No. GSC-19,200-1, and identified as "cFS Draco"
  *
- * Copyright (c) 2021 United States Government as represented by the
+ * Copyright (c) 2023 United States Government as represented by the
  * Administrator of the National Aeronautics and Space Administration.
  * All Rights Reserved.
  *
@@ -65,7 +64,7 @@ bool SC_BeginAts(SC_AtsIndex_t AtsIndex, uint16 TimeOffset);
  *
  *  \sa #SC_START_ATS_CC
  */
-void SC_StartAtsCmd(const SC_StartAtsCmd_t *Cmd);
+CFE_Status_t SC_StartAtsCmd(const SC_StartAtsCmd_t *Cmd);
 
 /**
  * \brief Stop the executing ATS Command
@@ -82,7 +81,7 @@ void SC_StartAtsCmd(const SC_StartAtsCmd_t *Cmd);
  *
  *  \sa #SC_STOP_ATS_CC
  */
-void SC_StopAtsCmd(const SC_StopAtsCmd_t *Cmd);
+CFE_Status_t SC_StopAtsCmd(const SC_StopAtsCmd_t *Cmd);
 
 /**
  * \brief Stops an ATS & clears out data
@@ -116,7 +115,7 @@ void SC_KillAts(void);
  *
  *  \sa #SC_SWITCH_ATS_CC
  */
-void SC_SwitchAtsCmd(const SC_SwitchAtsCmd_t *Cmd);
+CFE_Status_t SC_SwitchAtsCmd(const SC_SwitchAtsCmd_t *Cmd);
 
 /**
  * \brief
@@ -186,7 +185,7 @@ void SC_ServiceSwitchPend(void);
  *
  *  \sa #SC_JUMP_ATS_CC
  */
-void SC_JumpAtsCmd(const SC_JumpAtsCmd_t *Cmd);
+CFE_Status_t SC_JumpAtsCmd(const SC_JumpAtsCmd_t *Cmd);
 
 /**
  * \brief Lets an ATS continue if a command failed the checksum
@@ -202,7 +201,7 @@ void SC_JumpAtsCmd(const SC_JumpAtsCmd_t *Cmd);
  *
  *  \sa #SC_CONTINUE_ATS_ON_FAILURE_CC
  */
-void SC_ContinueAtsOnFailureCmd(const SC_ContinueAtsOnFailureCmd_t *Cmd);
+CFE_Status_t SC_ContinueAtsOnFailureCmd(const SC_ContinueAtsOnFailureCmd_t *Cmd);
 
 /**
  * \brief  Append to an ATS Command
@@ -221,6 +220,6 @@ void SC_ContinueAtsOnFailureCmd(const SC_ContinueAtsOnFailureCmd_t *Cmd);
  *
  *  \sa #SC_APPEND_ATS_CC
  */
-void SC_AppendAtsCmd(const SC_AppendAtsCmd_t *Cmd);
+CFE_Status_t SC_AppendAtsCmd(const SC_AppendAtsCmd_t *Cmd);
 
 #endif

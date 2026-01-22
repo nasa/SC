@@ -1,8 +1,7 @@
 /************************************************************************
- * NASA Docket No. GSC-18,924-1, and identified as “Core Flight
- * System (cFS) Stored Command Application version 3.1.1”
+ * NASA Docket No. GSC-19,200-1, and identified as "cFS Draco"
  *
- * Copyright (c) 2021 United States Government as represented by the
+ * Copyright (c) 2023 United States Government as represented by the
  * Administrator of the National Aeronautics and Space Administration.
  * All Rights Reserved.
  *
@@ -47,7 +46,7 @@
 /* Starts an ATS                                                   */
 /*                                                                 */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-void SC_StartAtsCmd(const SC_StartAtsCmd_t *Cmd)
+CFE_Status_t SC_StartAtsCmd(const SC_StartAtsCmd_t *Cmd)
 {
     SC_AtsNum_t        AtsNum;   /* ATS ID */
     SC_AtsIndex_t      AtsIndex; /* ATS array index */
@@ -120,6 +119,8 @@ void SC_StartAtsCmd(const SC_StartAtsCmd_t *Cmd)
         SC_OperData.HkPacket.Payload.CmdErrCtr++;
 
     } /* end if */
+
+    return CFE_SUCCESS;
 }
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -127,7 +128,7 @@ void SC_StartAtsCmd(const SC_StartAtsCmd_t *Cmd)
 /*   Stop the currently executing ATS                              */
 /*                                                                 */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-void SC_StopAtsCmd(const SC_StopAtsCmd_t *Cmd)
+CFE_Status_t SC_StopAtsCmd(const SC_StopAtsCmd_t *Cmd)
 {
     int32 Result = SC_ERROR;
 
@@ -156,6 +157,8 @@ void SC_StopAtsCmd(const SC_StopAtsCmd_t *Cmd)
     SC_OperData.AtsCtrlBlckAddr->SwitchPendFlag = false;
 
     SC_OperData.HkPacket.Payload.CmdCtr++;
+
+    return CFE_SUCCESS;
 }
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -303,7 +306,7 @@ void SC_KillAts(void)
 /* Process an ATS Switch                                           */
 /*                                                                 */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-void SC_SwitchAtsCmd(const SC_SwitchAtsCmd_t *Cmd)
+CFE_Status_t SC_SwitchAtsCmd(const SC_SwitchAtsCmd_t *Cmd)
 {
     SC_AtsIndex_t      NewAtsIndex; /* the index of the ats to switch to*/
     SC_AtsInfoTable_t *AtsInfoPtr;
@@ -351,6 +354,8 @@ void SC_SwitchAtsCmd(const SC_SwitchAtsCmd_t *Cmd)
         SC_OperData.AtsCtrlBlckAddr->SwitchPendFlag = false;
 
     } /* end if */
+
+    return CFE_SUCCESS;
 }
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -500,7 +505,7 @@ bool SC_InlineSwitch(void)
 /* Jump an ATS forward in time                                     */
 /*                                                                 */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-void SC_JumpAtsCmd(const SC_JumpAtsCmd_t *Cmd)
+CFE_Status_t SC_JumpAtsCmd(const SC_JumpAtsCmd_t *Cmd)
 {
     SC_AtsEntryHeader_t *         Entry;        /* ATS table entry pointer */
     SC_AtsCmdEntryOffsetRecord_t *CmdOffsetRec; /* ATS entry location in table */
@@ -630,6 +635,8 @@ void SC_JumpAtsCmd(const SC_JumpAtsCmd_t *Cmd)
         SC_OperData.HkPacket.Payload.CmdErrCtr++;
 
     } /* end if */
+
+    return CFE_SUCCESS;
 }
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -637,7 +644,7 @@ void SC_JumpAtsCmd(const SC_JumpAtsCmd_t *Cmd)
 /* Continue ATS on Checksum Failure Cmd                            */
 /*                                                                 */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-void SC_ContinueAtsOnFailureCmd(const SC_ContinueAtsOnFailureCmd_t *Cmd)
+CFE_Status_t SC_ContinueAtsOnFailureCmd(const SC_ContinueAtsOnFailureCmd_t *Cmd)
 {
     SC_AtsCont_Enum_t State;
 
@@ -657,9 +664,10 @@ void SC_ContinueAtsOnFailureCmd(const SC_ContinueAtsOnFailureCmd_t *Cmd)
         SC_OperData.HkPacket.Payload.CmdCtr++;
 
         CFE_EVS_SendEvent(SC_CONT_CMD_INF_EID, CFE_EVS_EventType_INFORMATION,
-                          "Continue-ATS-On-Failure command, State: %lu",
-                          (unsigned long)State);
+                          "Continue-ATS-On-Failure command, State: %lu", (unsigned long)State);
     }
+
+    return CFE_SUCCESS;
 }
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -667,7 +675,7 @@ void SC_ContinueAtsOnFailureCmd(const SC_ContinueAtsOnFailureCmd_t *Cmd)
 /* Append to selected ATS                                          */
 /*                                                                 */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-void SC_AppendAtsCmd(const SC_AppendAtsCmd_t *Cmd)
+CFE_Status_t SC_AppendAtsCmd(const SC_AppendAtsCmd_t *Cmd)
 {
     SC_AtsIndex_t      AtsIndex; /* index (not ID) of target ATS */
     SC_AtsInfoTable_t *AtsInfoPtr;
@@ -680,7 +688,7 @@ void SC_AppendAtsCmd(const SC_AppendAtsCmd_t *Cmd)
         CFE_EVS_SendEvent(SC_APPEND_CMD_ARG_ERR_EID, CFE_EVS_EventType_ERROR, "Append ATS error: invalid ATS ID = %u",
                           SC_IDNUM_AS_UINT(Cmd->Payload.AtsNum));
 
-        return;
+        return CFE_SUCCESS;
     }
 
     /* create base zero array index from base one ID value */
@@ -728,4 +736,6 @@ void SC_AppendAtsCmd(const SC_AppendAtsCmd_t *Cmd)
                           "Append ATS %c command: %d ATS entries appended", SC_IDX_AS_CHAR(AtsIndex),
                           SC_OperData.HkPacket.Payload.AppendEntryCount);
     }
+
+    return CFE_SUCCESS;
 }

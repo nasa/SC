@@ -1,8 +1,7 @@
 /************************************************************************
- * NASA Docket No. GSC-18,924-1, and identified as “Core Flight
- * System (cFS) Stored Command Application version 3.1.1”
+ * NASA Docket No. GSC-19,200-1, and identified as "cFS Draco"
  *
- * Copyright (c) 2021 United States Government as represented by the
+ * Copyright (c) 2023 United States Government as represented by the
  * Administrator of the National Aeronautics and Space Administration.
  * All Rights Reserved.
  *
@@ -24,53 +23,12 @@
  *
  *  For SC this is only the function/command code definitions
  */
-#ifndef SC_MSGDEFS_H
-#define SC_MSGDEFS_H
+#ifndef DEFAULT_SC_MSGDEFS_H
+#define DEFAULT_SC_MSGDEFS_H
 
 #include "common_types.h"
 #include "sc_extern_typedefs.h"
 #include "sc_fcncodes.h"
-
-/************************************************************************
- * Macro Definitions
- ************************************************************************/
-
-#define SC_NUMBER_OF_RTS_IN_UINT16 16 /**< \brief Number of RTS represented in a uint16 */
-
-/**
- * ATS/RTS Cmd Status Enumeratoion
- */
-enum SC_Status
-{
-    SC_Status_EMPTY,           /**< \brief the object is not loaded */
-    SC_Status_LOADED,          /**< \brief the object is loaded */
-    SC_Status_IDLE,            /**< \brief the object is not executing */
-    SC_Status_EXECUTED,        /**< \brief the object has completed executing */
-    SC_Status_SKIPPED,         /**< \brief the object (ats command) was skipped */
-    SC_Status_EXECUTING,       /**< \brief the object is currently executing */
-    SC_Status_FAILED_CHECKSUM, /**< \brief the object failed a checksum test */
-    SC_Status_FAILED_DISTRIB,  /**< \brief the object could not be sent on the SWB */
-    SC_Status_STARTING         /**< \brief used when an inline switch is executed */
-};
-
-typedef uint8 SC_Status_Enum_t;
-
-#ifndef SC_OMIT_DEPRECATED
-/**
- * \name Old-style ATS/RTS Cmd Status macros
- * \{
- */
-#define SC_EMPTY           SC_Status_EMPTY
-#define SC_LOADED          SC_Status_LOADED
-#define SC_IDLE            SC_Status_IDLE
-#define SC_EXECUTED        SC_Status_EXECUTED
-#define SC_SKIPPED         SC_Status_SKIPPED
-#define SC_EXECUTING       SC_Status_EXECUTING
-#define SC_FAILED_CHECKSUM SC_Status_FAILED_CHECKSUM
-#define SC_FAILED_DISTRIB  SC_Status_FAILED_DISTRIB
-#define SC_STARTING        SC_Status_STARTING
-/**\}*/
-#endif
 
 /************************************************************************
  * Macro Definitions
@@ -99,9 +57,6 @@ typedef uint8 SC_Process_Enum_t;
 #define SC_NONE SC_Process_NONE
 /**\}*/
 #endif
-
-#define SC_MAX_TIME 0xFFFFFFFF /**< \brief Maximum time in SC */
-#define SC_MAX_WAKEUP_CNT 0xFFFFFFFF /**< \brief Maximum wakeup count in SC */
 
 /**
  * Enumeration for ATS identifiers
@@ -220,14 +175,14 @@ typedef struct
     uint32      NextRtsWakeupCnt;               /**< \brief Next RTS Command Absolute Wakeup Count */
     uint32      NextAtsTime;                    /**< \brief Next ATS Command Time (seconds) */
 
-    uint16 RtsExecutingStatus[(SC_NUMBER_OF_RTS + (SC_NUMBER_OF_RTS_IN_UINT16 - 1)) / SC_NUMBER_OF_RTS_IN_UINT16];
+    uint16 RtsExecutingStatus[(SC_NUMBER_OF_RTS + 15) / 16];
     /**< \brief RTS executing status bit map where each uint16 represents 16 RTS numbers.  Note: array
      index numbers and bit numbers use base zero indexing, but RTS numbers use base one indexing.  Thus,
      the LSB (bit zero) of uint16 array index zero represents RTS number 1, and bit one of uint16 array
      index zero represents RTS number 2, etc.  If an RTS is IDLE, then the corresponding bit is zero.
      If an RTS is EXECUTING, then the corresponding bit is one. */
 
-    uint16 RtsDisabledStatus[(SC_NUMBER_OF_RTS + (SC_NUMBER_OF_RTS_IN_UINT16 - 1)) / SC_NUMBER_OF_RTS_IN_UINT16];
+    uint16 RtsDisabledStatus[(SC_NUMBER_OF_RTS + 15) / 16];
     /**< \brief RTS disabled status bit map where each uint16 represents 16 RTS numbers.  Note: array
      index numbers and bit numbers use base zero indexing, but RTS numbers use base one indexing.  Thus,
      the LSB (bit zero) of uint16 array index zero represents RTS number 1, and bit one of uint16 array

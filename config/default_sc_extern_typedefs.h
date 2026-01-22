@@ -1,8 +1,7 @@
 /************************************************************************
- * NASA Docket No. GSC-18,924-1, and identified as “Core Flight
- * System (cFS) Stored Command Application version 3.1.1”
+ * NASA Docket No. GSC-19,200-1, and identified as "cFS Draco"
  *
- * Copyright (c) 2021 United States Government as represented by the
+ * Copyright (c) 2023 United States Government as represented by the
  * Administrator of the National Aeronautics and Space Administration.
  * All Rights Reserved.
  *
@@ -26,6 +25,41 @@
 #define SC_EXTERN_TYPEDEFS_H
 
 #include "common_types.h"
+
+/**
+ * ATS/RTS Cmd Status Enumeratoion
+ */
+enum SC_Status
+{
+    SC_Status_EMPTY,           /**< \brief the object is not loaded */
+    SC_Status_LOADED,          /**< \brief the object is loaded */
+    SC_Status_IDLE,            /**< \brief the object is not executing */
+    SC_Status_EXECUTED,        /**< \brief the object has completed executing */
+    SC_Status_SKIPPED,         /**< \brief the object (ats command) was skipped */
+    SC_Status_EXECUTING,       /**< \brief the object is currently executing */
+    SC_Status_FAILED_CHECKSUM, /**< \brief the object failed a checksum test */
+    SC_Status_FAILED_DISTRIB,  /**< \brief the object could not be sent on the SWB */
+    SC_Status_STARTING         /**< \brief used when an inline switch is executed */
+};
+
+typedef uint8 SC_Status_Enum_t;
+
+#ifndef SC_OMIT_DEPRECATED
+/**
+ * \name Old-style ATS/RTS Cmd Status macros
+ * \{
+ */
+#define SC_EMPTY           SC_Status_EMPTY
+#define SC_LOADED          SC_Status_LOADED
+#define SC_IDLE            SC_Status_IDLE
+#define SC_EXECUTED        SC_Status_EXECUTED
+#define SC_SKIPPED         SC_Status_SKIPPED
+#define SC_EXECUTING       SC_Status_EXECUTING
+#define SC_FAILED_CHECKSUM SC_Status_FAILED_CHECKSUM
+#define SC_FAILED_DISTRIB  SC_Status_FAILED_DISTRIB
+#define SC_STARTING        SC_Status_STARTING
+/**\}*/
+#endif
 
 /**
  * @brief An identifier for RTS's

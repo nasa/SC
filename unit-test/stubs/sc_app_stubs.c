@@ -1,8 +1,7 @@
 /************************************************************************
- * NASA Docket No. GSC-18,924-1, and identified as “Core Flight
- * System (cFS) Stored Command Application version 3.1.1”
+ * NASA Docket No. GSC-19,200-1, and identified as "cFS Draco"
  *
- * Copyright (c) 2021 United States Government as represented by the
+ * Copyright (c) 2023 United States Government as represented by the
  * Administrator of the National Aeronautics and Space Administration.
  * All Rights Reserved.
  *
@@ -47,6 +46,7 @@ CFE_Status_t SC_AppInit(void)
  */
 void SC_AppMain(void)
 {
+
     UT_GenStub_Execute(SC_AppMain, Basic, NULL);
 }
 
@@ -99,6 +99,7 @@ CFE_Status_t SC_InitTables(void)
  */
 void SC_LoadDefaultTables(void)
 {
+
     UT_GenStub_Execute(SC_LoadDefaultTables, Basic, NULL);
 }
 
@@ -151,5 +152,6 @@ CFE_Status_t SC_RegisterLoadableTables(void)
  */
 void SC_RegisterManageCmds(void)
 {
+
     UT_GenStub_Execute(SC_RegisterManageCmds, Basic, NULL);
 }

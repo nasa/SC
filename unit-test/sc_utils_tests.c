@@ -1,8 +1,7 @@
 /************************************************************************
- * NASA Docket No. GSC-18,924-1, and identified as “Core Flight
- * System (cFS) Stored Command Application version 3.1.1”
+ * NASA Docket No. GSC-19,200-1, and identified as "cFS Draco"
  *
- * Copyright (c) 2021 United States Government as represented by the
+ * Copyright (c) 2023 United States Government as represented by the
  * Administrator of the National Aeronautics and Space Administration.
  * All Rights Reserved.
  *
@@ -48,7 +47,7 @@ void SC_LookupTimeAccessor_Test(void)
     UtAssert_NOT_NULL(Accessor.Addr);
 
     Accessor.Addr = NULL;
-    Accessor.Obj  = SC_LookupTimeAccessor(SC_TimeRef_MAX);
+    Accessor.Obj  = SC_LookupTimeAccessor((SC_TimeRef_Enum_t)134);
     UtAssert_NOT_NULL(Accessor.Addr);
 }
 

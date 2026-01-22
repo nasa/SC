@@ -8,8 +8,13 @@ set(APP_SRC_FILES
   fsw/src/sc_state.c
   fsw/src/sc_loads.c
   fsw/src/sc_cmds.c
-  fsw/src/sc_dispatch.c
 )
+
+if (CFE_EDS_ENABLED)
+  list(APPEND APP_SRC_FILES fsw/src/sc_eds_dispatch.c)
+else()
+  list(APPEND APP_SRC_FILES fsw/src/sc_dispatch.c)
+endif()
 
 # Create the app module
 add_cfe_app(sc ${APP_SRC_FILES})
@@ -18,9 +23,11 @@ add_cfe_app(sc ${APP_SRC_FILES})
 target_include_directories(sc PUBLIC fsw/inc)
 
 set(APP_TABLE_FILES
-  fsw/tables/sc_rts001.c
   fsw/tables/sc_ats1.c
+  fsw/tables/sc_rts001.c
   fsw/tables/sc_rts002.c
+  fsw/tables/sc_rts003.c
+  fsw/tables/sc_rts004.c
 )
 
 add_cfe_tables(sc ${APP_TABLE_FILES})

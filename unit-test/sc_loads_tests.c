@@ -1,8 +1,7 @@
 /************************************************************************
- * NASA Docket No. GSC-18,924-1, and identified as “Core Flight
- * System (cFS) Stored Command Application version 3.1.1”
+ * NASA Docket No. GSC-19,200-1, and identified as "cFS Draco"
  *
- * Copyright (c) 2021 United States Government as represented by the
+ * Copyright (c) 2023 United States Government as represented by the
  * Administrator of the National Aeronautics and Space Administration.
  * All Rights Reserved.
  *
@@ -30,6 +29,8 @@
 #include "sc_loads.h"
 #include "sc_msgids.h"
 #include "sc_events.h"
+#include "sc_tbl.h"
+#include "sc_msg.h"
 #include "sc_test_utils.h"
 #include <unistd.h>
 #include <stdlib.h>
@@ -150,8 +151,8 @@ SC_AtsEntryHeader_t *UT_SC_SetupSingleAtsEntry(SC_AtsIndex_t AtsIndex, uint16 Cm
     return UT_SC_AppendSingleAtsEntry(&TailPtr, CmdNumber, MsgSize);
 }
 
-SC_RtsEntryHeader_t *UT_SC_SetupSingleRtsEntry(SC_RtsIndex_t RtsIndex, CFE_SB_MsgId_t MsgId, SC_RelWakeupCount_t WakeupCount,
-                                               size_t MsgSize)
+SC_RtsEntryHeader_t *UT_SC_SetupSingleRtsEntry(SC_RtsIndex_t RtsIndex, CFE_SB_MsgId_t MsgId,
+                                               SC_RelWakeupCount_t WakeupCount, size_t MsgSize)
 {
     void *TailPtr;
 
