@@ -1,8 +1,7 @@
 /************************************************************************
- * NASA Docket No. GSC-18,924-1, and identified as “Core Flight
- * System (cFS) Stored Command Application version 3.1.1”
+ * NASA Docket No. GSC-19,200-1, and identified as "cFS Draco"
  *
- * Copyright (c) 2021 United States Government as represented by the
+ * Copyright (c) 2023 United States Government as represented by the
  * Administrator of the National Aeronautics and Space Administration.
  * All Rights Reserved.
  *
@@ -42,7 +41,7 @@
 #include "cfe.h"
 #include "cfe_tbl_filedef.h"
 
-#include "sc_tbldefs.h"      /* defines SC table headers */
+#include "sc_tbl.h"          /* defines SC table headers */
 #include "sc_platform_cfg.h" /* defines table buffer size */
 #include "sc_msgdefs.h"      /* defines SC command code values */
 #include "sc_msgids.h"       /* defines SC packet msg ID's */
@@ -92,36 +91,34 @@ typedef union
 /* Helper macro to get size of structure elements */
 #define SC_MEMBER_SIZE(member) (sizeof(((SC_AtsStruct1_t *)0)->member))
 
-/* Used designated initializers to be verbose, modify as needed/desired */
+/* Used designated intializers to be verbose, modify as needed/desired */
 SC_AtsTable1_t SC_Ats1 = {
-    /* 1 */
-    .ats.hdr1.CmdNumber     = SC_COMMAND_NUM_INITIALIZER(1),
-    .ats.hdr1.TimeTag_MS    = SC_CMD1_TIME >> 16,
-    .ats.hdr1.TimeTag_LS    = SC_CMD1_TIME & 0xFFFF,
-    .ats.cmd1.CommandHeader = CFE_MSG_CMD_HDR_INIT(SC_CMD_MID, SC_MEMBER_SIZE(cmd1), SC_NOOP_CC, SC_NOOP_CKSUM),
+    .ats = {/* 1 */
+            .hdr1 = {.CmdNumber  = SC_COMMAND_NUM_INITIALIZER(1),
+                     .TimeTag_MS = SC_CMD1_TIME >> 16,
+                     .TimeTag_LS = SC_CMD1_TIME & 0xFFFF},
+            .cmd1 = {CFE_MSG_CMD_HDR_INIT(SC_CMD_MID, 0, SC_NOOP_CC, SC_NOOP_CKSUM)},
 
-    /* 2 */
-    .ats.hdr2.CmdNumber  = SC_COMMAND_NUM_INITIALIZER(2),
-    .ats.hdr2.TimeTag_MS = SC_CMD2_TIME >> 16,
-    .ats.hdr2.TimeTag_LS = SC_CMD2_TIME & 0xFFFF,
-    .ats.cmd2.CommandHeader =
-        CFE_MSG_CMD_HDR_INIT(SC_CMD_MID, SC_MEMBER_SIZE(cmd2), SC_ENABLE_RTS_CC, SC_ENABLE_RTS1_CKSUM),
-    .ats.cmd2.Payload.RtsNum = SC_RTS_NUM_INITIALIZER(1),
+            /* 2 */
+            .hdr2 = {.CmdNumber  = SC_COMMAND_NUM_INITIALIZER(2),
+                     .TimeTag_MS = SC_CMD2_TIME >> 16,
+                     .TimeTag_LS = SC_CMD2_TIME & 0xFFFF},
+            .cmd2 = {CFE_MSG_CMD_HDR_INIT(SC_CMD_MID, SC_MEMBER_SIZE(cmd2), SC_ENABLE_RTS_CC, SC_ENABLE_RTS1_CKSUM)},
 
-    /* 3 */
-    .ats.hdr3.CmdNumber  = SC_COMMAND_NUM_INITIALIZER(3),
-    .ats.hdr3.TimeTag_MS = SC_CMD3_TIME >> 16,
-    .ats.hdr3.TimeTag_LS = SC_CMD3_TIME & 0xFFFF,
-    .ats.cmd3.CommandHeader =
-        CFE_MSG_CMD_HDR_INIT(SC_CMD_MID, SC_MEMBER_SIZE(cmd3), SC_START_RTS_CC, SC_START_RTS1_CKSUM),
-    .ats.cmd3.Payload.RtsNum = SC_RTS_NUM_INITIALIZER(1),
+            .cmd2.Payload = {.RtsNum = SC_RTS_NUM_INITIALIZER(1)},
 
-    /* 4 */
-    .ats.hdr4.CmdNumber  = SC_COMMAND_NUM_INITIALIZER(4),
-    .ats.hdr4.TimeTag_MS = SC_CMD4_TIME >> 16,
-    .ats.hdr4.TimeTag_LS = SC_CMD4_TIME & 0xFFFF,
-    .ats.cmd4.CommandHeader =
-        CFE_MSG_CMD_HDR_INIT(SC_CMD_MID, SC_MEMBER_SIZE(cmd4), SC_RESET_COUNTERS_CC, SC_RESET_COUNTERS_CKSUM)};
+            /* 3 */
+            .hdr3 = {.CmdNumber  = SC_COMMAND_NUM_INITIALIZER(3),
+                     .TimeTag_MS = SC_CMD3_TIME >> 16,
+                     .TimeTag_LS = SC_CMD3_TIME & 0xFFFF},
+            .cmd3 = {CFE_MSG_CMD_HDR_INIT(SC_CMD_MID, SC_MEMBER_SIZE(cmd3), SC_START_RTS_CC, SC_START_RTS1_CKSUM)},
+
+            /* 4 */
+            .hdr4 = {.CmdNumber  = SC_COMMAND_NUM_INITIALIZER(4),
+                     .TimeTag_MS = SC_CMD4_TIME >> 16,
+                     .TimeTag_LS = SC_CMD4_TIME & 0xFFFF},
+            .cmd4 = {CFE_MSG_CMD_HDR_INIT(SC_CMD_MID, SC_MEMBER_SIZE(cmd4), SC_RESET_COUNTERS_CC,
+                                          SC_RESET_COUNTERS_CKSUM)}}};
 
 /* Macro for table structure */
-CFE_TBL_FILEDEF(SC_Ats1, SC.ATS_TBL1, SC Example ATS_TBL1, sc_ats1.tbl)
+CFE_TBL_FILEDEF(SC_Ats1, SC.AtsTable1, SC Example ATS_TBL1, sc_ats1.tbl)

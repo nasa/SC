@@ -1,8 +1,7 @@
 /************************************************************************
- * NASA Docket No. GSC-18,924-1, and identified as “Core Flight
- * System (cFS) Stored Command Application version 3.1.1”
+ * NASA Docket No. GSC-19,200-1, and identified as "cFS Draco"
  *
- * Copyright (c) 2021 United States Government as represented by the
+ * Copyright (c) 2023 United States Government as represented by the
  * Administrator of the National Aeronautics and Space Administration.
  * All Rights Reserved.
  *
@@ -833,10 +832,14 @@ void SC_ProcessRtpCommand_Test_RtsStatus(void)
 void SC_SendHkPacket_Test(void)
 {
     uint8              i;
-    int32              LastRtsHkIndex = 0;
-    SC_RtsIndex_t      RtsIndex       = SC_RTS_IDX_C(SC_NUMBER_OF_RTS - 1);
+    SC_RtsIndex_t      RtsIndex = SC_RTS_IDX_C(SC_NUMBER_OF_RTS - 1);
     SC_RtsInfoEntry_t *RtsInfoPtr;
     SC_AtsInfoTable_t *AtsInfoPtr;
+    uint16             ExpectedRtsExecStatus[(SC_NUMBER_OF_RTS + 15) / 16];
+    uint16             ExpectedRtsDisabledStatus[(SC_NUMBER_OF_RTS + 15) / 16];
+
+    memset(&ExpectedRtsExecStatus[0], 0u, sizeof(ExpectedRtsExecStatus));
+    memset(&ExpectedRtsDisabledStatus[0], 0u, sizeof(ExpectedRtsDisabledStatus));
 
     SC_OperData.HkPacket.Payload.CmdErrCtr                = 1;
     SC_OperData.HkPacket.Payload.CmdCtr                   = 2;
@@ -877,16 +880,15 @@ void SC_SendHkPacket_Test(void)
 
         RtsInfoPtr->DisabledFlag = true;
         RtsInfoPtr->RtsStatus    = SC_Status_EXECUTING;
+
+        SC_SET_HKTLM_RTS_MASK(ExpectedRtsDisabledStatus, i, true);
+        SC_SET_HKTLM_RTS_MASK(ExpectedRtsExecStatus, i, true);
     }
 
     RtsInfoPtr = SC_GetRtsInfoObject(RtsIndex);
 
     RtsInfoPtr->DisabledFlag = false;
     RtsInfoPtr->RtsStatus    = SC_Status_EMPTY;
-
-    LastRtsHkIndex = sizeof(SC_OperData.HkPacket.Payload.RtsExecutingStatus) /
-                         sizeof(SC_OperData.HkPacket.Payload.RtsExecutingStatus[0]) -
-                     1;
 
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_SendHkPacket());
@@ -923,24 +925,9 @@ void SC_SendHkPacket_Test(void)
     UtAssert_True(SC_OperData.HkPacket.Payload.NextAtsTime == 0, "SC_OperData.HkPacket.Payload.NextAtsTime == 0");
     UtAssert_True(SC_OperData.HkPacket.Payload.NumRtsActive == 20, "SC_OperData.HkPacket.Payload.NumRtsActive == 20");
     SC_Assert_ID_VALUE(SC_OperData.HkPacket.Payload.RtsNum, 21);
-    UtAssert_True(SC_OperData.HkPacket.Payload.NextRtsWakeupCnt == 0, "SC_OperData.HkPacket.Payload.NextRtsWakeupCnt == 0");
+    UtAssert_True(SC_OperData.HkPacket.Payload.NextRtsWakeupCnt == 0,
+                  "SC_OperData.HkPacket.Payload.NextRtsWakeupCnt == 0");
     UtAssert_BOOL_TRUE(SC_OperData.HkPacket.Payload.ContinueAtsOnFailureFlag);
-
-    /* Check first element */
-    UtAssert_True(SC_OperData.HkPacket.Payload.RtsExecutingStatus[0] == 65535,
-                  "SC_OperData.HkPacket.Payload.RtsExecutingStatus[0] == 65535");
-    UtAssert_True(SC_OperData.HkPacket.Payload.RtsDisabledStatus[0] == 65535,
-                  "SC_OperData.HkPacket.Payload.RtsDisabledStatus[0] == 65535");
-
-    /* Check middle element */
-    UtAssert_True(SC_OperData.HkPacket.Payload.RtsExecutingStatus[2] == 65535,
-                  "SC_OperData.HkPacket.Payload.RtsExecutingStatus[2] == 65535");
-    UtAssert_True(SC_OperData.HkPacket.Payload.RtsDisabledStatus[2] == 65535,
-                  "SC_OperData.HkPacket.Payload.RtsDisabledStatus[2] == 65535");
-
-    /* Check last element */
-    UtAssert_INT32_EQ(SC_OperData.HkPacket.Payload.RtsExecutingStatus[LastRtsHkIndex], 32767);
-    UtAssert_INT32_EQ(SC_OperData.HkPacket.Payload.RtsDisabledStatus[LastRtsHkIndex], 32767);
 
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
 }
@@ -1119,7 +1106,7 @@ void SC_ProcessRequest_Test_WakeupRtpExecutionTimeTooManyCmds(void)
 
     SC_AppData.NextCmdTime[SC_Process_RTP] = 0;
     SC_AppData.NextCmdTime[SC_Process_ATP] = 0;
-    SC_OperData.NumCmdsWakeup                 = 1000;
+    SC_OperData.NumCmdsWakeup              = 1000;
     SC_OperData.AtsCtrlBlckAddr->AtpState  = SC_Status_EXECUTING;
 
     /* Execute the function being tested */
@@ -1135,7 +1122,7 @@ void SC_ProcessRequest_Test_WakeupAtpExecutionTimeTooManyCmds(void)
 {
     SC_AppData.NextCmdTime[SC_Process_ATP] = 10;
     SC_AppData.CurrentTime                 = 100;
-    SC_OperData.NumCmdsWakeup                 = 1000;
+    SC_OperData.NumCmdsWakeup              = 1000;
     SC_OperData.AtsCtrlBlckAddr->AtpState  = SC_Status_IDLE;
 
     /* Execute the function being tested */
@@ -1680,8 +1667,7 @@ void UtTest_Setup(void)
                "SC_ProcessRequest_Test_HkMIDAutoStartRts");
     UtTest_Add(SC_ProcessRequest_Test_HkMIDAutoStartRtsLoaded, SC_Test_Setup, SC_Test_TearDown,
                "SC_ProcessRequest_Test_HkMIDAutoStartRtsLoaded");
-    UtTest_Add(SC_ProcessRequest_Test_WakeupNONE, SC_Test_Setup, SC_Test_TearDown,
-               "SC_ProcessRequest_Test_WakeupNONE");
+    UtTest_Add(SC_ProcessRequest_Test_WakeupNONE, SC_Test_Setup, SC_Test_TearDown, "SC_ProcessRequest_Test_WakeupNONE");
     UtTest_Add(SC_ProcessRequest_Test_WakeupRtpNotExecutionTime, SC_Test_Setup, SC_Test_TearDown,
                "SC_ProcessRequest_Test_WakeupRtpNotExecutionTime");
     UtTest_Add(SC_ProcessRequest_Test_WakeupNoSwitchPending, SC_Test_Setup, SC_Test_TearDown,

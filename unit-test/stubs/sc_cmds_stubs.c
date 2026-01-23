@@ -1,8 +1,7 @@
 /************************************************************************
- * NASA Docket No. GSC-18,924-1, and identified as “Core Flight
- * System (cFS) Stored Command Application version 3.1.1”
+ * NASA Docket No. GSC-19,200-1, and identified as "cFS Draco"
  *
- * Copyright (c) 2021 United States Government as represented by the
+ * Copyright (c) 2023 United States Government as represented by the
  * Administrator of the National Aeronautics and Space Administration.
  * All Rights Reserved.
  *
@@ -68,11 +67,15 @@ void SC_ManageTable(SC_TableType type, int32 ArrayIndex)
  * Generated stub function for SC_ManageTableCmd()
  * ----------------------------------------------------
  */
-void SC_ManageTableCmd(const SC_ManageTableCmd_t *Cmd)
+CFE_Status_t SC_ManageTableCmd(const SC_ManageTableCmd_t *Cmd)
 {
+    UT_GenStub_SetupReturnBuffer(SC_ManageTableCmd, CFE_Status_t);
+
     UT_GenStub_AddParam(SC_ManageTableCmd, const SC_ManageTableCmd_t *, Cmd);
 
     UT_GenStub_Execute(SC_ManageTableCmd, Basic, NULL);
+
+    return UT_GenStub_GetReturnValue(SC_ManageTableCmd, CFE_Status_t);
 }
 
 /*
@@ -80,23 +83,15 @@ void SC_ManageTableCmd(const SC_ManageTableCmd_t *Cmd)
  * Generated stub function for SC_NoopCmd()
  * ----------------------------------------------------
  */
-void SC_NoopCmd(const SC_NoopCmd_t *Cmd)
+CFE_Status_t SC_NoopCmd(const SC_NoopCmd_t *Cmd)
 {
+    UT_GenStub_SetupReturnBuffer(SC_NoopCmd, CFE_Status_t);
+
     UT_GenStub_AddParam(SC_NoopCmd, const SC_NoopCmd_t *, Cmd);
 
     UT_GenStub_Execute(SC_NoopCmd, Basic, NULL);
-}
 
-/*
- * ----------------------------------------------------
- * Generated stub function for SC_WakeupCmd()
- * ----------------------------------------------------
- */
-void SC_WakeupCmd(const SC_WakeupCmd_t *Cmd)
-{
-    UT_GenStub_AddParam(SC_WakeupCmd, const SC_WakeupCmd_t *, Cmd);
-
-    UT_GenStub_Execute(SC_WakeupCmd, Basic, NULL);
+    return UT_GenStub_GetReturnValue(SC_NoopCmd, CFE_Status_t);
 }
 
 /*
@@ -106,6 +101,7 @@ void SC_WakeupCmd(const SC_WakeupCmd_t *Cmd)
  */
 void SC_ProcessAtpCmd(void)
 {
+
     UT_GenStub_Execute(SC_ProcessAtpCmd, Basic, NULL);
 }
 
@@ -116,6 +112,7 @@ void SC_ProcessAtpCmd(void)
  */
 void SC_ProcessRtpCommand(void)
 {
+
     UT_GenStub_Execute(SC_ProcessRtpCommand, Basic, NULL);
 }
 
@@ -124,11 +121,15 @@ void SC_ProcessRtpCommand(void)
  * Generated stub function for SC_ResetCountersCmd()
  * ----------------------------------------------------
  */
-void SC_ResetCountersCmd(const SC_ResetCountersCmd_t *Cmd)
+CFE_Status_t SC_ResetCountersCmd(const SC_ResetCountersCmd_t *Cmd)
 {
+    UT_GenStub_SetupReturnBuffer(SC_ResetCountersCmd, CFE_Status_t);
+
     UT_GenStub_AddParam(SC_ResetCountersCmd, const SC_ResetCountersCmd_t *, Cmd);
 
     UT_GenStub_Execute(SC_ResetCountersCmd, Basic, NULL);
+
+    return UT_GenStub_GetReturnValue(SC_ResetCountersCmd, CFE_Status_t);
 }
 
 /*
@@ -136,11 +137,15 @@ void SC_ResetCountersCmd(const SC_ResetCountersCmd_t *Cmd)
  * Generated stub function for SC_SendHkCmd()
  * ----------------------------------------------------
  */
-void SC_SendHkCmd(const SC_SendHkCmd_t *Cmd)
+CFE_Status_t SC_SendHkCmd(const SC_SendHkCmd_t *Cmd)
 {
+    UT_GenStub_SetupReturnBuffer(SC_SendHkCmd, CFE_Status_t);
+
     UT_GenStub_AddParam(SC_SendHkCmd, const SC_SendHkCmd_t *, Cmd);
 
     UT_GenStub_Execute(SC_SendHkCmd, Basic, NULL);
+
+    return UT_GenStub_GetReturnValue(SC_SendHkCmd, CFE_Status_t);
 }
 
 /*
@@ -150,5 +155,22 @@ void SC_SendHkCmd(const SC_SendHkCmd_t *Cmd)
  */
 void SC_SendHkPacket(void)
 {
+
     UT_GenStub_Execute(SC_SendHkPacket, Basic, NULL);
+}
+
+/*
+ * ----------------------------------------------------
+ * Generated stub function for SC_WakeupCmd()
+ * ----------------------------------------------------
+ */
+CFE_Status_t SC_WakeupCmd(const SC_WakeupCmd_t *Cmd)
+{
+    UT_GenStub_SetupReturnBuffer(SC_WakeupCmd, CFE_Status_t);
+
+    UT_GenStub_AddParam(SC_WakeupCmd, const SC_WakeupCmd_t *, Cmd);
+
+    UT_GenStub_Execute(SC_WakeupCmd, Basic, NULL);
+
+    return UT_GenStub_GetReturnValue(SC_WakeupCmd, CFE_Status_t);
 }

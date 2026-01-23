@@ -1,8 +1,7 @@
 /************************************************************************
- * NASA Docket No. GSC-18,924-1, and identified as “Core Flight
- * System (cFS) Stored Command Application version 3.1.1”
+ * NASA Docket No. GSC-19,200-1, and identified as "cFS Draco"
  *
- * Copyright (c) 2021 United States Government as represented by the
+ * Copyright (c) 2023 United States Government as represented by the
  * Administrator of the National Aeronautics and Space Administration.
  * All Rights Reserved.
  *
@@ -77,23 +76,6 @@ typedef uint16 SC_AtsIndex_t;
  * The valid range is [0..SC_MAX_ATS_CMDS-1]
  */
 typedef uint16 SC_CommandIndex_t;
-
-/**
- * @brief A sequence number for commands.
- *
- * This value is intended to indicate the order with which commands
- * are executed within an ATS
- *
- * @note The command number in ATS entries is strictly for command
- * identification and referencing purposes.  Commands do not need to
- * appear in the table, nor be do they need to be numbered in order.
- *
- * For example, the command with SeqIndex == 3 will be the 4th command executed
- * within the ATS, after sorting by time.
- *
- * The valid range is [0..SC_MAX_ATS_CMDS-1]
- */
-typedef uint16 SC_SeqIndex_t;
 
 /*
  * ------------------------------------------------

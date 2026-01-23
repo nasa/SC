@@ -1,8 +1,7 @@
 /************************************************************************
- * NASA Docket No. GSC-18,924-1, and identified as “Core Flight
- * System (cFS) Stored Command Application version 3.1.1”
+ * NASA Docket No. GSC-19,200-1, and identified as "cFS Draco"
  *
- * Copyright (c) 2021 United States Government as represented by the
+ * Copyright (c) 2023 United States Government as represented by the
  * Administrator of the National Aeronautics and Space Administration.
  * All Rights Reserved.
  *
@@ -45,13 +44,13 @@
 
 /* Checksum for each sample command */
 #ifndef SC_NOOP_CKSUM
-#define SC_NOOP_CKSUM (0x8F)
+#define SC_NOOP_CKSUM (0x3E ^ ((SC_CMD_MID & 0xFF00) >> 8u) ^ ((SC_CMD_MID & 0x00FF)))
 #endif
 #ifndef SC_ENABLE_RTS2_CKSUM
-#define SC_ENABLE_RTS2_CKSUM (0x8E)
+#define SC_ENABLE_RTS2_CKSUM (0x3F ^ ((SC_CMD_MID & 0xFF00) >> 8u) ^ ((SC_CMD_MID & 0x00FF)))
 #endif
 #ifndef SC_START_RTS2_CKSUM
-#define SC_START_RTS2_CKSUM (0x8D)
+#define SC_START_RTS2_CKSUM (0x3C ^ ((SC_CMD_MID & 0xFF00) >> 8u) ^ ((SC_CMD_MID & 0x00FF)))
 #endif
 
 /* Custom table structure, modify as needed to add desired commands */
@@ -79,18 +78,16 @@ typedef union
 SC_RtsTable001_t SC_Rts001 = {
     /* 1 */
     .rts.hdr1.WakeupCount = 0,
-    .rts.cmd1.CommandHeader = CFE_MSG_CMD_HDR_INIT(SC_CMD_MID, SC_MEMBER_SIZE(cmd1), SC_NOOP_CC, SC_NOOP_CKSUM),
+    .rts.cmd1             = {CFE_MSG_CMD_HDR_INIT(SC_CMD_MID, SC_MEMBER_SIZE(cmd1), SC_NOOP_CC, SC_NOOP_CKSUM)},
 
     /* 2 */
     .rts.hdr2.WakeupCount = 5,
-    .rts.cmd2.CommandHeader =
-        CFE_MSG_CMD_HDR_INIT(SC_CMD_MID, SC_MEMBER_SIZE(cmd2), SC_ENABLE_RTS_CC, SC_ENABLE_RTS2_CKSUM),
+    .rts.cmd2 = {CFE_MSG_CMD_HDR_INIT(SC_CMD_MID, SC_MEMBER_SIZE(cmd2), SC_ENABLE_RTS_CC, SC_ENABLE_RTS2_CKSUM)},
     .rts.cmd2.Payload.RtsNum = SC_RTS_NUM_INITIALIZER(2),
 
     /* 3 */
     .rts.hdr3.WakeupCount = 5,
-    .rts.cmd3.CommandHeader =
-        CFE_MSG_CMD_HDR_INIT(SC_CMD_MID, SC_MEMBER_SIZE(cmd3), SC_START_RTS_CC, SC_START_RTS2_CKSUM),
+    .rts.cmd3 = {CFE_MSG_CMD_HDR_INIT(SC_CMD_MID, SC_MEMBER_SIZE(cmd3), SC_START_RTS_CC, SC_START_RTS2_CKSUM)},
     .rts.cmd3.Payload.RtsNum = SC_RTS_NUM_INITIALIZER(2)};
 
 /* Macro for table structure */

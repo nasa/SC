@@ -1,8 +1,7 @@
 /************************************************************************
- * NASA Docket No. GSC-18,924-1, and identified as “Core Flight
- * System (cFS) Stored Command Application version 3.1.1”
+ * NASA Docket No. GSC-19,200-1, and identified as "cFS Draco"
  *
- * Copyright (c) 2021 United States Government as represented by the
+ * Copyright (c) 2023 United States Government as represented by the
  * Administrator of the National Aeronautics and Space Administration.
  * All Rights Reserved.
  *
@@ -31,11 +30,15 @@
  * Generated stub function for SC_AppendAtsCmd()
  * ----------------------------------------------------
  */
-void SC_AppendAtsCmd(const SC_AppendAtsCmd_t *Cmd)
+CFE_Status_t SC_AppendAtsCmd(const SC_AppendAtsCmd_t *Cmd)
 {
+    UT_GenStub_SetupReturnBuffer(SC_AppendAtsCmd, CFE_Status_t);
+
     UT_GenStub_AddParam(SC_AppendAtsCmd, const SC_AppendAtsCmd_t *, Cmd);
 
     UT_GenStub_Execute(SC_AppendAtsCmd, Basic, NULL);
+
+    return UT_GenStub_GetReturnValue(SC_AppendAtsCmd, CFE_Status_t);
 }
 
 /*
@@ -60,11 +63,15 @@ bool SC_BeginAts(SC_AtsIndex_t AtsIndex, uint16 TimeOffset)
  * Generated stub function for SC_ContinueAtsOnFailureCmd()
  * ----------------------------------------------------
  */
-void SC_ContinueAtsOnFailureCmd(const SC_ContinueAtsOnFailureCmd_t *Cmd)
+CFE_Status_t SC_ContinueAtsOnFailureCmd(const SC_ContinueAtsOnFailureCmd_t *Cmd)
 {
+    UT_GenStub_SetupReturnBuffer(SC_ContinueAtsOnFailureCmd, CFE_Status_t);
+
     UT_GenStub_AddParam(SC_ContinueAtsOnFailureCmd, const SC_ContinueAtsOnFailureCmd_t *, Cmd);
 
     UT_GenStub_Execute(SC_ContinueAtsOnFailureCmd, Basic, NULL);
+
+    return UT_GenStub_GetReturnValue(SC_ContinueAtsOnFailureCmd, CFE_Status_t);
 }
 
 /*
@@ -86,11 +93,15 @@ bool SC_InlineSwitch(void)
  * Generated stub function for SC_JumpAtsCmd()
  * ----------------------------------------------------
  */
-void SC_JumpAtsCmd(const SC_JumpAtsCmd_t *Cmd)
+CFE_Status_t SC_JumpAtsCmd(const SC_JumpAtsCmd_t *Cmd)
 {
+    UT_GenStub_SetupReturnBuffer(SC_JumpAtsCmd, CFE_Status_t);
+
     UT_GenStub_AddParam(SC_JumpAtsCmd, const SC_JumpAtsCmd_t *, Cmd);
 
     UT_GenStub_Execute(SC_JumpAtsCmd, Basic, NULL);
+
+    return UT_GenStub_GetReturnValue(SC_JumpAtsCmd, CFE_Status_t);
 }
 
 /*
@@ -100,6 +111,7 @@ void SC_JumpAtsCmd(const SC_JumpAtsCmd_t *Cmd)
  */
 void SC_KillAts(void)
 {
+
     UT_GenStub_Execute(SC_KillAts, Basic, NULL);
 }
 
@@ -110,6 +122,7 @@ void SC_KillAts(void)
  */
 void SC_ServiceSwitchPend(void)
 {
+
     UT_GenStub_Execute(SC_ServiceSwitchPend, Basic, NULL);
 }
 
@@ -118,11 +131,15 @@ void SC_ServiceSwitchPend(void)
  * Generated stub function for SC_StartAtsCmd()
  * ----------------------------------------------------
  */
-void SC_StartAtsCmd(const SC_StartAtsCmd_t *Cmd)
+CFE_Status_t SC_StartAtsCmd(const SC_StartAtsCmd_t *Cmd)
 {
+    UT_GenStub_SetupReturnBuffer(SC_StartAtsCmd, CFE_Status_t);
+
     UT_GenStub_AddParam(SC_StartAtsCmd, const SC_StartAtsCmd_t *, Cmd);
 
     UT_GenStub_Execute(SC_StartAtsCmd, Basic, NULL);
+
+    return UT_GenStub_GetReturnValue(SC_StartAtsCmd, CFE_Status_t);
 }
 
 /*
@@ -130,11 +147,15 @@ void SC_StartAtsCmd(const SC_StartAtsCmd_t *Cmd)
  * Generated stub function for SC_StopAtsCmd()
  * ----------------------------------------------------
  */
-void SC_StopAtsCmd(const SC_StopAtsCmd_t *Cmd)
+CFE_Status_t SC_StopAtsCmd(const SC_StopAtsCmd_t *Cmd)
 {
+    UT_GenStub_SetupReturnBuffer(SC_StopAtsCmd, CFE_Status_t);
+
     UT_GenStub_AddParam(SC_StopAtsCmd, const SC_StopAtsCmd_t *, Cmd);
 
     UT_GenStub_Execute(SC_StopAtsCmd, Basic, NULL);
+
+    return UT_GenStub_GetReturnValue(SC_StopAtsCmd, CFE_Status_t);
 }
 
 /*
@@ -142,9 +163,13 @@ void SC_StopAtsCmd(const SC_StopAtsCmd_t *Cmd)
  * Generated stub function for SC_SwitchAtsCmd()
  * ----------------------------------------------------
  */
-void SC_SwitchAtsCmd(const SC_SwitchAtsCmd_t *Cmd)
+CFE_Status_t SC_SwitchAtsCmd(const SC_SwitchAtsCmd_t *Cmd)
 {
+    UT_GenStub_SetupReturnBuffer(SC_SwitchAtsCmd, CFE_Status_t);
+
     UT_GenStub_AddParam(SC_SwitchAtsCmd, const SC_SwitchAtsCmd_t *, Cmd);
 
     UT_GenStub_Execute(SC_SwitchAtsCmd, Basic, NULL);
+
+    return UT_GenStub_GetReturnValue(SC_SwitchAtsCmd, CFE_Status_t);
 }

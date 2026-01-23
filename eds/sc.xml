@@ -1,0 +1,561 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    GSC-18128-1, "Core Flight Executive Version 6.7"
+    LEW-19710-1, "CCSDS electronic data sheet implementation"
+
+    Copyright (c) 2006-2019 United States Government as represented by
+    the Administrator of the National Aeronautics and Space Administration.
+    All Rights Reserved.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+    This document adheres to the Electronic Data Sheet (EDS) XML schema
+    as prescribed in CCSDS book 876.0.
+
+    Purpose:
+      This describes all interface objects for the Executive Services (CFE_ES)
+      core application
+
+-->
+<PackageFile xmlns="http://www.ccsds.org/schema/sois/seds">
+  <Package name="SC" shortDescription="Stored Command">
+
+    <DataTypeSet>
+
+<!--
+  <define name="SC_MAX_TIME" value="0xFFFFFFFF" shortDescription="Maximum time in SC" />
+  <define name="SC_MAX_WAKEUP_CNT" value="0xFFFFFFFF" shortDescription="Maximum wakeup count in SC" />
+  <define name="SC_INVALID_RTS_NUMBER" value="0" shortDescription="Invalid RTS number" />
+-->
+
+      <IntegerDataType name="RtsNum">
+         <IntegerDataEncoding sizeInBits="16" encoding="unsigned" />
+      </IntegerDataType>
+      <IntegerDataType name="AtsNum">
+         <IntegerDataEncoding sizeInBits="16" encoding="unsigned" />
+      </IntegerDataType>
+      <IntegerDataType name="CommandNum">
+         <IntegerDataEncoding sizeInBits="16" encoding="unsigned" />
+      </IntegerDataType>
+      <IntegerDataType name="EntryOffset">
+         <IntegerDataEncoding sizeInBits="16" encoding="unsigned" />
+      </IntegerDataType>
+      <IntegerDataType name="SeqIndex">
+         <IntegerDataEncoding sizeInBits="16" encoding="unsigned" />
+      </IntegerDataType>
+
+      <EnumeratedDataType name="Status" shortDescription="ATS/RTS Cmd Status">
+        <EnumerationList>
+          <Enumeration label="EMPTY" value="0" />
+          <Enumeration label="LOADED" value="1" />
+          <Enumeration label="IDLE" value="2" />
+          <Enumeration label="EXECUTED" value="3" />
+          <Enumeration label="SKIPPED" value="4" />
+          <Enumeration label="EXECUTING" value="5" />
+          <Enumeration label="FAILED_CHECKSUM" value="6" />
+          <Enumeration label="FAILED_DISTRIB" value="7" />
+          <Enumeration label="STARTING" value="8" />
+        </EnumerationList>
+        <IntegerDataEncoding sizeInBits="8" encoding="unsigned" />
+      </EnumeratedDataType>
+
+      <EnumeratedDataType name="Process">
+        <EnumerationList>
+            <Enumeration label="ATP" value="0" shortDescription="ATP process next"/>
+            <Enumeration label="RTP" value="1" shortDescription="RTP process next"/>
+            <Enumeration label="NONE" value="0xFF" shortDescription="No pending process"/>
+        </EnumerationList>
+        <IntegerDataEncoding sizeInBits="8" encoding="unsigned" />
+      </EnumeratedDataType>
+
+      <EnumeratedDataType name="AtsId">
+        <EnumerationList>
+          <Enumeration label="NO_ATS" value="0" />
+          <Enumeration label="ATSA" value="1" />
+          <Enumeration label="ATSB" value="2" />
+        </EnumerationList>
+        <IntegerDataEncoding sizeInBits="8" encoding="unsigned"/>
+      </EnumeratedDataType>
+
+      <EnumeratedDataType name="TimeRef">
+        <EnumerationList>
+            <Enumeration label="USE_CFE_TIME" value="0" shortDescription="Use cFE configured time" />
+            <Enumeration label="USE_TAI" value="1" shortDescription="Use TAI Time" />
+            <Enumeration label="USE_UTC" value="2" shortDescription="Use UTC Time" />
+        </EnumerationList>
+        <IntegerDataEncoding sizeInBits="8" encoding="unsigned"/>
+      </EnumeratedDataType>
+
+      <EnumeratedDataType name="AtsCont">
+        <EnumerationList>
+            <Enumeration label="FALSE" value="0" shortDescription="Do not continue on failure" />
+            <Enumeration label="TRUE" value="1" shortDescription="Continue on failure" />
+        </EnumerationList>
+        <IntegerDataEncoding sizeInBits="8" encoding="unsigned"/>
+      </EnumeratedDataType>
+
+      <ArrayDataType name="AtpFreeBytes" dataTypeRef="BASE_TYPES/uint32">
+        <DimensionList>
+          <Dimension size="${SC/NUMBER_OF_ATS}" />
+        </DimensionList>
+      </ArrayDataType>
+
+      <ArrayDataType name="RtsStatusBits" dataTypeRef="BASE_TYPES/StatusBit">
+        <DimensionList>
+          <Dimension size="${SC/NUMBER_OF_RTS}" />
+        </DimensionList>
+      </ArrayDataType>
+
+      <ContainerDataType name="HkTlm_Payload" shortDescription="Housekeeping Packet Payload Structure">
+        <EntryList>
+          <Entry type="AtsId" name="CurrAtsId" shortDescription="Current ATS number: 1 = ATS A, 2 = ATS B" />
+          <Entry type="Status" name="AtpState" shortDescription="Current ATP state: 2 = IDLE, 5 = EXECUTING" />
+          <Entry type="AtsCont" name="ContinueAtsOnFailureFlag" shortDescription="Continue ATS execution on failure flag" />
+          <Entry type="BASE_TYPES/uint8" name="CmdErrCtr" shortDescription="Counts Request Errors" />
+          <Entry type="BASE_TYPES/uint8" name="CmdCtr" shortDescription="Counts Ground Requests" />
+          <Entry type="BASE_TYPES/uint8" name="Padding8" shortDescription="Structure padding" />
+          <Entry type="BASE_TYPES/uint16" name="SwitchPendFlag" shortDescription="Switch pending flag: 0 = NO, 1 = YES" />
+          <Entry type="BASE_TYPES/uint16" name="NumRtsActive" shortDescription="Number of RTSs currently active" />
+          <Entry type="RtsNum" name="RtsNum" shortDescription="Next RTS number" />
+          <Entry type="BASE_TYPES/uint16" name="RtsActiveCtr" shortDescription="Increments when an RTS is started without error" />
+          <Entry type="BASE_TYPES/uint16" name="RtsActiveErrCtr" shortDescription="Increments when an attempt to start an RTS fails" />
+          <Entry type="BASE_TYPES/uint16" name="AtsCmdCtr" shortDescription="Total ATS cmd cnter counts commands sent by the ATS" />
+          <Entry type="BASE_TYPES/uint16" name="AtsCmdErrCtr" shortDescription="Total ATS cmd Error ctr command errors in the ATS" />
+          <Entry type="BASE_TYPES/uint16" name="RtsCmdCtr" shortDescription="Counts TOTAL rts cmds that were sent out from ALL active RTSs" />
+          <Entry type="BASE_TYPES/uint16" name="RtsCmdErrCtr" shortDescription="Counts TOTAL number of errs from ALL RTSs that are active" />
+          <Entry type="AtsNum" name="LastAtsErrSeq" shortDescription="Last ATS Errant Sequence Num Values: 1 or 2" />
+          <Entry type="CommandNum" name="LastAtsErrCmd" shortDescription="Last ATS Errant Command Num" />
+          <Entry type="RtsNum" name="LastRtsErrSeq" shortDescription="Last RTS Errant Sequence Num" />
+          <Entry type="EntryOffset" name="LastRtsErrCmd" shortDescription="Offset in the RTS buffer for the last command error, in words" />
+          <Entry type="AtsNum" name="AppendCmdArg" shortDescription="ATS selection argument from most recent Append ATS command" />
+          <Entry type="BASE_TYPES/uint16" name="AppendEntryCount" shortDescription="Number of cmd entries in current Append ATS table" />
+          <Entry type="BASE_TYPES/uint16" name="AppendByteCount" shortDescription="Size of cmd entries in current Append ATS table" />
+          <Entry type="BASE_TYPES/uint16" name="AppendLoadCount" shortDescription="Total number of Append ATS table loads" />
+          <Entry type="BASE_TYPES/uint32" name="AtpCmdNumber" shortDescription="Current command number" />
+          <Entry name="AtpFreeBytes" type="AtpFreeBytes"  shortDescription="Free Bytes in each ATS" />
+          <Entry type="BASE_TYPES/uint32" name="NextRtsWakeupCnt" shortDescription="Next RTS Command Absolute Wakeup Count" />
+          <Entry type="BASE_TYPES/uint32" name="NextAtsTime" shortDescription="Next ATS Command Time (seconds)" />
+          <Entry name="RtsExecutingStatus" type="RtsStatusBits"  shortDescription="RTS disabled status bit map">
+            <LongDescription>
+             Each BASE_TYPES/uint16 represents 16 RTS numbers.
+             Note: array index numbers and bit numbers use base zero indexing, but RTS numbers use base one indexing.
+             Thus, the LSB (bit zero) of BASE_TYPES/uint16 array index zero represents RTS number 1, and bit one of BASE_TYPES/uint16
+             array index zero represents RTS number 2, etc.  If an RTS is ENABLED, then the corresponding bit is zero.
+             If an RTS is DISABLED, then the corresponding bit is one.
+            </LongDescription>
+          </Entry>
+          <Entry name="RtsDisabledStatus" type="RtsStatusBits"  shortDescription="RTS executing status bit map">
+            <LongDescription>
+             Each BASE_TYPES/uint16 represents 16 RTS numbers.  Note: array
+             index numbers and bit numbers use base zero indexing, but RTS numbers use base one indexing.  Thus,
+             the LSB (bit zero) of BASE_TYPES/uint16 array index zero represents RTS number 1, and bit one of BASE_TYPES/uint16 array
+             index zero represents RTS number 2, etc.  If an RTS is IDLE, then the corresponding bit is zero.
+             If an RTS is EXECUTING, then the corresponding bit is one.
+            </LongDescription>
+          </Entry>
+        </EntryList>
+      </ContainerDataType>
+
+      <ContainerDataType name="StartAtsCmd_Payload" shortDescription="ATS Id Command Payload">
+        <EntryList>
+          <Entry type="AtsNum" name="AtsNum" shortDescription="The ID of the ATS to start, 1 = ATS_A, 2 = ATS_B" />
+          <PaddingEntry sizeInBits="16" />
+        </EntryList>
+      </ContainerDataType>
+      <ContainerDataType name="RtsCmd_Payload" shortDescription="RTS Id Command Payload">
+        <EntryList>
+          <Entry type="RtsNum" name="RtsNum" shortDescription="The ID of the RTS to start, 1 through #SC_NUMBER_OF_RTS" />
+          <PaddingEntry sizeInBits="16" />
+        </EntryList>
+      </ContainerDataType>
+      <ContainerDataType name="JumpAtsCmd_Payload" shortDescription="Jump running ATS to a new time Command Payload">
+        <EntryList>
+          <Entry type="BASE_TYPES/uint32" name="NewTime" shortDescription="the time to jump to" />
+        </EntryList>
+      </ContainerDataType>
+      <ContainerDataType name="ContinueAtsOnFailureCmd_Payload" shortDescription="Continue ATS on failure command Payload">
+        <EntryList>
+          <Entry type="AtsCont" name="ContinueState" shortDescription="true or false, to continue ATS after a failure" />
+          <PaddingEntry sizeInBits="16" />
+        </EntryList>
+      </ContainerDataType>
+      <ContainerDataType name="AppendAtsCmd_Payload" shortDescription="Append to ATS Command Payload">
+        <EntryList>
+          <Entry type="AtsNum" name="AtsNum" shortDescription="The ID of the ATS to append to, 1 = ATS_A, 2 = ATS_B" />
+          <PaddingEntry sizeInBits="16" />
+        </EntryList>
+      </ContainerDataType>
+      <ContainerDataType name="RtsGrpCmd_Payload" shortDescription="RTS Group Command Payload">
+        <EntryList>
+          <Entry type="RtsNum" name="FirstRtsNum" shortDescription="ID of the first RTS to act on, 1 through #SC_NUMBER_OF_RTS" />
+          <Entry type="RtsNum" name="LastRtsNum" shortDescription="ID of the last RTS to act on, 1 through #SC_NUMBER_OF_RTS" />
+        </EntryList>
+      </ContainerDataType>
+
+      <ContainerDataType name="HkTlm" shortDescription="Housekeeping Packet Structure" baseType="CFE_HDR/TelemetryHeader">
+        <EntryList>
+          <Entry type="HkTlm_Payload" name="Payload" />
+        </EntryList>
+      </ContainerDataType>
+
+      <ContainerDataType name="SendHkCmd" shortDescription="Send HK Command" baseType="CFE_HDR/CommandHeader" />
+      <ContainerDataType name="WakeupCmd" shortDescription="Wakeup Command" baseType="CFE_HDR/CommandHeader" />
+      <ContainerDataType name="CMD" shortDescription="Ground Command" baseType="CFE_HDR/CommandHeader" />
+
+      <ContainerDataType name="NoopCmd" baseType="CMD">
+        <ConstraintSet>
+          <ValueConstraint entry="Sec.FunctionCode" value="0" />
+        </ConstraintSet>
+      </ContainerDataType>
+
+      <ContainerDataType name="ResetCountersCmd" baseType="CMD">
+        <ConstraintSet>
+          <ValueConstraint entry="Sec.FunctionCode" value="1" />
+        </ConstraintSet>
+      </ContainerDataType>
+
+      <ContainerDataType name="StartAtsCmd" baseType="CMD">
+        <ConstraintSet>
+          <ValueConstraint entry="Sec.FunctionCode" value="2" />
+        </ConstraintSet>
+        <EntryList>
+          <Entry type="StartAtsCmd_Payload" name="Payload" />
+        </EntryList>
+      </ContainerDataType>
+
+      <ContainerDataType name="StopAtsCmd" baseType="CMD">
+        <ConstraintSet>
+          <ValueConstraint entry="Sec.FunctionCode" value="3" />
+        </ConstraintSet>
+      </ContainerDataType>
+
+      <ContainerDataType name="StartRtsCmd" baseType="CMD">
+        <ConstraintSet>
+          <ValueConstraint entry="Sec.FunctionCode" value="4" />
+        </ConstraintSet>
+        <EntryList>
+          <Entry type="RtsCmd_Payload" name="Payload" />
+        </EntryList>
+      </ContainerDataType>
+
+      <ContainerDataType name="StopRtsCmd" baseType="CMD">
+        <ConstraintSet>
+          <ValueConstraint entry="Sec.FunctionCode" value="5" />
+        </ConstraintSet>
+        <EntryList>
+          <Entry type="RtsCmd_Payload" name="Payload" />
+        </EntryList>
+      </ContainerDataType>
+
+      <ContainerDataType name="DisableRtsCmd" baseType="CMD">
+        <ConstraintSet>
+          <ValueConstraint entry="Sec.FunctionCode" value="6" />
+        </ConstraintSet>
+        <EntryList>
+          <Entry type="RtsCmd_Payload" name="Payload" />
+        </EntryList>
+      </ContainerDataType>
+
+      <ContainerDataType name="EnableRtsCmd" baseType="CMD">
+        <ConstraintSet>
+          <ValueConstraint entry="Sec.FunctionCode" value="7" />
+        </ConstraintSet>
+        <EntryList>
+          <Entry type="RtsCmd_Payload" name="Payload" />
+        </EntryList>
+      </ContainerDataType>
+
+      <ContainerDataType name="SwitchAtsCmd" baseType="CMD">
+        <ConstraintSet>
+          <ValueConstraint entry="Sec.FunctionCode" value="8" />
+        </ConstraintSet>
+      </ContainerDataType>
+
+      <ContainerDataType name="JumpAtsCmd" baseType="CMD">
+        <ConstraintSet>
+          <ValueConstraint entry="Sec.FunctionCode" value="9" />
+        </ConstraintSet>
+        <EntryList>
+          <Entry type="JumpAtsCmd_Payload" name="Payload" />
+        </EntryList>
+      </ContainerDataType>
+
+      <ContainerDataType name="ContinueAtsOnFailureCmd" baseType="CMD">
+        <ConstraintSet>
+          <ValueConstraint entry="Sec.FunctionCode" value="10" />
+        </ConstraintSet>
+        <EntryList>
+          <Entry type="ContinueAtsOnFailureCmd_Payload" name="Payload" />
+        </EntryList>
+      </ContainerDataType>
+
+      <ContainerDataType name="AppendAtsCmd" baseType="CMD">
+        <ConstraintSet>
+          <ValueConstraint entry="Sec.FunctionCode" value="11" />
+        </ConstraintSet>
+        <EntryList>
+          <Entry type="AppendAtsCmd_Payload" name="Payload" />
+        </EntryList>
+      </ContainerDataType>
+
+      <ContainerDataType name="ManageTableCmd" baseType="CMD">
+        <ConstraintSet>
+          <ValueConstraint entry="Sec.FunctionCode" value="12" />
+        </ConstraintSet>
+        <EntryList>
+          <Entry type="CFE_TBL/NotifyCmd_Payload" name="Payload" />
+        </EntryList>
+      </ContainerDataType>
+
+      <ContainerDataType name="StartRtsGrpCmd" baseType="CMD">
+        <ConstraintSet>
+          <ValueConstraint entry="Sec.FunctionCode" value="13" />
+        </ConstraintSet>
+        <EntryList>
+          <Entry type="RtsGrpCmd_Payload" name="Payload" />
+        </EntryList>
+      </ContainerDataType>
+
+      <ContainerDataType name="StopRtsGrpCmd" baseType="CMD">
+        <ConstraintSet>
+          <ValueConstraint entry="Sec.FunctionCode" value="14" />
+        </ConstraintSet>
+        <EntryList>
+          <Entry type="RtsGrpCmd_Payload" name="Payload" />
+        </EntryList>
+      </ContainerDataType>
+
+      <ContainerDataType name="DisableRtsGrpCmd" baseType="CMD">
+        <ConstraintSet>
+          <ValueConstraint entry="Sec.FunctionCode" value="15" />
+        </ConstraintSet>
+        <EntryList>
+          <Entry type="RtsGrpCmd_Payload" name="Payload" />
+        </EntryList>
+      </ContainerDataType>
+
+      <ContainerDataType name="EnableRtsGrpCmd" baseType="CMD">
+        <ConstraintSet>
+          <ValueConstraint entry="Sec.FunctionCode" value="16" />
+        </ConstraintSet>
+        <EntryList>
+          <Entry type="RtsGrpCmd_Payload" name="Payload" />
+        </EntryList>
+      </ContainerDataType>
+
+
+      <!-- TABLE DEFINITIONS -->
+      <IntegerDataType name="AbsTimeTag" shortDescription="#SC_AbsTimeTag_t">
+        <IntegerDataEncoding sizeInBits="32" encoding="unsigned" />
+      </IntegerDataType>
+
+      <IntegerDataType name="RelTimeTag" shortDescription="#SC_RelTimeTag_t">
+        <IntegerDataEncoding sizeInBits="32" encoding="unsigned" />
+      </IntegerDataType>
+
+
+      <ContainerDataType name="AtsEntryHeader" shortDescription="ATS Entry">
+        <EntryList>
+          <Entry name="Pad" type="BASE_TYPES/uint16" shortDescription="Structure padding" />
+          <Entry name="CmdNumber" type="CommandNum" shortDescription="ATS Command Number, range = 1 to SC_MAX_ATS_CMDS" />
+          <Entry name="TimeTag_MS" type="BASE_TYPES/uint16" shortDescription="Time tag most significant 16 bits" />
+          <Entry name="TimeTag_LS" type="BASE_TYPES/uint16" />
+        </EntryList>
+      </ContainerDataType>
+
+      <ContainerDataType name="AtsEntry" shortDescription="ATS Entry">
+        <EntryList>
+          <Entry name="Header" type="AtsEntryHeader" shortDescription="ATS Header" />
+          <Entry name="Msg" type="CFE_HDR/CommandHeader" shortDescription="Msg" />
+        </EntryList>
+      </ContainerDataType>
+
+      <IntegerDataType name="RelWakeupCount">
+         <IntegerDataEncoding sizeInBits="32" encoding="unsigned" />
+      </IntegerDataType>
+
+      <ContainerDataType name="RtsEntryHeader" shortDescription="RTS Entry">
+        <EntryList>
+          <Entry name="WakeupCount" type="RelWakeupCount" shortDescription="Relative wakeup count" />
+        </EntryList>
+      </ContainerDataType>
+
+      <ContainerDataType name="RtsEntry" shortDescription="RTS Entry">
+        <EntryList>
+          <Entry name="Header" type="RtsEntryHeader" shortDescription="RTS Header" />
+          <Entry name="Msg" type="CFE_HDR/CommandHeader" shortDescription="Msg" />
+        </EntryList>
+      </ContainerDataType>
+
+      <!-- Note that the BUFF_SIZE configurable parameters have traditionally been in 16-bit word units -->
+      <BinaryDataType name="AtsDefTable" shortDescription="ATS Definition Table" sizeInBits="${SC/ATS_BUFF_SIZE} * 16" />
+      <BinaryDataType name="AppendDefTable" shortDescription="Append Definition Table" sizeInBits="${SC/APPEND_BUFF_SIZE} * 16" />
+      <BinaryDataType name="RtsDefTable" shortDescription="RTS Definition Table" sizeInBits="${SC/RTS_BUFF_SIZE} * 16" />
+
+      <ContainerDataType name="AtsInfoTable" shortDescription="ATS Info Table Type - One of these records are kept for each ATS">
+        <EntryList>
+          <Entry type="BASE_TYPES/uint16" name="AtsUseCtr" shortDescription="How many times it has been used" />
+          <Entry type="BASE_TYPES/uint16" name="NumberOfCommands" shortDescription="number of commands in the ATS" />
+          <Entry type="BASE_TYPES/uint32" name="AtsSize" shortDescription="size of the ATS" />
+        </EntryList>
+      </ContainerDataType>
+
+      <ArrayDataType name="AtsInfoDumpTable" dataTypeRef="AtsInfoTable" shortDescription="ATS Info Table">
+        <DimensionList>
+          <Dimension size="${SC/NUMBER_OF_ATS}" />
+        </DimensionList>
+      </ArrayDataType>
+
+      <ContainerDataType name="RtsInfoEntry" shortDescription="RTS info table entry type -One of these records is kept for each RTS">
+        <EntryList>
+          <Entry type="Status" name="RtsStatus" shortDescription="status of the RTS" />
+          <Entry type="BASE_TYPES/uint8" name="DisabledFlag" shortDescription="disabled/enabled flag" />
+          <Entry type="BASE_TYPES/uint8" name="CmdCtr" shortDescription="Cmds executed in current rts" />
+          <Entry type="BASE_TYPES/uint8" name="CmdErrCtr" shortDescription="errs in current RTS" />
+          <Entry type="BASE_TYPES/uint32" name="NextCommandTgtWakeup" shortDescription="target wakeup count for next RTS command" />
+          <Entry type="EntryOffset" name="NextCommandPtr" shortDescription="where next rts cmd is" />
+          <Entry type="BASE_TYPES/uint16" name="UseCtr" shortDescription="how many times RTS is run" />
+        </EntryList>
+      </ContainerDataType>
+
+      <ArrayDataType name="RtsInfoDumpTable" dataTypeRef="RtsInfoEntry" shortDescription="RTS Info Table">
+        <DimensionList>
+          <Dimension size="${SC/NUMBER_OF_RTS}" />
+        </DimensionList>
+      </ArrayDataType>
+
+      <ContainerDataType name="AtpControlBlock" shortDescription="ATP Control Block Type">
+        <EntryList>
+          <Entry type="Status" name="AtpState" shortDescription="execution state of the ATP" />
+          <Entry type="AtsNum" name="CurrAtsNum" shortDescription="current ATS running if any" />
+          <Entry type="BASE_TYPES/uint16" name="Padding" shortDescription="Structure padding to align to 32-bit boundaries" />
+          <Entry type="CommandNum" name="CmdNumber" shortDescription="current cmd number to run if any" />
+          <Entry type="SeqIndex" name="TimeIndexPtr" shortDescription="time index pointer for current cmd" />
+          <Entry type="BASE_TYPES/uint16" name="SwitchPendFlag" shortDescription="indicates that a buffer switch is waiting" />
+        </EntryList>
+      </ContainerDataType>
+      <ContainerDataType name="RtpControlBlock" shortDescription="RTP Control Block Type">
+        <EntryList>
+          <Entry type="BASE_TYPES/uint16" name="NumRtsActive" shortDescription="number of RTSs currently active" />
+          <Entry type="RtsNum" name="CurrRtsNum" shortDescription="next RTS number" />
+        </EntryList>
+      </ContainerDataType>
+
+<!--
+     <ArrayDataType name="AppendTable" dataTypeRef="AtsEntry" shortDescription="Append Table">
+        <DimensionList>
+          <Dimension size="${SC/MAX_APPEND_CMDS}" />
+        </DimensionList>
+      </ArrayDataType>
+
+      <ArrayDataType name="RtsTable" dataTypeRef="RtsEntry" shortDescription="RTS Table">
+        <DimensionList>
+          <Dimension size="${SC/MAX_RTS_CMDS}" />
+        </DimensionList>
+      </ArrayDataType>
+-->
+
+     <ArrayDataType name="AtsCmdStatusTable" dataTypeRef="BASE_TYPES/uint32" shortDescription="ATS Command Status">
+        <DimensionList>
+          <Dimension size="${SC/MAX_ATS_CMDS}" />
+        </DimensionList>
+      </ArrayDataType>
+    </DataTypeSet>
+
+    <ComponentSet>
+      <Component name="Application">
+        <RequiredInterfaceSet>
+          <Interface name="ATS_TBL" shortDescription="Table interface" type="CFE_TBL/Table">
+            <GenericTypeMapSet>
+              <GenericTypeMap name="TableDataType" type="AtsDefTable" />
+            </GenericTypeMapSet>
+          </Interface>
+          <Interface name="RTS_TBL" shortDescription="Table interface" type="CFE_TBL/Table">
+            <GenericTypeMapSet>
+              <GenericTypeMap name="TableDataType" type="RtsDefTable" />
+            </GenericTypeMapSet>
+          </Interface>
+          <Interface name="APPEND_TBL" shortDescription="Table interface" type="CFE_TBL/Table">
+            <GenericTypeMapSet>
+              <GenericTypeMap name="TableDataType" type="AppendDefTable" />
+            </GenericTypeMapSet>
+          </Interface>
+          <Interface name="ATSCMD_TBL" shortDescription="Table interface" type="CFE_TBL/Table">
+            <GenericTypeMapSet>
+              <GenericTypeMap name="TableDataType" type="AtsCmdStatusTable" />
+            </GenericTypeMapSet>
+          </Interface>
+          <Interface name="ATSINF_TBL" shortDescription="Table interface" type="CFE_TBL/Table">
+            <GenericTypeMapSet>
+              <GenericTypeMap name="TableDataType" type="AtsInfoDumpTable" />
+            </GenericTypeMapSet>
+          </Interface>
+          <Interface name="RTSINF_TBL" shortDescription="Table interface" type="CFE_TBL/Table">
+            <GenericTypeMapSet>
+              <GenericTypeMap name="TableDataType" type="RtsInfoDumpTable" />
+            </GenericTypeMapSet>
+          </Interface>
+          <Interface name="ATPCTR_TBL" shortDescription="Table interface" type="CFE_TBL/Table">
+            <GenericTypeMapSet>
+              <GenericTypeMap name="TableDataType" type="AtpControlBlock" />
+            </GenericTypeMapSet>
+          </Interface>
+          <Interface name="RTPCTR_TBL" shortDescription="Table interface" type="CFE_TBL/Table">
+            <GenericTypeMapSet>
+              <GenericTypeMap name="TableDataType" type="RtpControlBlock" />
+            </GenericTypeMapSet>
+          </Interface>
+          <Interface name="CMD" shortDescription="Software bus telecommand interface" type="CFE_SB/Telecommand">
+            <GenericTypeMapSet>
+              <GenericTypeMap name="TelecommandDataType" type="CMD" />
+            </GenericTypeMapSet>
+          </Interface>
+          <Interface name="SEND_HK" shortDescription="Send telemetry command interface" type="CFE_SB/Telecommand">
+            <!-- This uses a bare spacepacket with no payload -->
+            <GenericTypeMapSet>
+              <GenericTypeMap name="TelecommandDataType" type="SendHkCmd" />
+            </GenericTypeMapSet>
+          </Interface>
+          <Interface name="WAKEUP" shortDescription="1Hz wakeup command" type="CFE_SB/Telecommand">
+            <!-- This uses a bare spacepacket with no payload -->
+            <GenericTypeMapSet>
+              <GenericTypeMap name="TelecommandDataType" type="WakeupCmd" />
+            </GenericTypeMapSet>
+          </Interface>
+          <Interface name="HK_TLM" shortDescription="Software bus housekeeping telemetry interface" type="CFE_SB/Telemetry">
+            <GenericTypeMapSet>
+              <GenericTypeMap name="TelemetryDataType" type="HkTlm" />
+            </GenericTypeMapSet>
+          </Interface>
+        </RequiredInterfaceSet>
+        <Implementation>
+          <VariableSet>
+            <Variable type="BASE_TYPES/uint16" readOnly="true" name="CmdTopicId" initialValue="${CFE_MISSION/SC_CMD_TOPICID}" />
+            <Variable type="BASE_TYPES/uint16" readOnly="true" name="SendHkTopicId" initialValue="${CFE_MISSION/SC_SEND_HK_TOPICID}" />
+            <Variable type="BASE_TYPES/uint16" readOnly="true" name="WakeupTopicId" initialValue="${CFE_MISSION/SC_WAKEUP_TOPICID}" />
+            <Variable type="BASE_TYPES/uint16" readOnly="true" name="HkTlmTopicId" initialValue="${CFE_MISSION/SC_HK_TLM_TOPICID}" />
+          </VariableSet>
+          <!-- Assign fixed numbers to the "TopicId" parameter of each interface -->
+          <ParameterMapSet>
+            <ParameterMap interface="CMD" parameter="TopicId" variableRef="CmdTopicId" />
+            <ParameterMap interface="SEND_HK" parameter="TopicId" variableRef="SendHkTopicId" />
+            <ParameterMap interface="WAKEUP" parameter="TopicId" variableRef="WakeupTopicId" />
+            <ParameterMap interface="HK_TLM" parameter="TopicId" variableRef="HkTlmTopicId" />
+          </ParameterMapSet>
+        </Implementation>
+      </Component>
+    </ComponentSet>
+
+  </Package>
+</PackageFile>

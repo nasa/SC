@@ -1,8 +1,7 @@
 /************************************************************************
- * NASA Docket No. GSC-18,924-1, and identified as “Core Flight
- * System (cFS) Stored Command Application version 3.1.1”
+ * NASA Docket No. GSC-19,200-1, and identified as "cFS Draco"
  *
- * Copyright (c) 2021 United States Government as represented by the
+ * Copyright (c) 2023 United States Government as represented by the
  * Administrator of the National Aeronautics and Space Administration.
  * All Rights Reserved.
  *
@@ -23,32 +22,11 @@
  *   constant and structure definitions.
  *
  */
-#ifndef SC_TBLDEFS_H
-#define SC_TBLDEFS_H
+#ifndef DEFAULT_SC_TBLDEFS_H
+#define DEFAULT_SC_TBLDEFS_H
 
 #include "common_types.h"
 #include "sc_extern_typedefs.h"
-#include "cfe_msg_hdr.h"
-
-/*************************************************************************
- * Macro Definitions
- *************************************************************************/
-#define SC_ATS_HEADER_SIZE (sizeof(SC_AtsEntryHeader_t)) /**< \brief ATS header size in bytes */
-#define SC_RTS_HEADER_SIZE (sizeof(SC_RtsEntryHeader_t)) /**< \brief RTS header size in bytes */
-
-/**
- * \defgroup cfscstblids ID definitions for cFE Table Services manage table request command
- * \{
- */
-#define SC_TBL_ID_ATS_0     (1)                                  /**< \brief ATS 0 Table ID */
-#define SC_TBL_ID_APPEND    (SC_TBL_ID_ATS_0 + SC_NUMBER_OF_ATS) /**< \brief Append Table ID */
-#define SC_TBL_ID_RTS_0     (SC_TBL_ID_APPEND + 1)               /**< \brief RTS 0 Table ID */
-#define SC_TBL_ID_RTS_INFO  (SC_TBL_ID_RTS_0 + SC_NUMBER_OF_RTS) /**< \brief RTS Info Table ID */
-#define SC_TBL_ID_RTP_CTRL  (SC_TBL_ID_RTS_INFO + 1)             /**< \brief RTS Control Table ID */
-#define SC_TBL_ID_ATS_INFO  (SC_TBL_ID_RTP_CTRL + 1)             /**< \brief ATS Info Table ID */
-#define SC_TBL_ID_ATP_CTRL  (SC_TBL_ID_ATS_INFO + 1)             /**< \brief ATS Control Table ID */
-#define SC_TBL_ID_ATS_CMD_0 (SC_TBL_ID_ATP_CTRL + 1)             /**< \brief ATS 0 Command Table ID */
-/**\}*/
 
 /************************************************************************
  * Type Definitions
@@ -63,6 +41,23 @@ typedef uint32 SC_AbsTimeTag_t;
  *  \brief Relative wakeup count
  */
 typedef uint32 SC_RelWakeupCount_t;
+
+/**
+ * @brief A sequence number for commands.
+ *
+ * This value is intended to indicate the order with which commands
+ * are executed within an ATS
+ *
+ * @note The command number in ATS entries is strictly for command
+ * identification and referencing purposes.  Commands do not need to
+ * appear in the table, nor be do they need to be numbered in order.
+ *
+ * For example, the command with SeqIndex == 3 will be the 4th command executed
+ * within the ATS, after sorting by time.
+ *
+ * The valid range is [0..SC_MAX_ATS_CMDS-1]
+ */
+typedef uint16 SC_SeqIndex_t;
 
 /**
  *  \brief ATS Table Entry Header Type
@@ -114,5 +109,29 @@ typedef struct
     SC_RtsEntryHeader_t     Header; /**< \brief RTS header */
     CFE_MSG_CommandHeader_t Msg;    /**< \brief Command Message to be sent */
 } SC_RtsEntry_t;
+
+/**
+ *  \brief ATS Info Table Type - One of these records are kept for each ATS
+ */
+typedef struct
+{
+    uint16 AtsUseCtr;        /**< \brief How many times it has been used */
+    uint16 NumberOfCommands; /**< \brief number of commands in the ATS */
+    uint32 AtsSize;          /**< \brief size of the ATS */
+} SC_AtsInfoTable_t;
+
+/**
+ *  \brief RTS info table entry type -One of these records is kept for each RTS
+ */
+typedef struct
+{
+    SC_Status_Enum_t RtsStatus;            /**< \brief status of the RTS */
+    bool             DisabledFlag;         /**< \brief disabled/enabled flag */
+    uint8            CmdCtr;               /**< \brief Cmds executed in current rts */
+    uint8            CmdErrCtr;            /**< \brief errs in current RTS */
+    uint32           NextCommandTgtWakeup; /**< \brief target wakeup count for next RTS command */
+    SC_EntryOffset_t NextCommandPtr;       /**< \brief where next rts cmd is */
+    uint16           UseCtr;               /**< \brief how many times RTS is run */
+} SC_RtsInfoEntry_t;
 
 #endif

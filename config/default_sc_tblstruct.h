@@ -1,8 +1,7 @@
 /************************************************************************
- * NASA Docket No. GSC-18,924-1, and identified as “Core Flight
- * System (cFS) Stored Command Application version 3.1.1”
+ * NASA Docket No. GSC-19,200-1, and identified as "cFS Draco"
  *
- * Copyright (c) 2021 United States Government as represented by the
+ * Copyright (c) 2023 United States Government as represented by the
  * Administrator of the National Aeronautics and Space Administration.
  * All Rights Reserved.
  *
@@ -27,14 +26,41 @@
  * either by overriding this header or by generating definitions from a command/data
  * dictionary tool.
  */
-#ifndef SC_TBLSTRUCT_H
-#define SC_TBLSTRUCT_H
+#ifndef DEFAULT_SC_TBLSTRUCT_H
+#define DEFAULT_SC_TBLSTRUCT_H
 
 /*************************************************************************
  * Includes
  *************************************************************************/
+#include "common_types.h"
 #include "sc_tbldefs.h"
 #include "sc_mission_cfg.h"
 #include "cfe_mission_cfg.h"
+
+/**
+ *  \brief ATP Control Block Type
+ */
+typedef struct
+{
+    SC_Status_Enum_t AtpState;       /**< \brief execution state of the ATP */
+    SC_AtsNum_t      CurrAtsNum;     /**< \brief current ATS running if any */
+    uint16           Padding;        /**< \brief Structure padding to align to 32-bit boundaries */
+    SC_CommandNum_t  CmdNumber;      /**< \brief current cmd number to run if any */
+    SC_SeqIndex_t    TimeIndexPtr;   /**< \brief time index pointer for current cmd */
+    uint16           SwitchPendFlag; /**< \brief indicates that a buffer switch is waiting */
+} SC_AtpControlBlock_t;
+
+/**
+ *  \brief RTP Control Block Type
+ *
+ *  \note Now there is only really one RTP
+ *  This structure contains overall info for the next relative time
+ *  processor.
+ */
+typedef struct
+{
+    uint16      NumRtsActive; /**< \brief number of RTSs currently active */
+    SC_RtsNum_t CurrRtsNum;   /**< \brief next RTS number */
+} SC_RtpControlBlock_t;
 
 #endif

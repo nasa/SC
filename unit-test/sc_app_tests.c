@@ -1,8 +1,7 @@
 /************************************************************************
- * NASA Docket No. GSC-18,924-1, and identified as “Core Flight
- * System (cFS) Stored Command Application version 3.1.1”
+ * NASA Docket No. GSC-19,200-1, and identified as "cFS Draco"
  *
- * Copyright (c) 2021 United States Government as represented by the
+ * Copyright (c) 2023 United States Government as represented by the
  * Administrator of the National Aeronautics and Space Administration.
  * All Rights Reserved.
  *
@@ -161,11 +160,11 @@ void SC_AppInit_Test_NominalPowerOnReset(void)
     UtAssert_INT32_EQ(SC_AppInit(), CFE_SUCCESS);
 
     /* Verify results */
-    Expected_SC_OperData.AtsInfoHandle         = 0;
-    Expected_SC_OperData.RtsCtrlBlckHandle     = 0;
-    Expected_SC_OperData.AtsCtrlBlckHandle     = 0;
-    Expected_SC_OperData.AtsCmdStatusHandle[0] = 0;
-    Expected_SC_OperData.AtsCmdStatusHandle[1] = 0;
+    memset(&Expected_SC_OperData.AtsInfoHandle, 0, sizeof(Expected_SC_OperData.AtsInfoHandle));
+    memset(&Expected_SC_OperData.RtsInfoHandle, 0, sizeof(Expected_SC_OperData.RtsInfoHandle));
+    memset(&Expected_SC_OperData.RtsCtrlBlckHandle, 0, sizeof(Expected_SC_OperData.RtsCtrlBlckHandle));
+    memset(&Expected_SC_OperData.AtsCtrlBlckHandle, 0, sizeof(Expected_SC_OperData.AtsCtrlBlckHandle));
+    memset(&Expected_SC_OperData.AtsCmdStatusHandle, 0, sizeof(Expected_SC_OperData.AtsCmdStatusHandle));
 
     Expected_SC_OperData.HkPacket.Payload.ContinueAtsOnFailureFlag = SC_AtsCont_TRUE;
 
@@ -226,11 +225,11 @@ void SC_AppInit_Test_Nominal(void)
     UtAssert_INT32_EQ(SC_AppInit(), CFE_SUCCESS);
 
     /* Verify results */
-    Expected_SC_OperData.AtsInfoHandle         = 0;
-    Expected_SC_OperData.RtsCtrlBlckHandle     = 0;
-    Expected_SC_OperData.AtsCtrlBlckHandle     = 0;
-    Expected_SC_OperData.AtsCmdStatusHandle[0] = 0;
-    Expected_SC_OperData.AtsCmdStatusHandle[1] = 0;
+    memset(&Expected_SC_OperData.AtsInfoHandle, 0, sizeof(Expected_SC_OperData.AtsInfoHandle));
+    memset(&Expected_SC_OperData.RtsInfoHandle, 0, sizeof(Expected_SC_OperData.RtsInfoHandle));
+    memset(&Expected_SC_OperData.RtsCtrlBlckHandle, 0, sizeof(Expected_SC_OperData.RtsCtrlBlckHandle));
+    memset(&Expected_SC_OperData.AtsCtrlBlckHandle, 0, sizeof(Expected_SC_OperData.AtsCtrlBlckHandle));
+    memset(&Expected_SC_OperData.AtsCmdStatusHandle, 0, sizeof(Expected_SC_OperData.AtsCmdStatusHandle));
 
     UtAssert_MemCmp(&SC_OperData.CmdPipe, &Expected_SC_OperData.CmdPipe, sizeof(Expected_SC_OperData.CmdPipe), "2");
     UtAssert_MemCmp(&SC_OperData.AtsInfoHandle, &Expected_SC_OperData.AtsInfoHandle,

@@ -1,8 +1,7 @@
 /************************************************************************
- * NASA Docket No. GSC-18,924-1, and identified as “Core Flight
- * System (cFS) Stored Command Application version 3.1.1”
+ * NASA Docket No. GSC-19,200-1, and identified as "cFS Draco"
  *
- * Copyright (c) 2021 United States Government as represented by the
+ * Copyright (c) 2023 United States Government as represented by the
  * Administrator of the National Aeronautics and Space Administration.
  * All Rights Reserved.
  *
@@ -59,12 +58,12 @@ void SC_ProcessAtpCmd(void)
     SC_CommandIndex_t             CmdIndex; /* ATS command index */
     CFE_Status_t                  Result;
     bool                          AbortATS = false;
-    SC_AtsEntry_t                *EntryPtr;
+    SC_AtsEntry_t *               EntryPtr;
     CFE_SB_MsgId_t                MessageID   = CFE_SB_INVALID_MSG_ID;
     CFE_MSG_FcnCode_t             CommandCode = 0;
     bool                          ChecksumValid;
     SC_AtsCmdEntryOffsetRecord_t *CmdOffsetRec; /* ATS entry location in table */
-    SC_AtsCmdStatusEntry_t       *StatusEntryPtr;
+    SC_AtsCmdStatusEntry_t *      StatusEntryPtr;
 
     /*
      ** The following conditions must be met before the ATS command will be
@@ -288,7 +287,7 @@ void SC_ProcessAtpCmd(void)
 
 void SC_ProcessRtpCommand(void)
 {
-    SC_RtsEntry_t     *EntryPtr;  /* a pointer to an RTS entry header */
+    SC_RtsEntry_t *    EntryPtr;  /* a pointer to an RTS entry header */
     SC_RtsIndex_t      RtsIndex;  /* the RTS index for the cmd */
     SC_EntryOffset_t   CmdOffset; /* the location of the cmd    */
     CFE_Status_t       Result;
@@ -311,7 +310,8 @@ void SC_ProcessRtpCommand(void)
 
     RtsInfoPtr = SC_GetRtsInfoObject(RtsIndex);
 
-    if ((SC_AppData.NextCmdTime[SC_Process_RTP] <= SC_AppData.CurrentWakeupCount) && (RtsInfoPtr->RtsStatus == SC_Status_EXECUTING))
+    if ((SC_AppData.NextCmdTime[SC_Process_RTP] <= SC_AppData.CurrentWakeupCount) &&
+        (RtsInfoPtr->RtsStatus == SC_Status_EXECUTING))
     {
         /*
          ** Count the command for the rate limiter
@@ -441,35 +441,24 @@ void SC_SendHkPacket(void)
      ** Fill out the RTP control block information
      */
 
-    SC_OperData.HkPacket.Payload.NumRtsActive      = SC_OperData.RtsCtrlBlckAddr->NumRtsActive;
-    SC_OperData.HkPacket.Payload.RtsNum            = SC_OperData.RtsCtrlBlckAddr->CurrRtsNum;
-    SC_OperData.HkPacket.Payload.NextRtsWakeupCnt  = SC_AppData.NextCmdTime[SC_Process_RTP];
+    SC_OperData.HkPacket.Payload.NumRtsActive     = SC_OperData.RtsCtrlBlckAddr->NumRtsActive;
+    SC_OperData.HkPacket.Payload.RtsNum           = SC_OperData.RtsCtrlBlckAddr->CurrRtsNum;
+    SC_OperData.HkPacket.Payload.NextRtsWakeupCnt = SC_AppData.NextCmdTime[SC_Process_RTP];
 
     /*
      ** Fill out the RTS status bit mask
      ** First clear out the status mask
      */
-    for (i = 0; i < (SC_NUMBER_OF_RTS + (SC_NUMBER_OF_RTS_IN_UINT16 - 1)) / SC_NUMBER_OF_RTS_IN_UINT16; i++)
-    {
-        SC_OperData.HkPacket.Payload.RtsExecutingStatus[i] = 0;
-        SC_OperData.HkPacket.Payload.RtsDisabledStatus[i]  = 0;
-
-    } /* end for */
+    memset(SC_OperData.HkPacket.Payload.RtsExecutingStatus, 0, sizeof(SC_OperData.HkPacket.Payload.RtsExecutingStatus));
+    memset(SC_OperData.HkPacket.Payload.RtsDisabledStatus, 0, sizeof(SC_OperData.HkPacket.Payload.RtsDisabledStatus));
 
     for (i = 0; i < SC_NUMBER_OF_RTS; i++)
     {
         RtsInfoPtr = SC_GetRtsInfoObject(SC_RTS_IDX_C(i));
 
-        if (RtsInfoPtr->DisabledFlag == true)
-        {
-            SC_OperData.HkPacket.Payload.RtsDisabledStatus[i / SC_NUMBER_OF_RTS_IN_UINT16] |=
-                (1 << (i % SC_NUMBER_OF_RTS_IN_UINT16));
-        }
-        if (RtsInfoPtr->RtsStatus == SC_Status_EXECUTING)
-        {
-            SC_OperData.HkPacket.Payload.RtsExecutingStatus[i / SC_NUMBER_OF_RTS_IN_UINT16] |=
-                (1 << (i % SC_NUMBER_OF_RTS_IN_UINT16));
-        }
+        SC_SET_HKTLM_RTS_MASK(SC_OperData.HkPacket.Payload.RtsDisabledStatus, i, RtsInfoPtr->DisabledFlag);
+        SC_SET_HKTLM_RTS_MASK(SC_OperData.HkPacket.Payload.RtsExecutingStatus, i,
+                              (RtsInfoPtr->RtsStatus == SC_Status_EXECUTING));
     } /* end for */
 
     /* send the status packet */
@@ -482,7 +471,7 @@ void SC_SendHkPacket(void)
 /* Send HK Command                                                 */
 /*                                                                 */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-void SC_SendHkCmd(const SC_SendHkCmd_t *Cmd)
+CFE_Status_t SC_SendHkCmd(const SC_SendHkCmd_t *Cmd)
 {
     SC_RtsInfoEntry_t *RtsInfoPtr;
 
@@ -506,6 +495,8 @@ void SC_SendHkCmd(const SC_SendHkCmd_t *Cmd)
 
     /* request from health and safety for housekeeping status */
     SC_SendHkPacket();
+
+    return CFE_SUCCESS;
 }
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -514,7 +505,7 @@ void SC_SendHkCmd(const SC_SendHkCmd_t *Cmd)
 /*                                                                 */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-void SC_ResetCountersCmd(const SC_ResetCountersCmd_t *Cmd)
+CFE_Status_t SC_ResetCountersCmd(const SC_ResetCountersCmd_t *Cmd)
 {
     CFE_EVS_SendEvent(SC_RESET_INF_EID, CFE_EVS_EventType_INFORMATION, "Reset counters command");
 
@@ -526,6 +517,8 @@ void SC_ResetCountersCmd(const SC_ResetCountersCmd_t *Cmd)
     SC_OperData.HkPacket.Payload.RtsCmdErrCtr    = 0;
     SC_OperData.HkPacket.Payload.RtsActiveCtr    = 0;
     SC_OperData.HkPacket.Payload.RtsActiveErrCtr = 0;
+
+    return CFE_SUCCESS;
 }
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -533,7 +526,7 @@ void SC_ResetCountersCmd(const SC_ResetCountersCmd_t *Cmd)
 /* Wakeup Command                                                  */
 /*                                                                 */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-void SC_WakeupCmd(const SC_WakeupCmd_t *Cmd)
+CFE_Status_t SC_WakeupCmd(const SC_WakeupCmd_t *Cmd)
 {
     uint32 CurrentNumCmds;
     SC_AppData.CurrentWakeupCount++;
@@ -558,11 +551,11 @@ void SC_WakeupCmd(const SC_WakeupCmd_t *Cmd)
         if (CurrentNumCmds == SC_OperData.NumCmdsWakeup)
         {
             SC_GetNextRtsTime();
-            
+
             SC_ProcessRtpCommand();
         }
-        
-        /* 
+
+        /*
          * No commands could be processed
          */
         if (CurrentNumCmds == SC_OperData.NumCmdsWakeup)
@@ -572,6 +565,8 @@ void SC_WakeupCmd(const SC_WakeupCmd_t *Cmd)
     }
 
     SC_OperData.NumCmdsWakeup = 0;
+
+    return CFE_SUCCESS;
 }
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -579,11 +574,13 @@ void SC_WakeupCmd(const SC_WakeupCmd_t *Cmd)
 /* No Op Command                                                   */
 /*                                                                 */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-void SC_NoopCmd(const SC_NoopCmd_t *Cmd)
+CFE_Status_t SC_NoopCmd(const SC_NoopCmd_t *Cmd)
 {
     SC_OperData.HkPacket.Payload.CmdCtr++;
     CFE_EVS_SendEvent(SC_NOOP_INF_EID, CFE_EVS_EventType_INFORMATION, "No-op command. Version %d.%d.%d.%d",
                       SC_MAJOR_VERSION, SC_MINOR_VERSION, SC_REVISION, SC_MISSION_REV);
+
+    return CFE_SUCCESS;
 }
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -592,7 +589,7 @@ void SC_NoopCmd(const SC_NoopCmd_t *Cmd)
 /*                                                                 */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-void SC_ManageTableCmd(const SC_ManageTableCmd_t *Cmd)
+CFE_Status_t SC_ManageTableCmd(const SC_ManageTableCmd_t *Cmd)
 {
     int32 ArrayIndex;
     int32 TableID = Cmd->Payload.Parameter;
@@ -646,6 +643,8 @@ void SC_ManageTableCmd(const SC_ManageTableCmd_t *Cmd)
     }
 
     // No success/informational event is sent for this command intentionally, to avoid the risk of flooding.
+
+    return CFE_SUCCESS;
 }
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -696,8 +695,8 @@ void SC_ManageTable(SC_TableType type, int32 ArrayIndex)
 {
     CFE_Status_t     Result;
     CFE_TBL_Handle_t TblHandle;
-    uint32         **TblAddr;
-    void            *TblPtrNew;
+    uint32 **        TblAddr;
+    void *           TblPtrNew;
 
     switch (type)
     {
