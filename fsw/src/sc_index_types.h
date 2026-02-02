@@ -371,8 +371,8 @@ static inline bool SC_RtsNumWithinRange(SC_RtsNum_t RtsNum, SC_RtsNum_t IdLimit)
  */
 static inline bool SC_RtsNumValidateRange(SC_RtsNum_t FirstRtsNum, SC_RtsNum_t LastRtsNum)
 {
-    return SC_RtsNumIsValid(FirstRtsNum) && SC_RtsNumIsValid(LastRtsNum) &&
-           SC_RtsNumWithinRange(FirstRtsNum, LastRtsNum);
+    return SC_RtsNumIsValid(FirstRtsNum) && SC_RtsNumIsValid(LastRtsNum)
+           && SC_RtsNumWithinRange(FirstRtsNum, LastRtsNum);
 }
 
 /**
@@ -388,7 +388,7 @@ static inline bool SC_RtsNumValidateRange(SC_RtsNum_t FirstRtsNum, SC_RtsNum_t L
  */
 static inline SC_EntryOffset_t SC_EntryOffsetAdvance(SC_EntryOffset_t Pos, size_t Bytes)
 {
-    return (SC_EntryOffset_t) {SC_IDX_AS_UINT(Pos) + ((Bytes + sizeof(uint32) - 1) / sizeof(uint32))};
+    return (SC_EntryOffset_t) { SC_IDX_AS_UINT(Pos) + ((Bytes + sizeof(uint32) - 1) / sizeof(uint32)) };
 }
 
 #endif

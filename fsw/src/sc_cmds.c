@@ -58,12 +58,12 @@ void SC_ProcessAtpCmd(void)
     SC_CommandIndex_t             CmdIndex; /* ATS command index */
     CFE_Status_t                  Result;
     bool                          AbortATS = false;
-    SC_AtsEntry_t *               EntryPtr;
+    SC_AtsEntry_t                *EntryPtr;
     CFE_SB_MsgId_t                MessageID   = CFE_SB_INVALID_MSG_ID;
     CFE_MSG_FcnCode_t             CommandCode = 0;
     bool                          ChecksumValid;
     SC_AtsCmdEntryOffsetRecord_t *CmdOffsetRec; /* ATS entry location in table */
-    SC_AtsCmdStatusEntry_t *      StatusEntryPtr;
+    SC_AtsCmdStatusEntry_t       *StatusEntryPtr;
 
     /*
      ** The following conditions must be met before the ATS command will be
@@ -73,8 +73,8 @@ void SC_ProcessAtpCmd(void)
      ** 3.) The atp is currently EXECUTING
      */
 
-    if ((SC_OperData.AtsCtrlBlckAddr->AtpState == SC_Status_EXECUTING) &&
-        (!SC_CompareAbsTime(SC_AppData.NextCmdTime[SC_Process_ATP], SC_AppData.CurrentTime)))
+    if ((SC_OperData.AtsCtrlBlckAddr->AtpState == SC_Status_EXECUTING)
+        && (!SC_CompareAbsTime(SC_AppData.NextCmdTime[SC_Process_ATP], SC_AppData.CurrentTime)))
     {
         /*
          ** Get a pointer to the next ats command
@@ -170,9 +170,11 @@ void SC_ProcessAtpCmd(void)
                             SC_OperData.HkPacket.Payload.LastAtsErrSeq = SC_OperData.AtsCtrlBlckAddr->CurrAtsNum;
                             SC_OperData.HkPacket.Payload.LastAtsErrCmd = SC_OperData.AtsCtrlBlckAddr->CmdNumber;
 
-                            CFE_EVS_SendEvent(SC_ATS_DIST_ERR_EID, CFE_EVS_EventType_ERROR,
+                            CFE_EVS_SendEvent(SC_ATS_DIST_ERR_EID,
+                                              CFE_EVS_EventType_ERROR,
                                               "ATS Command Distribution Failed, Cmd Number: %u, SB returned: 0x%08X",
-                                              SC_IDNUM_AS_UINT(EntryPtr->Header.CmdNumber), (unsigned int)Result);
+                                              SC_IDNUM_AS_UINT(EntryPtr->Header.CmdNumber),
+                                              (unsigned int)Result);
 
                             /* Mark this ATS for abortion */
                             AbortATS = true;
@@ -184,7 +186,8 @@ void SC_ProcessAtpCmd(void)
                     /*
                      ** Send an event message to report the invalid command status
                      */
-                    CFE_EVS_SendEvent(SC_ATS_CHKSUM_ERR_EID, CFE_EVS_EventType_ERROR,
+                    CFE_EVS_SendEvent(SC_ATS_CHKSUM_ERR_EID,
+                                      CFE_EVS_EventType_ERROR,
                                       "ATS Command Failed Checksum: Command #%u Skipped",
                                       SC_IDNUM_AS_UINT(EntryPtr->Header.CmdNumber));
                     /*
@@ -214,7 +217,8 @@ void SC_ProcessAtpCmd(void)
                  ** Send an event message to report the invalid command status
                  */
 
-                CFE_EVS_SendEvent(SC_ATS_MSMTCH_ERR_EID, CFE_EVS_EventType_ERROR,
+                CFE_EVS_SendEvent(SC_ATS_MSMTCH_ERR_EID,
+                                  CFE_EVS_EventType_ERROR,
                                   "ATS Command Number Mismatch: Command Skipped, expected: %u received: %u",
                                   SC_IDNUM_AS_UINT(SC_CommandIndexToNum(CmdIndex)),
                                   SC_IDNUM_AS_UINT(EntryPtr->Header.CmdNumber));
@@ -241,7 +245,8 @@ void SC_ProcessAtpCmd(void)
             /*
              ** Send an event message to report the invalid command status
              */
-            CFE_EVS_SendEvent(SC_ATS_SKP_ERR_EID, CFE_EVS_EventType_ERROR,
+            CFE_EVS_SendEvent(SC_ATS_SKP_ERR_EID,
+                              CFE_EVS_EventType_ERROR,
                               "Invalid ATS Command Status: Command Skipped, Status: %lu",
                               (unsigned long)StatusEntryPtr->Status);
             /*
@@ -287,7 +292,7 @@ void SC_ProcessAtpCmd(void)
 
 void SC_ProcessRtpCommand(void)
 {
-    SC_RtsEntry_t *    EntryPtr;  /* a pointer to an RTS entry header */
+    SC_RtsEntry_t     *EntryPtr;  /* a pointer to an RTS entry header */
     SC_RtsIndex_t      RtsIndex;  /* the RTS index for the cmd */
     SC_EntryOffset_t   CmdOffset; /* the location of the cmd    */
     CFE_Status_t       Result;
@@ -310,8 +315,8 @@ void SC_ProcessRtpCommand(void)
 
     RtsInfoPtr = SC_GetRtsInfoObject(RtsIndex);
 
-    if ((SC_AppData.NextCmdTime[SC_Process_RTP] <= SC_AppData.CurrentWakeupCount) &&
-        (RtsInfoPtr->RtsStatus == SC_Status_EXECUTING))
+    if ((SC_AppData.NextCmdTime[SC_Process_RTP] <= SC_AppData.CurrentWakeupCount)
+        && (RtsInfoPtr->RtsStatus == SC_Status_EXECUTING))
     {
         /*
          ** Count the command for the rate limiter
@@ -360,9 +365,11 @@ void SC_ProcessRtpCommand(void)
                 /*
                  ** Send an event message to report the invalid command status
                  */
-                CFE_EVS_SendEvent(SC_RTS_DIST_ERR_EID, CFE_EVS_EventType_ERROR,
+                CFE_EVS_SendEvent(SC_RTS_DIST_ERR_EID,
+                                  CFE_EVS_EventType_ERROR,
                                   "RTS %03u Command Distribution Failed: RTS Stopped. SB returned 0x%08X",
-                                  SC_IDNUM_AS_UINT(SC_OperData.RtsCtrlBlckAddr->CurrRtsNum), (unsigned int)Result);
+                                  SC_IDNUM_AS_UINT(SC_OperData.RtsCtrlBlckAddr->CurrRtsNum),
+                                  (unsigned int)Result);
 
                 SC_OperData.HkPacket.Payload.RtsCmdErrCtr++;
                 RtsInfoPtr->CmdErrCtr++;
@@ -382,7 +389,8 @@ void SC_ProcessRtpCommand(void)
             /*
              ** Send an event message to report the invalid command status
              */
-            CFE_EVS_SendEvent(SC_RTS_CHKSUM_ERR_EID, CFE_EVS_EventType_ERROR,
+            CFE_EVS_SendEvent(SC_RTS_CHKSUM_ERR_EID,
+                              CFE_EVS_EventType_ERROR,
                               "RTS %03u Command Failed Checksum: RTS Stopped",
                               SC_IDNUM_AS_UINT(SC_OperData.RtsCtrlBlckAddr->CurrRtsNum));
             /*
@@ -398,7 +406,7 @@ void SC_ProcessRtpCommand(void)
              */
             SC_KillRts(RtsIndex);
         } /* end if */
-    }     /* end if */
+    } /* end if */
 }
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -457,7 +465,8 @@ void SC_SendHkPacket(void)
         RtsInfoPtr = SC_GetRtsInfoObject(SC_RTS_IDX_C(i));
 
         SC_SET_HKTLM_RTS_MASK(SC_OperData.HkPacket.Payload.RtsDisabledStatus, i, RtsInfoPtr->DisabledFlag);
-        SC_SET_HKTLM_RTS_MASK(SC_OperData.HkPacket.Payload.RtsExecutingStatus, i,
+        SC_SET_HKTLM_RTS_MASK(SC_OperData.HkPacket.Payload.RtsExecutingStatus,
+                              i,
                               (RtsInfoPtr->RtsStatus == SC_Status_EXECUTING));
     } /* end for */
 
@@ -577,8 +586,13 @@ CFE_Status_t SC_WakeupCmd(const SC_WakeupCmd_t *Cmd)
 CFE_Status_t SC_NoopCmd(const SC_NoopCmd_t *Cmd)
 {
     SC_OperData.HkPacket.Payload.CmdCtr++;
-    CFE_EVS_SendEvent(SC_NOOP_INF_EID, CFE_EVS_EventType_INFORMATION, "No-op command. Version %d.%d.%d.%d",
-                      SC_MAJOR_VERSION, SC_MINOR_VERSION, SC_REVISION, SC_MISSION_REV);
+    CFE_EVS_SendEvent(SC_NOOP_INF_EID,
+                      CFE_EVS_EventType_INFORMATION,
+                      "No-op command. Version %d.%d.%d.%d",
+                      SC_MAJOR_VERSION,
+                      SC_MINOR_VERSION,
+                      SC_REVISION,
+                      SC_MISSION_REV);
 
     return CFE_SUCCESS;
 }
@@ -638,8 +652,10 @@ CFE_Status_t SC_ManageTableCmd(const SC_ManageTableCmd_t *Cmd)
     else
     {
         /* Invalid table ID */
-        CFE_EVS_SendEvent(SC_TABLE_MANAGE_ID_ERR_EID, CFE_EVS_EventType_ERROR,
-                          "Table manage command packet error: table ID = %d", (int)TableID);
+        CFE_EVS_SendEvent(SC_TABLE_MANAGE_ID_ERR_EID,
+                          CFE_EVS_EventType_ERROR,
+                          "Table manage command packet error: table ID = %d",
+                          (int)TableID);
     }
 
     // No success/informational event is sent for this command intentionally, to avoid the risk of flooding.
@@ -658,8 +674,10 @@ void SC_ManageRtsTable(int32 ArrayIndex)
     /* validate array index */
     if (ArrayIndex >= SC_NUMBER_OF_RTS)
     {
-        CFE_EVS_SendEvent(SC_TABLE_MANAGE_RTS_INV_INDEX_ERR_EID, CFE_EVS_EventType_ERROR,
-                          "RTS table manage error: invalid RTS index %d", (int)ArrayIndex);
+        CFE_EVS_SendEvent(SC_TABLE_MANAGE_RTS_INV_INDEX_ERR_EID,
+                          CFE_EVS_EventType_ERROR,
+                          "RTS table manage error: invalid RTS index %d",
+                          (int)ArrayIndex);
         return;
     }
 
@@ -677,8 +695,10 @@ void SC_ManageAtsTable(int32 ArrayIndex)
     /* validate array index */
     if (ArrayIndex >= SC_NUMBER_OF_ATS)
     {
-        CFE_EVS_SendEvent(SC_TABLE_MANAGE_ATS_INV_INDEX_ERR_EID, CFE_EVS_EventType_ERROR,
-                          "ATS table manage error: invalid ATS index %d", (int)ArrayIndex);
+        CFE_EVS_SendEvent(SC_TABLE_MANAGE_ATS_INV_INDEX_ERR_EID,
+                          CFE_EVS_EventType_ERROR,
+                          "ATS table manage error: invalid ATS index %d",
+                          (int)ArrayIndex);
         return;
     }
 
@@ -695,8 +715,8 @@ void SC_ManageTable(SC_TableType type, int32 ArrayIndex)
 {
     CFE_Status_t     Result;
     CFE_TBL_Handle_t TblHandle;
-    uint32 **        TblAddr;
-    void *           TblPtrNew;
+    uint32         **TblAddr;
+    void            *TblPtrNew;
 
     switch (type)
     {
@@ -745,20 +765,26 @@ void SC_ManageTable(SC_TableType type, int32 ArrayIndex)
         /* Ignore successful dump or validate and cmds before first activate. */
         if (type == ATS)
         {
-            CFE_EVS_SendEvent(SC_TABLE_MANAGE_ATS_ERR_EID, CFE_EVS_EventType_ERROR,
+            CFE_EVS_SendEvent(SC_TABLE_MANAGE_ATS_ERR_EID,
+                              CFE_EVS_EventType_ERROR,
                               "ATS table manage process error: ATS = %u, Result = 0x%X",
-                              SC_IDNUM_AS_UINT(SC_AtsIndexToNum(SC_ATS_IDX_C(ArrayIndex))), (unsigned int)Result);
+                              SC_IDNUM_AS_UINT(SC_AtsIndexToNum(SC_ATS_IDX_C(ArrayIndex))),
+                              (unsigned int)Result);
         }
         else if (type == RTS)
         {
-            CFE_EVS_SendEvent(SC_TABLE_MANAGE_RTS_ERR_EID, CFE_EVS_EventType_ERROR,
+            CFE_EVS_SendEvent(SC_TABLE_MANAGE_RTS_ERR_EID,
+                              CFE_EVS_EventType_ERROR,
                               "RTS table manage process error: RTS = %u, Result = 0x%X",
-                              SC_IDNUM_AS_UINT(SC_RtsIndexToNum(SC_RTS_IDX_C(ArrayIndex))), (unsigned int)Result);
+                              SC_IDNUM_AS_UINT(SC_RtsIndexToNum(SC_RTS_IDX_C(ArrayIndex))),
+                              (unsigned int)Result);
         }
         else
         {
-            CFE_EVS_SendEvent(SC_TABLE_MANAGE_APPEND_ERR_EID, CFE_EVS_EventType_ERROR,
-                              "ATS Append table manage process error: Result = 0x%X", (unsigned int)Result);
+            CFE_EVS_SendEvent(SC_TABLE_MANAGE_APPEND_ERR_EID,
+                              CFE_EVS_EventType_ERROR,
+                              "ATS Append table manage process error: Result = 0x%X",
+                              (unsigned int)Result);
         }
     }
 } /* End SC_ManageTable() */

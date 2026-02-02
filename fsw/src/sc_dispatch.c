@@ -64,9 +64,12 @@ bool SC_VerifyCmdLength(const CFE_MSG_Message_t *Msg, size_t ExpectedLength)
         CFE_MSG_GetMsgId(Msg, &MessageID);
         CFE_MSG_GetFcnCode(Msg, &CommandCode);
 
-        CFE_EVS_SendEvent(SC_CMD_LEN_ERR_EID, CFE_EVS_EventType_ERROR,
+        CFE_EVS_SendEvent(SC_CMD_LEN_ERR_EID,
+                          CFE_EVS_EventType_ERROR,
                           "Invalid msg length: ID = 0x%08lX, CC = %d, Len = %d, Expected = %d",
-                          (unsigned long)CFE_SB_MsgIdToValue(MessageID), CommandCode, (int)ActualLength,
+                          (unsigned long)CFE_SB_MsgIdToValue(MessageID),
+                          CommandCode,
+                          (int)ActualLength,
                           (int)ExpectedLength);
         Result = false;
         if (CFE_SB_MsgIdToValue(MessageID) == SC_CMD_MID)
@@ -121,7 +124,9 @@ void SC_ProcessRequest(const CFE_SB_Buffer_t *BufPtr)
     }
     else
     {
-        CFE_EVS_SendEvent(SC_MID_ERR_EID, CFE_EVS_EventType_ERROR, "Invalid command pipe message ID: 0x%08lX",
+        CFE_EVS_SendEvent(SC_MID_ERR_EID,
+                          CFE_EVS_EventType_ERROR,
+                          "Invalid command pipe message ID: 0x%08lX",
                           (unsigned long)CFE_SB_MsgIdToValue(MessageID));
 
         SC_OperData.HkPacket.Payload.CmdErrCtr++;
@@ -267,8 +272,11 @@ void SC_ProcessCommand(const CFE_SB_Buffer_t *BufPtr)
             break;
 
         default:
-            CFE_EVS_SendEvent(SC_CC_ERR_EID, CFE_EVS_EventType_ERROR, "Invalid Command Code: MID =  0x%08lX CC =  %d",
-                              (unsigned long)CFE_SB_MsgIdToValue(MessageID), CommandCode);
+            CFE_EVS_SendEvent(SC_CC_ERR_EID,
+                              CFE_EVS_EventType_ERROR,
+                              "Invalid Command Code: MID =  0x%08lX CC =  %d",
+                              (unsigned long)CFE_SB_MsgIdToValue(MessageID),
+                              CommandCode);
             SC_OperData.HkPacket.Payload.CmdErrCtr++;
             break;
     } /* end switch */

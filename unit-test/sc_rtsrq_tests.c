@@ -47,11 +47,11 @@ void SC_StartRtsCmd_Test_Nominal(void)
     SC_RtsEntryHeader_t *Entry;
     SC_RtsIndex_t        RtsIndex = SC_RTS_IDX_C(0);
     size_t               MsgSize;
-    SC_RtsInfoEntry_t *  RtsInfoPtr;
+    SC_RtsInfoEntry_t   *RtsInfoPtr;
 
     RtsInfoPtr = SC_GetRtsInfoObject(RtsIndex);
 
-    Entry          = (SC_RtsEntryHeader_t *)SC_GetRtsEntryAtOffset(RtsIndex, SC_ENTRY_OFFSET_FIRST);
+    Entry              = (SC_RtsEntryHeader_t *)SC_GetRtsEntryAtOffset(RtsIndex, SC_ENTRY_OFFSET_FIRST);
     Entry->WakeupCount = 0;
 
     UT_CmdBuf.StartRtsCmd.Payload.RtsNum = SC_RtsIndexToNum(RtsIndex);
@@ -88,14 +88,14 @@ void SC_StartRtsCmd_Test_StartRtsNoEvents(void)
     SC_RtsEntryHeader_t *Entry;
     SC_RtsIndex_t        RtsIndex;
     size_t               MsgSize;
-    SC_RtsInfoEntry_t *  RtsInfoPtr;
+    SC_RtsInfoEntry_t   *RtsInfoPtr;
 
     UT_CmdBuf.StartRtsCmd.Payload.RtsNum = SC_RTS_NUM_C(SC_NUMBER_OF_RTS);
 
     RtsIndex   = SC_RtsNumToIndex(UT_CmdBuf.StartRtsCmd.Payload.RtsNum);
     RtsInfoPtr = SC_GetRtsInfoObject(RtsIndex);
 
-    Entry          = (SC_RtsEntryHeader_t *)SC_GetRtsEntryAtOffset(RtsIndex, SC_ENTRY_OFFSET_FIRST);
+    Entry              = (SC_RtsEntryHeader_t *)SC_GetRtsEntryAtOffset(RtsIndex, SC_ENTRY_OFFSET_FIRST);
     Entry->WakeupCount = 0;
 
     RtsInfoPtr->DisabledFlag = false;
@@ -140,11 +140,11 @@ void SC_StartRtsCmd_Test_InvalidCommandLength1(void)
     SC_RtsEntryHeader_t *Entry;
     SC_RtsIndex_t        RtsIndex = SC_RTS_IDX_C(0);
     size_t               MsgSize;
-    SC_RtsInfoEntry_t *  RtsInfoPtr;
+    SC_RtsInfoEntry_t   *RtsInfoPtr;
 
     RtsInfoPtr = SC_GetRtsInfoObject(RtsIndex);
 
-    Entry          = (SC_RtsEntryHeader_t *)SC_GetRtsEntryAtOffset(RtsIndex, SC_ENTRY_OFFSET_FIRST);
+    Entry              = (SC_RtsEntryHeader_t *)SC_GetRtsEntryAtOffset(RtsIndex, SC_ENTRY_OFFSET_FIRST);
     Entry->WakeupCount = 0;
 
     UT_CmdBuf.StartRtsCmd.Payload.RtsNum = SC_RtsIndexToNum(RtsIndex);
@@ -171,11 +171,11 @@ void SC_StartRtsCmd_Test_InvalidCommandLength2(void)
     SC_RtsEntryHeader_t *Entry;
     SC_RtsIndex_t        RtsIndex = SC_RTS_IDX_C(0);
     size_t               MsgSize;
-    SC_RtsInfoEntry_t *  RtsInfoPtr;
+    SC_RtsInfoEntry_t   *RtsInfoPtr;
 
     RtsInfoPtr = SC_GetRtsInfoObject(RtsIndex);
 
-    Entry          = (SC_RtsEntryHeader_t *)SC_GetRtsEntryAtOffset(RtsIndex, SC_ENTRY_OFFSET_FIRST);
+    Entry              = (SC_RtsEntryHeader_t *)SC_GetRtsEntryAtOffset(RtsIndex, SC_ENTRY_OFFSET_FIRST);
     Entry->WakeupCount = 0;
 
     UT_CmdBuf.StartRtsCmd.Payload.RtsNum = SC_RtsIndexToNum(RtsIndex);
@@ -201,11 +201,11 @@ void SC_StartRtsCmd_Test_RtsNotLoadedOrInUse(void)
 {
     SC_RtsEntryHeader_t *Entry;
     SC_RtsIndex_t        RtsIndex = SC_RTS_IDX_C(0);
-    SC_RtsInfoEntry_t *  RtsInfoPtr;
+    SC_RtsInfoEntry_t   *RtsInfoPtr;
 
     RtsInfoPtr = SC_GetRtsInfoObject(RtsIndex);
 
-    Entry          = (SC_RtsEntryHeader_t *)SC_GetRtsEntryAtOffset(RtsIndex, SC_ENTRY_OFFSET_FIRST);
+    Entry              = (SC_RtsEntryHeader_t *)SC_GetRtsEntryAtOffset(RtsIndex, SC_ENTRY_OFFSET_FIRST);
     Entry->WakeupCount = 0;
 
     UT_CmdBuf.StartRtsCmd.Payload.RtsNum = SC_RtsIndexToNum(RtsIndex);
@@ -225,11 +225,11 @@ void SC_StartRtsCmd_Test_RtsDisabled(void)
 {
     SC_RtsEntryHeader_t *Entry;
     SC_RtsIndex_t        RtsIndex = SC_RTS_IDX_C(0);
-    SC_RtsInfoEntry_t *  RtsInfoPtr;
+    SC_RtsInfoEntry_t   *RtsInfoPtr;
 
     RtsInfoPtr = SC_GetRtsInfoObject(RtsIndex);
 
-    Entry          = (SC_RtsEntryHeader_t *)SC_GetRtsEntryAtOffset(RtsIndex, SC_ENTRY_OFFSET_FIRST);
+    Entry              = (SC_RtsEntryHeader_t *)SC_GetRtsEntryAtOffset(RtsIndex, SC_ENTRY_OFFSET_FIRST);
     Entry->WakeupCount = 0;
 
     UT_CmdBuf.StartRtsCmd.Payload.RtsNum = SC_RtsIndexToNum(RtsIndex);
@@ -633,8 +633,7 @@ void SC_DisableRtsCmd_Test_Nominal(void)
     UtAssert_True(RtsInfoPtr->DisabledFlag == true, "RtsInfoPtr->DisabledFlag == true");
     UtAssert_True(SC_OperData.HkPacket.Payload.CmdCtr == 1, "SC_OperData.HkPacket.Payload.CmdCtr == 1");
 
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID,
-                      SC_DISABLE_RTS_INF_EID);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_DISABLE_RTS_INF_EID);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
 }
 
@@ -802,8 +801,7 @@ void SC_EnableRtsCmd_Test_Nominal(void)
     UtAssert_True(RtsInfoPtr->DisabledFlag == false, "RtsInfoPtr->DisabledFlag == false");
     UtAssert_True(SC_OperData.HkPacket.Payload.CmdCtr == 1, "SC_OperData.HkPacket.Payload.CmdCtr == 1");
 
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID,
-                      SC_ENABLE_RTS_INF_EID);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_ENABLE_RTS_INF_EID);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
 }
 
@@ -987,7 +985,8 @@ void SC_KillRts_Test(void)
 
     /* Verify results */
     UtAssert_True(RtsInfoPtr->RtsStatus == SC_Status_LOADED, "RtsInfoPtr->RtsStatus == SC_Status_LOADED");
-    UtAssert_True(RtsInfoPtr->NextCommandTgtWakeup == SC_MAX_WAKEUP_CNT, "RtsInfoPtr->NextCommandTgtWakeup == SC_MAX_WAKEUP_CNT");
+    UtAssert_True(RtsInfoPtr->NextCommandTgtWakeup == SC_MAX_WAKEUP_CNT,
+                  "RtsInfoPtr->NextCommandTgtWakeup == SC_MAX_WAKEUP_CNT");
     UtAssert_True(SC_OperData.RtsCtrlBlckAddr->NumRtsActive == 0, "SC_OperData.RtsCtrlBlckAddr->NumRtsActive == 0");
 
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
@@ -1008,7 +1007,8 @@ void SC_KillRts_Test_NoActiveRts(void)
 
     /* Verify results */
     UtAssert_True(RtsInfoPtr->RtsStatus == SC_Status_LOADED, "RtsInfoPtr->RtsStatus == SC_Status_LOADED");
-    UtAssert_True(RtsInfoPtr->NextCommandTgtWakeup == SC_MAX_WAKEUP_CNT, "RtsInfoPtr->NextCommandTgtWakeup == SC_MAX_WAKEUP_CNT");
+    UtAssert_True(RtsInfoPtr->NextCommandTgtWakeup == SC_MAX_WAKEUP_CNT,
+                  "RtsInfoPtr->NextCommandTgtWakeup == SC_MAX_WAKEUP_CNT");
     UtAssert_True(SC_OperData.RtsCtrlBlckAddr->NumRtsActive == 0, "SC_OperData.RtsCtrlBlckAddr->NumRtsActive == 0");
 
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
@@ -1064,91 +1064,157 @@ void SC_AutoStartRts_Test_InvalidIdZero(void)
 void UtTest_Setup(void)
 {
     UtTest_Add(SC_StartRtsCmd_Test_Nominal, SC_Test_Setup, SC_Test_TearDown, "SC_StartRtsCmd_Test_Nominal");
-    UtTest_Add(SC_StartRtsCmd_Test_StartRtsNoEvents, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_StartRtsCmd_Test_StartRtsNoEvents,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_StartRtsCmd_Test_StartRtsNoEvents");
-    UtTest_Add(SC_StartRtsCmd_Test_InvalidCommandLength1, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_StartRtsCmd_Test_InvalidCommandLength1,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_StartRtsCmd_Test_InvalidCommandLength1");
-    UtTest_Add(SC_StartRtsCmd_Test_InvalidCommandLength2, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_StartRtsCmd_Test_InvalidCommandLength2,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_StartRtsCmd_Test_InvalidCommandLength2");
-    UtTest_Add(SC_StartRtsCmd_Test_RtsNotLoadedOrInUse, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_StartRtsCmd_Test_RtsNotLoadedOrInUse,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_StartRtsCmd_Test_RtsNotLoadedOrInUse");
     UtTest_Add(SC_StartRtsCmd_Test_RtsDisabled, SC_Test_Setup, SC_Test_TearDown, "SC_StartRtsCmd_Test_RtsDisabled");
     UtTest_Add(SC_StartRtsCmd_Test_InvalidRtsNum, SC_Test_Setup, SC_Test_TearDown, "SC_StartRtsCmd_Test_InvalidRtsNum");
 
-    UtTest_Add(SC_StartRtsCmd_Test_InvalidRtsNumZero, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_StartRtsCmd_Test_InvalidRtsNumZero,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_StartRtsCmd_Test_InvalidRtsNumZero");
     UtTest_Add(SC_StartRtsGrpCmd_Test_Nominal, SC_Test_Setup, SC_Test_TearDown, "SC_StartRtsGrpCmd_Test_Nominal");
-    UtTest_Add(SC_StartRtsGrpCmd_Test_StartRtsGroupError, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_StartRtsGrpCmd_Test_StartRtsGroupError,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_StartRtsGrpCmd_Test_StartRtsGroupError");
-    UtTest_Add(SC_StartRtsGrpCmd_Test_FirstRtsIndex, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_StartRtsGrpCmd_Test_FirstRtsIndex,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_StartRtsGrpCmd_Test_FirstRtsIndex");
-    UtTest_Add(SC_StartRtsGrpCmd_Test_FirstRtsIndexZero, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_StartRtsGrpCmd_Test_FirstRtsIndexZero,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_StartRtsGrpCmd_Test_FirstRtsIndexZero");
-    UtTest_Add(SC_StartRtsGrpCmd_Test_LastRtsIndex, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_StartRtsGrpCmd_Test_LastRtsIndex,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_StartRtsGrpCmd_Test_LastRtsIndex");
-    UtTest_Add(SC_StartRtsGrpCmd_Test_LastRtsIndexZero, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_StartRtsGrpCmd_Test_LastRtsIndexZero,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_StartRtsGrpCmd_Test_LastRtsIndexZero");
-    UtTest_Add(SC_StartRtsGrpCmd_Test_FirstLastRtsIndex, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_StartRtsGrpCmd_Test_FirstLastRtsIndex,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_StartRtsGrpCmd_Test_FirstLastRtsIndex");
-    UtTest_Add(SC_StartRtsGrpCmd_Test_DisabledFlag, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_StartRtsGrpCmd_Test_DisabledFlag,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_StartRtsGrpCmd_Test_DisabledFlag");
     UtTest_Add(SC_StartRtsGrpCmd_Test_RtsStatus, SC_Test_Setup, SC_Test_TearDown, "SC_StartRtsGrpCmd_Test_RtsStatus");
     UtTest_Add(SC_StopRtsCmd_Test_Nominal, SC_Test_Setup, SC_Test_TearDown, "SC_StopRtsCmd_Test_Nominal");
     UtTest_Add(SC_StopRtsCmd_Test_InvalidRts, SC_Test_Setup, SC_Test_TearDown, "SC_StopRtsCmd_Test_InvalidRts");
     UtTest_Add(SC_StopRtsGrpCmd_Test_Nominal, SC_Test_Setup, SC_Test_TearDown, "SC_StopRtsGrpCmd_Test_Nominal");
     UtTest_Add(SC_StopRtsGrpCmd_Test_Error, SC_Test_Setup, SC_Test_TearDown, "SC_StopRtsGrpCmd_Test_Error");
-    UtTest_Add(SC_StopRtsGrpCmd_Test_NotExecuting, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_StopRtsGrpCmd_Test_NotExecuting,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_StopRtsGrpCmd_Test_NotExecuting");
-    UtTest_Add(SC_StopRtsGrpCmd_Test_FirstRtsIndex, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_StopRtsGrpCmd_Test_FirstRtsIndex,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_StopRtsGrpCmd_Test_FirstRtsIndex");
-    UtTest_Add(SC_StopRtsGrpCmd_Test_FirstRtsIndexZero, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_StopRtsGrpCmd_Test_FirstRtsIndexZero,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_StopRtsGrpCmd_Test_FirstRtsIndexZero");
-    UtTest_Add(SC_StopRtsGrpCmd_Test_LastRtsIndex, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_StopRtsGrpCmd_Test_LastRtsIndex,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_StopRtsGrpCmd_Test_LastRtsIndex");
-    UtTest_Add(SC_StopRtsGrpCmd_Test_LastRtsIndexZero, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_StopRtsGrpCmd_Test_LastRtsIndexZero,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_StopRtsGrpCmd_Test_LastRtsIndexZero");
-    UtTest_Add(SC_StopRtsGrpCmd_Test_FirstLastRtsIndex, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_StopRtsGrpCmd_Test_FirstLastRtsIndex,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_StopRtsGrpCmd_Test_FirstLastRtsIndex");
     UtTest_Add(SC_DisableRtsCmd_Test_Nominal, SC_Test_Setup, SC_Test_TearDown, "SC_DisableRtsCmd_Test_Nominal");
-    UtTest_Add(SC_DisableRtsCmd_Test_InvalidRtsID, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_DisableRtsCmd_Test_InvalidRtsID,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_DisableRtsCmd_Test_InvalidRtsID");
     UtTest_Add(SC_DisableRtsGrpCmd_Test_Nominal, SC_Test_Setup, SC_Test_TearDown, "SC_DisableRtsGrpCmd_Test_Nominal");
     UtTest_Add(SC_DisableRtsGrpCmd_Test_Error, SC_Test_Setup, SC_Test_TearDown, "SC_DisableRtsGrpCmd_Test_Error");
-    UtTest_Add(SC_DisableRtsGrpCmd_Test_FirstRtsIndex, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_DisableRtsGrpCmd_Test_FirstRtsIndex,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_DisableRtsGrpCmd_Test_FirstRtsIndex");
-    UtTest_Add(SC_DisableRtsGrpCmd_Test_FirstRtsIndexZero, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_DisableRtsGrpCmd_Test_FirstRtsIndexZero,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_DisableRtsGrpCmd_Test_FirstRtsIndexZero");
-    UtTest_Add(SC_DisableRtsGrpCmd_Test_LastRtsIndex, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_DisableRtsGrpCmd_Test_LastRtsIndex,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_DisableRtsGrpCmd_Test_LastRtsIndex");
-    UtTest_Add(SC_DisableRtsGrpCmd_Test_LastRtsIndexZero, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_DisableRtsGrpCmd_Test_LastRtsIndexZero,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_DisableRtsGrpCmd_Test_LastRtsIndexZero");
-    UtTest_Add(SC_DisableRtsGrpCmd_Test_FirstLastRtsIndex, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_DisableRtsGrpCmd_Test_FirstLastRtsIndex,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_DisableRtsGrpCmd_Test_FirstLastRtsIndex");
-    UtTest_Add(SC_DisableRtsGrpCmd_Test_DisabledFlag, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_DisableRtsGrpCmd_Test_DisabledFlag,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_DisableRtsGrpCmd_Test_DisabledFlag");
     UtTest_Add(SC_EnableRtsCmd_Test_Nominal, SC_Test_Setup, SC_Test_TearDown, "SC_EnableRtsCmd_Test_Nominal");
     UtTest_Add(SC_EnableRtsCmd_Test_InvalidRtsID, SC_Test_Setup, SC_Test_TearDown, "SC_EnableRtsCmd_Test_InvalidRtsID");
-    UtTest_Add(SC_EnableRtsCmd_Test_InvalidRtsIDZero, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_EnableRtsCmd_Test_InvalidRtsIDZero,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_EnableRtsCmd_Test_InvalidRtsIDZero");
     UtTest_Add(SC_EnableRtsGrpCmd_Test_Nominal, SC_Test_Setup, SC_Test_TearDown, "SC_EnableRtsGrpCmd_Test_Nominal");
     UtTest_Add(SC_EnableRtsGrpCmd_Test_Error, SC_Test_Setup, SC_Test_TearDown, "SC_EnableRtsGrpCmd_Test_Error");
-    UtTest_Add(SC_EnableRtsGrpCmd_Test_FirstRtsIndex, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_EnableRtsGrpCmd_Test_FirstRtsIndex,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_EnableRtsGrpCmd_Test_FirstRtsIndex");
-    UtTest_Add(SC_EnableRtsGrpCmd_Test_FirstRtsIndexZero, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_EnableRtsGrpCmd_Test_FirstRtsIndexZero,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_EnableRtsGrpCmd_Test_FirstRtsIndexZero");
-    UtTest_Add(SC_EnableRtsGrpCmd_Test_LastRtsIndex, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_EnableRtsGrpCmd_Test_LastRtsIndex,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_EnableRtsGrpCmd_Test_LastRtsIndex");
-    UtTest_Add(SC_EnableRtsGrpCmd_Test_LastRtsIndexZero, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_EnableRtsGrpCmd_Test_LastRtsIndexZero,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_EnableRtsGrpCmd_Test_LastRtsIndexZero");
-    UtTest_Add(SC_EnableRtsGrpCmd_Test_FirstLastRtsIndex, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_EnableRtsGrpCmd_Test_FirstLastRtsIndex,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_EnableRtsGrpCmd_Test_FirstLastRtsIndex");
-    UtTest_Add(SC_EnableRtsGrpCmd_Test_DisabledFlag, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_EnableRtsGrpCmd_Test_DisabledFlag,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_EnableRtsGrpCmd_Test_DisabledFlag");
     UtTest_Add(SC_KillRts_Test, SC_Test_Setup, SC_Test_TearDown, "SC_KillRts_Test");
     UtTest_Add(SC_KillRts_Test_NoActiveRts, SC_Test_Setup, SC_Test_TearDown, "SC_KillRts_Test_NoActiveRts");
     UtTest_Add(SC_KillRts_Test_InvalidIndex, SC_Test_Setup, SC_Test_TearDown, "SC_KillRts_Test_InvalidIndex");
     UtTest_Add(SC_AutoStartRts_Test_Nominal, SC_Test_Setup, SC_Test_TearDown, "SC_AutoStartRts_Test_Nominal");
     UtTest_Add(SC_AutoStartRts_Test_InvalidId, SC_Test_Setup, SC_Test_TearDown, "SC_AutoStartRts_Test_InvalidId");
-    UtTest_Add(SC_AutoStartRts_Test_InvalidIdZero, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_AutoStartRts_Test_InvalidIdZero,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_AutoStartRts_Test_InvalidIdZero");
 }

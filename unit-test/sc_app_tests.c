@@ -91,7 +91,6 @@ void SC_AppMain_Test_Nominal(void)
 
 void SC_AppMain_Test_AppInitError(void)
 {
-
     /* Set CFE_EVS_Register to return -1 in order to make SC_AppInit return -1, in order to reach "RunStatus =
      * CFE_ES_APP_ERROR" */
     UT_SetDeferredRetcode(UT_KEY(CFE_EVS_Register), 1, -1);
@@ -169,19 +168,33 @@ void SC_AppInit_Test_NominalPowerOnReset(void)
     Expected_SC_OperData.HkPacket.Payload.ContinueAtsOnFailureFlag = SC_AtsCont_TRUE;
 
     UtAssert_MemCmp(&SC_OperData.CmdPipe, &Expected_SC_OperData.CmdPipe, sizeof(Expected_SC_OperData.CmdPipe), "2");
-    UtAssert_MemCmp(&SC_OperData.AtsInfoHandle, &Expected_SC_OperData.AtsInfoHandle,
-                    sizeof(Expected_SC_OperData.AtsInfoHandle), "AtsInfoHandle");
-    UtAssert_MemCmp(&SC_OperData.RtsInfoHandle, &Expected_SC_OperData.RtsInfoHandle,
-                    sizeof(Expected_SC_OperData.RtsInfoHandle), "13");
-    UtAssert_MemCmp(&SC_OperData.RtsCtrlBlckHandle, &Expected_SC_OperData.RtsCtrlBlckHandle,
-                    sizeof(Expected_SC_OperData.RtsCtrlBlckHandle), "RtsCtrlBlckHandle");
-    UtAssert_MemCmp(&SC_OperData.AtsCtrlBlckHandle, &Expected_SC_OperData.AtsCtrlBlckHandle,
-                    sizeof(Expected_SC_OperData.AtsCtrlBlckHandle), "AtsCtrlBlckHandle");
-    UtAssert_MemCmp(&SC_OperData.AtsCmdStatusHandle, &Expected_SC_OperData.AtsCmdStatusHandle,
-                    sizeof(Expected_SC_OperData.AtsCmdStatusHandle), "AtsCmdStatusHandle");
-    UtAssert_MemCmp(&SC_OperData.AtsDupTestArray, &Expected_SC_OperData.AtsDupTestArray,
-                    sizeof(Expected_SC_OperData.AtsDupTestArray), "21");
-    UtAssert_MemCmp(&SC_OperData.NumCmdsWakeup, &Expected_SC_OperData.NumCmdsWakeup, sizeof(Expected_SC_OperData.NumCmdsWakeup),
+    UtAssert_MemCmp(&SC_OperData.AtsInfoHandle,
+                    &Expected_SC_OperData.AtsInfoHandle,
+                    sizeof(Expected_SC_OperData.AtsInfoHandle),
+                    "AtsInfoHandle");
+    UtAssert_MemCmp(&SC_OperData.RtsInfoHandle,
+                    &Expected_SC_OperData.RtsInfoHandle,
+                    sizeof(Expected_SC_OperData.RtsInfoHandle),
+                    "13");
+    UtAssert_MemCmp(&SC_OperData.RtsCtrlBlckHandle,
+                    &Expected_SC_OperData.RtsCtrlBlckHandle,
+                    sizeof(Expected_SC_OperData.RtsCtrlBlckHandle),
+                    "RtsCtrlBlckHandle");
+    UtAssert_MemCmp(&SC_OperData.AtsCtrlBlckHandle,
+                    &Expected_SC_OperData.AtsCtrlBlckHandle,
+                    sizeof(Expected_SC_OperData.AtsCtrlBlckHandle),
+                    "AtsCtrlBlckHandle");
+    UtAssert_MemCmp(&SC_OperData.AtsCmdStatusHandle,
+                    &Expected_SC_OperData.AtsCmdStatusHandle,
+                    sizeof(Expected_SC_OperData.AtsCmdStatusHandle),
+                    "AtsCmdStatusHandle");
+    UtAssert_MemCmp(&SC_OperData.AtsDupTestArray,
+                    &Expected_SC_OperData.AtsDupTestArray,
+                    sizeof(Expected_SC_OperData.AtsDupTestArray),
+                    "21");
+    UtAssert_MemCmp(&SC_OperData.NumCmdsWakeup,
+                    &Expected_SC_OperData.NumCmdsWakeup,
+                    sizeof(Expected_SC_OperData.NumCmdsWakeup),
                     "22");
     UtAssert_MemCmp(&SC_OperData.HkPacket, &Expected_SC_OperData.HkPacket, sizeof(Expected_SC_OperData.HkPacket), "23");
 
@@ -232,19 +245,33 @@ void SC_AppInit_Test_Nominal(void)
     memset(&Expected_SC_OperData.AtsCmdStatusHandle, 0, sizeof(Expected_SC_OperData.AtsCmdStatusHandle));
 
     UtAssert_MemCmp(&SC_OperData.CmdPipe, &Expected_SC_OperData.CmdPipe, sizeof(Expected_SC_OperData.CmdPipe), "2");
-    UtAssert_MemCmp(&SC_OperData.AtsInfoHandle, &Expected_SC_OperData.AtsInfoHandle,
-                    sizeof(Expected_SC_OperData.AtsInfoHandle), "AtsInfoHandle");
-    UtAssert_MemCmp(&SC_OperData.RtsInfoHandle, &Expected_SC_OperData.RtsInfoHandle,
-                    sizeof(Expected_SC_OperData.RtsInfoHandle), "13");
-    UtAssert_MemCmp(&SC_OperData.RtsCtrlBlckHandle, &Expected_SC_OperData.RtsCtrlBlckHandle,
-                    sizeof(Expected_SC_OperData.RtsCtrlBlckHandle), "RtsCtrlBlckHandle");
-    UtAssert_MemCmp(&SC_OperData.AtsCtrlBlckHandle, &Expected_SC_OperData.AtsCtrlBlckHandle,
-                    sizeof(Expected_SC_OperData.AtsCtrlBlckHandle), "AtsCtrlBlckHandle");
-    UtAssert_MemCmp(&SC_OperData.AtsCmdStatusHandle, &Expected_SC_OperData.AtsCmdStatusHandle,
-                    sizeof(Expected_SC_OperData.AtsCmdStatusHandle), "AtsCmdStatusHandle");
-    UtAssert_MemCmp(&SC_OperData.AtsDupTestArray, &Expected_SC_OperData.AtsDupTestArray,
-                    sizeof(Expected_SC_OperData.AtsDupTestArray), "21");
-    UtAssert_MemCmp(&SC_OperData.NumCmdsWakeup, &Expected_SC_OperData.NumCmdsWakeup, sizeof(Expected_SC_OperData.NumCmdsWakeup),
+    UtAssert_MemCmp(&SC_OperData.AtsInfoHandle,
+                    &Expected_SC_OperData.AtsInfoHandle,
+                    sizeof(Expected_SC_OperData.AtsInfoHandle),
+                    "AtsInfoHandle");
+    UtAssert_MemCmp(&SC_OperData.RtsInfoHandle,
+                    &Expected_SC_OperData.RtsInfoHandle,
+                    sizeof(Expected_SC_OperData.RtsInfoHandle),
+                    "13");
+    UtAssert_MemCmp(&SC_OperData.RtsCtrlBlckHandle,
+                    &Expected_SC_OperData.RtsCtrlBlckHandle,
+                    sizeof(Expected_SC_OperData.RtsCtrlBlckHandle),
+                    "RtsCtrlBlckHandle");
+    UtAssert_MemCmp(&SC_OperData.AtsCtrlBlckHandle,
+                    &Expected_SC_OperData.AtsCtrlBlckHandle,
+                    sizeof(Expected_SC_OperData.AtsCtrlBlckHandle),
+                    "AtsCtrlBlckHandle");
+    UtAssert_MemCmp(&SC_OperData.AtsCmdStatusHandle,
+                    &Expected_SC_OperData.AtsCmdStatusHandle,
+                    sizeof(Expected_SC_OperData.AtsCmdStatusHandle),
+                    "AtsCmdStatusHandle");
+    UtAssert_MemCmp(&SC_OperData.AtsDupTestArray,
+                    &Expected_SC_OperData.AtsDupTestArray,
+                    sizeof(Expected_SC_OperData.AtsDupTestArray),
+                    "21");
+    UtAssert_MemCmp(&SC_OperData.NumCmdsWakeup,
+                    &Expected_SC_OperData.NumCmdsWakeup,
+                    sizeof(Expected_SC_OperData.NumCmdsWakeup),
                     "22");
     UtAssert_MemCmp(&SC_OperData.HkPacket, &Expected_SC_OperData.HkPacket, sizeof(Expected_SC_OperData.HkPacket), "23");
 
@@ -543,7 +570,6 @@ void SC_GetDumpTablePointers_Test_Nominal(void)
 
 void SC_GetDumpTablePointers_Test_ErrorGetAddressRTSInformation(void)
 {
-
     /* Need to set CFE_TBL_GetAddress to return -1 on 1st call (to generate error message
      * SC_GET_ADDRESS_RTS_INFO_ERR_EID) and CFE_SUCCESS on all other calls.
      */
@@ -691,65 +717,119 @@ void UtTest_Setup(void)
     UtTest_Add(SC_AppMain_Test_Nominal, SC_Test_Setup, SC_Test_TearDown, "SC_AppMain_Test_Nominal");
     UtTest_Add(SC_AppMain_Test_AppInitError, SC_Test_Setup, SC_Test_TearDown, "SC_AppMain_Test_AppInitError");
     UtTest_Add(SC_AppMain_Test_RcvMsgError, SC_Test_Setup, SC_Test_TearDown, "SC_AppMain_Test_RcvMsgError");
-    UtTest_Add(SC_AppInit_Test_NominalPowerOnReset, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_AppInit_Test_NominalPowerOnReset,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_AppInit_Test_NominalPowerOnReset");
     UtTest_Add(SC_AppInit_Test_Nominal, SC_Test_Setup, SC_Test_TearDown, "SC_AppInit_Test_Nominal");
     UtTest_Add(SC_AppInit_Test_EVSRegisterError, SC_Test_Setup, SC_Test_TearDown, "SC_AppInit_Test_EVSRegisterError");
     UtTest_Add(SC_AppInit_Test_SBCreatePipeError, SC_Test_Setup, SC_Test_TearDown, "SC_AppInit_Test_SBCreatePipeError");
-    UtTest_Add(SC_AppInit_Test_SBSubscribeHKError, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_AppInit_Test_SBSubscribeHKError,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_AppInit_Test_SBSubscribeHKError");
-    UtTest_Add(SC_AppInit_Test_SBSubscribeToCmdError, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_AppInit_Test_SBSubscribeToCmdError,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_AppInit_Test_SBSubscribeToCmdError");
-    UtTest_Add(SC_AppInit_Test_SubscribeToWakeupError, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_AppInit_Test_SubscribeToWakeupError,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_AppInit_Test_SubscribeToWakeupError");
     UtTest_Add(SC_AppInit_Test_InitTablesError, SC_Test_Setup, SC_Test_TearDown, "SC_AppInit_Test_InitTablesError");
     UtTest_Add(SC_InitTables_Test_Nominal, SC_Test_Setup, SC_Test_TearDown, "SC_InitTables_Test_Nominal");
-    UtTest_Add(SC_InitTables_Test_ErrorRegisterAllTables, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_InitTables_Test_ErrorRegisterAllTables,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_InitTables_Test_ErrorRegisterAllTables");
-    UtTest_Add(SC_InitTables_Test_ErrorGetDumpTablePointers, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_InitTables_Test_ErrorGetDumpTablePointers,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_InitTables_Test_ErrorGetDumpTablePointers");
-    UtTest_Add(SC_InitTables_Test_ErrorGetLoadTablePointers, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_InitTables_Test_ErrorGetLoadTablePointers,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_InitTables_Test_ErrorGetLoadTablePointers");
     UtTest_Add(SC_RegisterAllTables_Test_Nominal, SC_Test_Setup, SC_Test_TearDown, "SC_RegisterAllTables_Test_Nominal");
-    UtTest_Add(SC_RegisterAllTables_Test_ErrorRegisterRTSInformation, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_RegisterAllTables_Test_ErrorRegisterRTSInformation,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_RegisterAllTables_Test_ErrorRegisterRTSInformation");
-    UtTest_Add(SC_RegisterAllTables_Test_ErrorRegisterRTPControl, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_RegisterAllTables_Test_ErrorRegisterRTPControl,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_RegisterAllTables_Test_ErrorRegisterRTPControl");
-    UtTest_Add(SC_RegisterAllTables_Test_ErrorRegisterATSInformation, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_RegisterAllTables_Test_ErrorRegisterATSInformation,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_RegisterAllTables_Test_ErrorRegisterATSInformation");
-    UtTest_Add(SC_RegisterAllTables_Test_ErrorRegisterATPControl, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_RegisterAllTables_Test_ErrorRegisterATPControl,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_RegisterAllTables_Test_ErrorRegisterATPControl");
-    UtTest_Add(SC_RegisterAllTables_Test_ErrorRegisterATSCommandStatus, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_RegisterAllTables_Test_ErrorRegisterATSCommandStatus,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_RegisterAllTables_Test_ErrorRegisterATSCommandStatus");
-    UtTest_Add(SC_RegisterAllTables_Test_ErrorRegisterLoadableRTS, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_RegisterAllTables_Test_ErrorRegisterLoadableRTS,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_RegisterAllTables_Test_ErrorRegisterLoadableRTS");
-    UtTest_Add(SC_RegisterAllTables_Test_ErrorRegisterLoadableATS, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_RegisterAllTables_Test_ErrorRegisterLoadableATS,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_RegisterAllTables_Test_ErrorRegisterLoadableATS");
-    UtTest_Add(SC_RegisterAllTables_Test_ErrorRegisterLoadableAppendATS, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_RegisterAllTables_Test_ErrorRegisterLoadableAppendATS,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_RegisterAllTables_Test_ErrorRegisterLoadableAppendATS");
-    UtTest_Add(SC_RegisterDumpOnlyTables_Test_Nominal, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_RegisterDumpOnlyTables_Test_Nominal,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_RegisterDumpOnlyTables_Test_Nominal");
-    UtTest_Add(SC_RegisterLoadableTables_Test_Nominal, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_RegisterLoadableTables_Test_Nominal,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_RegisterLoadableTables_Test_Nominal");
-    UtTest_Add(SC_GetDumpTablePointers_Test_Nominal, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_GetDumpTablePointers_Test_Nominal,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_GetDumpTablePointers_Test_Nominal");
-    UtTest_Add(SC_GetDumpTablePointers_Test_ErrorGetAddressRTSInformation, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_GetDumpTablePointers_Test_ErrorGetAddressRTSInformation,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_GetDumpTablePointers_Test_ErrorGetAddressRTSInformation");
-    UtTest_Add(SC_GetDumpTablePointers_Test_ErrorGetAddressRTPControl, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_GetDumpTablePointers_Test_ErrorGetAddressRTPControl,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_GetDumpTablePointers_Test_ErrorGetAddressRTPControl");
-    UtTest_Add(SC_GetDumpTablePointers_Test_ErrorGetAddressATSInformation, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_GetDumpTablePointers_Test_ErrorGetAddressATSInformation,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_GetDumpTablePointers_Test_ErrorGetAddressATSInformation");
-    UtTest_Add(SC_GetDumpTablePointers_Test_ErrorGetAddressATPControl, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_GetDumpTablePointers_Test_ErrorGetAddressATPControl,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_GetDumpTablePointers_Test_ErrorGetAddressATPControl");
-    UtTest_Add(SC_GetDumpTablePointers_Test_ErrorGetAddressATSCommandStatus, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_GetDumpTablePointers_Test_ErrorGetAddressATSCommandStatus,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_GetDumpTablePointers_Test_ErrorGetAddressATSCommandStatus");
-    UtTest_Add(SC_GetLoadTablePointers_Test_Nominal, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_GetLoadTablePointers_Test_Nominal,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_GetLoadTablePointers_Test_Nominal");
-    UtTest_Add(SC_GetLoadTablePointers_Test_ErrorGetAddressLoadableATS, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_GetLoadTablePointers_Test_ErrorGetAddressLoadableATS,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_GetLoadTablePointers_Test_ErrorGetAddressLoadableATS");
-    UtTest_Add(SC_GetLoadTablePointers_Test_ErrorGetAddressLoadableATSAppend, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_GetLoadTablePointers_Test_ErrorGetAddressLoadableATSAppend,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_GetLoadTablePointers_Test_ErrorGetAddressLoadableATSAppend");
-    UtTest_Add(SC_GetLoadTablePointers_Test_ErrorGetAddressLoadableRTS, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_GetLoadTablePointers_Test_ErrorGetAddressLoadableRTS,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_GetLoadTablePointers_Test_ErrorGetAddressLoadableRTS");
     UtTest_Add(SC_LoadDefaultTables_Test, SC_Test_Setup, SC_Test_TearDown, "SC_LoadDefaultTables_Test");
 }

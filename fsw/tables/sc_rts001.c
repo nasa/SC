@@ -78,17 +78,18 @@ typedef union
 SC_RtsTable001_t SC_Rts001 = {
     /* 1 */
     .rts.hdr1.WakeupCount = 0,
-    .rts.cmd1             = {CFE_MSG_CMD_HDR_INIT(SC_CMD_MID, SC_MEMBER_SIZE(cmd1), SC_NOOP_CC, SC_NOOP_CKSUM)},
+    .rts.cmd1             = { CFE_MSG_CMD_HDR_INIT(SC_CMD_MID, SC_MEMBER_SIZE(cmd1), SC_NOOP_CC, SC_NOOP_CKSUM) },
 
     /* 2 */
     .rts.hdr2.WakeupCount = 5,
-    .rts.cmd2 = {CFE_MSG_CMD_HDR_INIT(SC_CMD_MID, SC_MEMBER_SIZE(cmd2), SC_ENABLE_RTS_CC, SC_ENABLE_RTS2_CKSUM)},
+    .rts.cmd2 = { CFE_MSG_CMD_HDR_INIT(SC_CMD_MID, SC_MEMBER_SIZE(cmd2), SC_ENABLE_RTS_CC, SC_ENABLE_RTS2_CKSUM) },
     .rts.cmd2.Payload.RtsNum = SC_RTS_NUM_INITIALIZER(2),
 
     /* 3 */
     .rts.hdr3.WakeupCount = 5,
-    .rts.cmd3 = {CFE_MSG_CMD_HDR_INIT(SC_CMD_MID, SC_MEMBER_SIZE(cmd3), SC_START_RTS_CC, SC_START_RTS2_CKSUM)},
-    .rts.cmd3.Payload.RtsNum = SC_RTS_NUM_INITIALIZER(2)};
+    .rts.cmd3 = { CFE_MSG_CMD_HDR_INIT(SC_CMD_MID, SC_MEMBER_SIZE(cmd3), SC_START_RTS_CC, SC_START_RTS2_CKSUM) },
+    .rts.cmd3.Payload.RtsNum = SC_RTS_NUM_INITIALIZER(2)
+};
 
 /* Macro for table structure */
 CFE_TBL_FILEDEF(SC_Rts001, SC.RTS_TBL001, SC Example RTS_TBL001, sc_rts001.tbl)

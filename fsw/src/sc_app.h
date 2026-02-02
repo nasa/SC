@@ -218,7 +218,7 @@ void SC_RegisterManageCmds(void);
 
 #define SC_DUP_TEST_UNUSED -1 /**< \brief Unused marking for duplicate test */
 
-#define SC_INVALID_CMD_NUMBER ((SC_CommandNum_t) {0}) /**< \brief Invalid command number */
+#define SC_INVALID_CMD_NUMBER ((SC_CommandNum_t) { 0 }) /**< \brief Invalid command number */
 
 #define SC_ROUND_UP_BYTES 3 /**< \brief Round up to word length (in bytes) */
 
@@ -245,13 +245,13 @@ typedef struct
     CFE_SB_PipeId_t CmdPipe; /**< \brief Command pipe ID */
 
     CFE_TBL_Handle_t AtsTblHandle[SC_NUMBER_OF_ATS]; /**< \brief Table handles for all ATS tables    */
-    uint32 *         AtsTblAddr[SC_NUMBER_OF_ATS];   /**< \brief Table Addresses for all ATS tables  */
+    uint32          *AtsTblAddr[SC_NUMBER_OF_ATS];   /**< \brief Table Addresses for all ATS tables  */
 
     CFE_TBL_Handle_t AppendTblHandle; /**< \brief Table handle for Append ATS table   */
-    uint32 *         AppendTblAddr;   /**< \brief Table Address for Append ATS table  */
+    uint32          *AppendTblAddr;   /**< \brief Table Address for Append ATS table  */
 
     CFE_TBL_Handle_t RtsTblHandle[SC_NUMBER_OF_RTS]; /**< \brief Table handles for all RTS tables    */
-    uint32 *         RtsTblAddr[SC_NUMBER_OF_RTS];   /**< \brief Table addresses for all RTS tables  */
+    uint32          *RtsTblAddr[SC_NUMBER_OF_RTS];   /**< \brief Table addresses for all RTS tables  */
 
     CFE_TBL_Handle_t   AtsInfoHandle;  /**< \brief Table handle the for ATS Info Table */
     SC_AtsInfoTable_t *AtsInfoTblAddr; /**< \brief Table address for the ATS Info Table*/
