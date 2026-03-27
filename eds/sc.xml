@@ -187,7 +187,7 @@
       <ContainerDataType name="ContinueAtsOnFailureCmd_Payload" shortDescription="Continue ATS on failure command Payload">
         <EntryList>
           <Entry type="AtsCont" name="ContinueState" shortDescription="true or false, to continue ATS after a failure" />
-          <PaddingEntry sizeInBits="16" />
+          <PaddingEntry sizeInBits="24" />
         </EntryList>
       </ContainerDataType>
       <ContainerDataType name="AppendAtsCmd_Payload" shortDescription="Append to ATS Command Payload">
