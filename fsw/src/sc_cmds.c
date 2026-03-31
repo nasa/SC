@@ -457,15 +457,19 @@ void SC_SendHkPacket(void)
      ** Fill out the RTS status bit mask
      ** First clear out the status mask
      */
-    memset(SC_OperData.HkPacket.Payload.RtsExecutingStatus, 0, sizeof(SC_OperData.HkPacket.Payload.RtsExecutingStatus));
-    memset(SC_OperData.HkPacket.Payload.RtsDisabledStatus, 0, sizeof(SC_OperData.HkPacket.Payload.RtsDisabledStatus));
+    memset(SC_OperData.HkPacket.Payload.RtsExecutingStatusBits,
+           0,
+           sizeof(SC_OperData.HkPacket.Payload.RtsExecutingStatusBits));
+    memset(SC_OperData.HkPacket.Payload.RtsDisabledStatusBits,
+           0,
+           sizeof(SC_OperData.HkPacket.Payload.RtsDisabledStatusBits));
 
     for (i = 0; i < SC_NUMBER_OF_RTS; i++)
     {
         RtsInfoPtr = SC_GetRtsInfoObject(SC_RTS_IDX_C(i));
 
-        SC_SET_HKTLM_RTS_MASK(SC_OperData.HkPacket.Payload.RtsDisabledStatus, i, RtsInfoPtr->DisabledFlag);
-        SC_SET_HKTLM_RTS_MASK(SC_OperData.HkPacket.Payload.RtsExecutingStatus,
+        SC_SET_HKTLM_RTS_MASK(SC_OperData.HkPacket.Payload.RtsDisabledStatusBits, i, RtsInfoPtr->DisabledFlag);
+        SC_SET_HKTLM_RTS_MASK(SC_OperData.HkPacket.Payload.RtsExecutingStatusBits,
                               i,
                               (RtsInfoPtr->RtsStatus == SC_Status_EXECUTING));
     } /* end for */
