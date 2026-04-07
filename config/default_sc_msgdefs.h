@@ -229,7 +229,7 @@ typedef struct
 typedef struct
 {
     SC_AtsCont_Enum_t ContinueState; /**< \brief true or false, to continue ATS after a failure  */
-    uint16            Padding;       /**< \brief Structure Padding */
+    uint8             Padding[3];    /**< \brief Structure Padding */
 } SC_SetContinueAtsOnFailureCmd_Payload_t;
 
 /**

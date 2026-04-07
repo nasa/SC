@@ -923,89 +923,169 @@ void UtTest_Setup(void)
 {
     UtTest_Add(SC_VerifyCmdLength_Test_Nominal, SC_Test_Setup, SC_Test_TearDown, "SC_VerifyCmdLength_Test_Nominal");
     UtTest_Add(SC_VerifyCmdLength_Test_LenError, SC_Test_Setup, SC_Test_TearDown, "SC_VerifyCmdLength_Test_LenError");
-    UtTest_Add(SC_VerifyCmdLength_Test_LenErrorNotMID, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_VerifyCmdLength_Test_LenErrorNotMID,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_VerifyCmdLength_Test_LenErrorNotMID");
 
     UtTest_Add(SC_ProcessRequest_Test_CmdNominal, SC_Test_Setup, SC_Test_TearDown, "SC_ProcessRequest_Test_CmdNominal");
-    UtTest_Add(SC_ProcessRequest_Test_SendHkNominal, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_ProcessRequest_Test_SendHkNominal,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_ProcessRequest_Test_SendHkNominal");
-    UtTest_Add(SC_ProcessRequest_Test_SendHkCmdInvalidLength, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_ProcessRequest_Test_SendHkCmdInvalidLength,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_ProcessRequest_Test_SendHkCmdInvalidLength");
-    UtTest_Add(SC_ProcessRequest_Test_WakeupCmdInvalidLength, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_ProcessRequest_Test_WakeupCmdInvalidLength,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_ProcessRequest_Test_WakeupCmdInvalidLength");
-    UtTest_Add(SC_ProcessRequest_Test_WakeupNominal, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_ProcessRequest_Test_WakeupNominal,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_ProcessRequest_Test_WakeupNominal");
     UtTest_Add(SC_ProcessRequest_Test_MIDError, SC_Test_Setup, SC_Test_TearDown, "SC_ProcessRequest_Test_MIDError");
 
-    UtTest_Add(SC_ProcessCommand_Test_NoopCmdNominal, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_ProcessCommand_Test_NoopCmdNominal,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_ProcessCommand_Test_NoopCmdNominal");
-    UtTest_Add(SC_ProcessCommand_Test_ResetCounterCmdNominal, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_ProcessCommand_Test_ResetCounterCmdNominal,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_ProcessCommand_Test_ResetCounterCmdNominal");
-    UtTest_Add(SC_ProcessCommand_Test_StartAtsCmdNominal, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_ProcessCommand_Test_StartAtsCmdNominal,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_ProcessCommand_Test_StartAtsCmdNominal");
-    UtTest_Add(SC_ProcessCommand_Test_StopAtsCmdNominal, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_ProcessCommand_Test_StopAtsCmdNominal,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_ProcessCommand_Test_StopAtsCmdNominal");
-    UtTest_Add(SC_ProcessCommand_Test_StartRtsCmdNominal, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_ProcessCommand_Test_StartRtsCmdNominal,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_ProcessCommand_Test_StartRtsCmdNominal");
-    UtTest_Add(SC_ProcessCommand_Test_StopRtsCmdNominal, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_ProcessCommand_Test_StopRtsCmdNominal,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_ProcessCommand_Test_StopRtsCmdNominal");
-    UtTest_Add(SC_ProcessCommand_Test_DisableRtsCmdNominal, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_ProcessCommand_Test_DisableRtsCmdNominal,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_ProcessCommand_Test_DisableRtsCmdNominal");
-    UtTest_Add(SC_ProcessCommand_Test_EnableRtsCmdNominal, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_ProcessCommand_Test_EnableRtsCmdNominal,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_ProcessCommand_Test_EnableRtsCmdNominal");
-    UtTest_Add(SC_ProcessCommand_Test_SwitchAtsCmdNominal, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_ProcessCommand_Test_SwitchAtsCmdNominal,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_ProcessCommand_Test_SwitchAtsCmdNominal");
-    UtTest_Add(SC_ProcessCommand_Test_JumpAtsCmdNominal, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_ProcessCommand_Test_JumpAtsCmdNominal,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_ProcessCommand_Test_JumpAtsCmdNominal");
-    UtTest_Add(SC_ProcessCommand_Test_ContinueAtsOnFailureCmdNominal, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_ProcessCommand_Test_ContinueAtsOnFailureCmdNominal,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_ProcessCommand_Test_ContinueAtsOnFailureCmdNominal");
-    UtTest_Add(SC_ProcessCommand_Test_AppendAtsCmdNominal, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_ProcessCommand_Test_AppendAtsCmdNominal,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_ProcessCommand_Test_AppendAtsCmdNominal");
-    UtTest_Add(SC_ProcessCommand_Test_TableManageCmdNominal, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_ProcessCommand_Test_TableManageCmdNominal,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_ProcessCommand_Test_TableManageCmdNominal");
-    UtTest_Add(SC_ProcessCommand_Test_StartRtsGrpCmdNominal, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_ProcessCommand_Test_StartRtsGrpCmdNominal,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_ProcessCommand_Test_StartRtsGrpCmdNominal");
-    UtTest_Add(SC_ProcessCommand_Test_StopRtsGrpCmdNominal, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_ProcessCommand_Test_StopRtsGrpCmdNominal,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_ProcessCommand_Test_StopRtsGrpCmdNominal");
-    UtTest_Add(SC_ProcessCommand_Test_DisableRtsGrpCmdNominal, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_ProcessCommand_Test_DisableRtsGrpCmdNominal,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_ProcessCommand_Test_DisableRtsGrpCmdNominal");
-    UtTest_Add(SC_ProcessCommand_Test_EnableRtsGrpCmdNominal, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_ProcessCommand_Test_EnableRtsGrpCmdNominal,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_ProcessCommand_Test_EnableRtsGrpCmdNominal");
 
-    UtTest_Add(SC_ProcessCommand_Test_NoopCmdInvalidLength, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_ProcessCommand_Test_NoopCmdInvalidLength,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_ProcessCommand_Test_NoopCmdInvalidLength");
-    UtTest_Add(SC_ProcessCommand_Test_ResetCounterCmdInvalidLength, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_ProcessCommand_Test_ResetCounterCmdInvalidLength,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_ProcessCommand_Test_ResetCounterCmdInvalidLength");
-    UtTest_Add(SC_ProcessCommand_Test_StartAtsCmdInvalidLength, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_ProcessCommand_Test_StartAtsCmdInvalidLength,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_ProcessCommand_Test_StartAtsCmdInvalidLength");
-    UtTest_Add(SC_ProcessCommand_Test_StopAtsCmdInvalidLength, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_ProcessCommand_Test_StopAtsCmdInvalidLength,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_ProcessCommand_Test_StopAtsCmdInvalidLength");
-    UtTest_Add(SC_ProcessCommand_Test_StartRtsCmdInvalidLength, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_ProcessCommand_Test_StartRtsCmdInvalidLength,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_ProcessCommand_Test_StartRtsCmdInvalidLength");
-    UtTest_Add(SC_ProcessCommand_Test_StopRtsCmdInvalidLength, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_ProcessCommand_Test_StopRtsCmdInvalidLength,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_ProcessCommand_Test_StopRtsCmdInvalidLength");
-    UtTest_Add(SC_ProcessCommand_Test_DisableRtsCmdInvalidLength, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_ProcessCommand_Test_DisableRtsCmdInvalidLength,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_ProcessCommand_Test_DisableRtsCmdInvalidLength");
-    UtTest_Add(SC_ProcessCommand_Test_EnableRtsCmdInvalidLength, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_ProcessCommand_Test_EnableRtsCmdInvalidLength,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_ProcessCommand_Test_EnableRtsCmdInvalidLength");
-    UtTest_Add(SC_ProcessCommand_Test_SwitchAtsCmdInvalidLength, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_ProcessCommand_Test_SwitchAtsCmdInvalidLength,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_ProcessCommand_Test_SwitchAtsCmdInvalidLength");
-    UtTest_Add(SC_ProcessCommand_Test_JumpAtsCmdInvalidLength, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_ProcessCommand_Test_JumpAtsCmdInvalidLength,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_ProcessCommand_Test_JumpAtsCmdInvalidLength");
-    UtTest_Add(SC_ProcessCommand_Test_ContinueAtsOnFailureCmdInvalidLength, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_ProcessCommand_Test_ContinueAtsOnFailureCmdInvalidLength,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_ProcessCommand_Test_ContinueAtsOnFailureCmdInvalidLength");
-    UtTest_Add(SC_ProcessCommand_Test_AppendAtsCmdInvalidLength, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_ProcessCommand_Test_AppendAtsCmdInvalidLength,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_ProcessCommand_Test_AppendAtsCmdInvalidLength");
-    UtTest_Add(SC_ProcessCommand_Test_TableManageCmdInvalidLength, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_ProcessCommand_Test_TableManageCmdInvalidLength,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_ProcessCommand_Test_TableManageCmdInvalidLength");
-    UtTest_Add(SC_ProcessCommand_Test_StartRtsGrpCmdInvalidLength, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_ProcessCommand_Test_StartRtsGrpCmdInvalidLength,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_ProcessCommand_Test_StartRtsGrpCmdInvalidLength");
-    UtTest_Add(SC_ProcessCommand_Test_StopRtsGrpCmdInvalidLength, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_ProcessCommand_Test_StopRtsGrpCmdInvalidLength,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_ProcessCommand_Test_StopRtsGrpCmdInvalidLength");
-    UtTest_Add(SC_ProcessCommand_Test_DisableRtsGrpCmdInvalidLength, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_ProcessCommand_Test_DisableRtsGrpCmdInvalidLength,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_ProcessCommand_Test_DisableRtsGrpCmdInvalidLength");
-    UtTest_Add(SC_ProcessCommand_Test_EnableRtsGrpCmdInvalidLength, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_ProcessCommand_Test_EnableRtsGrpCmdInvalidLength,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_ProcessCommand_Test_EnableRtsGrpCmdInvalidLength");
-    UtTest_Add(SC_ProcessCommand_Test_InvalidCmdError, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_ProcessCommand_Test_InvalidCmdError,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_ProcessCommand_Test_InvalidCmdError");
 }

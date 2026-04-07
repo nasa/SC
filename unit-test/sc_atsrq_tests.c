@@ -42,7 +42,9 @@
  * Function Definitions
  */
 
-int32 UT_SC_StartAtsRq_CompareHookAgreaterthanB(void *UserObj, int32 StubRetcode, uint32 CallCount,
+int32 UT_SC_StartAtsRq_CompareHookAgreaterthanB(void                   *UserObj,
+                                                int32                   StubRetcode,
+                                                uint32                  CallCount,
                                                 const UT_StubContext_t *Context)
 {
     return CFE_TIME_A_GT_B;
@@ -66,7 +68,7 @@ void SC_StartAtsCmd_Test_NominalA(void)
 {
     CFE_SB_MsgId_t        TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
     SC_AtsIndex_t         AtsIndex  = SC_ATS_IDX_C(0);
-    SC_AtsInfoTable_t *   AtsInfoPtr;
+    SC_AtsInfoTable_t    *AtsInfoPtr;
     SC_AtsCmdNumRecord_t *AtsCmdNumRec;
 
     AtsCmdNumRec = SC_GetAtsCommandNumAtSeq(AtsIndex, SC_SEQUENCE_IDX_FIRST);
@@ -95,7 +97,7 @@ void SC_StartAtsCmd_Test_NominalB(void)
 {
     CFE_SB_MsgId_t        TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
     SC_AtsIndex_t         AtsIndex  = SC_ATS_IDX_C(1);
-    SC_AtsInfoTable_t *   AtsInfoPtr;
+    SC_AtsInfoTable_t    *AtsInfoPtr;
     SC_AtsCmdNumRecord_t *AtsCmdNumRec;
 
     AtsCmdNumRec = SC_GetAtsCommandNumAtSeq(AtsIndex, SC_SEQUENCE_IDX_FIRST);
@@ -330,7 +332,7 @@ void SC_BeginAts_Test_Nominal(void)
 {
     SC_AtsIndex_t         AtsIndex   = SC_ATS_IDX_C(0);
     uint16                TimeOffset = 0;
-    SC_AtsInfoTable_t *   AtsInfoPtr;
+    SC_AtsInfoTable_t    *AtsInfoPtr;
     SC_AtsCmdNumRecord_t *AtsCmdNumRec;
 
     AtsCmdNumRec = SC_GetAtsCommandNumAtSeq(AtsIndex, SC_SEQUENCE_IDX_FIRST);
@@ -356,9 +358,9 @@ void SC_BeginAts_Test_AllCommandsSkipped(void)
 {
     SC_AtsIndex_t           AtsIndex   = SC_ATS_IDX_C(0);
     uint16                  TimeOffset = 0;
-    SC_AtsInfoTable_t *     AtsInfoPtr;
+    SC_AtsInfoTable_t      *AtsInfoPtr;
     SC_AtsCmdStatusEntry_t *StatusEntryPtr;
-    SC_AtsCmdNumRecord_t *  AtsCmdNumRec;
+    SC_AtsCmdNumRecord_t   *AtsCmdNumRec;
 
     AtsCmdNumRec   = SC_GetAtsCommandNumAtSeq(AtsIndex, SC_SEQUENCE_IDX_FIRST);
     StatusEntryPtr = SC_GetAtsStatusEntryForCommand(AtsIndex, SC_COMMAND_IDX_C(0));
@@ -786,7 +788,7 @@ void SC_JumpAtsCmd_Test_SkipOneCmd(void)
     SC_AtsIndex_t           AtsIndex  = SC_ATS_IDX_C(0);
     CFE_SB_MsgId_t          TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
     CFE_MSG_FcnCode_t       FcnCode   = SC_JUMP_ATS_CC;
-    SC_AtsInfoTable_t *     AtsInfoPtr;
+    SC_AtsInfoTable_t      *AtsInfoPtr;
     SC_AtsCmdStatusEntry_t *StatusPtr0;
     SC_AtsCmdStatusEntry_t *StatusPtr1;
 
@@ -836,7 +838,7 @@ void SC_JumpAtsCmd_Test_AllCommandsSkipped(void)
     SC_AtsIndex_t           AtsIndex  = SC_ATS_IDX_C(0);
     CFE_SB_MsgId_t          TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
     CFE_MSG_FcnCode_t       FcnCode   = SC_JUMP_ATS_CC;
-    SC_AtsInfoTable_t *     AtsInfoPtr;
+    SC_AtsInfoTable_t      *AtsInfoPtr;
     SC_AtsCmdStatusEntry_t *StatusEntryPtr;
 
     AtsInfoPtr     = SC_GetAtsInfoObject(AtsIndex);
@@ -891,7 +893,7 @@ void SC_JumpAtsCmd_Test_AtsNotLoaded(void)
     SC_AtsIndex_t           AtsIndex  = SC_ATS_IDX_C(0);
     CFE_SB_MsgId_t          TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
     CFE_MSG_FcnCode_t       FcnCode   = SC_JUMP_ATS_CC;
-    SC_AtsInfoTable_t *     AtsInfoPtr;
+    SC_AtsInfoTable_t      *AtsInfoPtr;
     SC_AtsCmdStatusEntry_t *StatusPtr0;
     SC_AtsCmdStatusEntry_t *StatusPtr1;
 
@@ -951,8 +953,7 @@ void ContinueAtsOnFailureCmd_Test_Nominal(void)
     UtAssert_BOOL_TRUE(SC_OperData.HkPacket.Payload.ContinueAtsOnFailureFlag);
     UtAssert_True(SC_OperData.HkPacket.Payload.CmdCtr == 1, "SC_OperData.HkPacket.Payload.CmdCtr == 1");
 
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID,
-                      SC_CONT_CMD_INF_EID);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_CONT_CMD_INF_EID);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
 }
 
@@ -974,8 +975,7 @@ void ContinueAtsOnFailureCmd_Test_FalseState(void)
                   "SC_OperData.HkPacket.Payload.ContinueAtsOnFailureFlag == false");
     UtAssert_True(SC_OperData.HkPacket.Payload.CmdCtr == 1, "SC_OperData.HkPacket.Payload.CmdCtr == 1");
 
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID,
-                      SC_CONT_CMD_INF_EID);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_CONT_CMD_INF_EID);
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
 }
 
@@ -1005,7 +1005,7 @@ void SC_AppendAtsCmd_Test_Nominal(void)
     SC_AtsIndex_t        AtsIndex  = SC_ATS_IDX_C(0);
     CFE_SB_MsgId_t       TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
     CFE_MSG_FcnCode_t    FcnCode   = SC_APPEND_ATS_CC;
-    SC_AtsInfoTable_t *  AtsInfoPtr;
+    SC_AtsInfoTable_t   *AtsInfoPtr;
 
     AtsInfoPtr = SC_GetAtsInfoObject(AtsIndex);
 
@@ -1161,58 +1161,96 @@ void UtTest_Setup(void)
     UtTest_Add(SC_StartAtsCmd_Test_NoCommandsB, SC_Test_Setup, SC_Test_TearDown, "SC_StartAtsCmd_Test_NoCommandsB");
     UtTest_Add(SC_StartAtsCmd_Test_InUse, SC_Test_Setup, SC_Test_TearDown, "SC_StartAtsCmd_Test_InUse");
     UtTest_Add(SC_StartAtsCmd_Test_InvalidAtsNum, SC_Test_Setup, SC_Test_TearDown, "SC_StartAtsCmd_Test_InvalidAtsNum");
-    UtTest_Add(SC_StartAtsCmd_Test_InvalidAtsNumZero, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_StartAtsCmd_Test_InvalidAtsNumZero,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_StartAtsCmd_Test_InvalidAtsNumZero");
     UtTest_Add(SC_StopAtsCmd_Test_NominalA, SC_Test_Setup, SC_Test_TearDown, "SC_StopAtsCmd_Test_NominalA");
     UtTest_Add(SC_StopAtsCmd_Test_NominalB, SC_Test_Setup, SC_Test_TearDown, "SC_StopAtsCmd_Test_NominalB");
     UtTest_Add(SC_StopAtsCmd_Test_NoRunningAts, SC_Test_Setup, SC_Test_TearDown, "SC_StopAtsCmd_Test_NoRunningAts");
     UtTest_Add(SC_BeginAts_Test_Nominal, SC_Test_Setup, SC_Test_TearDown, "SC_BeginAts_Test_Nominal");
-    UtTest_Add(SC_BeginAts_Test_AllCommandsSkipped, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_BeginAts_Test_AllCommandsSkipped,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_BeginAts_Test_AllCommandsSkipped");
     UtTest_Add(SC_BeginAts_Test_InvalidAtsIndex, SC_Test_Setup, SC_Test_TearDown, "SC_BeginAts_Test_InvalidAtsIndex");
     UtTest_Add(SC_KillAts_Test, SC_Test_Setup, SC_Test_TearDown, "SC_KillAts_Test");
     UtTest_Add(SC_SwitchAtsCmd_Test_Nominal, SC_Test_Setup, SC_Test_TearDown, "SC_SwitchAtsCmd_Test_Nominal");
     UtTest_Add(SC_SwitchAtsCmd_Test_BadId, SC_Test_Setup, SC_Test_TearDown, "SC_SwitchAtsCmd_Test_BadId");
-    UtTest_Add(SC_SwitchAtsCmd_Test_DestinationAtsNotLoaded, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_SwitchAtsCmd_Test_DestinationAtsNotLoaded,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_SwitchAtsCmd_Test_DestinationAtsNotLoaded");
     UtTest_Add(SC_SwitchAtsCmd_Test_AtpIdle, SC_Test_Setup, SC_Test_TearDown, "SC_SwitchAtsCmd_Test_AtpIdle");
-    UtTest_Add(SC_ServiceSwitchPend_Test_NominalA, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_ServiceSwitchPend_Test_NominalA,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_ServiceSwitchPend_Test_NominalA");
-    UtTest_Add(SC_ServiceSwitchPend_Test_NominalB, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_ServiceSwitchPend_Test_NominalB,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_ServiceSwitchPend_Test_NominalB");
-    UtTest_Add(SC_ServiceSwitchPend_Test_AtsEmpty, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_ServiceSwitchPend_Test_AtsEmpty,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_ServiceSwitchPend_Test_AtsEmpty");
     UtTest_Add(SC_ServiceSwitchPend_Test_AtpIdle, SC_Test_Setup, SC_Test_TearDown, "SC_ServiceSwitchPend_Test_AtpIdle");
-    UtTest_Add(SC_ServiceSwitchPend_Test_NoSwitch, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_ServiceSwitchPend_Test_NoSwitch,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_ServiceSwitchPend_Test_NoSwitch");
-    UtTest_Add(SC_ServiceSwitchPend_Test_AtsNotStarted, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_ServiceSwitchPend_Test_AtsNotStarted,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_ServiceSwitchPend_Test_AtsNotStarted");
     UtTest_Add(SC_InlineSwitch_Test_NominalA, SC_Test_Setup, SC_Test_TearDown, "SC_InlineSwitch_Test_NominalA");
     UtTest_Add(SC_InlineSwitch_Test_NominalB, SC_Test_Setup, SC_Test_TearDown, "SC_InlineSwitch_Test_NominalB");
-    UtTest_Add(SC_InlineSwitch_Test_AllCommandsSkipped, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_InlineSwitch_Test_AllCommandsSkipped,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_InlineSwitch_Test_AllCommandsSkipped");
-    UtTest_Add(SC_InlineSwitch_Test_DestinationAtsNotLoaded, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_InlineSwitch_Test_DestinationAtsNotLoaded,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_InlineSwitch_Test_DestinationAtsNotLoaded");
     UtTest_Add(SC_JumpAtsCmd_Test_SkipOneCmd, SC_Test_Setup, SC_Test_TearDown, "SC_JumpAtsCmd_Test_SkipOneCmd");
-    UtTest_Add(SC_JumpAtsCmd_Test_AllCommandsSkipped, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_JumpAtsCmd_Test_AllCommandsSkipped,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_JumpAtsCmd_Test_AllCommandsSkipped");
     UtTest_Add(SC_JumpAtsCmd_Test_NoRunningAts, SC_Test_Setup, SC_Test_TearDown, "SC_JumpAtsCmd_Test_NoRunningAts");
     UtTest_Add(SC_JumpAtsCmd_Test_AtsNotLoaded, SC_Test_Setup, SC_Test_TearDown, "SC_JumpAtsCmd_Test_AtsNotLoaded");
-    UtTest_Add(ContinueAtsOnFailureCmd_Test_Nominal, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(ContinueAtsOnFailureCmd_Test_Nominal,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "ContinueAtsOnFailureCmd_Test_Nominal");
-    UtTest_Add(ContinueAtsOnFailureCmd_Test_FalseState, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(ContinueAtsOnFailureCmd_Test_FalseState,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "ContinueAtsOnFailureCmd_Test_FalseState");
-    UtTest_Add(ContinueAtsOnFailureCmd_Test_InvalidState, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(ContinueAtsOnFailureCmd_Test_InvalidState,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "ContinueAtsOnFailureCmd_Test_InvalidState");
     UtTest_Add(SC_AppendAtsCmd_Test_Nominal, SC_Test_Setup, SC_Test_TearDown, "SC_AppendAtsCmd_Test_Nominal");
-    UtTest_Add(SC_AppendAtsCmd_Test_InvalidAtsNum, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_AppendAtsCmd_Test_InvalidAtsNum,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_AppendAtsCmd_Test_InvalidAtsNum");
-    UtTest_Add(SC_AppendAtsCmd_Test_InvalidAtsNumZero, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_AppendAtsCmd_Test_InvalidAtsNumZero,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_AppendAtsCmd_Test_InvalidAtsNumZero");
-    UtTest_Add(SC_AppendAtsCmd_Test_AtsTableEmpty, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_AppendAtsCmd_Test_AtsTableEmpty,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_AppendAtsCmd_Test_AtsTableEmpty");
-    UtTest_Add(SC_AppendAtsCmd_Test_AppendTableEmpty, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_AppendAtsCmd_Test_AppendTableEmpty,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_AppendAtsCmd_Test_AppendTableEmpty");
-    UtTest_Add(SC_AppendAtsCmd_Test_NoRoomForAppendInAts, SC_Test_Setup, SC_Test_TearDown,
+    UtTest_Add(SC_AppendAtsCmd_Test_NoRoomForAppendInAts,
+               SC_Test_Setup,
+               SC_Test_TearDown,
                "SC_AppendAtsCmd_Test_NoRoomForAppendInAts");
 }

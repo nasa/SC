@@ -157,7 +157,7 @@
  *
  *  \sa #SC_START_ATS_CC
  */
-#define SC_STOP_ATS_CC 3
+#define SC_STOP_ATS_CC  3
 
 /**
  * \brief Start an RTS
