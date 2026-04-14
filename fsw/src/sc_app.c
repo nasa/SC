@@ -105,7 +105,7 @@ void SC_AppMain(void)
             /* Invoke command handlers */
             SC_ProcessRequest(BufPtr);
         }
-        else if (Result == CFE_SB_TIME_OUT)
+        else if (Result == CFE_SB_TIME_OUT || Result == CFE_SB_NO_MESSAGE)
         {
             /* no action, but also no error */
         }
