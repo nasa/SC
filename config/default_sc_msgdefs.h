@@ -150,7 +150,7 @@ typedef struct
 
     uint8 CmdErrCtr; /**< \brief Counts Request Errors */
     uint8 CmdCtr;    /**< \brief Counts Ground Requests */
-    uint8 Padding8;  /**< \brief Structure padding */
+    uint8 Padding1;  /**< \brief Structure padding */
 
     uint16           SwitchPendFlag;  /**< \brief Switch pending flag: 0 = NO, 1 = YES */
     uint16           NumRtsActive;    /**< \brief Number of RTSs currently active */
@@ -188,6 +188,8 @@ typedef struct
      the LSB (bit zero) of uint16 array index zero represents RTS number 1, and bit one of uint16 array
      index zero represents RTS number 2, etc.  If an RTS is ENABLED, then the corresponding bit is zero.
      If an RTS is DISABLED, then the corresponding bit is one. */
+
+    uint8 Padding2[2];
 } SC_HkTlm_Payload_t;
 
 /**\}*/
