@@ -837,8 +837,8 @@ void SC_SendHkPacket_Test(void)
     SC_RtsIndex_t      RtsIndex = SC_RTS_IDX_C(SC_NUMBER_OF_RTS - 1);
     SC_RtsInfoEntry_t *RtsInfoPtr;
     SC_AtsInfoTable_t *AtsInfoPtr;
-    uint16             ExpectedRtsExecStatus[(SC_NUMBER_OF_RTS + 15) / 16];
-    uint16             ExpectedRtsDisabledStatus[(SC_NUMBER_OF_RTS + 15) / 16];
+    uint8              ExpectedRtsExecStatus[(SC_NUMBER_OF_RTS + 7) / 8];
+    uint8              ExpectedRtsDisabledStatus[(SC_NUMBER_OF_RTS + 7) / 8];
 
     memset(&ExpectedRtsExecStatus[0], 0u, sizeof(ExpectedRtsExecStatus));
     memset(&ExpectedRtsDisabledStatus[0], 0u, sizeof(ExpectedRtsDisabledStatus));
