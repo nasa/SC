@@ -121,4 +121,4 @@ SC_AtsTable1_t SC_Ats1 = {
                                           SC_RESET_COUNTERS_CKSUM)}}};
 
 /* Macro for table structure */
-CFE_TBL_FILEDEF(SC_Ats1, SC.AtsTable1, SC Example ATS_TBL1, sc_ats1.tbl)
+CFE_TBL_FILEDEF(SC_Ats1, SC.ATS_TBL1, SC Example ATS_TBL1, sc_ats1.tbl)
