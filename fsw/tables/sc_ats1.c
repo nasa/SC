@@ -68,17 +68,22 @@
 #define SC_RESET_COUNTERS_CKSUM (0x8E)
 #endif
 
+typedef union
+{
+    uint32              Align32;
+    SC_AtsEntryHeader_t Hdr;
+} SC_AlignedAtsEntryHeader_t;
 /* Custom table structure, modify as needed to add desired commands */
 typedef struct
 {
-    SC_AtsEntryHeader_t   hdr1;
-    SC_NoopCmd_t          cmd1;
-    SC_AtsEntryHeader_t   hdr2;
-    SC_EnableRtsCmd_t     cmd2;
-    SC_AtsEntryHeader_t   hdr3;
-    SC_StartRtsCmd_t      cmd3;
-    SC_AtsEntryHeader_t   hdr4;
-    SC_ResetCountersCmd_t cmd4;
+    SC_AlignedAtsEntryHeader_t hdr1;
+    SC_NoopCmd_t               cmd1;
+    SC_AlignedAtsEntryHeader_t hdr2;
+    SC_EnableRtsCmd_t          cmd2;
+    SC_AlignedAtsEntryHeader_t hdr3;
+    SC_StartRtsCmd_t           cmd3;
+    SC_AlignedAtsEntryHeader_t hdr4;
+    SC_ResetCountersCmd_t      cmd4;
 } SC_AtsStruct1_t;
 
 /* Define the union to size the table correctly */
@@ -94,13 +99,13 @@ typedef union
 /* Used designated intializers to be verbose, modify as needed/desired */
 SC_AtsTable1_t SC_Ats1 = {
     .ats = {/* 1 */
-            .hdr1 = {.CmdNumber  = SC_COMMAND_NUM_INITIALIZER(1),
+            .hdr1.Hdr = {.CmdNumber  = SC_COMMAND_NUM_INITIALIZER(1),
                      .TimeTag_MS = SC_CMD1_TIME >> 16,
                      .TimeTag_LS = SC_CMD1_TIME & 0xFFFF},
-            .cmd1 = {CFE_MSG_CMD_HDR_INIT(SC_CMD_MID, 0, SC_NOOP_CC, SC_NOOP_CKSUM)},
+            .cmd1 = {CFE_MSG_CMD_HDR_INIT(SC_CMD_MID, SC_MEMBER_SIZE(cmd1), SC_NOOP_CC, SC_NOOP_CKSUM)},
 
             /* 2 */
-            .hdr2 = {.CmdNumber  = SC_COMMAND_NUM_INITIALIZER(2),
+            .hdr2.Hdr = {.CmdNumber  = SC_COMMAND_NUM_INITIALIZER(2),
                      .TimeTag_MS = SC_CMD2_TIME >> 16,
                      .TimeTag_LS = SC_CMD2_TIME & 0xFFFF},
             .cmd2 = {CFE_MSG_CMD_HDR_INIT(SC_CMD_MID, SC_MEMBER_SIZE(cmd2), SC_ENABLE_RTS_CC, SC_ENABLE_RTS1_CKSUM)},
@@ -108,17 +113,17 @@ SC_AtsTable1_t SC_Ats1 = {
             .cmd2.Payload = {.RtsNum = SC_RTS_NUM_INITIALIZER(1)},
 
             /* 3 */
-            .hdr3 = {.CmdNumber  = SC_COMMAND_NUM_INITIALIZER(3),
+            .hdr3.Hdr = {.CmdNumber  = SC_COMMAND_NUM_INITIALIZER(3),
                      .TimeTag_MS = SC_CMD3_TIME >> 16,
                      .TimeTag_LS = SC_CMD3_TIME & 0xFFFF},
             .cmd3 = {CFE_MSG_CMD_HDR_INIT(SC_CMD_MID, SC_MEMBER_SIZE(cmd3), SC_START_RTS_CC, SC_START_RTS1_CKSUM)},
 
             /* 4 */
-            .hdr4 = {.CmdNumber  = SC_COMMAND_NUM_INITIALIZER(4),
+            .hdr4.Hdr = {.CmdNumber  = SC_COMMAND_NUM_INITIALIZER(4),
                      .TimeTag_MS = SC_CMD4_TIME >> 16,
                      .TimeTag_LS = SC_CMD4_TIME & 0xFFFF},
             .cmd4 = {CFE_MSG_CMD_HDR_INIT(SC_CMD_MID, SC_MEMBER_SIZE(cmd4), SC_RESET_COUNTERS_CC,
                                           SC_RESET_COUNTERS_CKSUM)}}};
 
 /* Macro for table structure */
-CFE_TBL_FILEDEF(SC_Ats1, SC.AtsTable1, SC Example ATS_TBL1, sc_ats1.tbl)
+CFE_TBL_FILEDEF(SC_Ats1, SC.ATS_TBL1, SC Example ATS_TBL1, sc_ats1.tbl)

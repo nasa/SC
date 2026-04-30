@@ -150,7 +150,7 @@ typedef struct
 
     uint8 CmdErrCtr; /**< \brief Counts Request Errors */
     uint8 CmdCtr;    /**< \brief Counts Ground Requests */
-    uint8 Padding8;  /**< \brief Structure padding */
+    uint8 Padding1;  /**< \brief Structure padding */
 
     uint16           SwitchPendFlag;  /**< \brief Switch pending flag: 0 = NO, 1 = YES */
     uint16           NumRtsActive;    /**< \brief Number of RTSs currently active */
@@ -175,19 +175,21 @@ typedef struct
     uint32      NextRtsWakeupCnt;               /**< \brief Next RTS Command Absolute Wakeup Count */
     uint32      NextAtsTime;                    /**< \brief Next ATS Command Time (seconds) */
 
-    uint16 RtsExecutingStatus[(SC_NUMBER_OF_RTS + 15) / 16];
+    uint8 RtsExecutingStatusBits[(SC_NUMBER_OF_RTS + 7) / 8];
     /**< \brief RTS executing status bit map where each uint16 represents 16 RTS numbers.  Note: array
      index numbers and bit numbers use base zero indexing, but RTS numbers use base one indexing.  Thus,
      the LSB (bit zero) of uint16 array index zero represents RTS number 1, and bit one of uint16 array
      index zero represents RTS number 2, etc.  If an RTS is IDLE, then the corresponding bit is zero.
      If an RTS is EXECUTING, then the corresponding bit is one. */
 
-    uint16 RtsDisabledStatus[(SC_NUMBER_OF_RTS + 15) / 16];
+    uint8 RtsDisabledStatusBits[(SC_NUMBER_OF_RTS + 7) / 8];
     /**< \brief RTS disabled status bit map where each uint16 represents 16 RTS numbers.  Note: array
      index numbers and bit numbers use base zero indexing, but RTS numbers use base one indexing.  Thus,
      the LSB (bit zero) of uint16 array index zero represents RTS number 1, and bit one of uint16 array
      index zero represents RTS number 2, etc.  If an RTS is ENABLED, then the corresponding bit is zero.
      If an RTS is DISABLED, then the corresponding bit is one. */
+
+    uint8 Padding2[2];
 } SC_HkTlm_Payload_t;
 
 /**\}*/
