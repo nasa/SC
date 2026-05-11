@@ -72,15 +72,16 @@ typedef union
 SC_RtsTable003_t SC_Rts003 = {
     /* 1 */
     .rts.hdr1.WakeupCount = 0,
-    .rts.cmd1             = {CFE_MSG_CMD_HDR_INIT(SC_CMD_MID, SC_MEMBER_SIZE(cmd1), SC_NOOP_CC, SC_NOOP_CKSUM)},
+    .rts.cmd1             = { CFE_MSG_CMD_HDR_INIT(SC_CMD_MID, SC_MEMBER_SIZE(cmd1), SC_NOOP_CC, SC_NOOP_CKSUM) },
 
     /* 2 */
     .rts.hdr2.WakeupCount = 5,
-    .rts.cmd2             = {CFE_MSG_CMD_HDR_INIT(SC_CMD_MID, SC_MEMBER_SIZE(cmd2), SC_NOOP_CC, SC_NOOP_CKSUM)},
+    .rts.cmd2             = { CFE_MSG_CMD_HDR_INIT(SC_CMD_MID, SC_MEMBER_SIZE(cmd2), SC_NOOP_CC, SC_NOOP_CKSUM) },
 
     /* 3 */
     .rts.hdr3.WakeupCount = 5,
-    .rts.cmd3             = {CFE_MSG_CMD_HDR_INIT(SC_CMD_MID, SC_MEMBER_SIZE(cmd3), SC_NOOP_CC, SC_NOOP_CKSUM)}};
+    .rts.cmd3             = { CFE_MSG_CMD_HDR_INIT(SC_CMD_MID, SC_MEMBER_SIZE(cmd3), SC_NOOP_CC, SC_NOOP_CKSUM) }
+};
 
 /* Macro for table structure */
 CFE_TBL_FILEDEF(SC_Rts003, SC.RTS_TBL003, SC Example RTS_TBL003, sc_rts003.tbl)

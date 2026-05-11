@@ -35,22 +35,19 @@ typedef enum
     APPEND
 } SC_TableType;
 
-#define SC_HKTLM_MEMBER_SIZE(x) sizeof(((SC_HkTlm_Payload_t *)0)->x)
-
 /* Macro to set/clear bits in the HK TLM bitmask for RTS status */
 enum
 {
-    SC_BITS_PER_HKTLM_OCTET = SC_NUMBER_OF_RTS / SC_HKTLM_MEMBER_SIZE(RtsDisabledStatus),
-    SC_BITS_PER_HKTLM_WORD  = SC_HKTLM_MEMBER_SIZE(RtsDisabledStatus[0]) * SC_BITS_PER_HKTLM_OCTET,
+    SC_BITS_PER_HKTLM_ENTRY = 8 /* by definition, as this now uses uint8 only */
 };
 
-#define SC_SET_HKTLM_RTS_MASK(f, s, v)                                             \
-    do                                                                             \
-    {                                                                              \
-        if (v)                                                                     \
-            f[s / SC_BITS_PER_HKTLM_WORD] |= (1 << (s % SC_BITS_PER_HKTLM_WORD));  \
-        else                                                                       \
-            f[s / SC_BITS_PER_HKTLM_WORD] &= ~(1 << (s % SC_BITS_PER_HKTLM_WORD)); \
+#define SC_SET_HKTLM_RTS_MASK(f, s, v)                                               \
+    do                                                                               \
+    {                                                                                \
+        if (v)                                                                       \
+            f[s / SC_BITS_PER_HKTLM_ENTRY] |= (1 << (s % SC_BITS_PER_HKTLM_ENTRY));  \
+        else                                                                         \
+            f[s / SC_BITS_PER_HKTLM_ENTRY] &= ~(1 << (s % SC_BITS_PER_HKTLM_ENTRY)); \
     } while (0)
 
 /**

@@ -46,7 +46,6 @@ CFE_Status_t SC_AppInit(void)
  */
 void SC_AppMain(void)
 {
-
     UT_GenStub_Execute(SC_AppMain, Basic, NULL);
 }
 
@@ -99,7 +98,6 @@ CFE_Status_t SC_InitTables(void)
  */
 void SC_LoadDefaultTables(void)
 {
-
     UT_GenStub_Execute(SC_LoadDefaultTables, Basic, NULL);
 }
 
@@ -152,6 +150,5 @@ CFE_Status_t SC_RegisterLoadableTables(void)
  */
 void SC_RegisterManageCmds(void)
 {
-
     UT_GenStub_Execute(SC_RegisterManageCmds, Basic, NULL);
 }

@@ -101,7 +101,6 @@ CFE_Status_t SC_NoopCmd(const SC_NoopCmd_t *Cmd)
  */
 void SC_ProcessAtpCmd(void)
 {
-
     UT_GenStub_Execute(SC_ProcessAtpCmd, Basic, NULL);
 }
 
@@ -112,7 +111,6 @@ void SC_ProcessAtpCmd(void)
  */
 void SC_ProcessRtpCommand(void)
 {
-
     UT_GenStub_Execute(SC_ProcessRtpCommand, Basic, NULL);
 }
 
@@ -155,7 +153,6 @@ CFE_Status_t SC_SendHkCmd(const SC_SendHkCmd_t *Cmd)
  */
 void SC_SendHkPacket(void)
 {
-
     UT_GenStub_Execute(SC_SendHkPacket, Basic, NULL);
 }
 

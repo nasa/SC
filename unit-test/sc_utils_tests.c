@@ -31,7 +31,7 @@
 
 static CFE_TIME_SysTime_t UT_TimeRefFunc(void)
 {
-    return (CFE_TIME_SysTime_t) {1234, 5678};
+    return (CFE_TIME_SysTime_t) { 1234, 5678 };
 }
 
 void SC_LookupTimeAccessor_Test(void)
@@ -39,7 +39,7 @@ void SC_LookupTimeAccessor_Test(void)
     union
     {
         SC_TimeAccessor_t Obj;
-        void *            Addr;
+        void             *Addr;
     } Accessor;
 
     Accessor.Addr = NULL;
@@ -53,7 +53,7 @@ void SC_LookupTimeAccessor_Test(void)
 
 void SC_GetCurrentTime_Test(void)
 {
-    SC_AppData.TimeRef     = (SC_TimeAccessor_t) {UT_TimeRefFunc};
+    SC_AppData.TimeRef     = (SC_TimeAccessor_t) { UT_TimeRefFunc };
     SC_AppData.CurrentTime = 0;
 
     /* Execute the function being tested */
@@ -92,8 +92,8 @@ void SC_ComputeAbsWakeup_Test(void)
 
 void SC_CompareAbsTime_Test_True(void)
 {
-    SC_AbsTimeTag_t AbsTimeTag1 = {0};
-    SC_AbsTimeTag_t AbsTimeTag2 = {0};
+    SC_AbsTimeTag_t AbsTimeTag1 = { 0 };
+    SC_AbsTimeTag_t AbsTimeTag2 = { 0 };
 
     UT_SetDeferredRetcode(UT_KEY(CFE_TIME_Compare), 1, CFE_TIME_A_GT_B);
 
@@ -103,8 +103,8 @@ void SC_CompareAbsTime_Test_True(void)
 
 void SC_CompareAbsTime_Test_False(void)
 {
-    SC_AbsTimeTag_t AbsTimeTag1 = {0};
-    SC_AbsTimeTag_t AbsTimeTag2 = {0};
+    SC_AbsTimeTag_t AbsTimeTag1 = { 0 };
+    SC_AbsTimeTag_t AbsTimeTag2 = { 0 };
 
     UT_SetDeferredRetcode(UT_KEY(CFE_TIME_Compare), 1, -1);
 

@@ -97,7 +97,6 @@ SC_AbsTimeTag_t SC_GetAtsEntryTime(SC_AtsEntryHeader_t *Entry)
  */
 void SC_GetCurrentTime(void)
 {
-
     UT_GenStub_Execute(SC_GetCurrentTime, Basic, NULL);
 }
 

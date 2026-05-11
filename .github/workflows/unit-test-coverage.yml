@@ -15,4 +15,4 @@ on:
 jobs:
   unit-test-coverage:
     name: Run unit test and coverage
-    uses: nasa/cFS/.github/workflows/unit-test-coverage.yml@main
+    uses: nasa/cFS/.github/workflows/unit-test-coverage-reusable.yml@dev

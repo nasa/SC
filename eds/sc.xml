@@ -146,20 +146,20 @@
           <Entry name="AtpFreeBytes" type="AtpFreeBytes"  shortDescription="Free Bytes in each ATS" />
           <Entry type="BASE_TYPES/uint32" name="NextRtsWakeupCnt" shortDescription="Next RTS Command Absolute Wakeup Count" />
           <Entry type="BASE_TYPES/uint32" name="NextAtsTime" shortDescription="Next ATS Command Time (seconds)" />
-          <Entry name="RtsExecutingStatus" type="RtsStatusBits"  shortDescription="RTS disabled status bit map">
+          <Entry name="RtsExecutingStatusBits" type="RtsStatusBits"  shortDescription="RTS disabled status bit map">
             <LongDescription>
-             Each BASE_TYPES/uint16 represents 16 RTS numbers.
+             Each entry represents 8 RTS numbers.  Note: array
              Note: array index numbers and bit numbers use base zero indexing, but RTS numbers use base one indexing.
-             Thus, the LSB (bit zero) of BASE_TYPES/uint16 array index zero represents RTS number 1, and bit one of BASE_TYPES/uint16
+             Thus, the LSB (bit zero) of uint8 array index zero represents RTS number 1, and bit one of uint8
              array index zero represents RTS number 2, etc.  If an RTS is ENABLED, then the corresponding bit is zero.
              If an RTS is DISABLED, then the corresponding bit is one.
             </LongDescription>
           </Entry>
-          <Entry name="RtsDisabledStatus" type="RtsStatusBits"  shortDescription="RTS executing status bit map">
+          <Entry name="RtsDisabledStatusBits" type="RtsStatusBits"  shortDescription="RTS executing status bit map">
             <LongDescription>
-             Each BASE_TYPES/uint16 represents 16 RTS numbers.  Note: array
+             Each entry represents 8 RTS numbers.  Note: array
              index numbers and bit numbers use base zero indexing, but RTS numbers use base one indexing.  Thus,
-             the LSB (bit zero) of BASE_TYPES/uint16 array index zero represents RTS number 1, and bit one of BASE_TYPES/uint16 array
+             the LSB (bit zero) of uint8 array index zero represents RTS number 1, and bit one of uint8 array
              index zero represents RTS number 2, etc.  If an RTS is IDLE, then the corresponding bit is zero.
              If an RTS is EXECUTING, then the corresponding bit is one.
             </LongDescription>
@@ -187,7 +187,7 @@
       <ContainerDataType name="ContinueAtsOnFailureCmd_Payload" shortDescription="Continue ATS on failure command Payload">
         <EntryList>
           <Entry type="AtsCont" name="ContinueState" shortDescription="true or false, to continue ATS after a failure" />
-          <PaddingEntry sizeInBits="16" />
+          <PaddingEntry sizeInBits="24" />
         </EntryList>
       </ContainerDataType>
       <ContainerDataType name="AppendAtsCmd_Payload" shortDescription="Append to ATS Command Payload">
