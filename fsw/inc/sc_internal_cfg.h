@@ -362,7 +362,7 @@
  *       or equal to zero.
  */
 #define SC_MISSION_REV                  SC_INTERNAL_CFGVAL(MISSION_REV)
-#define DEFAULT_SC_INTERNAL_MISSION_REV 0
+#define DEFAULT_SC_INTERNAL_MISSION_REV 0xFF
 
 /**\}*/
 
