@@ -15,6 +15,9 @@ on:
     # 9:35 PM UTC every Sunday
     - cron:  '35 21 * * 0'
 
+permissions:
+  contents: read
+
 jobs:
   build-run:
     name: Build and run with startup msg verification
