@@ -174,11 +174,11 @@ CFE_Status_t SC_AppInit(void)
     /* Select auto-exec RTS to start during first HK request */
     if (CFE_ES_GetResetType(NULL) == CFE_PSP_RST_TYPE_POWERON)
     {
-        SC_AppData.AutoStartRTS = SC_RTS_NUM_C(RTS_ID_AUTO_POWER_ON);
+        SC_AppData.AutoStartRTS = SC_RTS_NUM_C(SC_RTS_ID_AUTO_POWER_ON);
     }
     else
     {
-        SC_AppData.AutoStartRTS = SC_RTS_NUM_C(RTS_ID_AUTO_PROCESSOR);
+        SC_AppData.AutoStartRTS = SC_RTS_NUM_C(SC_RTS_ID_AUTO_PROCESSOR);
     }
 
     /* Must be able to register for events */
