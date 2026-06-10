@@ -139,11 +139,11 @@
 
   <H2>Power On Resets</H2>
 
-  The RTS ID defined by #RTS_ID_AUTO_POWER_ON is started (if non-zero).
+  The RTS ID defined by #SC_RTS_ID_AUTO_POWER_ON is started (if non-zero).
 
   <H2>Processor Resets</H2>
 
-  The RTS ID defined by #RTS_ID_AUTO_PROCESSOR is started (if non-zero).
+  The RTS ID defined by #SC_RTS_ID_AUTO_PROCESSOR is started (if non-zero).
 
   <H2>Absolute Time Processor (ATP)</H2>
 
