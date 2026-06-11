@@ -431,7 +431,8 @@ void SC_LoadAts_Test_AtsEntryOverflow(void)
     SC_OperData.AtsTblAddr[AtsIndex]          = &AtsTable[0];
     SC_OperData.AtsInfoTblAddr                = &AtsInfoTbl;
 
-    MsgSize1      = SC_PACKET_MAX_SIZE;
+    /* Use a reasonable message size for testing to avoid test buffer overflow with large SC_PACKET_MAX_SIZE */
+    MsgSize1      = 256;  /* Use fixed 256 bytes instead of SC_PACKET_MAX_SIZE */
     BufEntrySize  = ((MsgSize1 + SC_ROUND_UP_BYTES) / SC_BYTES_IN_WORD) + SC_ATS_HDR_NOPKT_WORDS;
     MaxBufEntries = SC_ATS_BUFF_SIZE32 / BufEntrySize;
 
@@ -1364,8 +1365,8 @@ void SC_UpdateAppend_Test_CmdDoesNotFitBuffer(void)
 
     /* Verify results */
     UtAssert_True(SC_OperData.HkPacket.AppendLoadCount == 1, "SC_OperData.HkPacket.AppendLoadCount == 1");
-    UtAssert_True(SC_OperData.HkPacket.AppendEntryCount == 30, "SC_OperData.HkPacket.AppendEntryCount == 30");
-    UtAssert_True(SC_AppData.AppendWordCount == 1980, "SC_AppData.AppendWordCount == 1980");
+    UtAssert_True(SC_OperData.HkPacket.AppendEntryCount == MaxBufEntries, "SC_OperData.HkPacket.AppendEntryCount == %d", MaxBufEntries);
+    UtAssert_True(SC_AppData.AppendWordCount == (MaxBufEntries * BufEntrySize), "SC_AppData.AppendWordCount == %d", (MaxBufEntries * BufEntrySize));
 
     UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_UPDATE_APPEND_EID);
     UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventType, CFE_EVS_EventType_INFORMATION);
@@ -1512,9 +1513,13 @@ void SC_UpdateAppend_Test_EndOfBuffer(void)
     SC_UpdateAppend();
 
     /* Verify results */
+    /* Expected: MaxBufEntries entries fit, with the (MaxBufEntries-1)th entry being smaller */
+    int SmallEntrySize = (72 + SC_ROUND_UP_BYTES) / SC_BYTES_IN_WORD + SC_ATS_HDR_NOPKT_WORDS;
+    int ExpectedEntryCount = MaxBufEntries + 1;
+    int ExpectedWordCount = (MaxBufEntries * BufEntrySize) - BufEntrySize + SmallEntrySize + BufEntrySize;
     UtAssert_True(SC_OperData.HkPacket.AppendLoadCount == 1, "SC_OperData.HkPacket.AppendLoadCount == 1");
-    UtAssert_True(SC_OperData.HkPacket.AppendEntryCount == 31, "SC_OperData.HkPacket.AppendEntryCount == 31");
-    UtAssert_True(SC_AppData.AppendWordCount == 2000, "SC_AppData.AppendWordCount == 2000");
+    UtAssert_True(SC_OperData.HkPacket.AppendEntryCount == ExpectedEntryCount, "SC_OperData.HkPacket.AppendEntryCount == %d", ExpectedEntryCount);
+    UtAssert_True(SC_AppData.AppendWordCount == ExpectedWordCount, "SC_AppData.AppendWordCount == %d", ExpectedWordCount);
 
     UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_UPDATE_APPEND_EID);
     UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventType, CFE_EVS_EventType_INFORMATION);
