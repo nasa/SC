@@ -333,7 +333,8 @@
  * \par Limits:
  *       Must be a valid RTS ID or 0
  */
-#define RTS_ID_AUTO_POWER_ON 1
+#define SC_RTS_ID_AUTO_POWER_ON                  SC_INTERNAL_CFGVAL(RTS_ID_AUTO_POWER_ON)
+#define DEFAULT_SC_INTERNAL_RTS_ID_AUTO_POWER_ON 0
 
 /**
  * \brief Autostart RTS ID after processor reset
@@ -345,7 +346,8 @@
  * \par Limits:
  *       Must be a valid RTS ID or 0
  */
-#define RTS_ID_AUTO_PROCESSOR 2
+#define SC_RTS_ID_AUTO_PROCESSOR                  SC_INTERNAL_CFGVAL(RTS_ID_AUTO_PROCESSOR)
+#define DEFAULT_SC_INTERNAL_RTS_ID_AUTO_PROCESSOR 0
 
 /**
  * \brief Mission specific version number for SC application
@@ -362,7 +364,7 @@
  *       or equal to zero.
  */
 #define SC_MISSION_REV                  SC_INTERNAL_CFGVAL(MISSION_REV)
-#define DEFAULT_SC_INTERNAL_MISSION_REV 0
+#define DEFAULT_SC_INTERNAL_MISSION_REV 0xFF
 
 /**\}*/
 

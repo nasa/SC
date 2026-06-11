@@ -745,9 +745,26 @@ void SC_ManageTable(SC_TableType type, int32 ArrayIndex)
     /* Allow cFE to manage table */
     CFE_TBL_Manage(TblHandle);
 
-    /* Re-acquire table data pointer */
-    Result   = CFE_TBL_GetAddress(&TblPtrNew, TblHandle);
-    *TblAddr = TblPtrNew; /* Note that CFE_TBL_GetAddress() sets this to NULL if it fails */
+    /*
+    ** Re-acquire table data pointer. Per cfe_tbl.h, CFE_TBL_GetAddress leaves
+    ** TblPtrNew *undefined* on any non-success return -- it does NOT set it
+    ** to NULL (the inline comment that used to live here was wrong). Only
+    ** CFE_SUCCESS and CFE_TBL_INFO_UPDATED set the pointer. Default to NULL
+    ** before the call and only publish the address on success so a failed
+    ** acquire can't write uninitialised stack memory into the shared
+    ** SC_OperData.*TblAddr slot (where downstream code in sc_loads.c /
+    ** sc_atsrq.c would dereference it as a wild pointer).
+    */
+    TblPtrNew = NULL;
+    Result    = CFE_TBL_GetAddress(&TblPtrNew, TblHandle);
+    if (Result == CFE_SUCCESS || Result == CFE_TBL_INFO_UPDATED)
+    {
+        *TblAddr = TblPtrNew;
+    }
+    else
+    {
+        *TblAddr = NULL;
+    }
     if (Result == CFE_TBL_INFO_UPDATED)
     {
         /* Process new table data */
