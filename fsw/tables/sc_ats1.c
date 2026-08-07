@@ -94,7 +94,7 @@ typedef union
 } SC_AtsTable1_t;
 
 /* Helper macro to get size of structure elements */
-#define SC_MEMBER_SIZE(member) (sizeof(((SC_AtsStruct1_t *)0)->member))
+#define SC_MEMBER_SIZE(member) (sizeof(((SC_AtsStruct1_t *)NULL)->member))
 
 /* Used designated intializers to be verbose, modify as needed/desired */
 SC_AtsTable1_t SC_Ats1 = {
