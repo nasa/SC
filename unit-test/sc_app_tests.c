@@ -70,12 +70,14 @@ void SC_AppMain_Test_Nominal(void)
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &MsgSize, sizeof(MsgSize), false);
 
-    /* Load return buffer to make loop execute twice */
+    /* Load return buffer to make loop execute three times */
+    UT_SetDeferredRetcode(UT_KEY(CFE_ES_RunLoop), 1, true);
     UT_SetDeferredRetcode(UT_KEY(CFE_ES_RunLoop), 1, true);
     UT_SetDeferredRetcode(UT_KEY(CFE_ES_RunLoop), 1, true);
 
-    /* Return timeout first time through, will default to success on second */
+    /* Return timeout first time through, no message on the second, will default to success on the third */
     UT_SetDeferredRetcode(UT_KEY(CFE_SB_ReceiveBuffer), 1, CFE_SB_TIME_OUT);
+    UT_SetDeferredRetcode(UT_KEY(CFE_SB_ReceiveBuffer), 1, CFE_SB_NO_MESSAGE);
 
     /* Set table addresses */
     UT_SetHandlerFunction(UT_KEY(CFE_TBL_GetAddress), UT_Handler_CFE_TBL_GetAddress, NULL);
