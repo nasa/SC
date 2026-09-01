@@ -72,7 +72,7 @@ typedef union
 } SC_RtsTable001_t;
 
 /* Helper macro to get size of structure elements */
-#define SC_MEMBER_SIZE(member) (sizeof(((SC_RtsStruct001_t *)0)->member))
+#define SC_MEMBER_SIZE(member) (sizeof(((SC_RtsStruct001_t *)NULL)->member))
 
 /* Used designated initializers to be verbose, modify as needed/desired */
 SC_RtsTable001_t SC_Rts001 = {
