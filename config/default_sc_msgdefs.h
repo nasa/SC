@@ -45,8 +45,6 @@ enum SC_ProcessNum
     SC_Process_NONE = 0xFF /**< \brief No pending process */
 };
 
-typedef uint8 SC_Process_Enum_t;
-
 #ifndef SC_OMIT_DEPRECATED
 /**
  * \name Old-style defines for which process runs next
