@@ -18,7 +18,7 @@
 
 /**
  * @file
- *   his file contains the definitions of all of the events sent by
+ *   This file contains the definitions of all of the events sent by
  *   the Stored Command Processor
  */
 #ifndef SC_EVENTS_H
@@ -85,7 +85,7 @@
 #define SC_INIT_SB_SUBSCRIBE_ERR_EID 5
 
 /**
- * \brief HS Command Message Subscribe Failed Event ID
+ * \brief SC Command Message Subscribe Failed Event ID
  *
  *  \par Type: ERROR
  *
