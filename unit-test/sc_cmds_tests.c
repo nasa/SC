@@ -25,6 +25,7 @@
 #include "sc_rtsrq.h"
 #include "sc_state.h"
 #include "sc_events.h"
+#include "sc_eventids.h"
 #include "sc_msgids.h"
 #include "sc_test_utils.h"
 #include "sc_utils.h"
