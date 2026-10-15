@@ -41,20 +41,6 @@
 /*
  * Function Definitions
  */
-uint8 SC_STATE_TEST_GetTotalMsgLengthHook_RunCount;
-int32 SC_STATE_TEST_CFE_SB_GetTotalMsgLengthHook(void                   *UserObj,
-                                                 int32                   StubRetcode,
-                                                 uint32                  CallCount,
-                                                 const UT_StubContext_t *Context)
-{
-    SC_STATE_TEST_GetTotalMsgLengthHook_RunCount += 1;
-
-    if (SC_STATE_TEST_GetTotalMsgLengthHook_RunCount == 1)
-        return SC_PACKET_MAX_SIZE;
-    else
-        return SC_PACKET_MAX_SIZE + 100;
-}
-
 void SC_GetNextRtsTime_Test_Nominal(void)
 {
     SC_RtsIndex_t      RtsIndex = SC_RTS_IDX_C(0);
