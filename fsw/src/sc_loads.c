@@ -821,7 +821,7 @@ int32 SC_VerifyAtsEntry(uint32 *Buffer32, int32 EntryIndex, int32 BufferWords)
     SC_AtsEntry_t *EntryPtr;
     CFE_MSG_Size_t CommandBytes = 0;
     int32          CommandWords;
-    int32          Result = CFE_SUCCESS;
+    int32          Result;
 
     EntryPtr = (SC_AtsEntry_t *)&Buffer32[EntryIndex];
 
