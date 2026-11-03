@@ -89,17 +89,6 @@ typedef struct
 } SC_JumpAtsCmd_t;
 
 /**
- *  \brief Continue ATS on failure command
- *
- *  For command details see #SC_CONTINUE_ATS_ON_FAILURE_CC
- */
-typedef struct
-{
-    CFE_MSG_CommandHeader_t                 CommandHeader; /**< \brief Command Header */
-    SC_SetContinueAtsOnFailureCmd_Payload_t Payload;
-} SC_SetContinueAtsOnFailureCmd_t;
-
-/**
  *  \brief Append to ATS Command
  *
  *  For command details see #SC_APPEND_ATS_CC
