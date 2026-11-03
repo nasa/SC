@@ -28,6 +28,7 @@
 #include "sc_utils.h"
 #include "sc_loads.h"
 #include "sc_msgids.h"
+#include "sc_eventids.h"
 #include "sc_events.h"
 #include "sc_test_utils.h"
 #include <unistd.h>
