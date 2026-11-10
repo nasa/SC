@@ -18,7 +18,7 @@
 
 /**
  * @file
- *  The CFS Data Storage (DS) Application Private Config Definitions
+ *  The CFS Stored Command (SC) Application Private Config Definitions
  *
  * This provides default values for configurable items that are internal
  * to this module and do NOT affect the interface(s) of this module.  Changes

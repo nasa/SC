@@ -18,7 +18,7 @@
 
 /**
  * @file
- *  The CFS Data Storage (DS) Application command and telemetry
+ *  The CFS Stored Command (SC) Application command and telemetry
  *   message constant definitions.
  */
 #ifndef EDS_SC_MSGDEFS_H

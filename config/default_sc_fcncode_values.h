@@ -18,7 +18,7 @@
 
 /**
  * @file
- *  The CFS Data Storage (DS) Application Message IDs header file
+ *  The CFS Stored Command (SC) Application command function codes
  */
 #ifndef DEFAULT_SC_FCNCODE_VALUES_H
 #define DEFAULT_SC_FCNCODE_VALUES_H
@@ -27,25 +27,23 @@
 
 enum SC_FunctionCode
 {
-    SC_FunctionCode_NOOP             = 0,
-    SC_FunctionCode_RESET_COUNTERS   = 1,
-    SC_FunctionCode_SET_APP_STATE    = 2,
-    SC_FunctionCode_SET_FILTER_FILE  = 3,
-    SC_FunctionCode_SET_FILTER_TYPE  = 4,
-    SC_FunctionCode_SET_FILTER_PARMS = 5,
-    SC_FunctionCode_SET_DEST_TYPE    = 6,
-    SC_FunctionCode_SET_DEST_STATE   = 7,
-    SC_FunctionCode_SET_DEST_PATH    = 8,
-    SC_FunctionCode_SET_DEST_BASE    = 9,
-    SC_FunctionCode_SET_DEST_EXT     = 10,
-    SC_FunctionCode_SET_DEST_SIZE    = 11,
-    SC_FunctionCode_SET_DEST_AGE     = 12,
-    SC_FunctionCode_SET_DEST_COUNT   = 13,
-    SC_FunctionCode_CLOSE_FILE       = 14,
-    SC_FunctionCode_GET_FILE_INFO    = 15,
-    SC_FunctionCode_ADD_MID          = 16,
-    SC_FunctionCode_REMOVE_MID       = 17,
-    SC_FunctionCode_CLOSE_ALL        = 18,
+    SC_FunctionCode_NOOP                    = 0,
+    SC_FunctionCode_RESET_COUNTERS          = 1,
+    SC_FunctionCode_START_ATS               = 2,
+    SC_FunctionCode_STOP_ATS                = 3,
+    SC_FunctionCode_START_RTS               = 4,
+    SC_FunctionCode_STOP_RTS                = 5,
+    SC_FunctionCode_DISABLE_RTS             = 6,
+    SC_FunctionCode_ENABLE_RTS              = 7,
+    SC_FunctionCode_SWITCH_ATS              = 8,
+    SC_FunctionCode_JUMP_ATS                = 9,
+    SC_FunctionCode_CONTINUE_ATS_ON_FAILURE = 10,
+    SC_FunctionCode_APPEND_ATS              = 11,
+    SC_FunctionCode_MANAGE_TABLE            = 12,
+    SC_FunctionCode_START_RTS_GRP           = 13,
+    SC_FunctionCode_STOP_RTS_GRP            = 14,
+    SC_FunctionCode_DISABLE_RTS_GRP         = 15,
+    SC_FunctionCode_ENABLE_RTS_GRP          = 16,
 };
 
 #endif

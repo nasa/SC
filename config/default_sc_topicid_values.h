@@ -18,7 +18,7 @@
 
 /**
  * @file
- *  The CFS Data Storage (DS) Application Topic IDs
+ *  The CFS Stored Command (SC) Application Topic IDs
  */
 #ifndef DEFAULT_SC_TOPICID_VALUES_H
 #define DEFAULT_SC_TOPICID_VALUES_H
