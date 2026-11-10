@@ -18,8 +18,8 @@
 
 /**
  * @file
- *   CFS Checksum (CS) Application provides the service of background
- *   checksumming user-defined objects in the CFS
+ *   CFS Stored Command (SC) Application command dispatch using the
+ *   Electronic Data Sheets (EDS) message definitions
  */
 #include "cfe.h"
 

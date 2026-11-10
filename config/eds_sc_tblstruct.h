@@ -18,7 +18,7 @@
 
 /**
  * @file
- *  The CFS Data Storage (DS) Application Message IDs header file
+ *  The CFS Stored Command (SC) Application table structure definitions
  */
 #ifndef EDS_SC_TBLSTRUCT_H
 #define EDS_SC_TBLSTRUCT_H

@@ -18,7 +18,7 @@
 
 /**
  * @file
- *  The CFS Data Storage (DS) Application command function codes
+ *  The CFS Stored Command (SC) Application command function codes
  *
  * @note
  *   This file should be strictly limited to the command/function code (CC)

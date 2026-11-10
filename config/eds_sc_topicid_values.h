@@ -18,7 +18,7 @@
 
 /**
  * @file
- *  The CFS Data Storage (DS) Application Topic IDs
+ *  The CFS Stored Command (SC) Application Topic IDs
  */
 #ifndef EDS_SC_TOPICID_VALUES_H
 #define EDS_SC_TOPICID_VALUES_H

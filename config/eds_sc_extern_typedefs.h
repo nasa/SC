@@ -18,7 +18,7 @@
 
 /**
  * @file
- *  The CFS Data Storage (DS) Application table related
+ *  The CFS Stored Command (SC) Application table related
  *   constant definitions.
  */
 #ifndef EDS_SC_EXTERN_TYPEDEFS_H

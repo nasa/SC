@@ -18,7 +18,7 @@
 
 /**
  * @file
- *  The CFS Data Storage (DS) Application Command and Telemetry packet definition file.
+ *  The CFS Stored Command (SC) Application Command and Telemetry packet definition file.
  *
  * @note
  *   Constants and enumerated types related to these message structures

@@ -18,7 +18,7 @@
 
 /**
  * @file
- *  The CFS Data Storage (DS) Application Message IDs
+ *  The CFS Stored Command (SC) Application Message IDs
  */
 #ifndef DEFAULT_SC_MSGID_VALUES_H
 #define DEFAULT_SC_MSGID_VALUES_H
